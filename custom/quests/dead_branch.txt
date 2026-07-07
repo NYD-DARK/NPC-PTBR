@@ -1,0 +1,104 @@
+//===== rAthena Script ======================================= 
+//= Dead Branch (+Bloody Branch) Quest
+//===== By: ================================================== 
+//= GM-Yevon
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+// Simple item trade-in quest, a person can get a Dead Branch
+// by simply providing the items: Log x3 (7201), Wooden Heart x1 (7189), 
+// Trunk x5 (1019), and Wooden Gnarl x1 (7222).
+//===== Additional Comments: ================================= 
+//= 1.1 Optimized, added Bloody Branch with 0.01% chance [Lupus]
+//============================================================
+
+niflheim,204,179,3	script	Mister Mobry	121,{
+
+	mes "[Mister Mobry]";
+	mes "As árvores possuem espíritos, sabia...";
+	next;
+
+	mes "[Mister Mobry]";
+	mes "Na verdade, eu sei um segredo sobre esses espíritos que pode, de certa forma... talvez lhe ajudar...";
+	next;
+
+	mes "[Mister Mobry]";
+	mes "Eu posso criar um galho cheio de espírito... Isso é, se você puder me fornecer os materiais corretos...";
+	next;
+	goto L_MENU;
+
+L_MENU:
+	menu "O que eu preciso?",-,"Onde posso encontrar essas coisas?",M_FIND,"Faça um Galho Seco para mim!",M_CREATE,"Esqueça...",M_END;
+
+	mes "[Mister Mobry]";
+	mes "Mwehehe... Vejo que você quer controlar espíritos das árvores, não é? Ok... eu preciso de:";
+	mes "^1354453 Troncos^000000";
+	mes "^1354451 Coração de Madeira^000000";
+	mes "^1354455 Troncos de Árvore^000000";
+	mes "^1354451 Nó de Madeira^000000";
+	next;
+	goto L_MENU;
+
+M_FIND:
+	mes "[Mister Mobry]";
+	mes "Você pode encontrar os seguintes itens em certos monstros, heheh...";
+	mes "^135445Troncos podem ser encontrados em Golems de Árvore.^000000";
+	mes "^135445Corações de Madeira são a essência dos Golems de Árvore.^000000";
+	mes "^135445Troncos de Árvore? Sério, pense em madeira...^000000";
+	mes "^135445Nó de Madeira... Gibbet...^000000";
+	next;
+	goto L_MENU;
+
+L_NOLOG:
+	mes "[Mister Mobry]";
+	mes "^135445Troncos^000000 são o corpo... Eu preciso de mais deles.";
+	mes "Traga-me três troncos e eu farei o espírito para você...";
+	close;
+
+L_NOHEART:
+	mes "[Mister Mobry]";
+	mes "O ^135445Coração de Madeira^000000 é a essência do espírito.";
+	mes "Traga-me um coração de madeira e eu farei o espírito para você...";
+	close;
+
+L_NOTRUNK:
+	mes "[Mister Mobry]";
+	mes "O quê? Você não conseguiu nem encontrar ^1354455 Troncos de Árvore^000000?";
+	mes "Mate Salgueiros Anciões ou algo assim... Poxa... nenhum tronco, heh... patético.";
+	close;
+
+L_NOGNARL:
+	mes "[Mister Mobry]";
+	mes "Como posso fazer um sem um ^135445Nó de Madeira^000000?";
+	mes "Eu disse Gibbet... eles estão por toda parte neste lugar...";
+	close;
+
+M_CREATE:
+	mes "[Mister Mobry]";
+	mes "Bem... vamos ver o que você me trouxe...";
+	next;
+	if(countitem(7201)<3) goto L_NOLOG;
+	if(countitem(7189)<1) goto L_NOHEART;
+	if(countitem(1019)<5) goto L_NOTRUNK;
+	if(countitem(7222)<1) goto L_NOGNARL;
+	delitem 7201,3;
+	delitem 7189,1;
+	delitem 1019,5;
+	delitem 7222,1;
+	mes "[Mister Mobry]";
+	mes "Heh... Espero que você se divirta com os espíritos das árvores... Cuidado agora...";
+	mes "Heh... cuidado agora? O que me importa se você mor..... Deixa pra lá.";
+	if(rand(1000)==0) goto L_GIVE2;
+	getitem 604,1; //Dead Branch
+	close;
+L_GIVE2:
+	getitem 12103,1; //Bloody Branch
+	close;
+
+M_END:
+	mes "[Mister Mobry]";
+	mes "Nada de espírito para você... então vá embora!";
+	close;
+}

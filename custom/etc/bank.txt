@@ -1,0 +1,118 @@
+//===== rAthena Script ======================================= 
+//= Banker Script 
+//===== By: ================================================== 
+//= Syrus22 (1.0)
+//===== Current Version: ===================================== 
+//= 2.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= An account wide Banker to store Zeny
+//===== Additional Comments: ================================= 
+//= Syrus22 - There's an optional transaction fee at the top of
+//= the script. To use it simply change the first set command
+//= to set the cost variable to whatever you want the fee to be.
+//= Version 2.0: Optimized and brought the script up to standard. [Jguy]
+//============================================================ 
+
+prontera,132,217,5	script	Banker	109,{
+	set @cost,500;
+	mes "[Banker]";
+	mes "Bem-vindo ao Primeiro Banco de Prontera. Como posso ajudá-lo hoje?";
+	next;
+	switch(select("Gostaria de fazer um depósito.:Gostaria de fazer um saque.:Qual é o meu saldo atual?:Cancelar")) {
+	case 1:
+		mes "[Banker]";
+		mes "Muito bem... Quanto você gostaria de depositar? O máximo que você pode depositar de uma vez é 999.999 Zenys.";
+		next;
+		if (@cost > 0) {
+			mes "[Banker]";
+			mes "Ah, e saiba que há uma taxa de" +@cost + "Zenys em todas as transações!";
+			next;
+		}
+		input @deposit;
+		if (@deposit < 1) {
+			mes "Certifique-se de me pedir para depositar um valor real.";
+			close;
+		}
+		else if (@deposit > Zeny) {
+			mes "Não parece que você tem a quantidade de Zenys que está tentando depositar!";
+			close;
+		}
+		else if (@deposit > (Zeny - @cost)) {
+			mes "Você precisa de" + @cost + "Zenys para cobrir a taxa de transação!";
+			close;
+		}
+		else {
+			set Zeny,Zeny - @deposit;
+			set Zeny,Zeny - @cost;
+			set #bankstorage,#bankstorage + @deposit;
+			mes "[Banker]";
+			mes "Muito obrigado... Seus Zenys estão em boas mãos.";
+			close;
+		}
+	case 2:
+		mes "[Banker]";
+		mes "Muito bem... Quanto você gostaria de sacar? O máximo que você pode sacar de uma vez é 999.999 Zenys.";
+		next;
+		if (@cost > 0) {
+			mes "[Banker]";
+			mes "Ah, e saiba que há uma taxa de" +@cost + "Zenys em todas as transações!";
+			next;
+		}
+		input @withdrawl;
+		if (@withdrawl < 1) {
+			mes "Por favor, não brinque comigo. Preciso de um valor real para sacar.";
+			close;
+		}
+		else if (@withdrawl > #bankstorage) {
+			mes "Você só tem ^00FF00" + callfunc("F_InsertComma",#bankstorage) +"^000000 zenys em sua conta!";
+			close;
+		}
+		else if ((@cost > Zeny) && ((Zeny + @withdrawl) > @cost)) {
+			mes "[Banker]";
+			mes "Você não tem Zenys para a taxa de transação no momento. Gostaria que eu descontasse a taxa diretamente do seu saque?";
+			next;
+			switch(select("Sim, por favor.:Não, obrigado.")){
+			case 1:
+				mes "[Banker]";
+				mes "Removendo" + @cost + "do seu saque para cobrir a taxa de depósito...";
+				set @withdrawl,@withdrawl - @cost;
+				set #bankstorage,#bankstorage - @cost;
+				set @cost,0;
+				next;
+				set Zeny,Zeny - @cost;
+				set Zeny,Zeny + @withdrawl;
+				set #bankstorage,#bankstorage - @withdrawl;
+				mes "[Banker]";
+				mes "Aqui estão seus Zenys. Tenha um bom dia.";
+				close;
+			case 2:
+				mes "[Banker]";
+				mes "Muito bem... volte sempre.";
+				close;
+			}
+		}
+		else {
+			set Zeny,Zeny - @cost;
+			set Zeny,Zeny + @withdrawl;
+			set #bankstorage,#bankstorage - @withdrawl;
+			mes "[Banker]";
+			mes "Aqui estão seus Zenys. Tenha um bom dia.";
+			close;
+		}
+	case 3:
+		mes "[Banker]";
+		mes "Hmmmm... deixe-me verificar alguma papelada.";
+		next;
+		mes "*Sussurro, Sussurro*";
+		next;
+		mes "[Banker]";
+		mes "Você tem atualmente" + callfunc("F_InsertComma",#bankstorage) + "Zenys em sua conta.";
+		close;
+	case 4:
+		mes "[Banker]";
+		mes "Muito bem... volte sempre.";
+		close;
+	}
+}

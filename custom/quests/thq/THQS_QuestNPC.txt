@@ -1,0 +1,554 @@
+//===== rAthena Script =======================================
+//= Treasure Hunter Quests
+//===== By: ==================================================
+//= Fredzilla
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Start for Treasure hunter quests
+//===== Additional Comments: =================================
+//= Event_THQS - Used to check if you have already registered
+//= #Treasure_Token - used to keep track of tokens
+//= 1.0 - Straight conversionof Aegis NPC file
+//= 1.1 Added time penalty to prevent get quests to often [Lupus]
+//= 1.2 Fixed not working penalty, added anti-cheat [Lupus]
+//= 1.3 Changed some bad RGB Codes. (bugreport:211) [Samuray22]
+//= 1.4 Fixed typos. (bugreport:2607) [Kisuka]
+//============================================================
+
+yuno_in01,112,151,6	script	Quest Manager	62,{
+	mes "[Guy]";
+	mes "Bem-vindo à Guilda dos Caçadores de Tesouros"+strcharinfo(0)+".";
+	next;
+	if (On_Quest == 0) goto N_NewQuest;
+	mes "[Guy]";
+	mes "Escute" +strcharinfo(0)+ ", você só pode realizar 1 missão por vez, você deve concluir a missão, a menos que tenha desistido.";
+	mes "Desistir custará a você ^FF00002500z^000000.";
+	next;
+	menu "Não, eu nunca abandonaria uma missão!",-,"É, eu sou patético... Pagar 2500z",N_PayZeny;
+	mes "[Guy]";
+	mes "Bom, então volte lá para fora.";
+	close;
+N_PayZeny:
+	if (Zeny < 2500) goto N_ZenyFail;
+	set one_qset, 0;
+	set two_qset, 0;
+	set three_qset, 0;
+	set four_qset, 0;
+	set five_qset, 0;
+	set six_qset, 0;
+	set seven_qset, 0;
+	set eight_qset, 0;
+	set nine_qset, 0;
+	set ten_qset, 0;
+	set On_Quest, 0;
+	set Zeny,Zeny-2500;
+	//add time delay penalty. You can get another quest after 2 - 3 hours. [Lupus]
+	set #THQ_DELAY, (GetTime(DT_YEAR)*12*31*24+GetTime(DT_MONTH)*31*24+GetTime(DT_DAYOFMONTH)*24+GetTime(DT_HOUR)+rand(2,3));
+	mes "[Guy]";
+	mes "É triste ver alguém desistir de uma missão...";
+	mes "Que vergonha.";
+	emotion ET_ANGER;
+	close;
+
+N_ZenyFail:
+	mes "[Guy]";
+	mes "É triste que você não tenha nem ^FF00002500z^000000.";
+	close;
+
+N_NewQuest:
+	if (Event_THQS == 0) goto N_Signup;
+	//checking if time penalty is over [Lupus]
+	if (#THQ_DELAY > (GetTime(DT_YEAR)*12*31*24 + GetTime(DT_MONTH)*31*24 + GetTime(DT_DAYOFMONTH)*24 + GetTime(DT_HOUR)) ) goto L_NoQuestsForYet;
+	mes "[Guy]";
+	mes "Ahh, bem-vindo, companheiro Caçador.";
+	mes "Você tem atualmente ^FF0000"+#Treasure_Token+"^000000 fichas de tesouro!!!";
+	mes "Gostaria que eu lhe atribuísse uma Missão?";
+	next;
+	menu "Sim, eu gostaria de uma Missão, por favor.",-,"Desculpe Guy, sem tempo hoje.",N_NoTime;
+	
+	mes "[Guy]";
+	mes "Ok, vamos ver que missão podemos te dar hoje.";
+	mes "Os nomes das missões em ^FF0000Esta Cor^000000 significam que elas são mais desafiadoras que as outras, mas possuem recompensas melhores.";
+	next;
+	set #THQ_DELAY,(GetTime(DT_YEAR)*12*31*24+GetTime(DT_MONTH)*31*24+GetTime(DT_DAYOFMONTH)*24+GetTime(DT_HOUR) + 1); //you can get another quest after 1 hour [Lupus]
+	emotion ET_BEST;
+	if(@treasure_job==0) set @treasure_job,rand(1,10); //doesn't allow cheaters to pick any quest they want
+	if(@treasure_job==2) goto N_JobList2;
+	if(@treasure_job==3) goto N_JobList3;
+	if(@treasure_job==4) goto N_JobList4;
+	if(@treasure_job==5) goto N_JobList5;
+	if(@treasure_job==6) goto N_JobList6;
+	if(@treasure_job==7) goto N_JobList7;
+	if(@treasure_job==8) goto N_JobList8;
+	if(@treasure_job==9) goto N_JobList9;
+	if(@treasure_job==10) goto N_JobList10;
+	goto N_JobList1; //if(@treasure_job==1)
+
+N_NoTime:
+	mes "[Guy]";
+	mes "Tudo bem, talvez na próxima."+strcharinfo(0)+".";
+	emotion ET_SCRATCH;
+	close;
+
+N_Signup:
+	mes "[Guy]";
+	mes "Receio que você deva se inscrever na guilda antes de poder sair em uma missão!";
+	emotion ET_SORRY;
+	close;
+
+L_NoQuestsForYet:
+	mes "[Guy]";
+	mes "Receio que ainda não existam Missões para você.";
+	mes "Volte daqui a"+ (#THQ_DELAY - (GetTime(DT_YEAR)*12*31*24+GetTime(DT_MONTH)*31*24+GetTime(DT_DAYOFMONTH)*24+GetTime(DT_HOUR)) )+"horas.";
+	emotion ET_SORRY;
+	close;
+
+L_QuestGiven:
+	set On_Quest,1;
+	set @treasure_job,0; //next time u get random quest
+	close;
+
+///////Job list 1///////
+N_JobList1:
+	mes "[Guy]";
+	mes "Ok, você tem algumas missões que podem ser feitas aqui.";
+	next;
+	menu "Velho Perdido.",-,"Mestre precisa de seu Arco.",N_MasterBow,"A Lista de Procurados.",N_HitList,"^FF0000A Viúva Triste.^000000",N_SadWidow;
+	mes "[Guy]";
+	mes "^FF0000Velho Perdido^000000";
+	mes "^FF0000------------^000000";
+	mes "Esta é uma missão fácil e com baixa recompensa.";
+	mes " ";
+	mes "Uma esposa veio nos pedir para encontrar seu marido; ela parece vir aqui com frequência pedindo para encontrá-lo repetidas vezes.";
+	next;
+	mes "[Guy]";
+	mes "Mas ele sempre parece estar no mesmo lugar, então não há muito o que procurar, verifique as montanhas 1 a oeste e 1 ao norte de Prontera.";
+	set one_qset,1;
+	goto L_QuestGiven;
+
+N_MasterBow:
+	mes "[Guy]";
+	mes "^FF0000O mestre precisa do seu Arco^000000";
+	mes "^FF0000--------------------^000000";
+	mes "É apenas uma entrega de pacote, nada demais.";
+	mes " ";
+	mes "Leve isso para um Arqueiro na Vila dos Arqueiro, fora de payon.";
+	getitem 1072,1; //Delivery_Box
+	set one_qset,2;
+	goto L_QuestGiven;
+
+N_HitList:
+	mes "[Guy]";
+	mes "^FF0000Lista de Alvos^000000";
+	mes "^FF0000------------^000000";
+	mes "Nesta missão você entrará em ação.";
+	mes " ";
+	mes "Tem um fazendeiro que está com todas as suas colheitas sendo comidas por ^FF0000Gatuno Bugs, Porings e Lunatics^000000. Aqui está uma lista do que preciso que você faça. Ele está esperando ao leste de Prontera.";
+	next;
+	mes "[Guy]";
+	mes "Ok, vá para o leste e acabe com esses canalhas como se não houvesse amanhã. Quando terminar essa lista, descarte-a, mas você NÃO receberá outra!.";
+	set one_qset,3;
+	goto L_QuestGiven;
+
+N_SadWidow:
+	mes "^FF0000A Viúva Triste^000000";
+	mes "^FF0000*************^000000";
+	mes "Esta é apenas mais uma missão com um possível bom pagamento.";
+	mes " ";
+	mes "Há uma velha viúva em Prontera, ela perdeu seu marido recentemente devido a um ataque de monstros. Ela solicitou que um membro da guilda vá falar com ela no cemitério de Prontera.";
+	set one_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 2///////
+N_JobList2:
+	mes "[Guy]";
+	mes "Ok, você tem algumas missões que podem ser feitas aqui.";
+	next;
+	menu "A Carta Estranha",-,"Jur para Jeramiah",N_JurJeramiah,"Mel do Apicultor",N_BeeHunny,"^FF0000O Viajante^000000",N_WanderMan;
+
+	mes "^FF0000A Carta Estranha^000000";
+	mes "^FF0000------------------^000000";
+	mes "Não sei muito sobre esta missão.";
+	mes " ";
+	mes "Um homem estranho veio aqui ontem e pediu para eu entregar esta ^FF0000Carta Estranha^000000 para uma mulher em Morocc. Como não fazemos perguntas, você deve cuidar desta entrega.";
+	mes "A mulher está localizada em Morocc e o nome dela é Erika.";
+	getitem 1072,1; //Delivery_Message
+	set two_qset, 1;
+	goto L_QuestGiven;
+
+N_JurJeramiah:
+	mes "^FF0000Jur para Jeramiah^000000";
+	mes "^FF0000----------------^000000";
+	mes "Missão de entrega padrão.";
+	mes " ";
+	mes "Jeramiah encomendou uma Jur Especial da nossa loja de armas. Seu trabalho é entregá-la a ele no Templo dos Assassinos.";
+	getitem 1998,1; //Jeramiah's_Jur
+	set two_qset,2;
+	goto L_QuestGiven;
+
+N_BeeHunny:
+	mes "^FF0000Mel de Apicultor^000000";
+	mes "^FF0000-----------------^000000";
+	mes "Um homem estranho no pântano precisa da sua ajuda.";
+	mes " ";
+	mes "Há um homem estranho na floresta, ^FF00001 ao sul e 1 a oeste^000000 de Prontera, ele precisa da sua ajuda com algo.";
+	set two_qset,3;
+	goto L_QuestGiven;
+
+N_WanderMan:
+	mes "^FF0000O Andarilho^000000";
+	mes "^FF0000**************^000000";
+	mes "Há uma mulher em payon que precisa desesperadamente de ajuda.";
+	mes " ";
+	mes "Há uma mulher em payon chamada Molly, por favor, chegue até ela o mais rápido possível; a carta que ela enviou parecia que alguém estava tentando matá-la.";
+	set two_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 3///////
+N_JobList3:
+	mes "[Guy]";
+	mes "Ok, você tem algumas missões que podem ser feitas aqui.";
+	next;
+	menu "Malditas Fadas!",-,"Entrega de Pacote",N_Delivery1,"Esgotos de Prontera",N_ProntCulvert,"^FF0000Problemas na Mina de Carvão^000000",N_CoalMine;
+	mes "^FF0000Malditas Pixies!^000000";
+	mes "^FF0000------------^000000";
+	mes "Você já esteve no Inferno?";
+	mes " ";
+	mes "Um homem do lado de fora do ^FF0000Ant Hell^000000 solicitou sua presença, sugiro que se apresse.";
+	set three_qset,1;
+	goto L_QuestGiven;
+
+N_Delivery1:
+	mes "^FF0000Entrega de Pacote^000000";
+	mes "^FF0000----------------^000000";
+	mes "Missão padrão de entrega.";
+	mes " ";
+	mes "Nesta missão, você precisa entregar uma caixa misteriosa para alguém chamado ^FF0000Flank na ponte entre Aldebaran e Juno^000000.";
+	getitem 1082,1; //Delivery_Box_
+	set three_qset,2;
+	goto L_QuestGiven;
+
+N_ProntCulvert:
+	mes "^FF0000Esgoto de Prontera^000000";
+	mes "^FF0000----------------^000000";
+	mes "Os insetos, eles estão em toda parte!.";
+	mes " ";
+	mes "O ^FF0000Esgoto de Prontera^000000 está fora de controle! Inscreva-se como voluntário para limpar uma parte do esgoto.";
+	next;
+	mes "Eu sei que parece não haver como pará-los, mas quantos você matar fará diferença. Depois de se inscrever, dentro do Esgoto, haverá um Cavaleiro que lhe dará uma missão.";
+	set three_qset,3;
+	goto L_QuestGiven;
+
+N_CoalMine:
+	mes "^FF0000Problemas na Mina de Carvão^000000";
+	mes "^FF0000************************^000000";
+	mes "A diversão... err... os problemas nunca acabam em Rune-Midgard.";
+	mes " ";
+	mes "Recentemente houve um acidente nas minas de carvão. Um enorme abismo se abriu e libertou alguns mortos-vivos, os Evil Druids.";
+	next;
+	mes "Os Druidas Malignos começaram a transformar todos os trabalhadores em mortos-vivos. Não sabemos o porquê, mas não queremos descobrir. Entre em contato com um homem chamado Rudolfo do lado de fora das Minas de Carvão.";
+	set three_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 4///////
+N_JobList4:
+	mes "[Guy]";
+	mes "Ok, você tem algumas missões que podem ser feitas aqui.";
+	next;
+	menu "Ataque Zumbi",-,"Místico Bruxo",N_MWizard,"Droga!",N_Shoot,"^FF0000Emperium^000000",N_Emp;
+	mes "^FF0000Ataque de Zumbis^000000";
+	mes "^FF0000-------------^000000";
+	mes "Os mortos-vivos invadiram a Caverna de payon!";
+	mes " ";
+	mes "Lembro-me de quando a Caverna de payon costumava ser um lugar seguro para visitar, mas agora Zumbis mortos-vivos infestaram a caverna! Por favor, contate a ^FF0000Flora do lado de fora da Caverna de payon^000000 e ajude-a.";
+	set four_qset,1;
+	goto L_QuestGiven;
+
+N_MWizard:
+	mes "^FF0000Místico Bruxo^000000";
+	mes "^FF0000-------------^000000";
+	mes "O protótipo de um cajado deve ser entregue a Zed, o Bruxo.";
+	mes " ";
+	mes "Zed, o Bruxo, pediu para testar um novo protótipo de cajado sem nome. Será seu trabalho entregá-lo a ele. Zed costuma ficar na área geral de Juno.";
+	getitem 1999,1; //Zed's_Staff
+	set four_qset,2;
+	goto L_QuestGiven;
+
+N_Shoot:
+	mes "^FF0000Ah, droga!^000000";
+	mes "^FF0000----------^000000";
+	mes "Uma garotinha está em apuros.";
+	mes " ";
+	mes "Há uma garotinha em apuros, o nome dela é Dassy e ela está a ^FF0000leste da fonte de Prontera^000000.";
+	set four_qset,3;
+	goto L_QuestGiven;
+
+N_Emp:
+	mes "^FF0000Emperium^000000";
+	mes "^FF0000********^000000";
+	mes "Esta é uma missão estranha sobre a qual sei pouco.";
+	mes " ";
+	mes "Alguém no ^FF0000Salão da Guilda de Prontera^000000 pediu para ver um de nossos membros, o nome dele é Czhore.";
+	set four_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 5///////
+N_JobList5:
+	mes "[Guy]";
+	mes "Ok, você tem algumas missões que podem ser feitas aqui.";
+	next;
+	menu "Terra Selvagem",-,"Parte 1 da Pirâmide",N_PyrPRT1,"Pensando primeiro",N_Thinkfirst,"^FF0000O fantasma não tão amigável^000000",N_Ghost;
+	mes "^FF0000Terras Selvagens^000000";
+	mes "^FF0000-----------^000000";
+	mes "Fácil para alguns, muito difícil para outros.";
+	mes " ";
+	mes "Um homem chamado Lithin deseja lhe dar uma missão, você pode encontrá-lo ao norte de Prontera dentro de ^FF0000O Templo Oculto^000000";
+	set five_qset,1;
+	goto L_QuestGiven;
+
+N_PyrPRT1:
+	mes "^FF0000Pirâmide^000000";
+	mes "^FF0000---------^000000";
+	mes "É engraçado porque ninguém sabe como isso foi realmente feito.";
+	mes " ";
+	mes "Aparentemente, as pirâmides começaram a ser infestadas por atividade morta-viva; fora das pirâmides, um homem estará esperando por você. Ele não nos disse o nome dele, mas pediu para que você se apresse.";
+	set five_qset,2;
+	goto L_QuestGiven;
+
+N_Thinkfirst:
+	mes "^FF0000Pensando primeiro^000000";
+	mes "^FF0000--------------^000000";
+	mes "Isso soa como outra daquelas missões de garotas bobas...";
+	mes " ";
+	mes "Dazzy, a loira local em Geffen, pediu para você entregar estas flores a ela. Não sei por que alguém enviaria flores para si mesma...";
+	getitem 744,1; //Bouquet
+	set five_qset,3;
+	goto L_QuestGiven;
+
+N_Ghost:
+	mes "^FF0000O fantasma não tão amigável^000000";
+	mes "^FF0000*************************^000000";
+	mes "Bem, ninguém nunca disse que o Gaspar era legal por trás das câmeras.";
+	mes " ";
+	mes "Um Bruxo no 3º andar da torre de Geffen quer falar com você sobre as ruínas antigas embaixo da cidade.";
+	set five_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 6///////
+N_JobList6:
+	mes "[Guy]";
+	mes "Ok, você tem algumas missões que podem ser feitas aqui.";
+	next;
+	menu "Pacote para ladrões",-,"Parte 2 da Pirâmide",N_PyrPRT2,"Entrega especial",N_Delivery2,"^FF0000Geffenia^000000",N_Gef;
+	mes "^FF0000Pacote para ladrões^000000";
+	mes "^FF0000------------------^000000";
+	mes "Quão irônico.";
+	mes " ";
+	mes "Entregue esta caixa para a guilda dos Gatunos.";
+	getitem 1083,1; //Delivery_Box__
+	set six_qset,1;
+	goto L_QuestGiven;
+
+N_PyrPRT2:
+	mes "^FF0000Parte 2 da Pirâmide^000000";
+	mes "^FF0000----------------^000000";
+	mes "Mais ação morta-viva neste triângulo!";
+	mes " ";
+	mes "Fale com um homem do lado de fora da entrada das pirâmides, ele parece ter outra missão para você.";
+	set six_qset,2;
+	goto L_QuestGiven;
+
+N_Delivery2:
+	mes "^FF0000Entrega especial^000000";
+	mes "^FF0000----------------^000000";
+	mes "Bem, a maior parte do que fazemos é entregar pacotes, esta não é diferente das outras.";
+	mes " ";
+	mes "Leve esta caixa — NÃO A ABRA! — para uma garotinha em Lutie chamada Chirach; ela deve estar perto do Papai Noel.";
+	getitem 1083,1; //Delivery_Box__
+	set six_qset,3;
+	goto L_QuestGiven;
+
+N_Gef:
+	mes "^FF0000Geffenia^000000";
+	mes "^FF0000********^000000";
+	mes "As criancinhas de Geffen têm tido pesadelos estranhos.";
+	mes " ";
+	mes "Acreditamos que as ruínas embaixo de Geffen estão causando esse problema; fale com um Bruxo chamado Zuuzuu dentro da Torre de Geffen para receber sua missão.";
+	set six_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 7///////
+N_JobList7:
+	mes "[Guy]";
+	mes "Ok, você tem algumas missões que podem ser feitas aqui.";
+	next;
+	menu "Suco de Maçã",-,"Entrega",N_Delivery3,"^FF0000Golden Gatuno Bug^000000",N_GTB,"^FF0000Piratas malignos^000000",N_EvilPirates;
+	mes "^FF0000Suco de Maçã^000000";
+	mes "^FF0000-----------^000000";
+	mes "Não dá para recusar um bom suco de maçã.";
+	mes " ";
+	mes "Há uma garotinha na praça de Prontera, um pouco ao norte da fonte, vá falar com ela.";
+	set seven_qset,1;
+	goto L_QuestGiven;
+
+N_Delivery3:
+	mes "^FF0000Entrega^000000";
+	mes "^FF0000--------^000000";
+	mes "Tantos pacotes, tão pouco tempo.";
+	mes " ";
+	mes "Leve esta caixa para um homem em Alberta chamado Charles.";
+	getitem 1082,1; //Delivery_Box_
+	set seven_qset,2;
+	goto L_QuestGiven;
+
+N_GTB:
+	mes "^FF0000Golden Gatuno Bug^000000";
+	mes "^FF0000****************^000000";
+	mes "O Esgoto de Prontera nunca mais foi o mesmo...";
+	mes " ";
+	mes "Bem, houve relatos de um Golden Gatuno Bug correndo pelo fundo do esgoto. Fale com um Cavaleiro dentro do esgoto.";
+	set seven_qset,3;
+	goto L_QuestGiven;
+
+N_EvilPirates:
+	mes "^FF0000Piratas malignos^000000";
+	mes "^FF0000************^000000";
+	mes "Um navio fantasma encalhou na costa de uma ilha fora de Izlude.";
+	mes " ";
+	mes "Uma Mercenário tem uma missão para você; ela está esperando do lado de fora do Navio Fantasma. Houve relatos de piratas mortos-vivos malignos espreitando dentro do navio.";
+	set seven_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 8///////
+N_JobList8:
+	mes "[Guy]";
+	mes "Ok, você tem algumas missões que podem ser feitas aqui.";
+	next;
+	menu "Suco de Banana",-,"Outra entrega",N_Delivery4,"Minhas contas perdidas",N_LostBeeds,"^FF0000Baphomet!^000000",N_Bapho;
+	mes "^FF0000Suco de Banana^000000";
+	mes "^FF0000------------^000000";
+	mes "Soa nojento para alguns, bom para outros.";
+	mes " ";
+	mes "Há uma garotinha na praça de Prontera, um pouco ao norte da fonte, vá falar com ela.";
+	set eight_qset,1;
+	goto L_QuestGiven;
+
+N_Delivery4:
+	mes "^FF0000Outra entrega^000000";
+	mes "^FF0000----------------^000000";
+	mes "Bem, sim, a entrega de caixas está em alta demanda, muitas pessoas preguiçosas.";
+	mes " ";
+	mes "Leve este pacote para um homem em Morocc chamado Klye.";
+	getitem 1081,1; //Delivery_Box
+	set eight_qset,2;
+	goto L_QuestGiven;
+
+N_Bapho:
+	mes "^FF0000Baphomet!^000000";
+	mes "^FF0000*********^000000";
+	mes "Escondido no Templo, ele observa e guarda.";
+	mes " ";
+	mes "Corre o boato de que um Homem-Bode está espreitando no Templo Oculto. Também há um homem no Templo Oculto chamado Zack que precisa da sua ajuda com esse Homem-Bode conhecido como Baphomet.";
+	set eight_qset,3;
+	goto L_QuestGiven;
+
+N_LostBeeds:
+	mes "^FF0000Minhas contas perdidas^000000";
+	mes "^FF0000-------------^000000";
+	mes "Ah, ótimo, sinto cheiro de estupidez...";
+	mes " ";
+	mes "Uma garotinha em payon quer falar com você, o nome dela é Flower. Que nome estúpido, hahaha.";
+	set eight_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 9///////
+N_JobList9:
+	mes "[Guy]";
+	mes "Ok, você tem algumas missões que podem ser feitas aqui.";
+	next;
+	menu "Caixa fedorenta",-,"Caverna de payon",N_PayonC,"^FF0000Sohees por toda parte!^000000",N_Sohee,"^FF0000Moonlight Flower^000000",N_Moonlight;
+	mes "^FF0000Caixa fedorenta^000000";
+	mes "^FF0000----------^000000";
+	mes "Ai meu Deus, por favor, tire isso daqui rápido.";
+	mes " ";
+	mes "Cara, fede como se alguém tivesse morrido aqui. Leve isso para a Escola de Magia em Geffen e se apresse, ahh, o cheiro está queimando meus olhos!!!";
+	getitem 1082,1; //Delivery_Box_
+	set nine_qset,1;
+	goto L_QuestGiven;
+
+N_Sohee:
+	mes "^FF0000Sohees por toda parte!^000000";
+	mes "^FF0000******************^000000" ;
+	mes "Hmmm, parece que um homem chamado Jack quer falar com você na guilda dos Arqueiro.";
+	mes " ";
+	mes "Bem, o que sabemos sobre payon é que, há algum tempo, houve um incêndio bizarro que queimou a velha escola.";
+	next;
+	mes "O estranho sobre o que aconteceu é que as crianças lá dentro não pareciam ter morrido por causa das chamas.";
+	mes "Fale com a garotinha da escola em algum lugar de payon.";
+	set nine_qset,2;
+	goto L_QuestGiven;
+
+N_Moonlight:
+	mes "^FF0000Moonlight Flower^000000";
+	mes "^FF0000****************^000000" ;
+	mes "Hmmm, parece que um homem chamado Jack quer falar com você na guilda dos Arqueiro.";
+	mes " ";
+	mes "Bem, não sei muito sobre isso, tem a ver com as regiões mais profundas da caverna de payon. Não sabemos muito porque ninguém parece voltar vivo.";
+	set nine_qset,3;
+	goto L_QuestGiven;
+
+N_PayonC:
+	mes "^FF0000Caverna de payon^000000";
+	mes "^FF0000----------^000000" ;
+	mes "Hmmm, parece que um homem chamado Jack quer falar com você na guilda dos Arqueiro.";
+	mes " ";
+	mes "Quanto mais entramos na caverna, mais estranho fica.";
+	set nine_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 10///////
+N_JobList10:
+	mes "[Guy]";
+	mes "Ok, você tem algumas missões que podem ser feitas aqui.";
+	next;
+	menu "A Caixa em Branco",-,"^FF0000Eddga^000000",N_Eddga,"^FF0000Phreeoni^000000",N_Phreeoni,"^FF0000Maya^000000",N_Maya;
+
+	mes "^FF0000A Caixa em Branco^000000";
+	mes "^FF0000-------------^000000";
+	mes "Pacote para Morocc";
+	mes " ";
+	mes "Não há nada escrito nesta caixa, exceto um aviso para entregá-la a um homem chamado Kreg.";
+	getitem 1082,1; //Delivery_Box_
+	set ten_qset,1;
+	goto L_QuestGiven;
+
+N_Eddga:
+	mes "^FF0000Eddga^000000";
+	mes "^FF0000*****^000000";
+	mes "O Tigre Tony está usando drogas e destruindo a floresta.";
+	mes " ";
+	mes "Fale com um homem do lado de fora da guilda 'Oculta' dos Caçador; ele precisa da sua ajuda.";
+	set ten_qset,2;
+	goto L_QuestGiven;
+
+N_Phreeoni:
+	mes "^FF0000Phreeoni^000000";
+	mes "^FF0000********^000000";
+	mes "Ele é grande e rosa, e você corre e se esconde!";
+	mes " ";
+	mes "Esse cara simplesmente apareceu em algum buraco um dia; ele não parece tão durão, mas você ficaria surpreso. Fale com um homem chamado Caral do lado de fora do Formigueiro.";
+	set ten_qset,3;
+	goto L_QuestGiven;
+
+N_Maya:
+	mes "^FF0000Maya^000000";
+	mes "^FF0000****^000000";
+	mes "Algo assustador!";
+	mes " ";
+	mes "Esse monstro seminu precisa de um exército para ser derrotado, agora é seu trabalho, boa sorte. Encontre uma garota chamada Jeni do lado de fora da entrada dos fundos do Formigueiro.";
+	set ten_qset,4;
+	goto L_QuestGiven;
+}

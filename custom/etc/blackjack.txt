@@ -1,0 +1,347 @@
+//===== rAthena Script =======================================
+//= Black Jack
+//===== By: ==================================================
+//= kobra_k88
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Black Jack card game.  Gameplay based off standard casino
+//= black jack rules.  Dealer must have at least 17 to stay and will
+//= automatically stay at 17 and up.  Player must have at least
+//= 13 to stay.  Aces counted as 11 or 1.  Option to "Double Down".
+//= Currently does not allow for "insurance", or "splitting"
+//= of pairs.
+//===== Additional Comments: =================================
+//= 1.0 First version.
+//============================================================
+
+cmd_in02,188,89,1	script	Black Jack Dealer	57,{
+	mes "[Dealer]";
+	mes "Olá! Gostaria de jogar uma partida de Black Jack?";
+M_Menu:
+	next;
+	menu "Quais são as regras?",M_0, "Quero jogar.",L_Play, "Não, obrigado.",M_End;
+
+M_0:
+	mes "[Dealer]";
+	mes "O que você gostaria de saber?";
+sM_Menu0:
+	next;
+	menu "O básico.",sM_0a, "Ganhar e perder.",sM_0b, "'Dobrar a aposta' (Double Down).",sM_0c,
+	"Ace value.",sM_0d, "Nothing.",M_Menu;
+
+sM_0a:
+	mes "[Dealer]";
+	mes "Black Jack é um jogo de cartas onde o objetivo é obter 21, ou chegar";
+	mes "o mais perto possível de 21 pontos, sem ultrapassar esse valor.";
+	next;
+	mes "[Dealer]";
+	mes "Antes do início do jogo, o jogador deve fazer uma aposta. Após a aposta,";
+	mes "tanto o dealer quanto o jogador recebem 2 cartas cada. Dependendo";
+	mes "das cartas que você tiver, pode escolher ^5533FF'parar'^000000,";
+	mes "ou pode escolher ^5533FF'pedir'^000000.";
+	next;
+	mes "[Dealer]";
+	mes "Quando você escolhe 'parar', está dizendo ao dealer que não precisa";
+	mes "de mais cartas. Isso permite que o dealer peça uma carta se ele(a)";
+	mes "quiser. Para parar, você deve ter ^FF3355pelo menos 13 pontos^000000. O";
+	mes "dealer só pode parar quando tiver ^FF335517 pontos ou mais^000000.";
+	next;
+	mes "[Dealer]";
+	mes "Quando você escolhe 'pedir', está dizendo ao dealer que quer";
+	mes "mais uma carta. Ao pedir mais cartas, você pode aumentar seu";
+	mes "total de pontos. Enquanto você tiver ^FF3355menos de 21^000000 pontos, pode";
+	mes "pedir uma carta do baralho.";
+	goto sM_Menu0;
+sM_0b:
+	mes "[Dealer]";
+	mes "Existem 3 formas de ganhar e perder no Black Jack.";
+	next;
+	mes "[Dealer]";
+	mes "1.) Ao final de uma rodada de Black Jack, se você tiver mais pontos";
+	mes "que o dealer, você vence a rodada. Por outro lado, se você tiver";
+	mes "menos pontos que o dealer, você perde.";
+	next;
+	mes "[Dealer]";
+	mes "2.) Se você pedir uma carta que faça o seu total de pontos ultrapassar";
+	mes "21, você perderá a rodada automaticamente. Isso é chamado de ^5533FF'estourar'^000000.";
+	mes "Se o dealer estourar, você vence a rodada.";
+	next;
+	mes "[Dealer]";
+	mes "3.) Se você obtiver um total de 21 pontos com as 2 primeiras cartas,";
+	mes "você vencerá a rodada automaticamente. Isso é chamado de ^5533FF'Black Jack'^000000";
+	mes "e ocorre quando você recebe um 'Ás' e uma carta de valor '10'. Se o";
+	mes "dealer conseguir um Black Jack, ele(a) vencerá a rodada automaticamente.";
+	next;
+	mes "[Dealer]";
+	mes "4.) Além de ganhar e perder, você pode empatar com o dealer. Se";
+	mes "tanto você quanto o dealer tiverem o mesmo total de pontos ao final";
+	mes "de uma rodada, isso resultará em um empate, sem vencedor e sem";
+	mes "perda ou ganho de dinheiro.";
+	next;
+	mes "[Dealer]";
+	mes "Isso é chamado de ^5533FF'push'^000000 com o dealer. Isso também";
+	mes "se aplica caso você e o dealer tenham Black Jack ao mesmo";
+	mes "tempo.";
+	goto sM_Menu0;
+sM_0c:
+	mes "[Dealer]";
+	mes "A opção 'Dobrar a aposta' permite que você dobre sua aposta atual,";
+	mes "mas com a desvantagem de que você só poderá pedir uma única";
+	mes "carta adicional. Essa opção só está disponível no início de";
+	mes "cada rodada.";
+	next;
+	mes "[Dealer]";
+	mes "Um exemplo de quando dobrar a aposta é útil, é quando";
+	mes "suas 2 primeiras cartas somam um total de 11 pontos. Você tem uma";
+	mes "boa chance de conseguir 21 ou 20 com a próxima carta que puxar.";
+	mes "Essa seria uma boa mão para dobrar a aposta.";
+	goto sM_Menu0;
+sM_0d:
+	mes "[Dealer]";
+	mes "A carta 'Ás' é única no jogo de Black Jack porque";
+	mes "pode ter 2 valores. Um Ás pode ser contado como 11 pontos,";
+	mes "ou apenas 1 ponto. Por exemplo, se você tivesse um Ás e um 4, isso";
+	mes "somaria 15 ou 5 pontos.";
+	next;
+	mes "[Dealer]";
+	mes "Se você decidir parar, o Ás será contado automaticamente como";
+	mes "11 pontos, totalizando 15 pontos.";
+	next;
+	mes "[Dealer]";
+	mes "Se você decidisse pedir e recebesse um 9, o ás seria";
+	mes "contado automaticamente como 1 ponto, totalizando 14";
+	mes "pontos. Se o Ás fosse contado como 11 pontos, o total";
+	mes "ultrapassaria 21 e você teria perdido.";
+	next;
+	mes "[Dealer]";
+	mes "É por causa dessa flexibilidade com o 'Ás' que o torna";
+	mes "a carta mais poderosa do jogo.";
+	goto sM_Menu0;
+M_End:
+	mes "[Dealer]";
+	mes "Sinta-se à vontade para voltar sempre.";
+	close;
+
+//================
+L_Play:
+	mes "[Dealer]";
+	mes "Por favor, faça suas apostas...";
+	next;
+	menu "2z",M_1a, "10z",M_1b, "20z",M_1c, "100z",M_1d, "Caro demais para mim...",M_End;
+
+M_1a:
+	if(Zeny < 2) goto sL_NotEnuf;
+	set @bet, 2;
+	goto L_Cont0;
+M_1b:
+	if(Zeny < 10) goto sL_NotEnuf;
+	set @bet, 10;
+	goto L_Cont0;
+M_1c:
+	if(Zeny < 20) goto sL_NotEnuf;
+	set @bet, 20;
+	goto L_Cont0;
+M_1d:
+	if(Zeny < 100) goto sL_NotEnuf;
+	set @bet, 100;
+	goto L_Cont0;
+
+sL_NotEnuf:
+	mes "[Dealer]";
+	mes "Sinto muito, mas você não tem zeny suficiente para essa aposta.";
+	close;
+
+L_Cont0:
+	mes "(as cartas estão sendo distribuídas)";
+	next;
+	deletearray $@card[0],13;
+	set @dealerTurn, 0;
+	set @numP, 0;
+	set @numD, 0;
+	set @pAce, 0;
+	set @dAce, 0;
+	callsub sF_GetCards, @numP, @playCard[@numP], @playCard$[@numP], @pAce;
+	callsub sF_GetCards, @numP, @playCard[@numP], @playCard$[@numP], @pAce;
+	callsub sF_GetCards, @numD, @dealCard[@numD], @dealCard$[@numD], @dAce;
+	callsub sF_GetCards, @numD, @dealCard[@numD], @dealCard$[@numD], @dAce;
+
+//==============
+L_Start:
+	callsub sF_GetTot;
+
+	mes "- Aqui estão as cartas do ^FF5533DEALER^000000:";
+	if (@numD==2) callsub sF_D2cards;
+	if (@numD==3) callsub sF_D3cards;
+	if (@numD==4) callsub sF_D4cards;
+	if (@numD==5) callsub sF_D5cards;
+	mes "O DEALER tem: ^FF5533"+@dealTot+"^000000";
+	mes " ";
+	mes "- Aqui estão ^5533FFSUAS^000000 cartas:";
+	if (@numP==2) callsub sF_P2cards;
+	if (@numP==3) callsub sF_P3cards;
+	if (@numP==4) callsub sF_P4cards;
+	if (@numP==5) callsub sF_P5cards;
+	if(@pAce != 1 || @playTot == 21) mes "VOCÊ tem: ^5533FF" +@playTot+ "^000000";
+	if(@pAce == 1 && @playTot != 21) mes "Você tem: ^5533FF" +@playTot+ "^000000, ou ^5533FF" +(@playTot-10)+ "^000000";
+	next;
+	if(@playTot==21 && @dealTot==21) goto sL_Push;
+	if(@numP==2 && @playTot == 21) goto sL_Win;
+	if(@numD==2 && @dealTot == 21) goto sL_Lose;
+	if(@playTot > 21) goto sL_Lose;
+	if(@dealTot > 21) goto sL_Win;
+	if(@numP==2 && @dealerTurn==0) menu "Pedir carta",M_Hit, "Parar",M_Parar, "Dobrar aposta",M_Double;
+	if(@dealerTurn == 0) menu "Pedir carta",M_Hit, "Parar",M_Parar;
+
+M_Parar:
+	mes "[Dealer]";
+	if(@playTot < 13) goto sL_PlayToLow;
+	if(@dealTot > 16) mes "O Dealer para.";
+	if(@dealTot > 16 || @numD == 5) goto L_Check;
+	mes "O Dealer vai pedir uma carta.";
+	next;
+	callsub sF_GetCards, @numD, @dealCard[@numD], @dealCard$[@numD], @dAce;
+	set @dealerTurn, 1;
+	goto L_Start;
+
+sL_PlayToLow:
+	mes "Sinto muito, mas seu total não é alto o suficiente para parar. Você deve pedir.";
+	next;
+	goto M_Hit;
+
+M_Hit:
+	if(@numP == 5) goto M_Stay;
+	callsub sF_GetCards, @numP, @playCard[@numP], @playCard$[@numP], @pAce;
+	goto L_Start;
+M_Double:
+	mes "[Dealer]";
+	mes "O jogador escolheu dobrar a aposta. Sua aposta atual será";
+	mes "dobrada e você só poderá pedir 1 carta extra.";
+	next;
+	set @dealerTurn, 1;
+	set @bet, @bet*2;
+	callsub sF_GetCards, @numP, @playCard[@numP], @playCard$[@numP], @pAce;
+	goto L_Start;
+
+//=============
+L_Check:
+	next;
+	if(@playTot < @dealTot) goto sL_Lose;
+	if(@playTot == @dealTot) goto sL_Push;
+
+sL_Win:
+	mes "[Dealer]";
+	mes "Parabéns, você venceu!";
+	next;
+	set Zeny, Zeny + @bet;
+	goto L_Play;
+sL_Lose:
+	mes "[Dealer]";
+	mes "Sinto muito, mas você perdeu.";
+	set Zeny, Zeny - @bet;
+	next;
+	goto L_Play;
+sL_Push:
+	mes "[Dealer]";
+	mes "É um empate (push). Você empatou com o Dealer.";
+	next;
+	goto L_Play;
+
+
+//==================================
+	// Sub function for dealing/pulling the cards
+sF_GetCards:
+	set @rnd, rand(1,13);
+	if($@card[@rnd] == 4) goto sF_GetCards;
+	set $@card[@rnd], $@card[@rnd] + 1;
+	set getarg(1), @rnd;
+	if(getarg(1) > 10) set getarg(1), 10;
+	if(getarg(1) == 1 && getarg(3) < 1) set getarg(1), 11;
+	if(getarg(1) == 11) set getarg(3), 1;
+	set getarg(2), " " + getarg(1) + " ";
+	if(@rnd == 10) set getarg(2), getarg(1);
+	if(@rnd == 1) set getarg(2), " A ";
+	if(@rnd == 11) set getarg(2), " J ";
+	if(@rnd == 12) set getarg(2), " Q ";
+	if(@rnd == 13) set getarg(2), " K ";
+	set getarg(0), getarg(0) + 1;
+	return;
+
+//==================================
+	// Sub function for getting the total score for each hand
+sF_GetTot:
+	set @i, 0;
+	set @dealTot, 0;
+	set @playTot, 0;
+
+GetDealTot:
+	set @dealTot, @dealTot + @dealCard[@i];
+	set @i, @i + 1;
+	if(@i < @numD) goto GetDealTot;
+	if(@dAce == 1 && @dealTot > 21) set @dealTot, @dealTot - 10;
+	set @i, 0;
+GetPlayTot:
+	set @playTot, @playTot + @playCard[@i];
+	set @i, @i + 1;
+	if(@i < @numP) goto GetPlayTot;
+	if(@pAce == 1 && @playTot > 21) set @pAce, 2;
+	if(@pAce > 0 && @playTot > 21) set @playTot, @playTot - 10;
+	return;
+
+//=======================================
+	// Sub function for displaying the Cards
+sF_D2cards:
+	mes "    .-----.   .-----. ";
+	mes "|"+@dealCard$[0]+"| |"+@dealCard$[1]+"|";
+	mes "'-----' '-----'";
+	return;
+sF_P2cards:
+	mes "    .-----.   .-----. ";
+	mes "|"+@playCard$[0]+"| |"+@playCard$[1]+"|";
+	mes "'-----' '-----'";
+	return;
+sF_D3cards:
+	mes "    .-----.   .-----.   .-----. ";
+	mes "|"+@dealCard$[0]+"| |"+@dealCard$[1]+"| |"+@dealCard$[2]+"|";
+	mes "'-----' '-----' '-----'";
+	return;
+sF_P3cards:
+	mes "    .-----.   .-----.   .-----. ";
+	mes "|"+@playCard$[0]+"| |"+@playCard$[1]+"| |"+@playCard$[2]+"|";
+	mes "'-----' '-----' '-----'";
+	return;
+sF_D4cards:
+	mes " .-----.  .-----.  .-----. ";
+	mes "|"+@dealCard$[0]+"| |"+@dealCard$[1]+"| |"+@dealCard$[2]+"|";
+	mes "'-----' '-----' '-----'";
+	mes "    .-----.  ";
+	mes "|"+@dealCard$[3]+"|";
+	mes "'-----'";
+	return;
+sF_P4cards:
+	mes " .-----.  .-----.  .-----. ";
+	mes "|"+@playCard$[0]+"| |"+@playCard$[1]+"| |"+@playCard$[2]+"|";
+	mes "'-----' '-----' '-----'";
+	mes "    .-----.  ";
+	mes "|"+@playCard$[3]+"|";
+	mes "'-----'";
+	return;
+sF_D5cards:
+	mes " .-----.  .-----.  .-----. ";
+	mes "|"+@dealCard$[0]+"| |"+@dealCard$[1]+"| |"+@dealCard$[2]+"|";
+	mes "'-----' '-----' '-----'";
+	mes "    .-----.   .-----. ";
+	mes "|"+@dealCard$[3]+"| |"+@dealCard$[4]+"|";
+	mes "'-----' '-----'";
+	return;
+sF_P5cards:
+	mes " .-----.  .-----.  .-----. ";
+	mes "|"+@playCard$[0]+"| |"+@playCard$[1]+"| |"+@playCard$[2]+"|";
+	mes "'-----' '-----' '-----'";
+	mes "    .-----.   .-----. ";
+	mes "|"+@playCard$[3]+"| |"+@playCard$[4]+"|";
+	mes "'-----' '-----'";
+	return;
+}

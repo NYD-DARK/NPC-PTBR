@@ -1,0 +1,51 @@
+//===== rAthena Script =======================================
+//= Balmung & Lord Kaho's Horns Quest
+//===== By: ==================================================
+//= MagicalTux
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Custom quests for Balmung and Lord Kaho's Horns.
+//= WARNING: The quests are very easy, so be careful!
+//===== Additional Comments: =================================
+//= 1.1 Cleaned and optimized. [Euphy]
+//============================================================
+
+prontera,158,356,4	script	Royal Messenger	105,{
+	
+	setarray .@Req1[0],1161,999,120,984,10,996,10,994,10,995,10,997,10;
+	setarray .@Req2[0],5013,2298,1,1001,10,996,10,994,10,995,10,997,10;
+	
+	mes "[Royal Messenger]";
+	mes "Bem-vindo a Prontera.";
+	mes "Sou o mensageiro encarregado das Missões Reais.";
+	next;
+	if(select("Escute...:Ir embora")==2) close;
+	mes "[Royal Messenger]";
+	mes "Existem duas missões.";
+	mes "Escolha a que você preferir.";
+	next;
+	set .@i, select("Balmung:Chifres de Lord Kaho:^777777Esquece.^000000");
+	mes "[Royal Messenger]";
+	if (.@i==3) {
+		mes "Tenha um bom dia.";
+		close; }
+	mes "Você precisará dos seguintes itens:";
+	for(set .@j,1; .@j<13; set .@j,.@j+2) {
+		mes "~"+getd(".@Req"+.@i+"["+(.@j+1)+"]")+"x ^0055FF"+getitemname(getd(".@Req"+.@i+"["+.@j+"]"))+"^000000";
+		if (!.@nr && countitem(getd(".@Req"+.@i+"["+.@j+"]")) < getd(".@Req"+.@i+"["+(.@j+1)+"]")) set .@nr,1; }
+	mes "~ 1.000.000z";
+	next;
+	mes "[Royal Messenger]";
+	if (.@nr || Zeny < 1000000) {
+		mes "Volte quando atender a todos os requisitos.";
+		close; }
+	for(set .@j,1; .@j<13; set .@j,.@j+2)
+		delitem getd(".@Req"+.@i+"["+.@j+"]"), getd(".@Req"+.@i+"["+(.@j+1)+"]");
+	set Zeny, Zeny-1000000;
+	mes "Vejo que você já tem todos os itens de que precisa. Aqui está o seu"+getitemname(getd(".@Req"+.@i+"[0]"))+", como prometido.";
+	getitem getd(".@Req"+.@i+"[0]"),1;
+	close;
+}

@@ -1,0 +1,108 @@
+//===== rAthena Script =======================================
+//= Slotted Sunglasses Quest
+//===== By: ==================================================
+//= amichan
+//===== Current Version: =====================================
+//= 1.8
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Quest to get Slotted Sunglasses.
+//= Will reset after quest completion.
+//===== Additional Comments: =================================
+//= 1.0 by Aegis 1.1 by aichan 1.2 by x[tsk] 1.3 by Darkchild
+//= 1.5 Fixed Exploit [Lupus]
+//= 1.6 Fixed Exploit [KarLaeda]
+//= 1.7 Relocated 'Maseph' to moc_fild07. [Kisuka]
+//= 1.8 Cleaning. [Euphy]
+//============================================================
+
+alberta,88,193,5	script	Sunglasses Trader	73,{
+	mes "[Sunglasses Trader]";
+	if(SG_QUEST1 == 1) {
+		mes "Não há mais nada que eu possa lhe dizer.";
+		next;
+		mes "[Sunglasses Trader]";
+		mes "Vá ver a Maseph. Ela está em algum lugar ao norte de Morocc.";
+		close; }
+	mes "Olá. O que posso fazer por você?";
+	next;
+	if(select("Ouvi dizer que você pode fazer ^0000FFSlotted Sunglasses^000000.:Nada, desculpe incomodar.")==2) {
+		mes "[Sunglasses Trader]";
+		mes "Volte quando estiver pronto.";
+		close; }
+	mes "[Sunglasses Trader]";
+	mes "Eu não as faço, mas posso lhe dizer onde encontrar a pessoa que faz. Por uma pequena taxa...";
+	next;
+	if(select("Quanto custa?:De jeito nenhum, eu mesmo a encontrarei!")==2) {
+		mes "[Sunglasses Trader]";
+		mes "Como quiser, a Fabricante não fará ^0000FFSlotted Sunglasses^000000 para você a menos que saiba que você está a caminho.";
+		mes "Apenas eu posso avisá-la de que você está vindo.";
+		next;
+		mes "[Sunglasses Trader]";
+		mes "Volte quando tiver desistido. Hahaha...";
+		close; }
+	mes "[Sunglasses Trader]";
+	mes "Para que eu lhe dê informações sobre as ^0000FFSlotted Sunglasses^000000, você precisa me trazer:";
+	mes "- ^0000881 Carat Diamond^000000";
+	mes "- ^00008850 Feathers^000000";
+	mes "- ^000088100000z^000000";
+	next;
+	if(select("Tudo bem, aqui está.:Isso é demais!")==2) {
+		mes "[Sunglasses Trader]";
+		mes "Como quiser.";
+		close; }
+	mes "[Sunglasses Trader]";
+	if (countitem(730) < 1 || countitem(949) < 50 || Zeny < 100000) {
+		mes "Está faltando algo. Volte quando tiver reunido todos os materiais.";
+		close; }
+	delitem 730,1;
+	delitem 949,50;
+	set Zeny, Zeny-100000;
+	set SG_QUEST1,1;
+	mes "[Sunglasses Trader]";
+	mes "Ótimo. Agora, escute com atenção.";
+	next;
+	mes "[Sunglasses Trader]";
+	mes "Procure por alguém chamada Maseph em algum lugar ao norte de Morocc.";
+	mes "Enviarei uma mensagem para ela informando que você está a caminho.";
+	close;
+}
+
+moc_fild07,334,186,5	script	Maseph	702,{
+	mes "[Maseph]";
+	if(SG_QUEST1 != 1) {
+		mes "Dia adorável, não é?";
+		close; }
+	mes "Olá.";
+	mes "Você veio pelas ^000088Slotted Sunglasses^000000, certo?";
+	next;
+	if(select("Sim:Não, desculpe incomodar.")==2) {
+		mes "[Maseph]";
+		mes "Siga seu caminho, então.";
+		close; }
+	mes "[Maseph]";
+	mes "Para fazer uma, precisarei de um par de ^000088Sunglasses^000000 e 400000z.";
+	next;
+	if(select("Aqui está.:Não, obrigado.")==2) {
+		mes "[Maseph]";
+		mes "Como desejar.";
+		close; }
+	mes "[Maseph]";
+	if (countitem(2201) < 1) {
+		mes "Preciso de um par de ^000088Sunglasses^000000. Volte quando tiver um.";
+		close; }
+	if (Zeny < 400000) {
+		mes "Você não tem Zeny suficiente. Volte quando tiver a quantia necessária.";
+		close; }
+	delitem 2201,1;
+	set Zeny, Zeny-400000;
+	mes "Obrigado. Vou começar imediatamente...";
+	next;
+	mes "[Maseph]";
+	mes "Aqui está, meu amigo.";
+	mes "Aproveite suas ^000088Slotted Sunglasses^000000.";
+	getitem 2202,1;
+	set SG_QUEST1,0;
+	close;
+}
