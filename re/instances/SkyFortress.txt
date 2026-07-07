@@ -1,0 +1,2070 @@
+//===== rAthena Script =======================================
+//= Sky Fortress Invasion
+//===== Description: =========================================
+//= [Official Conversion]
+//= Sky Fortress Invasion Instance
+//===== Changelogs: ==========================================
+//= 1.0 First version. [Capuche]
+//============================================================
+
+prt_q,249,82,2	script	Han#a1	8W_SOLDIER,{
+	mes "[Han]";
+	mes "Deve haver uma tonelada de monstros";
+	mes "atacando o centro de Prontera.";
+	mes "***";
+	next;
+	mes "[Han]";
+	mes "Minha família... Meus amigos...";
+	mes "Estão todos lá...";
+	mes "Eu preciso protegê-los...";
+	mes "Mas... eu tenho um trabalho ainda";
+	mes "mais importante para fazer aqui...";
+	next;
+	mes "[Han]";
+	mes "Eu, a cientista Doyeon, posso fazer isso.";
+	mes "Posso obliterar aquele lugar imundo,";
+	mes "que gera monstros sem parar...";
+	mes "É por isso que estou protegendo ele.";
+	mes "***";
+	next;
+	mes "[Han]";
+	mes "Protegê-lo e destruir esta fortaleza";
+	mes "é o que, no fim das contas, protege minha família";
+	mes "e meus amigos.";
+	close;
+}
+
+prt_q,252,79,4	script	Doek#a1	8W_SOLDIER,{
+	mes "[Doek]";
+	mes "Será que esta cientista que você vê aqui";
+	mes "realmente pode proteger Prontera?";
+	mes "Será que pode?";
+	mes "Você acredita nisso?";
+	next;
+	mes "[Doek]";
+	mes "Sinceramente, eu não...";
+	mes "Mas...";
+	next;
+	mes "[Doek]";
+	mes "Todos os meus entes queridos foram...";
+	mes "...por aqueles monstros...";
+	next;
+	mes "[Doek]";
+	mes "Esta é a última esperança que me resta...";
+	mes "Esta é a última.";
+	mes "Então, por favor, me ajude.";
+	mes "Ajude a Doyeon...";
+	next;
+	mes "- E então, ela permaneceu em silêncio -";
+	mes "- por um bom tempo. -";
+	close;
+}
+
+prt_q,249,79,4	script	Scientist Doyeon#a1	4_M_MAYOR,{
+	if (!checkweight(2104,2)) {
+		mes "- Está cheio de itens";
+		mes "então você não pode prosseguir com a conversa. -";
+		close;
+	}
+	if (BaseLevel < 145) {
+		mes "- Você deve estar no nível 145 ou superior";
+		mes "para prosseguir. -";
+		close;
+	}
+	switch( checkquest(9419,PLAYTIME) ) {
+	case -1:
+		if (is_party_leader() == false) {
+			callsub S_Info;
+			close;
+		}
+		if (isbegin_quest(9418) == 0) {// first entrance
+			.@party_name$ = getpartyname(getcharid(1));
+			mes "[Scientist Doyeon]";
+			mes "Sou uma cientista";
+			mes "vivendo em Prontera.";
+			mes "Sou apenas uma cientista comum";
+			mes "ensinando crianças e fazendo pesquisas.";
+			mes "E então... coisas surgiram";
+			mes "em Prontera de repente....";
+			while(true) {
+				next;
+				switch( select( "Sobre a Fortaleza Celeste", "Entrar na Fortaleza Celeste.", "Encerrar o diálogo." ) ) {
+				case 1:
+					callsub S_Info;
+					break;
+				case 2:
+					mes "[Scientist Doyeon]";
+					mes "Acho que posso abrir o portal,";
+					mes "pelo menos uma vez, com a magia";
+					mes "que venho acumulando com tanto esforço.";
+					mes "Espero que você me ajude a";
+					mes "destruir a fortaleza e";
+					mes "recuperar nossa Prontera.";
+					next;
+					if (select( "Não", "Sim" ) == 1) {
+						mes "[Scientist Doyeon]";
+						mes "Volte";
+						mes "se mudar de ideia...";
+						mes "Apenas saiba que o tempo está acabando...";
+						break;
+					}
+					mes "[Scientist Doyeon]";
+					mes "Pronto! Abri o portal";
+					mes "para a Fortaleza Celeste!";
+					mes "O portal ficará ativado";
+					mes "apenas por um período limitado de tempo.";
+					mes "Entre nele, rápido!";
+					if (instance_create("Sky Fortress Invasion") < 0) {
+						mes "Nome do Grupo:" + .@party_name$;
+						mes "Líder do Grupo:" + strcharinfo(0);
+						mes "^0000ffInvasão da Fortaleza Celeste ^000000- Falha na Reserva!";
+						close;
+					}
+					close;
+				case 3:
+					mes "[Scientist Doyeon]";
+					mes "Estou tão preocupada com";
+					mes "o futuro de Prontera...";
+					mes "Parece que esta fortaleza";
+					mes "deve ser a fonte de todo o mal...";
+					close;
+				}
+			}
+		}
+		mes "Você voltou ileso.";
+		mes "Então... o que aconteceu";
+		mes "lá dentro?";
+		next;
+		mes "- Eu contei a ela tudo que";
+		mes "aconteceu dentro da Fortaleza Celeste. -";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Como pode ser...";
+		mes "Ainda assim, acho que temos todos os motivos para manter a esperança";
+		mes "de eliminar aquele enorme Golem";
+		mes "na Fortaleza Celeste.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Ainda assim, aqueles monstros imundos";
+		mes "continuam surgindo em Prontera.";
+		mes "Então, acho que o que fizemos";
+		mes "não deve ser o suficiente.";
+		mes "***";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Para operar o portal,";
+		mes "muita magia é necessária.";
+		mes "Traga-me o item chamado -Passe de Calabouço-,";
+		mes "ou preciso de cerca de";
+		mes "três dias para coletar magia.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Espero que você entre na Fortaleza Celeste";
+		mes "e nos ajude a salvar";
+		mes "Prontera.";
+		completequest 9418;// Attack Sky Fortress Invading Prontera
+		setquest 9419;// Attack Sky Fortress Invading Prontera
+		if (isbegin_quest(9427) == 0) {
+			setquest 9427;// Clearing the Sky Fortress for the Same Time
+			completequest 9427;
+			rentitem 14505,3600;// Sky Fortress Ticket
+		}
+		close;
+	case 0:
+	case 1:
+		mes "[Scientist Doyeon]";
+		mes "Para operar o portal,";
+		mes "muita magia é necessária.";
+		mes "Traga-me o item chamado -Passe de Calabouço-,";
+		mes "ou preciso de cerca de";
+		mes "três dias para coletar magia.";
+		next;
+		if (is_party_leader() == true) {
+			.@party_name$ = getpartyname(getcharid(1));
+			if (select( "Encerrar o diálogo.", "Mostrar o -Passe de Calabouço-." ) == 2) {
+				if (rentalcountitem(14505) < 1 && rentalcountitem(14506) < 1) {// Sky Fortress Ticket
+					mes "[Scientist Doyeon]";
+					mes "Acho que isso não funciona";
+					mes "sem o -Passe de Calabouço-.";
+					mes "Não posso abrir o portal sem ele.";
+					close;
+				}
+				mes "[Scientist Doyeon]";
+				mes "Oh! Onde você";
+				mes "conseguiu o -Passe de Calabouço-?";
+				mes "Com este item,";
+				mes "eu praticamente consigo abrir o portal.";
+				next;
+				if (select( "Encerrar o diálogo.", "Ativar o portal." ) == 1) {
+					mes "[Scientist Doyeon]";
+					mes "Você não vai";
+					mes "ajudar Prontera?";
+					close;
+				}
+				mes "[Scientist Doyeon]";
+				mes "Pronto! Abri o portal";
+				mes "para a Fortaleza Celeste!";
+				mes "O portal ficará ativado";
+				mes "apenas por um período limitado de tempo.";
+				mes "Entre nele, rápido!";
+				if (instance_create("Sky Fortress Invasion") < 0) {
+					mes "Nome do Grupo:" + .@party_name$;
+					mes "Líder do Grupo:" + strcharinfo(0);
+					mes "^0000ffInvasão da Fortaleza Celeste ^000000- Falha na Reserva!";
+					close;
+				}
+				close;
+			}
+		}
+		mes "[Scientist Doyeon]";
+		mes "Espero que você entre na Fortaleza Celeste";
+		mes "e nos ajude a salvar";
+		mes "Prontera.";
+		close;
+	case 2:
+		mes "[Scientist Doyeon]";
+		mes "Você voltou! Você não fugiu!";
+		mes "Muito obrigada!";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Mas ainda assim...";
+		mes "Uma tonelada de monstros mortos-vivos continuaram surgindo";
+		mes "daquela entrada que vi atrás de mim,";
+		mes "como se o monstro de seiva cuspisse seiva.";
+		mes "Eles continuavam saindo";
+		mes "não importava quantos fossem mortos.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Suponho que os monstros estejam sendo criados";
+		mes "dentro da fortaleza.";
+		mes "Meu palpite é que, se pudermos derrotar o líder deles na fortaleza,";
+		mes "os monstros desaparecerão";
+		mes "e Prontera se estabilizará.";
+		mes "***";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Acho que posso abrir o portal,";
+		mes "pelo menos uma vez, com a magia";
+		mes "que venho acumulando com tanto esforço.";
+		mes "Espero que você me ajude a";
+		mes "destruir a fortaleza e";
+		mes "recuperar nossa Prontera.";
+		if (is_party_leader() == true) {
+			.@party_name$ = getpartyname(getcharid(1));
+			next;
+			if (select( "Não", "Sim" ) == 1) {
+				mes "[Scientist Doyeon]";
+				mes "Volte";
+				mes "se mudar de ideia...";
+				mes "Apenas saiba que o tempo está acabando...";
+				close;
+			}
+			mes "[Scientist Doyeon]";
+			mes "Pronto! Abri o portal";
+			mes "para a Fortaleza Celeste!";
+			mes "O portal ficará ativado";
+			mes "apenas por um período limitado de tempo.";
+			mes "Entre nele, rápido!";
+			if (instance_create("Sky Fortress Invasion") < 0) {
+				mes "Nome do Grupo:" + .@party_name$;
+				mes "Líder do Grupo:" + strcharinfo(0);
+				mes "^0000ffInvasão da Fortaleza Celeste ^000000- Falha na Reserva!";
+				close;
+			}
+		}
+		close;
+	}
+	end;
+
+S_Info:
+	mes "[Scientist Doyeon]";
+	mes "Sou uma cientista";
+	mes "vivendo em Prontera.";
+	mes "Sou apenas uma cientista comum";
+	mes "ensinando crianças e fazendo pesquisas.";
+	next;
+	mes "[Scientist Doyeon]";
+	mes "Mas agora... a vida, pelo menos como eu a conhecia,";
+	mes "foi despedaçada.";
+	next;
+	mes "[Scientist Doyeon]";
+	mes "Graças a esta fortaleza";
+	mes "que parece uma enorme lata de lixo,";
+	mes "nossa vila se transformou em um monte de entulho";
+	mes "que nem sequer apodrece.";
+	next;
+	mes "[Scientist Doyeon]";
+	mes "Edifícios desabam,";
+	mes "as pessoas continuam morrendo...";
+	mes "Eu me pergunto o que a nobreza e os soldados no Palácio de Prontera";
+	mes "estão fazendo quando as coisas estão desse jeito.";
+	next;
+	mes "[Scientist Doyeon]";
+	mes "Uma tonelada de monstros mortos-vivos continuou surgindo";
+	mes "daquela entrada vista atrás de mim";
+	mes "como se o monstro de seiva cuspisse seiva.";
+	mes "Eles continuavam saindo";
+	mes "não importa quantos fossem mortos.";
+	next;
+	mes "[Scientist Doyeon]";
+	mes "Suponho que os monstros estejam sendo criados";
+	mes "dentro da fortaleza.";
+	mes "Meu palpite é que, se pudermos derrotar o líder deles na fortaleza,";
+	mes "os monstros irão embora";
+	mes "e Prontera se estabilizará.";
+	mes "***";
+	next;
+	mes "[Scientist Doyeon]";
+	mes "Então eu realmente queria entrar na fortaleza";
+	mes "mas não consegui encontrar nenhuma entrada.";
+	mes "Estudei dia e noite";
+	mes "e finalmente a localizei.";
+	next;
+	mes "[Scientist Doyeon]";
+	mes "Para entrar na fortaleza,";
+	mes "o portal deve ser ativado.";
+	mes "Para fazer isso, muita magia";
+	mes "é indispensável!";
+	next;
+	mes "[Scientist Doyeon]";
+	mes "E então... eu tenho preparado";
+	mes "muita magia necessária para o portal.";
+	mes "Agora eu poderia usar um guerreiro";
+	mes "que possa destruir a fortaleza";
+	mes "e trazer paz para Prontera.";
+	return;
+}
+
+prt_q,243,75,3	script	Fortress Entry Warp Portal#1	PORTAL,{
+	if (BaseLevel < 145) {
+		mes "- Você deve ter nível 145 ou superior";
+		mes "para prosseguir. -";
+		close;
+	}
+	if (checkquest(9419,PLAYTIME) == 2 || (checkquest(9419,PLAYTIME) == -1 && isbegin_quest(9418) != 1)) {
+		setarray .@menu$[0], "Não entre no portal.", "Entre no portal.";
+		.@type = 1;
+	}
+	else {
+		mes "- O portal parece não funcionar.";
+		mes "Parece que você não consegue entrar... -";
+		next;
+		setarray .@menu$[0], "Encerrar o diálogo.", "", "Coloque o - Passe de Masmorra - perto do portal.";
+	}
+	switch( select( .@menu$[0], .@menu$[1], .@menu$[2] ) ) {
+	case 1:
+		mes "- O portal está emitindo luzes brilhantes. -";
+		close;
+	case 2:
+		break;
+	case 3:
+		if (rentalcountitem(14505) < 1 && rentalcountitem(14506) < 1) {// Sky Fortress Ticket
+			mes "- Você não tem -";
+			mes "- o Passe de Masmorra. -";
+			close;
+		}
+		break;
+	}
+	.@md_name$ = "Sky Fortress Invasion";
+	switch( instance_enter(.@md_name$) ) {
+	case IE_OTHER:
+		mes "Um erro desconhecido ocorreu.";
+		close;
+	case IE_NOINSTANCE:
+		mes "Masmorra Memorial" + .@md_name$ + "não existe.";
+		mes "O líder do grupo não criou a Masmorra Memorial.";
+		close;
+	case IE_NOMEMBER:
+		mes "Apenas os membros do grupo podem entrar na Masmorra Memorial.";
+		close;
+	case IE_OK:
+		mapannounce "prt_q", "Membro do grupo" + strcharinfo(0) + " of party's " + getpartyname( getcharid(1) ) + " enters " + .@md_name$ + "", bc_map,0xFF99;
+		if (.@type == 1) {
+			if (isbegin_quest(9419) > 0)
+				erasequest 9419;
+			if (isbegin_quest(9418) > 0)
+				erasequest 9418;
+			setquest 9418;// Attack Sky Fortress Invading Prontera
+		}
+		fortress_entrance_loc = 0;	// warp back to prt_q on exit
+		// warp "1@sthb",54,67;
+		end;
+	}
+	end;
+
+OnInit:
+	while(true) {
+		sleep 10000;
+		specialeffect EF_ENHANCE;
+	}
+	end;
+}
+
+// Dali entrance
+dali02,115,61,3	script	Fortress Entry Warp Portal#2	PORTAL,{
+	if (BaseLevel < 145) {
+		mes "- Você deve ter nível 145 ou superior";
+		mes "para prosseguir. -";
+		close;
+	}
+	mes "- O portal parece não funcionar.";
+	mes "Parece que você não consegue entrar. -";
+	next;
+	if (select( "Encerrar o diálogo.", "Coloque o - Passe de Masmorra - perto do portal." ) == 1) {
+		mes "- O portal está emitindo luzes brilhantes. -";
+		close;
+	}
+	if (rentalcountitem(14505) < 1 && rentalcountitem(14506) < 1) {// Sky Fortress Ticket
+		mes "- Você não tem -";
+		mes "- o Passe de Masmorra. -";
+		close;
+	}
+	.@md_name$ = "Sky Fortress Invasion";
+	switch( instance_enter(.@md_name$) ) {
+	case IE_OTHER:
+		mes "Um erro desconhecido ocorreu.";
+		close;
+	case IE_NOINSTANCE:
+		mes "Masmorra Memorial" + .@md_name$ + "não existe.";
+		mes "O líder do grupo não criou a Masmorra Memorial.";
+		close;
+	case IE_NOMEMBER:
+		mes "Apenas os membros do grupo podem entrar na Masmorra Memorial.";
+		close;
+	case IE_OK:
+		mapannounce "prt_q", "Membro do grupo" + strcharinfo(0) + " of party's " + getpartyname( getcharid(1) ) + " enters " + .@md_name$ + "", bc_map,0xFF99;
+		// warp "1@sthb",54,67;
+		fortress_entrance_loc = 1;	// warp back to dali02 on exit
+		// note: no quest change when using tickets
+		end;
+	}
+	end;
+
+OnInit:
+	while(true) {
+		sleep 10000;
+		specialeffect EF_ENHANCE;
+	}
+	end;
+}
+
+dali02,122,63,2	script	Scientist Doyeon#a2	4_M_MAYOR,{
+	if (!checkweight(2104,2)) {
+		mes "- Está cheio de itens";
+		mes "então você não pode prosseguir com a conversa. -";
+		close;
+	}
+	if (BaseLevel < 145) {
+		mes "- Você deve ter nível 145 ou superior";
+		mes "para prosseguir. -";
+		close;
+	}
+	if (is_party_leader() == false) {
+		mes "[Scientist Doyeon]";
+		mes "Sou um cientista";
+		mes "morando em Prontera.";
+		mes "Sou apenas um cientista comum";
+		mes "ensinando crianças e fazendo pesquisas.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Mas agora... minha vida normal";
+		mes "foi destruída.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Graças a esta fortaleza";
+		mes "que parece uma enorme lata de lixo,";
+		mes "nossa vila se transformou em um monte de entulho";
+		mes "que nem sequer apodrece.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Edifícios desabam,";
+		mes "as pessoas continuam morrendo...";
+		mes "Eu me pergunto o que a nobreza e os soldados no Palácio de Prontera";
+		mes "estão fazendo quando as coisas estão desse jeito.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Uma tonelada de monstros mortos-vivos continuou surgindo";
+		mes "daquela entrada vista atrás de mim";
+		mes "como se o monstro de seiva cuspisse seiva.";
+		mes "Eles continuavam saindo";
+		mes "não importa quantos fossem mortos.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Suponho que os monstros estejam sendo criados";
+		mes "dentro da fortaleza.";
+		mes "Meu palpite é que, se pudermos derrotar o líder deles na fortaleza,";
+		mes "os monstros irão embora";
+		mes "e Prontera se estabilizará.";
+		mes "***";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Então eu realmente queria entrar na fortaleza";
+		mes "mas não consegui encontrar nenhuma entrada.";
+		mes "Estudei dia e noite";
+		mes "e finalmente a localizei.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Para entrar na fortaleza,";
+		mes "o portal deve ser ativado.";
+		mes "Para fazer isso,";
+		mes "o -Passe de Masmorra-";
+		mes "é indispensável!";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "E então... eu tenho preparado";
+		mes "muita magia necessária para o portal.";
+		mes "Agora eu poderia usar um guerreiro";
+		mes "que possa destruir a fortaleza";
+		mes "e trazer paz para Prontera.";
+		close;
+	}
+	.@party_name$ = getpartyname(getcharid(1));
+	mes "[Scientist Doyeon]";
+	mes "Sou um cientista";
+	mes "morando em Prontera.";
+	mes "Ensino crianças e realizo atividades de pesquisa.";
+	mes "Mas tornou-se";
+	mes "tão perigoso lá,";
+	mes "então eu me mudei para cá.";
+	next;
+	switch( select( "Sobre a Fortaleza do Céu", "Entrar na Fortaleza do Céu.", "Encerrar o diálogo." ) ) {
+	case 1:
+		mes "[Scientist Doyeon]";
+		mes "Mas agora... minha vida normal";
+		mes "foi destruída.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Graças a esta fortaleza";
+		mes "que parece uma enorme lata de lixo,";
+		mes "nossa vila se transformou em um monte de entulho";
+		mes "que nem sequer apodrece.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Edifícios estão caindo,";
+		mes "as pessoas continuam morrendo...";
+		mes "Fico imaginando o que a nobreza e os soldados no Palácio de Prontera";
+		mes "estão fazendo quando as coisas estão assim.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Uma tonelada de monstros mortos-vivos continuava a surgir";
+		mes "como se o monstro de seiva cuspisse a seiva.";
+		mes "Eles continuavam saindo";
+		mes "não importa quantos fossem mortos.";
+		mes "***";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Suponho que os monstros estejam sendo criados";
+		mes "dentro da fortaleza.";
+		mes "Meu palpite é que, se conseguirmos derrotar o líder deles na fortaleza,";
+		mes "os monstros desaparecerão";
+		mes "e Prontera se estabilizará.";
+		mes "***";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Então, eu queria entrar na fortaleza,";
+		mes "mas não consegui encontrar nenhuma entrada.";
+		mes "Estudei dia e noite";
+		mes "e finalmente a localizei.";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "Para entrar na fortaleza,";
+		mes "o portal deve ser ativado.";
+		mes "Para fazer isso, uma grande quantidade de magia";
+		mes "é indispensável!";
+		next;
+		mes "[Scientist Doyeon]";
+		mes "E então... eu venho preparando";
+		mes "muita magia necessária para o portal.";
+		mes "Agora eu poderia usar um guerreiro";
+		mes "que possa destruir a fortaleza";
+		mes "e trazer paz para Prontera.";
+		mes "É por isso que estou aqui.";
+		close;
+	case 2:
+		mes "[Scientist Doyeon]";
+		mes "Para operar o portal,";
+		mes "muita magia é necessária.";
+		mes "Não se esqueça de me trazer";
+		mes "o -Passe de Masmorra-.";
+		mes "Esse é o único caminho para abrir";
+		mes "o portal para a Fortaleza do Céu.";
+		next;
+		if (select( "Encerrar o diálogo.", "Mostrar o -Passe de Masmorra-." ) == 1) {
+			mes "[Scientist Doyeon]";
+			mes "Não se esqueça de me trazer";
+			mes "o -Passe de Masmorra-.";
+			mes "Entre na Fortaleza do Céu";
+			mes "e ajude-nos a salvar";
+			mes "a invadida Prontera.";
+			close;
+		}
+		if (rentalcountitem(14505) < 1 && rentalcountitem(14506) < 1) {// Sky Fortress Ticket
+			mes "[Scientist Doyeon]";
+			mes "Eu não acho que isso funcione";
+			mes "sem o -Passe de Masmorra-.";
+			mes "Não consigo abrir o portal sem ele.";
+			close;
+		}
+		mes "[Scientist Doyeon]";
+		mes "Oh! Onde você";
+		mes "conseguiu o -Passe de Masmorra-?";
+		mes "Este item é suficiente";
+		mes "para abrir o portal.";
+		next;
+		if (select( "Encerrar o diálogo.", "Ativar o portal." ) == 1) {
+			mes "[Scientist Doyeon]";
+			mes "Você não vai";
+			mes "ajudar Prontera?";
+			close;
+		}
+		mes "[Scientist Doyeon]";
+		mes "Pronto! Abri o portal";
+		mes "para a Fortaleza do Céu!";
+		mes "O portal será ativado";
+		mes "apenas por um período limitado de tempo.";
+		mes "Entre nele, rápido!";
+		if (instance_create("Sky Fortress Invasion") < 0) {
+			mes "Nome do Grupo:" + .@party_name$;
+			mes "Líder do Grupo:" + strcharinfo(0);
+			mes "^0000ffInvasão à Fortaleza do Céu ^000000- Falha na Reserva!";
+			close;
+		}
+		close;
+	case 3:
+		close;
+	}
+}
+
+// Warps
+1@sthb,73,71,0	warp2	#sthd_move_01_01	3,3,1@sthb,73,84
+1@sthb,93,77,0	warp2	#sthd_move_02_01	2,2,1@sthb,210,96
+1@sthb,190,54,0	warp2	#sthd_move_02_02	2,2,1@sthd,103,71
+
+// Main event - step 1
+1@sthb,64,67,4	script	Stefan.J.E.Wolf#sthd_01	4_AS_RAGGED_GOLEM,{
+	end;
+OnStart:
+	enablenpc instance_npcname("Stefan.J.E.Wolf#sthd_01");
+	initnpctimer;
+	end;
+OnTimer1000:
+	npctalk "Stefan: ~Grunhidos~";
+	end;
+OnTimer3000:
+	npctalk "Earnest: Que bando de vermes ameaçadores...!";
+	end;
+OnTimer5000:
+	mapannounce 'sthb_map$, "Stefan Jack Earnest Wolf: Guard...the Sky Fortress...Immortal...beings...", bc_map,0xEBFF;
+	end;
+OnTimer6000:
+	donpcevent instance_npcname("#sthd_event_2") + "::OnStart";
+	end;
+OnTimer7000:
+	disablenpc instance_npcname("Stefan.J.E.Wolf#sthd_01");
+	stopnpctimer;
+	end;
+}
+
+1@sthb,64,67,4	duplicate(dummy_npc)	Stefan.J.E.Wolf#sthd_02	4_AS_RAGGED_GOLEM
+
+1@sthb,56,71,0	script	#sthd_event_1	HIDDEN_WARP_NPC,8,8,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_1");
+	.@stefan$ = instance_npcname("Stefan.J.E.Wolf#sthd_01");
+	setpcblock PCBLOCK_NPC, true;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : Is this what caused the invasion into Prontera? Inside the Sky Fortress?";
+	sleep2 2000;
+	enablenpc .@stefan$;
+	sleep2 2000;
+	cutin "stephan_j_e_w.bmp",2;
+	npctalk "Wolf: Intrusos... Fortaleza do Céu...", .@stefan$;
+	specialeffect2 EF_LOCKON;
+	sleep2 2000;
+	npctalk "Jack: Bijou... me disse... para impedir os intrusos...", .@stefan$;
+	sleep2 2000;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : What's that...huge lump?";
+	npctalk "Earnest: Pequeno... humano... Novato... Saia...", .@stefan$;
+	sleep2 2000;
+	setpcblock PCBLOCK_NPC, false;
+	cutin "",255;
+	specialeffect2 EF_LOCKON;
+	donpcevent instance_npcname("#sthd_event_1_boss") + "::OnStefanHp";
+	disablenpc .@stefan$;
+	end;
+}
+
+1@sthb,1,1,0	script	#sthd_event_1_boss	HIDDEN_WARP_NPC,{
+	end;
+OnStefanHp:
+	enablenpc instance_npcname("#sthd_event_1_boss");
+	monster 'sthb_map$,64,67, "Stefan.J.E.Wolf",3484,1, instance_npcname("#sthd_event_1_boss") + "::OnMobDead";	// AS_D_RAGGED_GOLEM
+	'boss_id = $@mobid[0];
+	initnpctimer;
+	end;
+OnTimer2000:
+	getunitdata 'boss_id, .@data;
+	if (.@data[UMOB_HP] >= 19000000)
+		end;
+	// fall through
+OnMobDead:
+	stopnpctimer;
+	killmonster 'sthb_map$, instance_npcname("#sthd_event_1_boss") + "::OnMobDead";
+	donpcevent instance_npcname("Stefan.J.E.Wolf#sthd_01") + "::OnStart";
+	disablenpc instance_npcname("#sthd_event_1_boss");
+	end;
+OnTimer3000:
+	initnpctimer;
+	end;
+}
+
+// 1@sthb,68,65,0	script	#sthd_event_2	HIDDEN_WARP_NPC,{	// official coord
+1@sthb,1,1,0	script	#sthd_event_2	HIDDEN_WARP_NPC,{
+	end;
+OnStart:
+	enablenpc instance_npcname("#sthd_event_2");
+	initnpctimer;
+	.@label$ = instance_npcname("#sthd_event_2") + "::OnMobDead";
+	monster 'sthb_map$,48,75,"Immortal Zombie Soldier",3476,1, .@label$;// AS_ZOMBIE
+	monster 'sthb_map$,56,75,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,63,74,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,63,67,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,63,61,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,56,60,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,48,60,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,48,67,"Immortal Zombie Soldier",3476,1, .@label$;
+	end;
+OnTimer3000:
+	if (mobcount( 'sthb_map$, instance_npcname("#sthd_event_2") + "::OnMobDead" ) > 0) {
+		initnpctimer;
+		end;
+	}
+	stopnpctimer;
+	disablenpc instance_npcname("#sthd_event_2");
+	donpcevent instance_npcname("#sthd_event_3") + "::OnStart";
+	end;
+OnMobDead:
+	end;
+}
+
+// 1@sthb,68,66,0	script	#sthd_event_3	HIDDEN_WARP_NPC,{	// official coord
+1@sthb,1,1,0	script	#sthd_event_3	HIDDEN_WARP_NPC,{
+	end;
+OnStart:
+	enablenpc instance_npcname("#sthd_event_3");
+	initnpctimer;
+	.@label$ = instance_npcname("#sthd_event_3") + "::OnMobDead";
+	monster 'sthb_map$,48,75,"Immortal Zombie Soldier",3476,1, .@label$;// AS_ZOMBIE
+	monster 'sthb_map$,56,75,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,63,74,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,63,67,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,63,61,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,56,60,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,48,60,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,48,67,"Immortal Zombie Soldier",3476,1, .@label$;
+	end;
+OnTimer3000:
+	if (mobcount( 'sthb_map$, instance_npcname("#sthd_event_3") + "::OnMobDead" ) > 0) {
+		initnpctimer;
+		end;
+	}
+	stopnpctimer;
+	disablenpc instance_npcname("#sthd_event_3");
+	donpcevent instance_npcname("#sthd_event_4") + "::OnStart";
+	end;
+OnMobDead:
+	end;
+}
+
+// 1@sthb,68,67,0	script	#sthd_event_4	HIDDEN_WARP_NPC,{	// official coord
+1@sthb,1,1,0	script	#sthd_event_4	HIDDEN_WARP_NPC,{
+	end;
+OnStart:
+	enablenpc instance_npcname("#sthd_event_4");
+	initnpctimer;
+	.@label$ = instance_npcname("#sthd_event_4") + "::OnMobDead";
+	monster 'sthb_map$,48,75,"Immortal Zombie Soldier",3476,1, .@label$;// AS_ZOMBIE
+	monster 'sthb_map$,56,75,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,63,74,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,63,67,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,63,61,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,56,60,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,48,60,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,48,67,"Immortal Zombie Soldier",3476,1, .@label$;
+	monster 'sthb_map$,56,79,"Sky Fortress Key Keeper",3478,1, .@label$;	// AS_ZOMBIE_SLAUGHTER
+	end;
+OnTimer3000:
+	if (mobcount( 'sthb_map$, instance_npcname("#sthd_event_4") + "::OnMobDead" ) > 0) {
+		initnpctimer;
+		end;
+	}
+	stopnpctimer;
+	disablenpc instance_npcname("#sthd_event_4");
+	enablenpc instance_npcname("#Stefan_Action1");
+	enablenpc instance_npcname("Stefan.J.E.Wolf#sthd_02");
+	end;
+OnMobDead:
+	end;
+}
+
+1@sthb,64,67,0	script	#Stefan_Action1	HIDDEN_WARP_NPC,8,8,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#Stefan_Action1");
+	setpcblock PCBLOCK_NPC, true;
+	sleep2 1000;
+	cutin "stephan_j_e_w.bmp",2;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : I believe that huge Golem is what plays an important role in the Sky Fortress.";
+	sleep2 2000;
+	npctalk "Wolf: Todos os subordinados na fortaleza... Intrusos... Parem eles... Ordem da... Bijou...", instance_npcname("Stefan.J.E.Wolf#sthd_02");
+	specialeffect2 EF_LOCKON;
+	sleep2 2000;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : What on earth is happening inside?";
+	sleep2 2000;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : Let's head to top! I believe there must be something there.";
+	sleep2 2000;
+	setpcblock PCBLOCK_NPC, false;
+	specialeffect2 EF_LOCKON;
+	specialeffect EF_BAKU,AREA, instance_npcname("Stefan.J.E.Wolf#sthd_02");
+	cutin "",255;
+
+	disablenpc instance_npcname("Stefan.J.E.Wolf#sthd_02");
+	for ( .@i = 1; .@i <= 6; .@i++ ) {
+		enablenpc instance_npcname("Deactivated Warp#sthd_mov_" + .@i);
+		enablenpc instance_npcname("#sthd_move_back_a_" + .@i);
+	}
+	enablenpc instance_npcname("#sthd_move_01_01");
+	enablenpc instance_npcname("#sthd_move_02_01");
+	enablenpc instance_npcname("#sthd_move_02_02");
+
+	enablenpc instance_npcname("#Stefan_Action2");	// 2nd map
+	enablenpc instance_npcname("Stefan.J.E.Wolf#sthd_03");
+
+	// Mobs spots
+	for ( .@i = 5; .@i <= 18; .@i++ )
+		enablenpc instance_npcname("#sthd_event_" + .@i);
+
+	// Room Shuffle
+	donpcevent instance_npcname("#sthd_key_control") + "::OnShuffle";
+	end;
+}
+
+
+// Shuffle warp room
+1@sthb,68,80,0	script	#sthd_key_control	HIDDEN_WARP_NPC,{
+	end;
+OnShuffle:
+	switch( rand(6) ) {
+	case 0:
+		// 'warp_list[ <from room X> ] = <to room Y>;
+		setarray 'warp_list[1], 5,1,3,4,6,2;
+		break;
+	case 1:
+		setarray 'warp_list[1], 2,6,4,3,1,5;
+		break;
+	case 2:
+		setarray 'warp_list[1], 3,5,1,6,2,4;
+		break;
+	case 3:
+		setarray 'warp_list[1], 6,4,2,5,3,1;
+		break;
+	case 4:
+		setarray 'warp_list[1], 1,3,5,2,4,6;
+		break;
+	case 5:
+		setarray 'warp_list[1], 4,2,6,1,5,3;
+		break;
+	}
+	end;
+}
+
+
+// Room exit
+1@sthc,66,88,0	script	#sthd_move_back_a_1	WARPNPC,2,2,{
+	end;
+OnTouch:
+	setarray .@coord[2],
+		 39,85,	// Activated Warp#sthd_mov_1
+		 83,95,	// Activated Warp#sthd_mov_2
+		 28,39,	// Activated Warp#sthd_mov_3
+		210,79,	// Activated Warp#sthd_mov_4
+		143,87,	// Activated Warp#sthd_mov_5
+		179,47;	// Activated Warp#sthd_mov_6
+	.@room_num = atoi( replacestr( strnpcinfo(2), "sthd_move_back_a_", "" ) );
+	.@index = inarray( 'warp_list[1], .@room_num ) * 2;
+	warp 'sthb_map$, .@coord[.@index], .@coord[ .@index+1 ];
+	end;
+}
+
+1@sthc,116,88,0	duplicate(#sthd_move_back_a_1)	#sthd_move_back_a_2	WARPNPC,2,2
+1@sthc,16,6,0	duplicate(#sthd_move_back_a_1)	#sthd_move_back_a_3	WARPNPC,2,2
+1@sthc,115,6,0	duplicate(#sthd_move_back_a_1)	#sthd_move_back_a_4	WARPNPC,2,2
+1@sthc,66,6,0	duplicate(#sthd_move_back_a_1)	#sthd_move_back_a_5	WARPNPC,2,2
+1@sthc,15,88,0	duplicate(#sthd_move_back_a_1)	#sthd_move_back_a_6	WARPNPC,2,2
+
+// Room entrance
+1@sthb,34,86,1	script	Activated Warp#sthd_mov_1	1_SHADOW_NPC,{
+	if (select( "Não entre no portal.", "Entre no portal." ) == 1) {
+		mes "- Portal sombrio -";
+		mes "- Uma luz negra está brilhando. -";
+		close;
+	}
+	mes "- Um Portal Negro está girando por aí. -";
+	close2;
+	setarray .@coord[2],
+		 66,96,	// #sthd_move_back_a_1, #sthd_event_13
+		116,96,	// #sthd_move_back_a_2, #sthd_event_14
+		 16,13,	// #sthd_move_back_a_3, #sthd_event_18, Immortal Wind Ghost
+		115,14,	// #sthd_move_back_a_4, #sthd_event_15
+		 66,14,	// #sthd_move_back_a_5, #sthd_event_16
+		 15,96;	// #sthd_move_back_a_6, #sthd_event_17, Immortal Cursed Knight
+
+	.@room_num = atoi( replacestr( strnpcinfo(2), "sthd_mov_", "" ) );
+	.@index = 'warp_list[.@room_num] * 2;
+	warp 'sthc_map$, .@coord[.@index], .@coord[ .@index+1 ];
+	end;
+}
+
+1@sthb,84,99,1	duplicate(Activated Warp#sthd_mov_1)	Activated Warp#sthd_mov_2	1_SHADOW_NPC
+1@sthb,24,40,1	duplicate(Activated Warp#sthd_mov_1)	Activated Warp#sthd_mov_3	1_SHADOW_NPC
+1@sthb,206,80,1	duplicate(Activated Warp#sthd_mov_1)	Activated Warp#sthd_mov_4	1_SHADOW_NPC
+1@sthb,147,86,1	duplicate(Activated Warp#sthd_mov_1)	Activated Warp#sthd_mov_5	1_SHADOW_NPC
+1@sthb,179,51,1	duplicate(Activated Warp#sthd_mov_1)	Activated Warp#sthd_mov_6	1_SHADOW_NPC
+
+1@sthb,34,85,1	script	Deactivated Warp#sthd_mov_1	4_ENERGY_WHITE,{
+	if (select( "Desativar o portal.", "Ativar o portal." ) == 1) {
+		mes "- Mova a fortaleza para um lugar especial -";
+		mes "- Porta acessível -";
+		mes "- Você vê uma porta acessível -";
+		close;
+	}
+	if (countitem(6960) < 1) {
+		mes "- Para operar o portal -";
+		mes "- Você precisa de uma chave para a Fortaleza do Céu. -";
+		close;
+	}
+	delitem 6960,1;
+	mes "- O portal foi -";
+	mes "- ativado com sucesso -";
+	mes "- Portal sombrio -";
+	mes "- foi trazido -";
+	mes "- brilhando em preto -";
+	disablenpc();
+	enablenpc instance_npcname("Activated Warp#" + strnpcinfo(2));
+	close;
+}
+
+1@sthb,83,99,1	duplicate(Deactivated Warp#sthd_mov_1)	Deactivated Warp#sthd_mov_2	4_ENERGY_WHITE
+1@sthb,24,39,1	duplicate(Deactivated Warp#sthd_mov_1)	Deactivated Warp#sthd_mov_3	4_ENERGY_WHITE
+1@sthb,206,79,1	duplicate(Deactivated Warp#sthd_mov_1)	Deactivated Warp#sthd_mov_4	4_ENERGY_WHITE
+1@sthb,147,87,1	duplicate(Deactivated Warp#sthd_mov_1)	Deactivated Warp#sthd_mov_5	4_ENERGY_WHITE
+1@sthb,178,51,1	duplicate(Deactivated Warp#sthd_mov_1)	Deactivated Warp#sthd_mov_6	4_ENERGY_WHITE
+
+
+// Spawn in the rooms
+1@sthc,66,94,0	script	#sthd_event_13	HIDDEN_WARP_NPC,8,8,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_13");
+	.@label$ = instance_npcname("#sthd_event_13") + "::OnMobDead";
+	monster 'sthc_map$,62,108,"Immortal Nightmare Shadow",3481,1, .@label$;// AS_EVIL_SHADOW1
+	monster 'sthc_map$,70,108,"Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,70,101,"Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,66,115,"Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,70,116,"Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,69,127,"Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,64,132,"Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,61,127,"Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,61,101,"Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,62,116,"Immortal Nightmare Shadow",3481,1, .@label$;
+	initnpctimer;
+	end;
+OnTimer2000:
+	if (mobcount( 'sthc_map$, instance_npcname("#sthd_event_13") + "::OnMobDead" ) > 0) {
+		initnpctimer;
+		end;
+	}
+	stopnpctimer;
+	enablenpc instance_npcname("Sky Fortress Gold Treasure#1");
+	end;
+OnMobDead:
+	end;
+}
+
+1@sthc,116,94,0	script	#sthd_event_14	HIDDEN_WARP_NPC,8,8,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_14");
+	.@label$ = instance_npcname("#sthd_event_14") + "::OnMobDead";
+	monster 'sthc_map$,112,101, "Immortal Angry Shadow",3482,1, .@label$;// AS_EVIL_SHADOW2
+	monster 'sthc_map$,120,101, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,119,110, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,115,115, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,114,128, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,112,110, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,118,120, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,110,130, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,111,120, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,120,130, "Immortal Angry Shadow",3482,1, .@label$;
+	initnpctimer;
+	end;
+OnTimer2000:
+	if (mobcount( 'sthc_map$, instance_npcname("#sthd_event_14") + "::OnMobDead" ) > 0) {
+		initnpctimer;
+		end;
+	}
+	stopnpctimer;
+	enablenpc instance_npcname("Sky Fortress Gold Treasure#2");
+	end;
+OnMobDead:
+	end;
+}
+
+1@sthc,115,12,0	script	#sthd_event_15	HIDDEN_WARP_NPC,8,8,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_15");
+	.@label$ = instance_npcname("#sthd_event_15") + "::OnMobDead";
+	monster 'sthc_map$,120,27, "Immortal Nightmare Shadow",3481,1, .@label$;// AS_EVIL_SHADOW1
+	monster 'sthc_map$,120,19, "Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,111,27, "Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,115,33, "Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,111,36, "Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,111,45, "Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,114,49, "Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,119,36, "Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,119,45, "Immortal Nightmare Shadow",3481,1, .@label$;
+	monster 'sthc_map$,116,18, "Immortal Nightmare Shadow",3481,1, .@label$;
+	initnpctimer;
+	end;
+OnTimer2000:
+	if (mobcount( 'sthc_map$, instance_npcname("#sthd_event_15") + "::OnMobDead" ) > 0) {
+		initnpctimer;
+		end;
+	}
+	stopnpctimer;
+	enablenpc instance_npcname("Sky Fortress Gold Treasure#3");
+	end;
+OnMobDead:
+	end;
+}
+
+1@sthc,66,12,0	script	#sthd_event_16	HIDDEN_WARP_NPC,8,8,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_16");
+	.@label$ = instance_npcname("#sthd_event_16") + "::OnMobDead";
+	monster 'sthc_map$,70,18, "Immortal Angry Shadow",3482,1, .@label$;// AS_EVIL_SHADOW2
+	monster 'sthc_map$,61,18, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,65,34, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,62,38, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,69,37, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,72,29, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,69,47, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,62,47, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,61,30, "Immortal Angry Shadow",3482,1, .@label$;
+	monster 'sthc_map$,64,50, "Immortal Angry Shadow",3482,1, .@label$;
+	initnpctimer;
+	end;
+OnTimer2000:
+	if (mobcount( 'sthc_map$, instance_npcname("#sthd_event_16") + "::OnMobDead" ) > 0) {
+		initnpctimer;
+		end;
+	}
+	stopnpctimer;
+	enablenpc instance_npcname("Sky Fortress Gold Treasure#4");
+	end;
+OnMobDead:
+	end;
+}
+
+// Cursed Knight room
+1@sthc,15,94,0	script	#sthd_event_17	HIDDEN_WARP_NPC,8,8,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_17");
+	donpcevent instance_npcname("Sky Fortress Treasure Box") + "::OnStart";	// enabled regardless of the monster count
+	monster 'sthc_map$,19,106, "Immortal Death Shadow",3483,1;// AS_EVIL_SHADOW3
+	monster 'sthc_map$,12,105, "Immortal Death Shadow",3483,1;
+	areamonster 'sthc_map$,11,113,15,117, "Immortal Death Shadow",3483,2;
+	areamonster 'sthc_map$,18,116,22,120, "Immortal Death Shadow",3483,2;
+	areamonster 'sthc_map$,10,125,14,129, "Immortal Death Shadow",3483,2;
+	areamonster 'sthc_map$,17,125,21,129, "Immortal Death Shadow",3483,2;
+	end;
+}
+
+// Wind Ghost room
+1@sthc,16,11,0	script	#sthd_event_18	HIDDEN_WARP_NPC,8,8,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_18");
+	donpcevent instance_npcname("Wind Ghost in Experiment") + "::OnStart";	// enabled regardless of the monster count
+	monster 'sthc_map$,19,21, "Immortal Death Shadow",3483,1;// AS_EVIL_SHADOW3
+	monster 'sthc_map$,12,21, "Immortal Death Shadow",3483,1;
+	areamonster 'sthc_map$,9,28,13,32, "Immortal Death Shadow",3483,2;
+	areamonster 'sthc_map$,17,29,21,33, "Immortal Death Shadow",3483,2;
+	areamonster 'sthc_map$,13,35,17,39, "Immortal Death Shadow",3483,2;
+	areamonster 'sthc_map$,13,43,17,47, "Immortal Death Shadow",3483,2;
+	end;
+}
+
+// Chest
+1@sthc,66,137,4	script	Sky Fortress Gold Treasure#1	4_TREASURE_BOX,{
+	mes "- Você encontrou -";
+	mes "- o Baú de Tesouro Brilhante. -";
+	next;
+	if (select( "Abrir o baú.", "Não abrir o baú." ) == 2) {
+		mes "- Se você abrir o baú, -";
+		mes "- deve haver alguns bons itens. -";
+		close;
+	}
+	if (is_party_leader() == false) {
+		mes "- Aqueles que não são o líder do grupo -";
+		mes "- não parecem conseguir abrir o baú. -";
+		close;
+	}
+	if (checkweight(5128,1) == 0) {
+		mes "- Está cheio de itens -";
+		mes "- então você não pode abrir o baú. -";
+		close;
+	}
+	donpcevent instance_npcname( strnpcinfo(0) ) + "::OnBar";
+	sleep2 3000;
+	if (is_party_leader() == false)
+		end;
+	disablenpc();
+	mes "- Naquele baú de tesouro, -";
+	.@r = rand(100);
+	if (.@r < 32) {
+		.@item_id = 985;	// Oridecon
+		specialeffect EF_ENHANCE;
+	}
+	else if (.@r < 64) {
+		.@item_id = 984;	// Elunium
+		specialeffect EF_ENHANCE;
+	}
+	else if (.@r < 84) {
+		.@item_id = 608;	// Seed_Of_Yggdrasil
+		specialeffect EF_ENHANCE;
+	}
+	else if (.@r < 94) {
+		.@item_id = 607;	// Yggdrasilberry
+		specialeffect EF_ENHANCE;
+	}
+	else if (.@r < 99) {
+		.@item_id = 616;	// Old_Card_Album
+		specialeffect EF_ENHANCE;
+	}
+	else if (.@r  == 99) {
+		.@item_id = 12246;	// Magic_Card_Album
+		specialeffect EF_GUMGANG2;
+		specialeffect EF_VOLCANO;
+		specialeffect EF_PNEUMA;
+	}
+	getitem .@item_id, 1;
+	mes "- você encontrou o" + getitemname(.@item_id) + ". -";
+	close;
+OnBar:
+	progressbar_npc "000000",3;
+	end;
+}
+
+1@sthc,116,137,4	duplicate(Sky Fortress Gold Treasure#1)	Sky Fortress Gold Treasure#2	4_TREASURE_BOX
+1@sthc,116,55,4	duplicate(Sky Fortress Gold Treasure#1)	Sky Fortress Gold Treasure#3	4_TREASURE_BOX
+1@sthc,66,55,4	duplicate(Sky Fortress Gold Treasure#1)	Sky Fortress Gold Treasure#4	4_TREASURE_BOX
+
+// Cursed Knight
+1@sthc,16,132,4	script	Sky Fortress Treasure Box	CLEAR_NPC,{
+	mes "- Você encontrou -";
+	mes "- o Baú de Tesouro Brilhante. -";
+	next;
+	if (select( "Abrir o baú.", "Não abrir o baú." ) == 2) {
+		mes "- Se você abrir o baú, -";
+		mes "- deve haver alguns bons itens. -";
+		close;
+	}
+	if (is_party_leader() == false) {
+		mes "- Aqueles que não são o líder do grupo -";
+		mes "- não parecem conseguir abrir o baú. -";
+		close;
+	}
+	if (checkweight(2655,1) == 0) {
+		mes "- Está cheio de itens -";
+		mes "- então você não pode abrir o baú. -";
+		close;
+	}
+	mes "- O baú de tesouro está abrindo -";
+	mes "- e algo de repente -";
+	mes "- apareceu na frente. -";
+	specialeffect EF_SILENT_BREEZE;
+	specialeffect EF_LOCKON;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : You may have touched something wrong...";
+	disablenpc instance_npcname("Sky Fortress Treasure Box");
+	stopnpctimer;
+	donpcevent instance_npcname("Immortal Cursed Knight#") + "::OnEvent";
+	close;
+OnStart:
+	enablenpc instance_npcname("Sky Fortress Treasure Box");
+	initnpctimer;
+	end;
+OnTimer8000:
+	specialeffect EF_LIGHTSPHERE2;
+	end;
+OnTimer9000:
+	initnpctimer;
+	end;
+}
+
+1@sthc,16,129,4	script	Immortal Cursed Knight#	4_AS_BLOODY_KNIGHT,{
+	end;
+OnEvent:
+	enablenpc instance_npcname("Immortal Cursed Knight#");
+	sleep 2000;
+	npctalk "Cavaleiro Amaldiçoado Imortal: Que tipo de intruso está tentando me acordar...";
+	sleep 2000;
+	npctalk "Cavaleiro Amaldiçoado Imortal: Perdição ao pequeno Gatuno que cobiça o tesouro na fortaleza...";
+	sleep 2000;
+	disablenpc instance_npcname("Immortal Cursed Knight#");
+	monster 'sthc_map$,16,129,"Immortal Cursed Knight",3474,1, instance_npcname("Immortal Cursed Knight#") + "::OnKnightB";	// AS_BLOODY_KNIGHT
+	'cursed_knight = $@mobid[0];
+	initnpctimer;
+	end;
+OnTimer2000:
+	if (mobcount('sthd_map$, instance_npcname("Immortal Cursed Knight#") + "::OnKnightB") < 1) {
+		stopnpctimer;
+		'cursed_knight = 0;
+		mapannounce 'sthc_map$, "Stefan Jack Earnest Wolf: Fell down... Immortal Cursed Knight... Sad... Will kill... The intruder...", bc_map,0xEBFF;
+		end;
+	}
+	if ('cursed_knight > 0) {
+		.@r = rand(30);
+		if (.@r == 0)
+			unittalk 'cursed_knight, "Immortal Cursed Knight: Glory to Bijou! Death to the intruders!";
+		else if (.@r == 1)
+			unittalk 'cursed_knight, "Immortal Cursed Knight: The perishable is nothing but a handful of ash before the Immortal Knight!";
+		else if (.@r == 2)
+			unittalk 'cursed_knight, "Immortal Cursed Knight: I can't...I can't seem to control the power!";
+	}
+	end;
+OnTimer3000:
+	initnpctimer;
+	end;
+OnKnightB:
+	end;
+}
+
+// Wind Ghost
+1@sthc,16,54,4	script	Wind Ghost in Experiment	CLEAR_NPC,{
+	if (select( "Examinar o tubo de ensaio.", "Não examinar o tubo de ensaio." ) == 2) {
+		mes "- Tenho certeza de que há algo -";
+		mes "- extremamente temível. -";
+		close;
+	}
+	if (is_party_leader() == false) {
+		mes "- Aqueles que não são o líder do grupo -";
+		mes "- parecem não conseguir operar o tubo de ensaio. -";
+		close;
+	}
+	mes "- O tubo de ensaio está se abrindo -";
+	mes "- e algo de repente -";
+	mes "- apareceu na frente. -";
+	specialeffect EF_SILENT_BREEZE;
+	specialeffect EF_LOCKON;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : What...what is this?";
+	donpcevent instance_npcname("Immortal Wind Ghost#01") + "::OnEvent";
+	stopnpctimer;
+	disablenpc instance_npcname("Wind Ghost in Experiment");
+	close;
+OnStart:
+	enablenpc instance_npcname("Wind Ghost in Experiment");
+	initnpctimer;
+	end;
+OnTimer8000:
+	specialeffect EF_LIGHTSPHERE2;
+	end;
+OnTimer9000:
+	initnpctimer;
+	end;
+}
+
+1@sthc,15,49,4	script	Immortal Wind Ghost#01	4_AS_WIND_GHOST,{
+	end;
+OnEvent:
+	enablenpc instance_npcname("Immortal Wind Ghost#01");
+	sleep 2000;
+	npctalk "Fantasma do Vento Imortal: Humano tolo... Você está implorando pela morte...";
+	sleep 2000;
+	npctalk "Fantasma do Vento Imortal: O poder fervendo dentro do meu corpo... É uma sensação muito boa...";
+	sleep 2000;
+	disablenpc instance_npcname("Immortal Wind Ghost#01");
+	monster 'sthc_map$,15,49,"Immortal Wind Ghost",3475,1, instance_npcname("Immortal Wind Ghost#01") + "::OnWindDead";	// AS_WIND_GHOST
+	'wind_ghost = $@mobid[0];
+	initnpctimer;
+	end;
+OnTimer2000:
+	if (mobcount('sthd_map$, instance_npcname("Immortal Wind Ghost#01") + "::OnWindDead") < 1) {
+		stopnpctimer;
+		'wind_ghost = 0;
+		mapannounce 'sthc_map$, "Stefan Jack Earnest Wolf: Experiment... Became stronger... Immortal Wind Ghost...is dead...Death to all...", bc_map,0xEBFF;
+		end;
+	}
+	if ('wind_ghost > 0) {
+		.@r = rand(30);
+		if (.@r == 0)
+			unittalk 'wind_ghost, "Immortal Wind Ghost: I feel more power filling up inside...";
+		else if (.@r == 1)
+			unittalk 'wind_ghost, "Immortal Wind Ghost: I will kill you slowly...from the deep side of your lung...";
+		else if (.@r == 2)
+			unittalk 'wind_ghost, "Immortal Wind Ghost: Only death awaits the humans who dare to go against me...";
+	}
+	end;
+OnTimer3000:
+	initnpctimer;
+	end;
+OnWindDead:
+	end;
+}
+
+
+// Spawn stairs - step 1
+1@sthb,65,86,0	script	#sthd_event_5	HIDDEN_WARP_NPC,5,5,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_5");
+	monster 'sthb_map$,61,84,"Immortal Fortress Legionnaire",3477,1;	// AS_IMMORTAL_CORPS
+	monster 'sthb_map$,51,87,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,37,81,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,41,85,"Immortal Zombie Assault",3479,1;			// AS_ZOMBIE_MASTER
+	monster 'sthb_map$,41,49,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,52,50,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,82,50,"Immortal Cursed Zombie",3480,1;			// AS_CURSED_SOLDIER
+	areamonster 'sthb_map$,34,57,38,61,"Immortal Cursed Zombie",3480,2;
+	if (rand(100) < 20)
+		monster 'sthb_map$,80,49,"Sky Fortress Key Keeper",3478,1;		// AS_ZOMBIE_SLAUGHTER
+	end;
+}
+
+1@sthb,62,49,0	script	#sthd_event_6	HIDDEN_WARP_NPC,5,5,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_6");
+	monster 'sthb_map$,79,48,"Immortal Fortress Legionnaire",3477,1;	// AS_IMMORTAL_CORPS
+	monster 'sthb_map$,67,50,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,85,60,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,82,74,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,83,49,"Immortal Zombie Assault",3479,1;			// AS_ZOMBIE_MASTER
+	monster 'sthb_map$,83,71,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,79,96,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,69,95,"Immortal Zombie Assault",3479,1;
+	areamonster 'sthb_map$,82,92,86,96,"Immortal Cursed Zombie",3480,2;			// AS_CURSED_SOLDIER
+	areamonster 'sthb_map$,83,84,87,88,"Immortal Cursed Zombie",3480,2;
+	if (rand(100) < 20)
+		monster 'sthb_map$,73,96,"Sky Fortress Key Keeper",3478,1;
+	end;
+}
+
+1@sthb,57,96,0	script	#sthd_event_7	HIDDEN_WARP_NPC,5,5,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_7");
+	monster 'sthb_map$,52,94,"Immortal Fortress Legionnaire",3477,1;	// AS_IMMORTAL_CORPS
+	monster 'sthb_map$,42,98,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,29,91,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,25,78,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,28,96,"Immortal Zombie Assault",3479,1;			// AS_ZOMBIE_MASTER
+	monster 'sthb_map$,27,69,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,26,55,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,32,41,"Immortal Zombie Assault",3479,1;
+	areamonster 'sthb_map$,27,65,31,69,"Immortal Cursed Zombie",3480,2;			// AS_CURSED_SOLDIER
+	areamonster 'sthb_map$,25,41,29,45,"Immortal Cursed Zombie",3480,2;
+	if (rand(100) < 20)
+		monster 'sthb_map$,27,54,"Sky Fortress Key Keeper",3478,1;
+	end;
+}
+
+1@sthb,32,39,0	script	#sthd_event_8	HIDDEN_WARP_NPC,5,5,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_8");
+	monster 'sthb_map$,53,38,"Immortal Fortress Legionnaire",3477,1;	// AS_IMMORTAL_CORPS
+	monster 'sthb_map$,64,41,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,78,38,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,43,41,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,28,40,"Immortal Zombie Assault",3479,1;			// AS_ZOMBIE_MASTER
+	monster 'sthb_map$,59,40,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,92,45,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,95,57,"Immortal Zombie Assault",3479,1;
+	areamonster 'sthb_map$,92,37,96,41,"Immortal Cursed Zombie",3480,2;			// AS_CURSED_SOLDIER
+	areamonster 'sthb_map$,87,39,91,43,"Immortal Cursed Zombie",3480,2;
+	if (rand(100) < 20)
+		monster 'sthb_map$,75,40,"Sky Fortress Key Keeper",3478,1;
+	end;
+}
+
+// Spawn stairs - step 2
+1@sthb,209,64,0	script	#sthd_event_9	HIDDEN_WARP_NPC,5,5,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_9");
+	monster 'sthb_map$,207,50,"Immortal Fortress Legionnaire",3477,1;	// AS_IMMORTAL_CORPS
+	monster 'sthb_map$,205,38,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,195,36,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,209,38,"Immortal Zombie Assault",3479,1;			// AS_ZOMBIE_MASTER
+	monster 'sthb_map$,161,39,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,150,36,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,144,38,"Immortal Cursed Zombie",3480,1;			// AS_CURSED_SOLDIER
+	areamonster 'sthb_map$,169,34,173,38,"Immortal Cursed Zombie",3480,2;
+	if (rand(100) < 20)
+		monster 'sthb_map$,163,38,"Sky Fortress Key Keeper",3478,1;
+	end;
+}
+
+1@sthb,144,47,0	script	#sthd_event_10	HIDDEN_WARP_NPC,5,5,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_10");
+	monster 'sthb_map$,142,61,"Immortal Fortress Legionnaire",3477,1;	// AS_IMMORTAL_CORPS
+	monster 'sthb_map$,145,71,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,142,83,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,147,94,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,143,64,"Immortal Zombie Assault",3479,1;			// AS_ZOMBIE_MASTER
+	monster 'sthb_map$,144,78,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,165,95,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,173,92,"Immortal Zombie Assault",3479,1;
+	areamonster 'sthb_map$,154,90,158,94,"Immortal Cursed Zombie",3480,2;			// AS_CURSED_SOLDIER
+	areamonster 'sthb_map$,141,92,145,96,"Immortal Cursed Zombie",3480,2;
+	if (rand(100) < 20)
+		monster 'sthb_map$,154,96,"Sky Fortress Key Keeper",3478,1;
+	end;
+}
+
+1@sthb,178,94,0	script	#sthd_event_11	HIDDEN_WARP_NPC,5,5,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_11");
+	monster 'sthb_map$,187,92,"Immortal Fortress Legionnaire",3477,1;	// AS_IMMORTAL_CORPS
+	monster 'sthb_map$,200,90,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,198,81,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,201,72,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,199,94,"Immortal Zombie Assault",3479,1;			// AS_ZOMBIE_MASTER
+	monster 'sthb_map$,199,70,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,195,48,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,185,47,"Immortal Zombie Assault",3479,1;
+	areamonster 'sthb_map$,196,60,200,64,"Immortal Cursed Zombie",3480,2;			// AS_CURSED_SOLDIER
+	areamonster 'sthb_map$,198,45,202,49,"Immortal Cursed Zombie",3480,2;
+	if (rand(100) < 20)
+		monster 'sthb_map$,202,56,"Sky Fortress Key Keeper",3478,1;
+	end;
+}
+
+1@sthb,179,48,0	script	#sthd_event_12	HIDDEN_WARP_NPC,5,5,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#sthd_event_12");
+	monster 'sthb_map$,168,49,"Immortal Fortress Legionnaire",3477,1;	// AS_IMMORTAL_CORPS
+	monster 'sthb_map$,159,46,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,154,52,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,152,65,"Immortal Fortress Legionnaire",3477,1;
+	monster 'sthb_map$,155,48,"Immortal Zombie Assault",3479,1;			// AS_ZOMBIE_MASTER
+	monster 'sthb_map$,154,73,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,159,84,"Immortal Zombie Assault",3479,1;
+	monster 'sthb_map$,171,82,"Immortal Zombie Assault",3479,1;
+	areamonster 'sthb_map$,151,82,155,86,"Immortal Cursed Zombie",3480,2;			// AS_CURSED_SOLDIER
+	areamonster 'sthb_map$,153,75,157,79,"Immortal Cursed Zombie",3480,2;
+	if (rand(100) < 20)
+		monster 'sthb_map$,156,46,"Sky Fortress Key Keeper",3478,1;
+	end;
+}
+
+
+// Main event - 2nd step
+1@sthb,207,83,0	script	#Stefan_Action2	HIDDEN_WARP_NPC,6,6,{
+	end;
+OnTouch:
+	disablenpc instance_npcname("#Stefan_Action2");
+	setpcblock PCBLOCK_NPC, true;
+	sleep2 1000;
+	cutin "stephan_j_e_w.bmp",2;
+	npctalk "Stefan: ~Grunhidos~", instance_npcname("Stefan.J.E.Wolf#sthd_03");
+	sleep2 2000;
+	npctalk "Earnest: Humanos imundos... Parem eles... Protejam... a fortaleza sagrada...", instance_npcname("Stefan.J.E.Wolf#sthd_03");
+	specialeffect2 EF_LOCKON;
+	sleep2 2000;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : It's extremely vigilant of me.";
+	sleep2 2000;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : I think there must be something if we keep following";
+	sleep2 2000;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : that Golem's trace!";
+	sleep2 2000;
+	setpcblock PCBLOCK_NPC, false;
+	mapannounce 'sthb_map$, "Stefan Jack Earnest Wolf: Holy fortress...Intruders...How wicked...Stop them...", bc_map,0xEBFF;
+	cutin "",255;
+	specialeffect2 EF_LOCKON;
+	disablenpc instance_npcname("Stefan.J.E.Wolf#sthd_03");
+	enablenpc instance_npcname("#Stefan for display3");
+	enablenpc instance_npcname("Stefan.J.E.Wolf#sthd_04");
+	end;
+}
+
+1@sthb,207,83,8	duplicate(dummy_npc)	Stefan.J.E.Wolf#sthd_03	4_AS_RAGGED_GOLEM
+
+
+// Final step
+1@sthd,103,115,6	duplicate(dummy_npc)	Stefan.J.E.Wolf#sthd_04	4_AS_RAGGED_GOLEM
+
+1@sthd,103,115,0	script	#Stefan for display3	HIDDEN_WARP_NPC,10,10,{
+	end;
+OnTouch:
+	.@stephan$ = instance_npcname("Stefan.J.E.Wolf#sthd_04");
+	disablenpc instance_npcname("#Stefan for display3");
+	setpcblock PCBLOCK_NPC, true;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : So this is finally the last...I suppose he must be the cause of Prontera Invasion, isn't he?";
+	sleep2 2000;
+	cutin "stephan_j_e_w.bmp",2;
+	npctalk "Wolf: Aventureiros... Um bando de novatos tolos...", .@stephan$;
+	sleep2 2000;
+	npctalk "Jack: Devo seguir... ordens... de Bijou...", .@stephan$;
+	sleep2 2000;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : Bijou? So, was Golem the mere guardian around here? Is that it...?";
+	sleep2 2000;
+	npctalk "Stefan: ~Rosnados~", .@stephan$;
+	sleep2 2000;
+	npctalk "Earnest: Vermes imundos... Não conseguem levar a vida como pretendiam... Poder imortal... Meu corpo...", .@stephan$;
+	sleep2 2000;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : I'd better defeat it first.";
+	sleep2 2000;
+	mapannounce 'sthd_map$, "Stefan Jack Earnest Wolf: Soldiers...Bijou's...fortress...Cut them all...I'll step up...I'll kill them...all...", bc_map,0xEBFF;
+	sleep2 2000;
+	cutin "",255;
+	specialeffect EF_LOCKON;
+	sleep2 2000;
+	setpcblock PCBLOCK_NPC, false;
+	disablenpc .@stephan$;
+	donpcevent instance_npcname("#Last_Boss") + "::OnStart";
+	areamonster 'sthd_map$,84,76,124,116,"Zombie Soldier of Bijou",3476,10, instance_npcname("#Stefan for display3") + "::OnMobDead";	// AS_ZOMBIE
+	initnpctimer;
+	end;
+OnTimer30000:
+	stopnpctimer;
+	mapannounce 'sthd_map$, "Stefan Jack Earnest Wolf: Cursed soldiers...Come...Bring it on...", bc_map,0xEBFF;
+	monster 'sthd_map$,0,0,"Cursed Soldier of Bijou",3485,5, instance_npcname("#Stefan for display3") + "::OnMobDead";	// AS_D_CURSED_SOLDIER
+	end;
+OnStop:
+	killmonster 'sthd_map$, instance_npcname("#Stefan for display3") + "::OnMobDead";
+	stopnpctimer;
+	end;
+OnMobDead:
+	end;
+}
+
+1@sthd,96,127,0	script	#Last_Boss	HIDDEN_WARP_NPC,{
+	end;
+OnStart:
+	monster 'sthd_map$,103,115,"Stefan.J.E.Wolf",3473,1, instance_npcname("#Last_Boss") + "::OnBossDead";		// AS_RAGGED_GOLEM
+	'boss_id = $@mobid[0];
+	initnpctimer;
+	end;
+OnBossDead:
+	end;
+OnTimer1000:
+	if ('boss_id < 1 || mobcount( 'sthd_map$, instance_npcname("#Last_Boss") + "::OnBossDead" ) < 1) {
+		'boss_id = 0;
+		'pantheon_event[0] = 1;
+		'pantheon_event[1] = 1;
+		donpcevent instance_npcname("#Last_Boss") + "::OnLastWord";
+		donpcevent instance_npcname("#Last_Boss_Monster") + "::OnReset";
+		donpcevent instance_npcname("#Last_Boss2_Monster") + "::OnReset";
+		donpcevent instance_npcname("#Stefan for display3") + "::OnStop";
+		donpcevent instance_npcname("Sky Fortress Escape Warp#end_warp") + "::OnEnable";
+		stopnpctimer;
+		end;
+	}
+	getunitdata 'boss_id, .@data;
+	.@hp = .@data[UMOB_HP];
+
+	if (.@hp > 6000000 && .@hp < 14000000) {
+		if ('pantheon_event[0] == 0) {
+			'pantheon_event[0] = 1;
+			donpcevent instance_npcname("#Last_Boss2_Monster") + "::OnStart";
+			mapannounce 'sthd_map$, "Stefan Jack Earnest Wolf: Strong...Adventurer... ~Growls~ My... soliders... Get out...", bc_map,0xEBFF;
+		}
+	}
+	else if (.@hp > 5000000 && .@hp < 6000001)
+		mapannounce 'sthd_map$, "Stefan Jack Earnest Wolf: I'll destroy you...I'll be smashing you...Come, the Cursed Soldiers...Ground-shaking...", bc_map,0xEBFF;
+	else if (.@hp < 5000001) {
+		if ('pantheon_event[1] == 0) {
+			'pantheon_event[1] = 1;
+			donpcevent instance_npcname("#Last_Boss2_Monster") + "::OnReset";
+			donpcevent instance_npcname("#Last_Boss_Monster") + "::OnStart";
+		}
+		.@bomb[0] = rand(1,7);
+		.@bomb[1] = rand(1,7);
+		.@bomb[2] = rand(1,8);
+		.@bomb[3] = rand(1,7);
+		.@bomb[4] = rand(1,8);
+		.@bomb[5] = rand(1,7);
+
+		if (.@bomb[0] == 1) {
+			.@pant[0] = 1;
+			if (.@bomb[3] == 1) setarray .@pant[1],8,23;
+			else if (.@bomb[3] == 2) setarray .@pant[1],9,21;
+			else if (.@bomb[3] == 3) setarray .@pant[1],10,24;
+			else if (.@bomb[3] == 4) setarray .@pant[1],11;
+			else if (.@bomb[3] == 5) setarray .@pant[1],12;
+			else if (.@bomb[3] == 6) setarray .@pant[1],13;
+			else if (.@bomb[3] == 7) setarray .@pant[1],14,27;
+		}
+		else if (.@bomb[0] == 2) {
+			.@pant[0] = 2;
+			if (.@bomb[3] == 1) setarray .@pant[1],8,23;
+			else if (.@bomb[3] == 2) setarray .@pant[1],9,1;
+			else if (.@bomb[3] == 3) setarray .@pant[1],10,21;
+			else if (.@bomb[3] == 4) setarray .@pant[1],11,24;
+			else if (.@bomb[3] == 5) setarray .@pant[1],12,27;
+			else if (.@bomb[3] == 6) setarray .@pant[1],13;
+			else if (.@bomb[3] == 7) setarray .@pant[1],14;
+		}
+		else if (.@bomb[0] == 3) {
+			.@pant[0] = 3;
+			if (.@bomb[3] == 1) setarray .@pant[1],8,23;
+			else if (.@bomb[3] == 2) setarray .@pant[1],9,24;
+			else if (.@bomb[3] == 3) setarray .@pant[1],10,1;
+			else if (.@bomb[3] == 4) setarray .@pant[1],11,21;
+			else if (.@bomb[3] == 5) setarray .@pant[1],12,27;
+			else if (.@bomb[3] == 6) setarray .@pant[1],13;
+			else if (.@bomb[3] == 7) setarray .@pant[1],14;
+		}
+		else if (.@bomb[0] == 4) {
+			.@pant[0] = 4;
+			if (.@bomb[3] == 1) setarray .@pant[1],8,23;
+			else if (.@bomb[3] == 2) setarray .@pant[1],9,24;
+			else if (.@bomb[3] == 3) setarray .@pant[1],10;
+			else if (.@bomb[3] == 4) setarray .@pant[1],11,1;
+			else if (.@bomb[3] == 5) setarray .@pant[1],12,21;
+			else if (.@bomb[3] == 6) setarray .@pant[1],13,27;
+			else if (.@bomb[3] == 7) setarray .@pant[1],14;
+		}
+		else if (.@bomb[0] == 5) {
+			.@pant[0] = 5;
+			if (.@bomb[3] == 1) setarray .@pant[1],8,23;
+			else if (.@bomb[3] == 2) setarray .@pant[1],9,24;
+			else if (.@bomb[3] == 3) setarray .@pant[1],10;
+			else if (.@bomb[3] == 4) setarray .@pant[1],11,27;
+			else if (.@bomb[3] == 5) setarray .@pant[1],12,1;
+			else if (.@bomb[3] == 6) setarray .@pant[1],13,21;
+			else if (.@bomb[3] == 7) setarray .@pant[1],14;
+		}
+		else if (.@bomb[0] == 6) {
+			setarray .@pant[0],6,26;
+			if (.@bomb[3] == 1) setarray .@pant[2],8,23;
+			else if (.@bomb[3] == 2) setarray .@pant[2],9,24;
+			else if (.@bomb[3] == 3) setarray .@pant[2],10;
+			else if (.@bomb[3] == 4) setarray .@pant[2],11,27;
+			else if (.@bomb[3] == 5) setarray .@pant[2],12;
+			else if (.@bomb[3] == 6) setarray .@pant[2],13,1;
+			else if (.@bomb[3] == 7) setarray .@pant[2],14,21;
+		}
+		else if (.@bomb[0] == 7) {
+			.@pant[0] = 7;
+			if (.@bomb[3] == 1) setarray .@pant[1],8,23;
+			else if (.@bomb[3] == 2) setarray .@pant[1],9,21;
+			else if (.@bomb[3] == 3) setarray .@pant[1],10,24;
+			else if (.@bomb[3] == 4) setarray .@pant[1],11;
+			else if (.@bomb[3] == 5) setarray .@pant[1],12,27;
+			else if (.@bomb[3] == 6) setarray .@pant[1],13;
+			else if (.@bomb[3] == 7) setarray .@pant[1],14,1;
+		}
+		.@s = getarraysize(.@pant);
+
+		if (.@bomb[1] == 1) {
+			setarray .@pant[.@s],8,23;
+			.@s += 2;
+			if (.@bomb[4] == 1) setarray .@pant[.@s],15,5;
+			else if (.@bomb[4] == 2) setarray .@pant[.@s],16,25;
+			else if (.@bomb[4] == 3) setarray .@pant[.@s],17;
+			else if (.@bomb[4] == 4) setarray .@pant[.@s],18;
+			else if (.@bomb[4] == 5) setarray .@pant[.@s],19;
+			else if (.@bomb[4] == 6) setarray .@pant[.@s],20;
+			else if (.@bomb[4] == 7) setarray .@pant[.@s],21;
+			else if (.@bomb[4] == 8) setarray .@pant[.@s],22;
+		}
+		else if (.@bomb[1] == 2) {
+			setarray .@pant[.@s],9,24;
+			.@s += 2;
+			if (.@bomb[4] == 1) setarray .@pant[.@s],15;
+			else if (.@bomb[4] == 2) setarray .@pant[.@s],16,5;
+			else if (.@bomb[4] == 3) setarray .@pant[.@s],17,25;
+			else if (.@bomb[4] == 4) setarray .@pant[.@s],18;
+			else if (.@bomb[4] == 5) setarray .@pant[.@s],19;
+			else if (.@bomb[4] == 6) setarray .@pant[.@s],20;
+			else if (.@bomb[4] == 7) setarray .@pant[.@s],21;
+			else if (.@bomb[4] == 8) setarray .@pant[.@s],22;
+		}
+		else if (.@bomb[1] == 3) {
+			.@pant[.@s] = 10;
+			.@s++;
+			if (.@bomb[4] == 1) setarray .@pant[.@s],15;
+			else if (.@bomb[4] == 2) setarray .@pant[.@s],16;
+			else if (.@bomb[4] == 3) setarray .@pant[.@s],17,5;
+			else if (.@bomb[4] == 4) setarray .@pant[.@s],18,25;
+			else if (.@bomb[4] == 5) setarray .@pant[.@s],19;
+			else if (.@bomb[4] == 6) setarray .@pant[.@s],20;
+			else if (.@bomb[4] == 7) setarray .@pant[.@s],21;
+			else if (.@bomb[4] == 8) setarray .@pant[.@s],22;
+		}
+		else if (.@bomb[1] == 4) {
+			.@pant[.@s] = 11;
+			.@s++;
+			if (.@bomb[4] == 1) setarray .@pant[.@s],15;
+			else if (.@bomb[4] == 2) setarray .@pant[.@s],16;
+			else if (.@bomb[4] == 3) setarray .@pant[.@s],17;
+			else if (.@bomb[4] == 4) setarray .@pant[.@s],18,5;
+			else if (.@bomb[4] == 5) setarray .@pant[.@s],19,25;
+			else if (.@bomb[4] == 6) setarray .@pant[.@s],20;
+			else if (.@bomb[4] == 7) setarray .@pant[.@s],21;
+			else if (.@bomb[4] == 8) setarray .@pant[.@s],22;
+		}
+		else if (.@bomb[1] == 5) {
+			.@pant[.@s] = 12;
+			.@s++;
+			if (.@bomb[4] == 1) setarray .@pant[.@s],15;
+			else if (.@bomb[4] == 2) setarray .@pant[.@s],16;
+			else if (.@bomb[4] == 3) setarray .@pant[.@s],17;
+			else if (.@bomb[4] == 4) setarray .@pant[.@s],18;
+			else if (.@bomb[4] == 5) setarray .@pant[.@s],19,5;
+			else if (.@bomb[4] == 6) setarray .@pant[.@s],20,25;
+			else if (.@bomb[4] == 7) setarray .@pant[.@s],21;
+			else if (.@bomb[4] == 8) setarray .@pant[.@s],22;
+		}
+		else if (.@bomb[1] == 6) {
+			.@pant[.@s] = 13;
+			.@s++;
+			if (.@bomb[4] == 1) setarray .@pant[.@s],15;
+			else if (.@bomb[4] == 2) setarray .@pant[.@s],16;
+			else if (.@bomb[4] == 3) setarray .@pant[.@s],17;
+			else if (.@bomb[4] == 4) setarray .@pant[.@s],18;
+			else if (.@bomb[4] == 5) setarray .@pant[.@s],19;
+			else if (.@bomb[4] == 6) setarray .@pant[.@s],20,5;
+			else if (.@bomb[4] == 7) setarray .@pant[.@s],21,25;
+			else if (.@bomb[4] == 8) setarray .@pant[.@s],22;
+		}
+		else if (.@bomb[1] == 7) {
+			.@pant[.@s] = 14;
+			.@s++;
+			if (.@bomb[4] == 1) setarray .@pant[.@s],15;
+			else if (.@bomb[4] == 2) setarray .@pant[.@s],16;
+			else if (.@bomb[4] == 3) setarray .@pant[.@s],17;
+			else if (.@bomb[4] == 4) setarray .@pant[.@s],18;
+			else if (.@bomb[4] == 5) setarray .@pant[.@s],19;
+			else if (.@bomb[4] == 6) setarray .@pant[.@s],20;
+			else if (.@bomb[4] == 7) setarray .@pant[.@s],21,5;
+			else if (.@bomb[4] == 8) setarray .@pant[.@s],22,25;
+		}
+
+		if (.@bomb[2] == 1) {
+			.@pant[.@s] = 15;
+			.@s++;
+			if (.@bomb[5] == 1) setarray .@pant[.@s],1,22;
+			else if (.@bomb[5] == 2) setarray .@pant[.@s],2,23;
+			else if (.@bomb[5] == 3) setarray .@pant[.@s],3,26;
+			else if (.@bomb[5] == 4) setarray .@pant[.@s],4;
+			else if (.@bomb[5] == 5) setarray .@pant[.@s],5;
+			else if (.@bomb[5] == 6) setarray .@pant[.@s],6;
+			else if (.@bomb[5] == 7) setarray .@pant[.@s],7;
+		}
+		else if (.@bomb[2] == 2) {
+			.@pant[.@s] = 16;
+			.@s++;
+			if (.@bomb[5] == 1) setarray .@pant[.@s],1;
+			else if (.@bomb[5] == 2) setarray .@pant[.@s],2,22;
+			else if (.@bomb[5] == 3) setarray .@pant[.@s],3,23;
+			else if (.@bomb[5] == 4) setarray .@pant[.@s],4,26;
+			else if (.@bomb[5] == 5) setarray .@pant[.@s],5;
+			else if (.@bomb[5] == 6) setarray .@pant[.@s],6;
+			else if (.@bomb[5] == 7) setarray .@pant[.@s],7;
+		}
+		else if (.@bomb[2] == 3) {
+			setarray .@pant[.@s],17,25;
+			.@s += 2;
+			if (.@bomb[5] == 1) setarray .@pant[.@s],1;
+			else if (.@bomb[5] == 2) setarray .@pant[.@s],2;
+			else if (.@bomb[5] == 3) setarray .@pant[.@s],3,22;
+			else if (.@bomb[5] == 4) setarray .@pant[.@s],4,23;
+			else if (.@bomb[5] == 5) setarray .@pant[.@s],5,26;
+			else if (.@bomb[5] == 6) setarray .@pant[.@s],6;
+			else if (.@bomb[5] == 7) setarray .@pant[.@s],7;
+		}
+		else if (.@bomb[2] == 4) {
+			.@pant[.@s] = 18;
+			.@s++;
+			if (.@bomb[5] == 1) setarray .@pant[.@s],1;
+			else if (.@bomb[5] == 2) setarray .@pant[.@s],2;
+			else if (.@bomb[5] == 3) setarray .@pant[.@s],3;
+			else if (.@bomb[5] == 4) setarray .@pant[.@s],4,22;
+			else if (.@bomb[5] == 5) setarray .@pant[.@s],5,23;
+			else if (.@bomb[5] == 6) setarray .@pant[.@s],6,26;
+			else if (.@bomb[5] == 7) setarray .@pant[.@s],7;
+		}
+		else if (.@bomb[2] == 5) {
+			setarray .@pant[.@s],19,27;
+			.@s += 2;
+			if (.@bomb[5] == 1) setarray .@pant[.@s],1;
+			else if (.@bomb[5] == 2) setarray .@pant[.@s],2;
+			else if (.@bomb[5] == 3) setarray .@pant[.@s],3;
+			else if (.@bomb[5] == 4) setarray .@pant[.@s],4;
+			else if (.@bomb[5] == 5) setarray .@pant[.@s],5,22;
+			else if (.@bomb[5] == 6) setarray .@pant[.@s],6,23;
+			else if (.@bomb[5] == 7) setarray .@pant[.@s],7,26;
+		}
+		else if (.@bomb[2] == 6) {
+			.@pant[.@s] = 20;
+			.@s++;
+			if (.@bomb[5] == 1) setarray .@pant[.@s],1,26;
+			else if (.@bomb[5] == 2) setarray .@pant[.@s],2;
+			else if (.@bomb[5] == 3) setarray .@pant[.@s],3;
+			else if (.@bomb[5] == 4) setarray .@pant[.@s],4;
+			else if (.@bomb[5] == 5) setarray .@pant[.@s],5;
+			else if (.@bomb[5] == 6) setarray .@pant[.@s],6,22;
+			else if (.@bomb[5] == 7) setarray .@pant[.@s],7,23;
+		}
+		else if (.@bomb[2] == 7) {
+			.@pant[.@s] = 21;
+			.@s++;
+			if (.@bomb[5] == 1) setarray .@pant[.@s],1,23;
+			else if (.@bomb[5] == 2) setarray .@pant[.@s],2;
+			else if (.@bomb[5] == 3) setarray .@pant[.@s],3,26;
+			else if (.@bomb[5] == 4) setarray .@pant[.@s],4;
+			else if (.@bomb[5] == 5) setarray .@pant[.@s],5;
+			else if (.@bomb[5] == 6) setarray .@pant[.@s],6;
+			else if (.@bomb[5] == 7) setarray .@pant[.@s],7,22;
+		}
+		else if (.@bomb[2] == 8) {
+			.@pant[.@s] = 22;
+			.@s++;
+			if (.@bomb[5] == 1) setarray .@pant[.@s],1;
+			else if (.@bomb[5] == 2) setarray .@pant[.@s],2,23;
+			else if (.@bomb[5] == 3) setarray .@pant[.@s],3,26;
+			else if (.@bomb[5] == 4) setarray .@pant[.@s],4;
+			else if (.@bomb[5] == 5) setarray .@pant[.@s],5;
+			else if (.@bomb[5] == 6) setarray .@pant[.@s],6;
+			else if (.@bomb[5] == 7) setarray .@pant[.@s],7;
+		}
+		.@s = getarraysize(.@pant);
+		for ( .@i = 0; .@i < .@s; ++.@i ) {
+			if (.@tmp[.@pant[.@i]])	// prevent to trigger the same event multiple times
+				continue;
+			.@tmp[.@pant[.@i]] = true;
+			donpcevent instance_npcname("#pantheon_damage" + .@pant[.@i]) + "::OnEvent";
+		}
+	}
+	end;
+OnTimer1500:
+	.@r = rand(1,30);
+	if (.@r == 1)
+		unittalk 'boss_id, "Wolf: Don't get away... Come closer... I'll kill you...";
+	else if (.@r < 11)
+		unittalk 'boss_id, "Stefan: ~Groans~ ~Growls~";
+	else if (.@r == 20)
+		unittalk 'boss_id, "Jack: I'm hurt... I'm scared... I take courage... I hit you...";
+	else if (.@r == 30)
+		unittalk 'boss_id, "Earnest: I'm angry... It's noisy... I'll wipe them all up...";
+	end;
+OnTimer3000:
+OnTimer4500:
+	if ('boss_id < 1 || mobcount( 'sthd_map$, instance_npcname("#Last_Boss") + "::OnBossDead" ) < 1) {
+		'boss_id = 0;
+		'pantheon_event[0] = 1;
+		'pantheon_event[1] = 1;
+		donpcevent instance_npcname("#Last_Boss") + "::OnLastWord";
+		donpcevent instance_npcname("#Last_Boss_Monster") + "::OnReset";
+		donpcevent instance_npcname("#Last_Boss2_Monster") + "::OnReset";
+		donpcevent instance_npcname("#Stefan for display3") + "::OnStop";
+		donpcevent instance_npcname("Sky Fortress Escape Warp#end_warp") + "::OnEnable";
+		stopnpctimer;
+	}
+	end;
+OnTimer6000:
+	initnpctimer;
+	end;
+OnLastWord:
+	mapannounce 'sthd_map$, "Stefan Jack Earnest Wolf: Dead...I was...But...I won't be dead...", bc_map,0xEBFF;
+	sleep 3000;
+	mapannounce 'sthd_map$, "Stefan Jack Earnest Wolf: Comes back...the power of Bijou...Eternal body...Again...", bc_map,0xEBFF;
+	end;
+}
+
+// hp > 6000000 && hp < 14000000
+1@sthd,99,128,0	script	#Last_Boss2_Monster	HIDDEN_WARP_NPC,{
+	end;
+OnStart:
+OnTimer10000:
+	initnpctimer;
+	end;
+OnTimer1000:
+	if (mobcount( 'sthd_map$, instance_npcname("#Last_Boss2_Monster") + "::OnMobDead" ) < 8)
+		areamonster 'sthd_map$,89,81,119,111,"Zombie Soldier of Bijou",3476,3, instance_npcname("#Last_Boss2_Monster") + "::OnMobDead";	// AS_ZOMBIE
+	end;
+OnReset:
+	killmonster 'sthd_map$, instance_npcname("#Last_Boss2_Monster") + "::OnMobDead";
+	stopnpctimer;
+	end;
+OnMobDead:
+	end;
+}
+
+// hp < 5000001
+1@sthd,99,127,0	script	#Last_Boss_Monster	HIDDEN_WARP_NPC,{
+	end;
+OnStart:
+OnTimer10000:
+	initnpctimer;
+	end;
+OnReset:
+	killmonster 'sthd_map$, instance_npcname("#Last_Boss_Monster") + "::OnMobDead";
+	stopnpctimer;
+	end;
+OnTimer1000:
+OnTimer8000:
+OnTimer16000:
+OnTimer24000:
+OnTimer32000:
+	// no count check
+	areamonster 'sthd_map$,84,76,124,116,"Cursed Soldier of Bijou",3485,2, instance_npcname("#Last_Boss_Monster") + "::OnMobDead";	// AS_D_CURSED_SOLDIER
+	end;
+OnTimer33000:
+	stopnpctimer;
+	end;
+OnMobDead:
+	end;
+}
+
+// Kill the player
+1@sthd,94,119,0	script	#pantheon_damage1	HIDDEN_WARP_NPC,6,5,{
+	end;
+OnTouch:
+	unitkill getcharid(3);
+	end;
+OnEvent:
+	specialeffect EF_GUMGANG4;
+	progressbar_npc "000000",4;
+	specialeffect EF_NPC_EARTHQUAKE;
+	cloakoffnpc();
+	initnpctimer;
+	end;
+OnTimer1000:
+	cloakonnpc();
+	end;
+OnTimer2000:
+	stopnpctimer;
+	end;
+}
+1@sthd,96,109,0	duplicate(#pantheon_damage1)	#pantheon_damage2	HIDDEN_WARP_NPC,6,5
+1@sthd,104,110,0	duplicate(#pantheon_damage1)	#pantheon_damage3	HIDDEN_WARP_NPC,6,5
+1@sthd,110,110,0	duplicate(#pantheon_damage1)	#pantheon_damage4	HIDDEN_WARP_NPC,6,5
+1@sthd,113,117,0	duplicate(#pantheon_damage1)	#pantheon_damage5	HIDDEN_WARP_NPC,6,5
+1@sthd,112,103,0	duplicate(#pantheon_damage1)	#pantheon_damage6	HIDDEN_WARP_NPC,6,5
+1@sthd,104,103,0	duplicate(#pantheon_damage1)	#pantheon_damage7	HIDDEN_WARP_NPC,6,5
+1@sthd,97,103,0	duplicate(#pantheon_damage1)	#pantheon_damage8	HIDDEN_WARP_NPC,6,5
+1@sthd,92,97,0	duplicate(#pantheon_damage1)	#pantheon_damage9	HIDDEN_WARP_NPC,6,5
+1@sthd,99,95,0	duplicate(#pantheon_damage1)	#pantheon_damage10	HIDDEN_WARP_NPC,6,5
+1@sthd,108,95,0	duplicate(#pantheon_damage1)	#pantheon_damage11	HIDDEN_WARP_NPC,6,5
+1@sthd,116,95,0	duplicate(#pantheon_damage1)	#pantheon_damage12	HIDDEN_WARP_NPC,6,5
+1@sthd,112,87,0	duplicate(#pantheon_damage1)	#pantheon_damage13	HIDDEN_WARP_NPC,6,5
+1@sthd,104,88,0	duplicate(#pantheon_damage1)	#pantheon_damage14	HIDDEN_WARP_NPC,6,5
+1@sthd,95,87,0	duplicate(#pantheon_damage1)	#pantheon_damage15	HIDDEN_WARP_NPC,6,5
+1@sthd,96,78,0	duplicate(#pantheon_damage1)	#pantheon_damage16	HIDDEN_WARP_NPC,6,5
+1@sthd,94,72,0	duplicate(#pantheon_damage1)	#pantheon_damage17	HIDDEN_WARP_NPC,6,5
+1@sthd,104,81,0	duplicate(#pantheon_damage1)	#pantheon_damage18	HIDDEN_WARP_NPC,6,5
+1@sthd,111,81,0	duplicate(#pantheon_damage1)	#pantheon_damage19	HIDDEN_WARP_NPC,6,5
+1@sthd,114,72,0	duplicate(#pantheon_damage1)	#pantheon_damage20	HIDDEN_WARP_NPC,6,5
+1@sthd,126,96,0	duplicate(#pantheon_damage1)	#pantheon_damage21	HIDDEN_WARP_NPC,6,6
+1@sthd,81,96,0	duplicate(#pantheon_damage1)	#pantheon_damage22	HIDDEN_WARP_NPC,6,6
+1@sthd,100,71,0	duplicate(#pantheon_damage1)	#pantheon_damage23	HIDDEN_WARP_NPC,6,6
+1@sthd,91,101,0	duplicate(#pantheon_damage1)	#pantheon_damage24	HIDDEN_WARP_NPC,6,6
+1@sthd,117,101,0	duplicate(#pantheon_damage1)	#pantheon_damage25	HIDDEN_WARP_NPC,6,6
+1@sthd,117,90,0	duplicate(#pantheon_damage1)	#pantheon_damage26	HIDDEN_WARP_NPC,6,6
+1@sthd,90,90,0	duplicate(#pantheon_damage1)	#pantheon_damage27	HIDDEN_WARP_NPC,6,6
+
+1@sthd,104,96,4	script	Sky Fortress Escape Warp#end_warp	1_SHADOW_NPC,{
+	if (select( "Não saia da Fortaleza Celestial.", "Vá para fora da Fortaleza Celestial." ) == 1) {
+		mes "- O portal está emanando luzes brilhantes. -";
+		close;
+	}
+	mes "- Você começa a ser transportado. -";
+	close2;
+	if (fortress_entrance_loc == 0)
+		warp "prt_q",244,81;
+	else {
+		warp "dali02",117,69;
+		fortress_entrance_loc = 0;
+	}
+	end;
+
+OnEnable:
+	initnpctimer;
+	enablenpc instance_npcname("Sky Fortress Escape Warp#end_warp");
+	end;
+OnTimer2000:
+	specialeffect EF_ENHANCE;
+	end;
+OnTimer3000:
+	initnpctimer;
+	end;
+
+OnInstanceInit:
+	'status_event = 0;
+	'boss_id = 0;
+	'pantheon_event[0] = 0;
+	'pantheon_event[1] = 0;
+
+	'sthb_map$ = instance_mapname("1@sthb");
+	'sthc_map$ = instance_mapname("1@sthc");
+	'sthd_map$ = instance_mapname("1@sthd");
+
+	// Warps
+	disablenpc instance_npcname("#sthd_move_01_01");
+	disablenpc instance_npcname("#sthd_move_02_01");
+	disablenpc instance_npcname("#sthd_move_02_02");
+
+	disablenpc instance_npcname("#sthd_event_1_boss");
+	disablenpc instance_npcname("Stefan.J.E.Wolf#sthd_01");
+	disablenpc instance_npcname("Stefan.J.E.Wolf#sthd_02");
+	disablenpc instance_npcname("#Stefan_Action1");
+
+	for ( .@i = 1; .@i <= 6; .@i++ ) {
+		disablenpc instance_npcname("Activated Warp#sthd_mov_" + .@i);
+		disablenpc instance_npcname("Deactivated Warp#sthd_mov_" + .@i);
+		disablenpc instance_npcname("#sthd_move_back_a_" + .@i);
+	}
+
+	disablenpc instance_npcname("#sthd_event_2");
+	disablenpc instance_npcname("#sthd_event_3");
+	disablenpc instance_npcname("#sthd_event_4");
+	for ( .@i = 5; .@i <= 18; .@i++ )
+		disablenpc instance_npcname("#sthd_event_" + .@i);
+
+	disablenpc instance_npcname("#sthd_key_control");
+
+	disablenpc instance_npcname("Sky Fortress Gold Treasure#1");
+	disablenpc instance_npcname("Sky Fortress Gold Treasure#2");
+	disablenpc instance_npcname("Sky Fortress Gold Treasure#3");
+	disablenpc instance_npcname("Sky Fortress Gold Treasure#4");
+	disablenpc instance_npcname("Sky Fortress Treasure Box");
+	disablenpc instance_npcname("Wind Ghost in Experiment");
+	disablenpc instance_npcname("Immortal Cursed Knight#");
+	disablenpc instance_npcname("Immortal Wind Ghost#01");
+
+	disablenpc instance_npcname("#Stefan_Action2");
+	disablenpc instance_npcname("Stefan.J.E.Wolf#sthd_03");
+
+	// Boss room
+	disablenpc instance_npcname("#Stefan for display3");
+	disablenpc instance_npcname("Stefan.J.E.Wolf#sthd_04");
+	disablenpc instance_npcname("#Last_Boss");
+	disablenpc instance_npcname("#Last_Boss2_Monster");
+	disablenpc instance_npcname("#Last_Boss_Monster");
+	disablenpc instance_npcname("Sky Fortress Escape Warp#end_warp");
+	for ( .@i = 1; .@i <= 27; .@i++ )
+		cloakonnpc instance_npcname("#pantheon_damage" + .@i);
+	end;
+}

@@ -1,0 +1,540 @@
+//===== rAthena Script =======================================
+//= Instance: Deep Forest.
+//===== Description: =========================================
+//- [Walkthrough conversion]
+//- Part of the Spirit Handler job change.
+//- Total : 6 steps.
+//===== Changelogs: ==========================================
+//= 1.0 First version. [Atemo]
+//============================================================
+
+// Entrance
+1@exsh,90,25,0	script	#outexsh	WARPNPC,4,4,{
+	end;
+OnTouch:
+	if (select( "Sair da Floresta Profunda.", "Ficar." ) == 1) {
+		warp "pay_fild09",114,343;
+		end;
+	}
+	end;
+
+OnInstanceInit:
+	'step = 0;
+	'map_1exsh$ = instance_mapname("1@exsh");
+	end;
+}
+
+1@exsh,90,53,0	script	#shbr1	WARPNPC,4,4,{
+	mes "- Algo misterioso parece estar bloqueando o caminho. Vamos falar com Chulho primeiro. -";
+	close2;
+	warp 'map_1exsh$,90,38;
+	end;
+}
+
+// Unknown effect
+// 1@exsh,90,53,0	script	#shbr2	WARPNPC,4,4
+
+
+// Step 1
+1@exsh,92,38,3	script	Chulho#sh1	4_EXJOB_CHUL_HO,{
+	if ('step == 0) {
+		setpcblock( PCBLOCK_NPC, true );
+		npctalk "Chulho : Você me seguiu imediatamente!";
+		cutin "ex_sh_chulho01.png",2;
+		sleep2 2000;
+		npctalk "Chulho : Parece que Hyunrok está muito zangado, dado que há um ar de ferocidade.";
+		cutin "ex_sh_chulho02.png",2;
+		sleep2 2000;
+		cloakoffnpc( instance_npcname("???#sh1_s") );
+		// npctalk "??? : Quem é você!!! O cheiro está estranho!!!";	// bug?
+		npctalk "??? : Quem é você!!! O cheiro está estranho!!!", instance_npcname("???#sh1_s");
+		cutin "",255;
+		sleep2 2000;
+		npctalk "Chulho : Sou eu!! Sou eu!! É o Chulho!!!";
+		cutin "ex_sh_chulho01.png",2;
+		sleep2 2000;
+		// npctalk "??? : Eu nunca senti um cheiro como esse!!!";
+		npctalk "??? : Eu nunca senti um cheiro como esse!!!", instance_npcname("???#sh1_s");
+		cutin "",255;
+		sleep2 2000;
+		// npctalk "??? : Saia desta floresta agora mesmo!!";
+		npctalk "??? : Saia desta floresta agora mesmo!!", instance_npcname("???#sh1_s");
+		sleep2 1000;
+		npctalk "Chulho : Argh!! Por que você está me batendo de repente!!!";
+		cutin "ex_sh_chulho02.png",2;
+		sleep2 2000;
+		npctalk "Chulho : Argh!! Eu não aguento isso!!!";
+		sleep2 1000;
+		npctalk "Chulho : Vamos acalmar esse cara e entrar na floresta!!!";
+		cutin "",255;
+		cloakonnpc( instance_npcname("???#sh1_s") );
+		setpcblock( PCBLOCK_NPC, false );
+		disablenpc();
+		if ('step == 0)
+			donpcevent instance_npcname("doram_job_change_mob_1") + "::OnStart";
+		end;
+	}
+}
+
+1@exsh,93,39,3	duplicate(dummy_cloaked_npc)	???#sh1_s	G_RAKE_SCARABA
+
+
+// Step 2
+1@exsh,93,39,3	script	doram_job_change_mob_1	-1,{
+	end;
+OnStart:
+	'step = 1;
+	monster 'map_1exsh$,93,39,"???","G_RAKE_SCARABA",1, instance_npcname("doram_job_change_mob_1") + "::OnMobDead";
+	.@mode = ( MD_CANMOVE | MD_AGGRESSIVE | MD_CANATTACK | MD_TELEPORTBLOCK | MD_DETECTOR );
+	setunitdata( $@mobid[0], UMOB_MODE, .@mode );
+	end;
+OnMobDead:
+	if ('step != 1 || mobcount( 'map_1exsh$, instance_npcname("doram_job_change_mob_1") + "::OnMobDead" ) != 0)
+		end;
+	'step = 2;
+	cloakoffnpc( instance_npcname("Chulho#sh1_1") );
+	setpcblock( PCBLOCK_NPC, true );
+	sleep2 2000;
+	npctalk "Chulho : O que está acontecendo!", instance_npcname("Chulho#sh1_1");
+	cutin "ex_sh_chulho02.png",2;
+	sleep2 2000;
+	npctalk "Chulho : Terei que procurar por Hyunrok.", instance_npcname("Chulho#sh1_1");
+	sleep2 2000;
+	npctalk "Chulho : Esta é a porta da frente, então vamos nos apressar e entrar.", instance_npcname("Chulho#sh1_1");
+	sleep2 2000;
+	cutin "",255;
+	cloakonnpc( instance_npcname("Chulho#sh1_1") );
+	setpcblock( PCBLOCK_NPC, false );
+	disablenpc instance_npcname("#shbr1");
+	// disablenpc instance_npcname("#shbr2");
+	if ('step == 2)
+		'step = 3;
+	end;
+}
+
+1@exsh,92,38,3	duplicate(dummy_cloaked_npc)	Chulho#sh1_1	4_EXJOB_CHUL_HO
+
+
+// Step 3
+1@exsh,86,83,5	script	Guard#md1	4_M_PAY_SOLDIER,3,3,{
+	if ('step == 3) {
+		mes "[Guard]";
+		mes "Você não pode passar por aqui.";
+		mes "Volte.";
+		next;
+		select( "Peça para eles deixarem você entrar." );
+		mes "[Guard]";
+		mes "Hyunrok me disse para não trazer pessoas suspeitas!!";
+		close2;
+		setpcblock( PCBLOCK_NPC, true );
+		.@npc_a$ = instance_npcname("Chulho#sh_c1");
+		.@npc_b$ = instance_npcname("Kisul#sh_k1");
+		cloakoffnpc( .@npc_a$ );
+		cloakoffnpc( .@npc_b$ );
+		npctalk "Kisul : Ah, nossa~", .@npc_b$;
+		cutin "ex_sh_kisul01.png",2;
+		sleep2 2000;
+		npctalk "Kisul : Ele tem muitos chifres!", .@npc_b$;
+		cutin "ex_sh_kisul02.png",2;
+		sleep2 2000;
+		npctalk "Kisul : É porque ainda sou jovem, então, por favor, entenda~", .@npc_b$;
+		sleep2 2000;
+		npctalk "Kisul : Hahahahaha!", .@npc_b$;
+		sleep2 2000;
+		npctalk "Chulho : Mas por que você está me atacando!", .@npc_a$;
+		cutin "ex_sh_chulho02.png",2;
+		sleep2 2000;
+		npctalk "Kisul : Eu não te disse para não comer nada?", .@npc_b$;
+		cutin "ex_sh_kisul01.png",2;
+		sleep2 2000;
+		npctalk "Kisul : Você não vai mudar como os outros animais selvagens depois de tomar aquele remédio.", .@npc_b$;
+		cutin "ex_sh_kisul02.png",2;
+		sleep2 2000;
+		npctalk "Kisul : O cheiro não desaparece, então é natural ser considerado suspeito!", .@npc_b$;
+		cutin "ex_sh_kisul03.png",2;
+		sleep2 2000;
+		npctalk "Chulho : Não fique só dizendo isso e me ajude!", .@npc_a$;
+		cutin "ex_sh_chulho02.png",2;
+		sleep2 2000;
+		npctalk "Kisul : Não será difícil, então tente o seu melhor.", .@npc_b$;
+		cutin "ex_sh_kisul01.png",2;
+		sleep2 2000;
+		npctalk "Kisul : Faz muito tempo que não vejo algo interessante~", .@npc_b$;
+		cutin "ex_sh_kisul02.png",2;
+		sleep2 2000;
+		npctalk "Chulho : Aaaah!!!", .@npc_a$;
+		cutin "",255;
+		cloakonnpc( .@npc_a$ );
+		cloakonnpc( .@npc_b$ );
+		mapannounce 'map_1exsh$, "Guard : I told you to go back!!!", bc_map, 0xB7EE,FW_NORMAL,16;
+		sleep2 1000;
+		disablenpc instance_npcname("Guard#md1");
+		disablenpc instance_npcname("Guard#md2");
+		sleep2 2000;
+		setpcblock( PCBLOCK_NPC, false );
+		mapannounce 'map_1exsh$, "Guard : You'll have to deal with us if you don't want go back!!!!", bc_map, 0xB7EE,FW_NORMAL,16;
+		if ('step == 3)
+			donpcevent instance_npcname("doram_job_change_mob_2") + "::OnStart";
+		end;
+	}
+	end;
+
+OnTouch:
+	mes "[Guard]";
+	mes "Você não pode passar por aqui.";
+	mes "Volte.";
+	close2;
+	warp 'map_1exsh$,90,75;
+	end;
+}
+1@exsh,93,83,3	duplicate(Guard#md1)	Guard#md2	4_M_PAY_SOLDIER,3,3
+
+
+// Step 4
+1@exsh,93,39,3	script	doram_job_change_mob_2	-1,{
+	end;
+OnStart:
+	'step = 4;
+	.@event$ = instance_npcname("doram_job_change_mob_2") + "::OnMobDead";
+	.@mode = ( MD_CANMOVE | MD_AGGRESSIVE | MD_CANATTACK | MD_TELEPORTBLOCK | MD_DETECTOR );
+
+	monster 'map_1exsh$,87,77,"Deep Forest Guardian","G_RAKE_SCARABA",1, .@event$;
+	setunitdata( $@mobid[0], UMOB_MODE, .@mode );
+	monster 'map_1exsh$,87,75,"Deep Forest Guardian","G_RAKE_SCARABA",1, .@event$;
+	setunitdata( $@mobid[0], UMOB_MODE, .@mode );
+	monster 'map_1exsh$,92,77,"Deep Forest Guardian","G_RAKE_SCARABA",1, .@event$;
+	setunitdata( $@mobid[0], UMOB_MODE, .@mode );
+	monster 'map_1exsh$,92,75,"Deep Forest Guardian","G_RAKE_SCARABA",1, .@event$;
+	setunitdata( $@mobid[0], UMOB_MODE, .@mode );
+	end;
+OnMobDead:
+	if ('step != 4 || mobcount( 'map_1exsh$, instance_npcname("doram_job_change_mob_2") + "::OnMobDead" ) != 0)
+		end;
+	.@npc_a$ = instance_npcname("Kisul#sh_k1");
+	.@npc_b$ = instance_npcname("Chulho#sh_c1");
+
+	'step = 5;
+	setpcblock( PCBLOCK_NPC, true );
+	cloakoffnpc( .@npc_a$ );
+	cloakoffnpc( .@npc_b$ );
+	npctalk "Chulho : Ah, meu Deus!", .@npc_b$;
+	cutin "ex_sh_chulho02.png",2;
+	sleep2 2000;
+	npctalk "Chulho : Pensei que ia morrer...", .@npc_b$;
+	emotion ET_CRY;
+	sleep2 2000;
+	npctalk "Kisul : É difícil te ver ficar tão agitado assim...", .@npc_a$;
+	cutin "ex_sh_kisul01.png",2;
+	sleep2 2000;
+	npctalk "Chulho : Você só ficou assistindo!!!", .@npc_b$;
+	cutin "ex_sh_chulho02.png",2;
+	sleep2 2000;
+	npctalk "Kisul : Hmm...", .@npc_a$;
+	cutin "ex_sh_kisul01.png",2;
+	sleep2 2000;
+	npctalk "Kisul : Vamos ver...", .@npc_a$;
+	sleep2 2000;
+	npctalk "Chulho : Não ignore o que eu disse!", .@npc_b$;
+	cutin "ex_sh_chulho02.png",2;
+	sleep2 2000;
+	npctalk "Kisul : O cheiro está começando a ficar sinistro, então é melhor você se apressar e procurar o Hyunrok.", .@npc_a$;
+	cutin "ex_sh_kisul02.png",2;
+	sleep2 2000;
+	npctalk "Kisul : Se for o Hyunrok, ele está sempre lá.", .@npc_a$;
+	sleep2 2000;
+	npctalk "Chulho : Então ele está perto do prédio principal do norte!", .@npc_b$;
+	cutin "ex_sh_chulho01.png",2;
+	sleep2 2000;
+	npctalk "Kisul : Não fique parado aí e se mova.", .@npc_a$;
+	cutin "ex_sh_kisul02.png",2;
+	sleep2 1000;
+	cloakonnpc( .@npc_b$ );
+	cloakonnpc( .@npc_a$ );
+	cloakoffnpc( instance_npcname("Hyunrok#sh1") );
+	cutin "",255;
+	setpcblock( PCBLOCK_NPC, false );
+	if ('step == 5)
+		'step = 6;
+	end;
+}
+
+1@exsh,91,79,3	duplicate(dummy_cloaked_npc)	Chulho#sh_c1	4_EXJOB_CHUL_HO
+1@exsh,87,80,5	duplicate(dummy_cloaked_npc)	Kisul#sh_k1	4_EXJOB_KI_SUL
+
+
+// Step 5
+1@exsh,87,146,5	duplicate(dummy_cloaked_npc)	Chulho#sh_c2	4_EXJOB_CHUL_HO
+1@exsh,92,146,3	duplicate(dummy_cloaked_npc)	Kisul#sh_k2	4_EXJOB_KI_SUL
+1@exsh,93,139,1	duplicate(dummy_cloaked_npc)	??????#sh_y2	G_THA_ODIUM
+1@exsh,92,140,1	duplicate(dummy_cloaked_npc)	Kwang Saeng#sh_t2	4_M_DARKPRIEST
+1@exsh,93,139,1	duplicate(dummy_cloaked_npc)	Admiral Lee Daegam#sh_y2	2_M_PHARMACIST
+
+1@exsh,90,148,3	script(CLOAKED)	Hyunrok#sh1	4_EXJOB_HYUN_ROK,{
+	if ('step == 6) {
+		setpcblock( PCBLOCK_NPC, true );
+		.@npc_a$ = instance_npcname("Chulho#sh_c2");
+		.@npc_b$ = instance_npcname("Kisul#sh_k2");
+		.@npc_c$ = instance_npcname("??????#sh_y2");
+		.@npc_d$ = instance_npcname("Kwang Saeng#sh_t2");
+		.@npc_e$ = instance_npcname("Admiral Lee Daegam#sh_y2");
+
+		npctalk "Hyunrok : Chulho, Kisul. Vocês voltaram.";
+		cutin "ex_sh_hyunrok01.png",2;
+		cloakoffnpc( .@npc_a$ );
+		cloakoffnpc( .@npc_b$ );
+		sleep2 2000;
+		npctalk "Chulho : Era lá que você estava!", .@npc_a$;
+		emotion ET_BLABLA, getnpcid(0,.@npc_a$);
+		cutin "ex_sh_chulho01.png",2;
+		sleep2 2000;
+		npctalk "Chulho : Procurei por você por muito tempo!", .@npc_a$;
+		sleep2 2000;
+		npctalk "Hyunrok : Acho que só saí por um momento.";
+		cutin "ex_sh_hyunrok01.png",2;
+		sleep2 2000;
+		npctalk "Hyunrok : Mas a pessoa ao seu lado é...?";
+		sleep2 2000;
+		npctalk "Hyunrok : Como você conseguiu entrar neste lugar?";
+		sleep2 2000;
+		npctalk "Chulho : Do que você está falando!", .@npc_a$;
+		emotion ET_SMILE, getnpcid(0,.@npc_a$);
+		cutin "ex_sh_chulho01.png",2;
+		sleep2 2000;
+		npctalk "Chulho : Este homem é um tigre como eu!", .@npc_a$;
+		cutin "ex_sh_chulho03.png",2;
+		emotion ET_HUK, playerattached();
+		sleep2 2000;
+		npctalk "Hyunrok : Do que você está falando?";
+		emotion ET_PROFUSELY_SWEAT;
+		cutin "ex_sh_hyunrok01.png",2;
+		sleep2 2000;
+		npctalk "Hyunrok : Ele não é parte da floresta como nós, ele é um guarda florestal, ele é um guarda florestal.";
+		sleep2 2000;
+		npctalk "Kisul : Hahahahaha!!!", .@npc_b$;
+		cutin "ex_sh_kisul01.png",2;
+		emotion ET_SMILE, getnpcid(0,.@npc_b$);
+		sleep2 2000;
+		npctalk "Kisul : Achei estranho, mas você não sabia?!", .@npc_b$;
+		cutin "ex_sh_kisul02.png",2;
+		sleep2 2000;
+		npctalk "Chulho : O quê?!", .@npc_a$;
+		cutin "ex_sh_chulho02.png",2;
+		emotion ET_HUK, getnpcid(0,.@npc_a$);
+		sleep2 2000;
+		npctalk "Chulho : Ele cheira exatamente como eu!!!", .@npc_a$;
+		sleep2 2000;
+		npctalk "Hyunrok : Embora existam algumas semelhanças com você, Chulho...";
+		cutin "ex_sh_hyunrok01.png",2;
+		sleep2 2000;
+		npctalk "Chulho : Aaaah!!!", .@npc_a$;
+		cutin "ex_sh_chulho02.png",2;
+		sleep2 2000;
+		npctalk "Hyunrok : De qualquer forma, acho que qualquer um que viva fora da floresta deveria voltar para o lado de fora.";
+		cutin "ex_sh_hyunrok01.png",2;
+		sleep2 2000;
+		npctalk "Hyunrok : As pessoas que perturbaram a floresta estão se aproximando novamente.";
+		sleep2 2000;
+		npctalk "Hyunrok : Não podemos simplesmente ficar parados.";
+		sleep2 2000;
+		npctalk "Kisul : Ah~", .@npc_b$;
+		cutin "ex_sh_kisul01.png",2;
+		sleep2 2000;
+		npctalk "Kisul : Você está tentando fazer algo irritante de novo?", .@npc_b$;
+		emotion ET_SLEEPY, getnpcid(0,.@npc_b$);
+		sleep2 1000;
+		cutin "",255;
+		cloakoffnpc( .@npc_e$ );
+		sleep2 2000;
+		npctalk "Admiral Lee Daegam : Onde estamos?", .@npc_e$;
+		emotion ET_STARE_ABOUT, getnpcid(0,.@npc_e$);
+		sleep2 2000;
+		npctalk "Admiral Lee Daegam : Kwang Saeng, acho que você foi fundo demais, por que não deixa isso para seus servos?", .@npc_e$;
+		emotion ET_SCRATCH, getnpcid(0,.@npc_e$);
+		sleep2 3000;
+		npctalk "Admiral Lee Daegam : Que diabos é isso!", .@npc_e$;
+		emotion ET_HUK, getnpcid(0,.@npc_e$);
+		sleep2 2000;
+		npctalk "Admiral Lee Daegam : Por que as bestas estão vestidas?", .@npc_e$;
+		sleep2 2000;
+		npctalk "Hyunrok : Quão rude você pode ser!!!";
+		cutin "ex_sh_hyunrok01.png",2;
+		sleep2 2000;
+		cutin "",255;
+		npctalk "Admiral Lee Daegam : Oops!", .@npc_e$;
+		emotion ET_HUK, getnpcid(0,.@npc_e$);
+		sleep2 2000;
+		npctalk "Admiral Lee Daegam : Um homem com chifres!!!", .@npc_e$;
+		sleep2 1000;
+		cloakoffnpc( .@npc_d$ );
+		sleep2 2000;
+		npctalk "Kwang Saeng : Oh!!!!", .@npc_d$;
+		emotion ET_COOL, getnpcid(0,.@npc_d$);
+		sleep2 2000;
+		npctalk "Kwang Saeng : Eu finalmente encontrei!!!", .@npc_d$;
+		sleep2 2000;
+		npctalk "Kwang Saeng : As bestas misteriosas da Floresta Profunda onde nenhum homem pode entrar!!!!", .@npc_d$;
+		sleep2 2000;
+		npctalk "Kwang Saeng : Um animal lendário diante dos meus olhos que pode ser imortalizado cortando e adoçando esses chifres!!!!", .@npc_d$;
+		emotion ET_SEXY, getnpcid(0,.@npc_d$);
+		sleep2 2000;
+		npctalk "Hyunrok : Afaste-se!!! Como se atreve!";
+		cutin "ex_sh_hyunrok01.png",2;
+		sleep2 2000;
+		cutin "",255;
+		npctalk "Kwang Saeng : Eheheheh!!!", .@npc_d$;
+		sleep2 2000;
+		npctalk "Kwang Saeng : Você não será capaz de me parar com as bestas da floresta!", .@npc_d$;
+		emotion ET_KIK, getnpcid(0,.@npc_d$);
+		sleep2 2000;
+		npctalk "Kwang Saeng : Porque todos os animais que tomaram meu remédio não têm escolha a não ser obedecer às minhas ordens.", .@npc_d$;
+		sleep2 2000;
+		npctalk "Admiral Lee Daegam : Aaaah!!!", .@npc_e$;
+		sleep2 350;
+		cloakonnpc( .@npc_e$ );
+		cloakoffnpc( .@npc_c$ );
+		emotion ET_HUK, getnpcid(0,.@npc_a$);
+		emotion ET_HUK, getnpcid(0,.@npc_b$);
+		emotion ET_HUK, playerattached();
+		emotion ET_SURPRISE;
+		sleep2 2000;
+		npctalk "?????? : Isso é demais!!!", .@npc_c$;
+		emotion ET_FRET, getnpcid(0,.@npc_c$);
+		sleep2 2000;
+		npctalk "Hyunrok : Aaah!!";
+		cutin "ex_sh_hyunrok01.png",2;
+		sleep2 2000;
+		npctalk "Hyunrok : Ah, meu Deus!!!";
+		sleep2 2000;
+		npctalk "Chulho : Arrgggg!!! Que nojo!!!!!", .@npc_a$;
+		emotion ET_PROFUSELY_SWEAT, getnpcid(0,.@npc_a$);
+		cutin "ex_sh_chulho02.png",2;
+		emotion ET_HUK, getnpcid(0,.@npc_a$);
+		sleep2 2000;
+		npctalk "Chulho : Vou acabar ficando assim!!!", .@npc_a$;
+		sleep2 2000;
+		npctalk "Kisul : Acalme-se e fique parado.", .@npc_b$;
+		cutin "ex_sh_kisul03.png",2;
+		sleep2 2000;
+		npctalk "Kisul : As coisas estão ficando mais interessantes do que eu pensava.", .@npc_b$;
+		cutin "ex_sh_kisul01.png",2;
+		emotion ET_KIK, getnpcid(0,.@npc_b$);
+		sleep2 2000;
+		npctalk "Chulho : Não é hora de ficar parado!", .@npc_a$;
+		cutin "ex_sh_chulho02.png",2;
+		sleep2 2000;
+		npctalk "Chulho : E se eu me transformar em um monstro como aquele!", .@npc_a$;
+		sleep2 2000;
+		npctalk "Kisul : Bem, vamos fazer os monstros dormirem e conversar de novo.", .@npc_b$;
+		cutin "ex_sh_kisul02.png",2;
+		sleep2 2000;
+		cloakonnpc( .@npc_a$ );
+		cloakonnpc( .@npc_b$ );
+		cloakonnpc( .@npc_c$ );
+		cloakonnpc( .@npc_d$ );
+		cutin "",255;
+		setpcblock( PCBLOCK_NPC, false );
+		disablenpc();
+		mapannounce 'map_1exsh$, "?????? : Arrgggg!!!", bc_map, 0xB7EE,FW_NORMAL,16;
+		mapannounce 'map_1exsh$, "?????? : Huhh!!!!", bc_map, 0xB7EE,FW_NORMAL,16;
+		if ('step == 6)
+			donpcevent instance_npcname("doram_job_change_mob_3") + "::OnStart";
+		end;
+	}
+	end;
+}
+
+
+// Step 6
+1@exsh,90,148,3	script(CLOAKED)	Hyunrok#sh2	4_EXJOB_HYUN_ROK,{
+	if ('step >= 8) {	// custom (debug)
+		warp "pay_fild09",113,343;
+		end;
+	}
+	end;
+}
+
+1@exsh,93,39,3	script	doram_job_change_mob_3	-1,{
+	end;
+OnStart:
+	'step = 7;
+	.@event$ = instance_npcname("doram_job_change_mob_3") + "::OnMobDead";
+	monster 'map_1exsh$,92,140,"??????","G_THA_ODIUM",1, .@event$;
+	monster 'map_1exsh$,92,140,"??????","G_THA_ODIUM",1, .@event$;
+	monster 'map_1exsh$,92,140,"??????","G_THA_ODIUM",1, .@event$;
+	end;
+OnMobDead:
+	if ('step != 7 || mobcount( 'map_1exsh$, instance_npcname("doram_job_change_mob_3") + "::OnMobDead" ) != 0)
+		end;
+	'step = 8;
+
+	setpcblock( PCBLOCK_NPC, true );
+	.@npc_a$ = instance_npcname("Chulho#sh_c2");
+	.@npc_b$ = instance_npcname("Kisul#sh_k2");
+	.@npc_c$ = instance_npcname("Kwang Saeng#sh_t2");
+	.@npc_d$ = instance_npcname("Hyunrok#sh2");
+
+	cloakoffnpc( .@npc_a$ );
+	cloakoffnpc( .@npc_b$ );
+	cloakoffnpc( .@npc_c$ );
+	cloakoffnpc( .@npc_d$ );
+	sleep2 2000;
+	npctalk "Kwang Saeng : Arg!!", .@npc_c$;
+	emotion ET_HUK, getnpcid(0,.@npc_c$);
+	sleep2 2000;
+	npctalk "Kwang Saeng : Por quê!!!", .@npc_c$;
+	sleep2 2000;
+	npctalk "Hyunrok : Foi imprudente tentar conquistar esta floresta com essa quantidade de força.", .@npc_d$;
+	cutin "ex_sh_hyunrok01.png",2;
+	sleep2 2000;
+	npctalk "Hyunrok : É melhor você voltar para onde pertence.", .@npc_d$;
+	sleep2 2000;
+	cutin "",255;
+	npctalk "Kwang Saeng : Arg!!!!!", .@npc_c$;
+	sleep2 500;
+	cloakonnpc( .@npc_c$ );
+	sleep2 1500;
+	npctalk "Hyunrok : Mesmo o menor vestígio parece demais para você, mas espero que a vida do vestígio seja uma oportunidade para refletir sobre seus pecados.", .@npc_d$;
+	cutin "ex_sh_hyunrok01.png",2;
+	sleep2 2000;
+	npctalk "Hyunrok : E" + strcharinfo(0) + ", thank you very much for helping us despite my rudeness.", .@npc_d$;
+	sleep2 2000;
+	npctalk "Chulho : Obrigado!", .@npc_a$;
+	cutin "ex_sh_chulho01.png",2;
+	sleep2 2000;
+	npctalk "Chulho : Então vamos fazer uma festa já que repreendemos o vilão!", .@npc_a$;
+	sleep2 2000;
+	npctalk "Kisul : É bom ter um banquete, mas se você ficar na floresta por muito tempo, não conseguirá voltar.", .@npc_b$;
+	cutin "ex_sh_kisul01.png",2;
+	sleep2 2000;
+	npctalk "Chulho : Então você pode continuar brincando comigo!", .@npc_a$;
+	cutin "ex_sh_chulho01.png",2;
+	sleep2 2000;
+	npctalk "Hyunrok : Isso não é possível.", .@npc_d$;
+	cutin "ex_sh_hyunrok01.png",2;
+	sleep2 2000;
+	npctalk "Hyunrok : Deixe-me enviar você de volta agora.", .@npc_d$;
+	sleep2 2000;
+	npctalk "Chulho : Ch--", .@npc_a$;
+	cutin "ex_sh_chulho02.png",2;
+	emotion ET_CRY, getnpcid(0,.@npc_a$);
+	sleep2 2000;
+	npctalk "Hyunrok : Então volte antes de ficar obcecado por este lugar.", .@npc_d$;
+	cutin "ex_sh_hyunrok01.png",2;
+	sleep2 2000;
+	npctalk "Hyunrok : Deixei uma pequena carta em frente à floresta quando você retornar, então, por favor, dê uma olhada antes de partir.", .@npc_d$;
+	sleep2 2000;
+	npctalk "Hyunrok : Por favor...", .@npc_d$;
+	sleep2 2000;
+	npctalk "Hyunrok : Tenha uma viagem segura para casa...", .@npc_d$;
+	if (isbegin_quest(11782) == 1) {
+		erasequest 11782;
+		setquest 11769;
+	}
+	if ('step == 8)
+		'step = 9;
+	sleep2 2000;
+	setpcblock( PCBLOCK_NPC, false );
+	cutin "",255;
+	warp "pay_fild09",113,343;
+	end;
+}

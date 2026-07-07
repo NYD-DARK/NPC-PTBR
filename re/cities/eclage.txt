@@ -1,0 +1,106 @@
+//===== rAthena Script ======================================= 
+//= General Eclage NPC.
+//===== By: ================================================== 
+//= Dastgir
+//===== Current Version: ===================================== 
+//= 2.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Eclage Town NPC
+//===== Additional Comments: ================================= 
+//= 1.0 Generic NPC place holders. [Euphy]
+//= 2.0 Converted from the official Aegis script. [Dastgir]
+//============================================================ 
+
+ecl_in02,96,22,3	script	sign#prison_inn	545,{
+	mes "[Norte] Prisão";
+	mes "[Oeste] Clínica";
+	close;
+}
+
+ecl_in01,8,71,5	script	Eclage Guard#pri_inn	447,{
+	mes "[Eclage Guard]";
+	mes "Este caminho levará você às partes inferiores de Eclage. Você encontrará uma prisão e uma clínica lá.";
+	close;
+}
+
+ecl_in02,164,56,3	script	Receptionist#Laphine	835,{
+	mes "[Receptionist]";
+	mes "Bem-vindo à Clínica de Eclage.";
+	next;
+	switch (select("Salvar Ponto de Retorno:Descansar:Encerrar a conversa")) {
+	case 1:
+		mes "[Receptionist]";
+		mes "A clínica foi definida como seu ponto de retorno. Mas tome cuidado~";
+		savepoint "ecl_in02",162,50,1,1;
+		close;
+	case 2:
+		mes "[Receptionist]";
+		mes "Recupere sua mente e seu corpo em nossa clínica. Ela é repleta da energia pura de Eclage.";
+		mes "Normalmente cobramos 1 Moeda Splendide, mas oferecemos um desconto especial para viajantes. O total é de 5.000 zenys.";
+		next;
+		switch (select("Pagar com Moeda Splendide:Pagar com Zenys:Esqueça")) {
+		case 1:
+			if (!countitem(6081)) {
+				mes "[Receptionist]";
+				mes "Parece que você não tem moedas suficientes. Você poderia verificar sua conta novamente, por favor?";
+				close;
+			}
+			mes "[Receptionist]";
+			mes "Sinta-se em casa~";
+			close2;
+			delitem 6081,1; //6081
+			percentheal 100,100;
+			warp "ecl_in02",167,49;
+			end;
+		case 2:
+			if (Zeny < 5000) {
+				mes "[Receptionist]";
+				mes "Parece que você não tem recursos suficientes para prosseguir. Você se importa de verificar sua conta novamente?";
+				close;
+			}
+			mes "[Receptionist]";
+			mes "Sinta-se em casa~";
+			close2;
+			Zeny = Zeny - 5000;
+			percentheal 100,100;
+			warp "ecl_in02",167,49;
+			end;
+		case 3:
+			close;
+		}
+	case 3:
+		close;
+	}
+}
+
+ecl_in02,135,45,5	script	Injured Laphine	442,{
+	mes "[Injured Laphine]";
+	mes "Aiii...";
+	mes "Onde...estou?";
+	next;
+	mes "[Doctor]";
+	mes "Você está em uma clínica. Não se preocupe.";
+	mes "Estancamos o sangramento e lançamos feitiços de emergência.";
+	mes "Você estava perdendo muito sangue. Foi por pouco, sabe.";
+	next;
+	mes "[Injured Laphine]";
+	mes "......";
+	mes "O quê, não, eu... eu não sinto nada... o que está acontecendo?";
+	next;
+	mes "[Doctor]";
+	mes "Hum... a flecha danificou sua asa gravemente...";
+	next;
+	mes "[Injured Laphine]";
+	mes "...o que você quer dizer?";
+	next;
+	mes "[Doctor]";
+	mes "Bem... eu ia te contar depois que você se recuperasse, mas você precisa saber. Você não pode mais decorar o Yai.";
+	mes "Em outras palavras, você feriu sua asa. A flecha atravessou a parte mais crítica da asa.";
+	next;
+	mes "[Injured Laphine]";
+	mes "O quê? Não pode ser... por favor... doutor!! Não!!";
+	close;
+}
+ecl_in02,137,44,3	duplicate(Injured Laphine)	Doctor Laphine#doctor	441
