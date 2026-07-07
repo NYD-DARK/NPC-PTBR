@@ -1,0 +1,1370 @@
+//===== rAthena Script ======================================= 
+//= Rogue Skills Quests
+//===== By: ================================================== 
+//= Lupus, Reddozen
+//===== Current Version: ===================================== 
+//= 1.8
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Quests for skills: CLose Confine
+//===== Additional Comments: ================================= 
+//= 1.4 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//= 1.5 Fixed bad NPC header data to comply with rev. 11603. [L0ne_W0lf]
+//= 1.6 Bug fixes as pointed out by Brainstorm in bugreport:351 [L0ne_W0lf]
+//= 1.6a Fixed(?) antoher problem (NPCs not disabling) hopefully. [L0ne_W0lf]
+//= 1.6b Corrected a Typo error with "rouge". (bugreport:909) [Samuray22]
+//= 1.7 Replaced effect numerics with constants. [L0ne_W0lf]
+//= 1.8 Some cleaning. [Euphy]
+//============================================================
+
+in_rogue,359,177,0	script	#killershow01	-1,{
+OnInit:
+	disablenpc "#killershow01";
+	end;
+
+OnEnable:
+	enablenpc "#killershow01";
+	initnpctimer;
+	end;
+
+OnDisable:
+	stopnpctimer;
+	disablenpc "#killershow01";
+	end;
+
+OnTimer1000:
+	enablenpc "Killer#Rogueguild";
+	end;
+
+OnTimer120000:
+	disablenpc "Killer#Rogueguild";
+	end;
+
+OnTimer150000:
+	disablenpc "Killer#Rogueguild";
+	disablenpc "#killershow01";
+	end;
+}
+
+in_rogue,357,174,2	script	Killer#Rogueguild	705,1,1,{
+OnInit:
+	disablenpc "Killer#Rogueguild";
+	end;
+
+OnTouch_:
+	if (ROG_SK == 10) {
+		specialeffect2 EF_CHANGECOLD;
+		specialeffect EF_CHANGEWIND;
+		specialeffect2 EF_LIGHTSPHERE;
+		set ROG_SK,11;
+		mes "[Killer]";
+		mes "O-o que você";
+		mes "fez comigo?!";
+		mes "N-não... não consigo me mexer!";
+		next;
+		mes "[Haijara Greg]";
+		mes "Oh? Eu não esperava que";
+		mes "você fosse capaz de conjurar";
+		mes "CloseConfine tão cedo!";
+		mes "Incrível, simplesmente incrível!";
+		mes "Agora, esta é uma boa chance";
+		mes "para você dominar a habilidade...";
+		next;
+		mes "[Haijara Greg]";
+		mes "Agora preste atenção.";
+		mes "Quero que você pratique";
+		mes "prever a intenção de movimento";
+		mes "do seu oponente neste assassino.";
+		mes "Você deve ser capaz de ver para que lado ele planeja se mover pela aura dele.";
+		next;
+		mes "[Haijara Greg]";
+		mes "Se ele planeja se mover para a esquerda,";
+		mes "a aura dele ficará branca. Se ele";
+		mes "se mover para a direita, ficará";
+		mes "amarela. Se ele pretender ir";
+		mes "para trás, ficará vermelho-pálido.";
+		next;
+		setarray .@Effects[1],EF_CHANGECOLD,EF_CHANGEWIND,EF_CHANGEEARTH;
+		for(set .@lim_1,0; .@lim_1<10; set .@lim_1,.@lim_1+1) {
+			set .@move_1,rand(1,3);
+			specialeffect .@Effects[.@move_1];
+			if (select("Bloqueie-o para a Esquerda:Bloqueie-o para a Direita:Bloqueie o Recuo dele") == .@move_1) {
+				mes "^3355FFO assassino permanece";
+				mes "incapaz de se mover e parece";
+				mes "incrivelmente confuso! Agora";
+				mes "mesmo, você está usando a habilidade";
+				mes "CloseConfine perfeitamente!^000000";
+				specialeffect EF_POTION1;
+				specialeffect2 EF_POTION7;
+			}
+			else {
+				mes "^3355FFEspere--!";
+				mes "Por alguma razão,";
+				mes "você sente que essa não é";
+				mes "a direção para a qual o assassino";
+				mes "está se movendo neste momento.";
+				mes "Você se corrige naturalmente.^000000";
+			}
+			next;
+		}
+		mes "^3355FFVocê recuperou com sucesso";
+		mes "o inestimável livro de habilidades";
+		mes "escrito pelo lendário";
+		mes "Chae Takbae.^000000";
+		close2;
+		disablenpc "Killer#Rogueguild";
+		donpcevent "#killershow01::OnDisable";
+		end;
+	}
+	else if (ROG_SK == 11) {
+		mes "[Killer]";
+		mes "Grrrrr...";
+		mes "A-ainda...";
+		mes "N-não... consigo me mover!";
+		close2;
+		disablenpc "Killer#Rogueguild";
+		donpcevent "#killershow01::OnDisable";
+		end;
+	}
+	end;
+}
+
+in_rogue,355,179,0	script	Haijara Greg#rogueguild	46,{
+	if (BaseJob == Job_Rogue) {
+		if (ROG_SK == 12 && Upper == 1) {
+			mes "[Haijara Greg]";
+			mes "Hm? Ah, amnésia como";
+			mes "resultado da transcendência,";
+			mes "hein? Então eu vou te ensinar a";
+			mes "habilidade CloseConfine novamente.";
+			specialeffect2 EF_LIGHTSPHERE;
+			skill "RG_CLOSECONFINE",1,SKILL_PERM;
+			set ROG_SK,13;
+			close;
+		}
+		else if (ROG_SK == 13 && Upper == 1) {
+			mes "[Haijara Greg]";
+			mes "Um Desordeiro, hein?";
+			mes "Certifique-se de usar";
+			mes "suas habilidades para";
+			mes "prejudicar inimigos que merecem";
+			mes "ser perseguidos. Boa";
+			mes "sorte para você, aventureiro.";
+			close;
+		}
+		else {
+			if (ROG_SK < 1) {
+				mes "[Haijara Greg]";
+				mes "C-como você encontrou este";
+				mes "lugar? Eu pensei que esta sala";
+				mes "de pânico deveria ser";
+				mes "impenetrável, até mesmo por Renegados!";
+				next;
+				mes "[Haijara Greg]";
+				mes "Isso não pode ser bom!";
+				mes "Será apenas uma questão de";
+				mes "tempo até eles me encontrarem...";
+				close;
+			}
+			else if (ROG_SK == 1) {
+				mes "[Haijara Greg]";
+				mes "Q-quem é você,";
+				mes "e como você entrou";
+				mes "aqui? Identifique-se!";
+				next;
+				if (select("Não quero te fazer mal!:Dê-nos o que queremos!") == 1) {
+					mes "[Haijara Greg]";
+					mes "Não...?";
+					mes "Então... Então";
+					mes "por que você veio?";
+					mes "Não é por acaso que";
+					mes "você me encontrou.";
+					next;
+					if (select("Eu vim para te ajudar.:Oh, na verdade, eu não estava procurando por você.") == 1) {
+						mes "[Haijara Greg]";
+						mes "Hmm... Bem, suponho que";
+						if (Upper == 1)
+							mes "eu possa confiar em um companheiro Desordeiro";
+						else
+							mes "eu possa confiar em um companheiro Arruaceiro";
+						mes "com meu dilema. Honra";
+						mes "entre ladrões e tudo mais.";
+						mes "Tudo bem. Você já ouviu";
+						mes "a lenda de Chae Takbae?";
+						next;
+						if (select("Não:Sim") == 1) {
+							mes "[Haijara Greg]";
+							mes "100 anos atrás, Chae Takbae";
+							mes "foi a primeira pessoa a";
+							mes "transcender seus limites. Ele foi";
+							mes "também a pessoa a escolher";
+							mes "um caminho diferente da classe que possuía antes.";
+							next;
+							mes "[Haijara Greg]";
+							mes "Ele era originalmente um Monge,";
+							mes "mas após transcender, ele";
+							mes "de alguma forma tornou-se um Desordeiro.";
+							mes "Mantendo seu conhecimento da";
+							mes "habilidade Root do Monge, ele a adaptou para os propósitos dos Rogues.";
+							next;
+							mes "[Haijara Greg]";
+							mes "Chae Takbae registrou os";
+							mes "fundamentos para esta nova";
+							mes "habilidade de Arruaceiro em um livro que";
+							mes "tive a sorte de";
+							mes "obter. Mas assim que o consegui,";
+							mes "a chantagem começou...";
+							next;
+							mes "[Haijara Greg]";
+							mes "Existem partes inescrupulosas";
+							mes "que usarão quaisquer";
+							mes "meios para tirar o livro";
+							mes "de mim. Eu entendo, já que";
+							mes "meus filhos e eu aprendemos novas";
+							mes "habilidades com os escritos de Takbae.";
+							next;
+							mes "[Haijara Greg]";
+							mes "No entanto, meu tempo está";
+							mes "acabando e aqueles homens";
+							mes "inevitavelmente me encontrarão.";
+							mes "Você vai me ajudar a salvar";
+							mes "a mim e aos meus filhos?";
+							next;
+							if (select("Com certeza!:Desculpe, mas estou ocupado.") == 1) {
+								mes "[Haijara Greg]";
+								mes "Oh, muito obrigado!";
+								mes "Escute, não posso arriscar ser";
+								mes "encontrado, então você levaria";
+								mes "esta carta ao meu filho mais novo,";
+								mes "^FF0000Louis Greg^000000? Depressa,";
+								mes "não resta muito tempo!";
+								set ROG_SK,2;
+								close;
+							}
+							mes "[Haijara Greg]";
+							mes "Eu... entendo.";
+							mes "Mas por favor perceba";
+							mes "que, se não for você, em quem";
+							mes "posso confiar para me ajudar?";
+							close;
+						}
+						mes "[Haijara Greg]";
+						mes "Então você conheceria o";
+						mes "valor do livro de habilidades que ele";
+						mes "escreveu e que agora possuo.";
+						mes "No entanto, sou perseguido por homens";
+						mes "que farão qualquer coisa para obtê-lo.";
+						mes "Você poderia, por favor, me ajudar?";
+						next;
+						if (select("Com certeza!:Desculpe, mas estou ocupado.") == 1) {
+							mes "[Haijara Greg]";
+							mes "Oh, muito obrigado!";
+							mes "Escute, não posso arriscar ser";
+							mes "encontrado, então você levaria";
+							mes "esta carta ao meu filho mais novo,";
+							mes "^FF0000Louis Greg^000000? Depressa,";
+							mes "não resta muito tempo!";
+							set ROG_SK,2;
+							close;
+						}
+						mes "[Haijara Greg]";
+						mes "Eu... entendo.";
+						mes "Mas por favor perceba";
+						mes "que, se não for você, em quem";
+						mes "posso confiar para me ajudar?";
+						close;
+					}
+					mes "[Haijara Greg]";
+					mes "Hm...?";
+					mes "Isso parece improvável, mas";
+					mes "suponho que é melhor te dar";
+					mes "o benefício da dúvida.";
+					mes "Bem, então, espero que você";
+					mes "consiga encontrar o caminho para sair daqui.";
+					close;
+				}
+				mes "[Haijara Greg]";
+				mes "Entendo. Que assim seja.";
+				mes "Vou te mostrar a habilidade";
+				mes "que você tanto cobiça...";
+				mes "^FF0000Close Confine^000000!";
+				specialeffect EF_CHANGECOLD;
+				specialeffect2 EF_CHANGEWIND;
+				next;
+				mes "[Haijara Greg]";
+				mes "Hmpf. Agora você está";
+				mes "indefeso, permitindo";
+				mes "que eu faça isso: ^FF0000Back Stab^000000!";
+				specialeffect2 EF_COMBOATTACK5;
+				percentheal -95,0;
+				next;
+				mes "[Haijara Greg]";
+				mes "Agora saia daqui.";
+				mes "Nunca mais mostre sua cara";
+				mes "gananciosa na minha frente.";
+				mes "E fique feliz por";
+				mes "eu não ter te matado!";
+				set ROG_SK,1;
+				close;
+			}
+			else if (ROG_SK == 2) {
+				mes "[Haijara Greg]";
+				mes "Estamos ficando sem";
+				mes "tempo... Por favor, leve esta";
+				mes "carta ao meu filho mais novo,";
+				mes "^FF0000Louis^000000, assim que puder!";
+				mes "Você pode encontrá-lo na guilda dos Arruaceiro";
+				mes "perto de ^FF0000Hollgrehenn Junior^000000.";
+				close;
+			}
+			else if (ROG_SK == 3) {
+				mes "[Haijara Greg]";
+				mes "Louis te enviou para encontrar";
+				mes "^FF0000Thor^000000? Ele está na guilda dos Arruaceiro";
+				mes "perto de ^FF0000Hermanthorn Jr.^000000,";
+				mes "não está? Sinto muito que você";
+				mes "tenha que visitar meus filhos um por";
+				mes "um... Sei que é impraticável.";
+				close;
+			}
+			else if (ROG_SK == 4) {
+				mes "[Haijara Greg]";
+				mes "Ah, procurando por ^FF0000Jay^000000, hein?";
+				mes "Ele está perto de ^FF0000Antonio Jr.^000000 aqui";
+				mes "na guilda dos Arruaceiro. Ou, pelo";
+				mes "menos, ele geralmente está lá.";
+				close;
+			}
+			else if (ROG_SK == 5) {
+				mes "[Haijara Greg]";
+				mes "Oh, você voltou!";
+				mes "E você trouxe";
+				mes "uma carta do Jay.";
+				mes "Bom, bom, deixe-me";
+				mes "ler o que ele tem a dizer...";
+				set ROG_SK,6;
+				next;
+				mes "[Haijara Greg]";
+				mes "Ah, ótimas notícias! Ele contatou";
+				mes "a guilda dos Arruaceiro";
+				mes "para solicitar proteção extra";
+				mes "e alertar os guardas. Eu posso";
+				mes "finalmente relaxar um pouco agora. Ninguém mexe com Rogues.";
+				next;
+				mes "[Haijara Greg]";
+				mes "Muito obrigado pela";
+				mes "sua ajuda. Eu estaria escondido";
+				mes "para sempre se não fosse";
+				mes "por você. Em troca, deixe-me";
+				mes "oferecer a chance de aprender";
+				mes "a habilidade secreta de Chae Takbae.";
+				next;
+				mes "[Haijara Greg]";
+				mes "Por favor, fale com ^FF0000Thor^000000";
+				mes "e diga a ele que eu";
+				mes "permiti que você aprendesse";
+				mes "a habilidade que ensinei";
+				mes "a todos os meus filhos. Ele vai";
+				mes "concordar, tenho certeza disso.";
+				close;
+			}
+			else if (ROG_SK == 6) {
+				mes "[Haijara Greg]";
+				mes "Por favor, peça a Thor para lhe ensinar";
+				mes "a habilidade secreta de Arruaceiro";
+				mes "de Chae Takbae. Entenda que";
+				mes "eu não posso te ensinar esta habilidade";
+				mes "com o equipamento que tenho aqui";
+				mes "nesta sala de pânico improvisada.";
+				close;
+			}
+			else if (ROG_SK == 7) {
+				mes "[Haijara Greg]";
+				mes "Hm...? Você não deveria";
+				mes "estar no meio do treinamento";
+				mes "para aprender essa habilidade?";
+				mes "Por favor, fale com Thor";
+				mes "e complete seu treinamento.";
+				close;
+			}
+			else if (ROG_SK == 8) {
+				mes "[Haijara Greg]";
+				mes "Você completou o";
+				mes "treinamento? Ah, isso é muito";
+				mes "excepcional. No entanto, você";
+				mes "deve falar com Thor primeiro...";
+				close;
+			}
+			else if (ROG_SK == 9) {
+				mes "[Haijara Greg]";
+				mes "Oh, você voltou!";
+				mes "Ouvi dizer que você completou";
+				mes "o treinamento e está pronto";
+				mes "para ouvir sobre as aplicações";
+				mes "da habilidade Close Confine.";
+				next;
+				mes "[Haijara Greg]";
+				mes "Wah! O que é isso--?!";
+				mes "Pare! P-por favor, pare";
+				mes "aquele homem! Não podemos deixar";
+				mes "ele roubar aquele livro!";
+				specialeffect EF_COMBOATTACK5;
+				donpcevent "Killer#Rogueguild::OnEnable";
+				set ROG_SK,10;
+				close;
+			}
+			else if (ROG_SK == 10) {
+				mes "[Haijara Greg]";
+				mes "Aquele homem acabou de roubar o";
+				mes "livro da habilidade Close Confine!";
+				mes "Por favor! Não o deixe fugir!";
+				mes "Aquele livro é inestimável!";
+				donpcevent "#killershow01::OnEnable";
+				close;
+			}
+			else if (ROG_SK == 11) {
+				donpcevent "Killer#Rogueguild::OnDisable";
+				donpcevent "#killershow01::OnDisable";
+				mes "^3355FFVocê devolveu o";
+				mes "livro de habilidades escrito por";
+				mes "Chae Takbae para Haijara.^000000";
+				next;
+				mes "[Haijara Greg]";
+				mes "Muito obrigado pela sua";
+				mes "ajuda. Agora, se você quiser";
+				mes "saber algumas informações detalhadas";
+				mes "sobre Close Confine,";
+				mes "posso te contar mais";
+				mes "sobre a habilidade, se quiser.";
+				next;
+				if (select("Sim, por favor.:Não, obrigado.") == 1) {
+					mes "[Haijara Greg]";
+					mes "Como você deve saber,";
+					mes "Close Confine imobiliza";
+					mes "um inimigo que está muito perto";
+					mes "de você. No entanto, há";
+					mes "algumas nuances sobre seu";
+					mes "uso em jogadores ou monstros.";
+					next;
+					mes "[Haijara Greg]";
+					mes "Bem, Close Confine é";
+					mes "semelhante à habilidade de Monge,";
+					mes "Root, mas ela apenas inibe o";
+					mes "movimento do inimigo, não";
+					mes "suas capacidades de ataque.";
+					next;
+					mes "[Haijara Greg]";
+					mes "Com a exceção de";
+					mes "Back Stab, que só podemos";
+					mes "usar uma vez durante a duração";
+					mes "de Close Confine, podemos";
+					mes "usar qualquer habilidade durante";
+					mes "o status de Close Confine.";
+					next;
+					mes "[Haijara Greg]";
+					mes "Inimigos afetados por";
+					mes "Close Confine podem escapar";
+					mes "usando Fly Wing, Butterfly";
+					mes "Wings, ou as habilidades Teleport";
+					mes "ou Hiding. No entanto, apenas";
+					mes "Hiding está ativo durante a WoE.";
+					next;
+					mes "[Haijara Greg]";
+					mes "Portanto, Close Confine";
+					mes "pode ser uma habilidade muito útil";
+					mes "durante cercos de Guild War, já";
+					mes "que o alvo não use a";
+					mes "habilidade Hiding para fugir.";
+					next;
+					mes "[Haijara Greg]";
+					mes "Com exceção de monstros Chefes,";
+					mes "Close Confine";
+					mes "imobilizará monstros por";
+					mes "10 segundos, dando aos Rogues";
+					mes "novas possibilidades ao";
+					mes "caçar em grupo.";
+					next;
+					mes "[Haijara Greg]";
+					mes "Bem, é tudo o que posso te";
+					mes "contar sobre Close Confine.";
+					mes "Espero que você aprenda";
+					mes "mais sobre esta habilidade através";
+					mes "da prática, e que se torne uma lenda tão grande quanto Chae Takbae.";
+					set ROG_SK,12;
+					skill "RG_CLOSECONFINE",1,SKILL_PERM;
+					specialeffect2 EF_LIGHTSPHERE;
+					close;
+				}
+				mes "[Haijara Greg]";
+				mes "Tudo bem então...";
+				mes "Espero que você consiga";
+				mes "aprender mais sobre Close";
+				mes "Confine através de uma prática";
+				mes "diligente. Boa sorte, e";
+				mes "obrigado novamente por sua ajuda.";
+				set ROG_SK,12;
+				skill "RG_CLOSECONFINE",1,SKILL_PERM;
+				specialeffect2 EF_LIGHTSPHERE;
+				close;
+			}
+			mes "[Haijara Greg]";
+			mes "Obrigado por me ajudar";
+			mes "a proteger este livro de";
+			mes "habilidade inestimável. Espero que";
+			mes "na próxima vez que nos encontrarmos,";
+			mes "sejamos camaradas no campo de batalha...";
+			close;
+		}
+	}
+	else {
+		mes "[Haijara Greg]";
+		mes "C-como você encontrou este";
+		mes "lugar? Eu pensei que esta sala de";
+		mes "pânico deveria ser";
+		mes "impenetrável, até mesmo para Rogues!";
+		next;
+		mes "[Haijara Greg]";
+		mes "Isso não pode ser bom!";
+		mes "Será apenas uma questão de";
+		mes "tempo até eles me encontrarem...";
+		next;
+		mes "[Haijara Greg]";
+		mes "Por favor...";
+		mes "Encontre-me um Desordeiro";
+		mes "ou um Arruaceiro em quem eu";
+		mes "possa confiar e envie-o para";
+		mes "me ajudar! Não tenho";
+		mes "muito tempo restante...";
+		close;
+	}
+}
+
+in_rogue,152,29,0	script	Louis Greg#rogueguild	84,{
+	if (BaseJob == Job_Rogue || Class == Job_Thief_High) {
+		if (ROG_SK < 1) {
+			mes "[Louis Greg]";
+			mes "Meu pai acabou de...";
+			mes "Ele simplesmente desapareceu!";
+			mes "Ele estava ensinando a mim e";
+			mes "meus irmãos uma nova habilidade,";
+			mes "mas ultimamente ele começou a agir";
+			mes "de forma paranoica por algum motivo...";
+			next;
+			mes "[Louis Greg]";
+			mes "Talvez ele tenha se escondido?";
+			mes "Sei que existe uma sala de pânico";
+			mes "escondida na guilda dos Arruaceiro, mas";
+			mes "nem eu sei onde encontrá-la.";
+			mes "Espero que esteja tudo bem...";
+			set ROG_SK,1;
+			close;
+		}
+		else if (ROG_SK == 1) {
+			mes "[Louis Greg]";
+			mes "Papai avisou que";
+			mes "pessoas poderiam vir atrás de nós";
+			mes "se soubessem da";
+			mes "nova habilidade que estávamos aprendendo.";
+			mes "Talvez ele tenha se escondido na";
+			mes "sala de pânico da guilda dos Arruaceiro...";
+			close;
+		}
+		else if (ROG_SK == 2) {
+			mes "[Louis Greg]";
+			mes "O que é isso...?";
+			mes "Uma carta do meu";
+			mes "pai? Oh, ele deve";
+			mes "estar bem! Rápido, deixe-me";
+			mes "lê-la imediatamente!";
+			set ROG_SK,3;
+			next;
+			mes "[Louis Greg]";
+			mes "Oh não, ele pode estar a salvo por";
+			mes "enquanto, mas meu pai está sendo caçado";
+			mes "por algumas pessoas perigosas? Meu";
+			mes "irmão Thor vai querer saber";
+			mes "sobre isso. Deixe-me escrever";
+			mes "uma carta para ele bem rápido...";
+			next;
+			mes "[Louis Greg]";
+			mes "Sei que não estou em";
+			mes "posição de pedir favores,";
+			mes "mas imagino que meu pai deva";
+			mes "confiar em você. Por favor, você";
+			mes "poderia levar minha carta e entregá-la";
+			mes "ao meu irmão mais velho, Thor?";
+			next;
+			mes "[Louis Greg]";
+			mes "Você pode encontrar Thor";
+			mes "ao lado de Hermanthorn Jr.";
+			mes "dentro da guilda dos Arruaceiro.";
+			mes "Eu realmente agradeceria muito se";
+			mes "você pudesse ajudar minha família.";
+			close;
+		}
+		else if (ROG_SK == 3) {
+			mes "[Louis Greg]";
+			mes "Meu irmão mais velho, ^FF0000Thor^000000,";
+			mes "precisa saber disso imediatamente!";
+			mes "Por favor, leve esta carta";
+			mes "para ele por mim. Ele deve estar";
+			mes "perto de ^FF0000Hermanthorn Jr.^000000 aqui";
+			mes "dentro da guilda dos Arruaceiro.";
+			close;
+		}
+		else if (ROG_SK == 4) {
+			mes "[Louis Greg]";
+			mes "Você está procurando pelo meu";
+			mes "irmão, Jay? Ele geralmente";
+			mes "fica por aqui na";
+			mes "guilda dos Arruaceiro com Antonio Jr.";
+			close;
+		}
+		else if (ROG_SK == 5) {
+			mes "[Louis Greg]";
+			mes "Se você precisa falar";
+			mes "com meu pai, ele provavelmente";
+			mes "ainda está na sala de pânico";
+			mes "secreta dentro da guilda dos Arruaceiro.";
+			mes "Eu ainda não sei onde esse lugar";
+			mes "poderia estar...";
+			close;
+		}
+		else if (ROG_SK == 6) {
+			mes "[Louis Greg]";
+			mes "Você quer aprender a";
+			mes "habilidade secreta de Arruaceiro? Oh,";
+			mes "você provavelmente deveria falar";
+			mes "com ^FF0000Thor^000000 sobre isso. Eu...";
+			mes "Eu sou muito ruim em explicar";
+			mes "coisas para as pessoas. Muito ruim.";
+			close;
+		}
+		else if (ROG_SK == 7) {
+			mes "[Louis Greg]";
+			mes "Hm? Você está no meio";
+			mes "de aprender a habilidade secreta";
+			mes "de Arruaceiro, não está? Ooh, então";
+			mes "você não deveria estar aqui";
+			mes "ainda. Por favor, volte e";
+			mes "fale com ^FF0000Thor^000000 novamente, ok?";
+			close;
+		}
+		else if (ROG_SK == 8) {
+			mes "[Louis Greg]";
+			mes "Oh, oh!";
+			mes "Você terminou";
+			mes "o treinamento? Ah,";
+			mes "então você precisa";
+			mes "falar com Thor novamente!";
+			close;
+		}
+		else if (ROG_SK == 9) {
+			mes "[Louis Greg]";
+			mes "Você queria aprender";
+			mes "mais sobre Close Confine?";
+			mes "Ugh, então é melhor você falar";
+			mes "com meu pai. Eu acabei de aprender";
+			mes "essa habilidade, sabe.";
+			close;
+		}
+		else if (ROG_SK == 11) {
+			mes "[Louis Greg]";
+			mes "Acabei de ouvir dos meus";
+			mes "irmãos que Chae Takbae";
+			mes "desenvolveu Close Confine";
+			mes "como uma forma de espancar brutalmente";
+			mes "seus inimigos, impedindo-os";
+			mes "de fugir. Isso é verdade?";
+			close;
+		}
+		mes "[Louis Greg]";
+		mes "Uau, você é realmente";
+		mes "incrível! Quem dera eu fosse";
+		mes "tão poderoso quanto você.";
+		mes "Odeio ser criança!";
+		close;
+	}
+	mes "[Louis Greg]";
+	mes "Por que eu virei um Arruaceiro?";
+	mes "Acho que só gosto de ser";
+	mes "sorrateiro. Isso, e ser";
+	mes "moral e cumpridor da lei é";
+	mes "difícil demais, sabe?";
+	close;
+}
+
+in_rogue,268,125,2	script	Thor Greg#rogueguild	86,{
+	if (BaseJob == Job_Rogue || Class == Job_Thief_High) {
+		if (ROG_SK < 1) {
+			mes "[Thor Greg]";
+			mes "Para onde meu pai foi?";
+			mes "Espero que aqueles homens estranhos";
+			mes "não tenham chegado até ele. Com";
+			mes "sorte, ele está escondido na";
+			mes "sala de pânico, mas ainda assim...";
+			set ROG_SK,1;
+			close;
+		}
+		else if (ROG_SK == 1) {
+			mes "[Thor Greg]";
+			mes "Hm... Meu pai pode";
+			mes "estar escondido na sala";
+			mes "de pânico. Nunca consegui";
+			mes "encontrá-la, mas a Markie diz";
+			mes "que a entrada é habilmente";
+			mes "escondida à esquerda dela. Hmmm...";
+			close;
+		}
+		else if (ROG_SK == 2) {
+			mes "[Thor Greg]";
+			mes "Você está procurando";
+			mes "pelo meu irmão mais novo, ^FF0000Louis^000000?";
+			mes "Ah, ele está sempre por perto";
+			mes "daquele ^FF0000Hollgrehenn Jr.^000000";
+			mes "aqui na guilda de Arruaceiro.";
+			mes "Por que você precisava dele?";
+			close;
+		}
+		else if (ROG_SK == 3) {
+			mes "[Thor Greg]";
+			mes "O que é isso que você";
+			mes "está me dando? Uma carta";
+			mes "do Louis? Deixe-me ver...";
+			set ROG_SK,4;
+			next;
+			mes "[Thor Greg]";
+			mes "Meu Deus, o papai está";
+			mes "em sérios apuros! É melhor";
+			mes "contar ao meu irmão mais velho, Jay,";
+			mes "imediatamente! Rápido, encontre ^FF0000Jay^000000";
+			mes "ao lado de ^FF0000Antonio Jr.^000000 aqui na";
+			mes "guilda! P-por favor, depressa!";
+			close;
+		}
+		else if (ROG_SK == 4) {
+			mes "[Thor Greg]";
+			mes "Você pode encontrar o Jay";
+			mes "com o Antonio Jr. aqui";
+			mes "dentro da guilda de Arruaceiro.";
+			mes "Por favor, leve a carta que escrevi";
+			mes "para ele o mais rápido possível!";
+			close;
+		}
+		else if (ROG_SK == 5) {
+			mes "[Thor Greg]";
+			mes "Com sorte, o papai não";
+			mes "saiu da sala de pânico da";
+			mes "guilda de Arruaceiro. Esse";
+			mes "pode ser o único lugar";
+			mes "onde ele está seguro...";
+			close;
+		}
+		else if (ROG_SK == 6) {
+			mes "[Thor Greg]";
+			mes "O que foi? O papai";
+			mes "queria que eu te ensinasse";
+			mes "a habilidade secreta de Arruaceiro?";
+			mes "Tudo bem, vou te treinar da";
+			mes "mesma forma que o papai. Gostaria";
+			mes "de uma explicação primeiro?";
+			next;
+			mes "[Thor Greg]";
+			mes "Se você não quer uma";
+			mes "explicação, eu vou apenas";
+			mes "te enviar para o campo de";
+			mes "treinamento imediatamente para que";
+			mes "você possa aprender ^FF0000Close Confine^000000.";
+			next;
+			if (select("Ouvir Explicação:Ir para o Campo de Treinamento") == 1) {
+				mes "[Thor Greg]";
+				mes "Tudo bem, o primeiro passo";
+				mes "para aprender ^FF0000Close Confine^000000";
+				mes "é dominar o bloqueio do";
+				mes "movimento do seu inimigo. Vou te";
+				mes "enviar para um campo de treinamento";
+				mes "especial para você praticar.";
+				next;
+				mes "[Thor Greg]";
+				mes "Lá, você encontrará nossa";
+				mes "parceira de treinamento. Aproxime-se";
+				mes "dela e certifique-se de que você";
+				mes "preveja e bloqueie seus movimentos";
+				mes "para a esquerda, direita ou para trás. Prepare-se, estou te enviando agora...";
+				close2;
+				warp "in_rogue",89,114;
+				end;
+			}
+			warp "in_rogue",89,114;
+			end;
+		}
+		else if (ROG_SK == 7) {
+			mes "[Thor Greg]";
+			mes "Tudo bem, vou quebrar";
+			mes "a quarta parede aqui e assumir";
+			mes "que você foi desconectado do";
+			mes "jogo. Você gostaria de retornar";
+			mes "ao campo de treinamento para";
+			mes "aprender ^FF0000Close Confine^000000?";
+			next;
+			if (select("Sim, por favor.:Não, obrigado.") == 1) {
+				mes "[Thor Greg]";
+				mes "Tudo bem, o primeiro passo";
+				mes "para aprender ^FF0000Close Confine^000000";
+				mes "é dominar o bloqueio do";
+				mes "movimento do seu inimigo. Vou te";
+				mes "enviar para um campo de treinamento";
+				mes "especial para você praticar.";
+				next;
+				mes "[Thor Greg]";
+				mes "Lá, você encontrará nossa";
+				mes "parceira de treinamento. Aproxime-se";
+				mes "dela e certifique-se de que você";
+				mes "preveja e bloqueie seus movimentos";
+				mes "para a esquerda, direita ou para trás. Prepare-se, estou te enviando agora...";
+				set ROG_SK,6;
+				close2;
+				warp "in_rogue",89,114;
+				end;
+			}
+			mes "[Thor Greg]";
+			mes "Tudo bem, tudo bem.";
+			mes "Quando se sentir pronto";
+			mes "para retomar o treinamento,";
+			mes "é só me avisar.";
+			close;
+
+		}
+		else if (ROG_SK == 8) {
+			mes "[Thor Greg]";
+			mes "Ah, ouvi da Kienna";
+			mes "que você completou seu";
+			mes "treinamento. Parabéns!";
+			mes "Agora, por favor, fale com meu";
+			mes "pai para que ele possa explicar a habilidade Close Confine em detalhes.";
+			set ROG_SK,9;
+			close;
+		}
+		else if (ROG_SK == 9) {
+			mes "[Thor Greg]";
+			mes "Por favor, fale com meu pai";
+			mes "para que ele possa explicar as";
+			mes "nuances da habilidade Close Confine";
+			mes "para você. Ele ainda deve estar na sala de pânico da guilda de Arruaceiro.";
+			close;
+		}
+		else if (ROG_SK == 11) {
+			mes "[Thor Greg]";
+			mes "Sabe, Chae Takbae";
+			mes "dizia: ''Eu sou Chae";
+			mes "Takbae. E você é...?''";
+			mes "para os oponentes, e logo";
+			mes "antes que eles pudessem responder,";
+			mes "ele os espancava até a polpa.";
+			next;
+			mes "[Thor Greg]";
+			mes "Ele realmente é";
+			mes "um herói lendário";
+			mes "entre os Rogues...!";
+			close;
+		}
+		mes "[Thor Greg]";
+		mes "Hm...?";
+		mes "Parece que";
+		mes "você é muito mais forte";
+		mes "do que eu. Provavelmente";
+		mes "não há muitas pessoas que";
+		mes "mexeriam com você...";
+		close;
+	}
+	mes "[Thor Greg]";
+	mes "Hmm, rouba isso, rouba";
+	mes "aquilo. *Suspiro* Esse é o meu";
+	mes "defeito mais vergonhoso: eu gasto zenys";
+	mes "quase tão rápido quanto consigo";
+	mes "roubá-los. É irresponsável...";
+	close;
+}
+
+in_rogue,181,114,3	script	Jay Greg#rogueguild	85,{
+	if (BaseJob == Job_Rogue || Class == Job_Thief_High) {
+		if (ROG_SK < 1) {
+			mes "[Jay Greg]";
+			mes "Meu pai deve estar escondido";
+			mes "na sala de pânico da guilda de Arruaceiro.";
+			mes "Estranhamente, meus irmãos";
+			mes "e eu nunca conseguimos encontrá-la e";
+			mes "saber se ele está seguro...";
+			set ROG_SK,1;
+			next;
+			mes "[Jay Greg]";
+			mes "Recentemente, ele tem sido perseguido";
+			mes "por esses homens estranhos que";
+			mes "andam ameaçando nossa família.";
+			mes "Bem, ele acabou de nos ensinar";
+			mes "uma habilidade nova, então ele pode";
+			mes "usá-la para se proteger...";
+			close;
+		}
+		else if (ROG_SK == 1) {
+			mes "[Jay Greg]";
+			mes "Imagino que meu pai";
+			mes "tenha se escondido na sala";
+			mes "de pânico da guilda de Arruaceiro. Nós nunca";
+			mes "conseguimos encontrá-la, mas supostamente";
+			mes "a entrada fica escondida perto";
+			mes "da Markie em algum lugar.";
+			close;
+		}
+		else if (ROG_SK == 2) {
+			mes "[Jay Greg]";
+			mes "Você está procurando";
+			mes "pelo Louis, meu irmão mais novo?";
+			mes "Ele está aqui na guilda dos Rogues,";
+			mes "então não deve ser muito difícil";
+			mes "encontrá-lo. Provavelmente ele está";
+			mes "parado perto do Hollgrehen Jr.";
+			close;
+		}
+		else if (ROG_SK == 3) {
+			mes "[Jay Greg]";
+			mes "Thor? Ele deve estar";
+			mes "por perto da guilda de Arruaceiro";
+			mes "em algum lugar. Você tentou";
+			mes "procurar em torno do Hermathorn Jr.?";
+			close;
+		}
+		else if (ROG_SK == 4) {
+			mes "[Jay Greg]";
+			mes "Uma carta para mim...?";
+			mes "Ah, é do Thor, então";
+			mes "acho melhor eu lê-la";
+			mes "imediatamente. Hmmm...";
+			set ROG_SK,5;
+			next;
+			mes "[Jay Greg]";
+			mes "Entendo... Devo relatar";
+			mes "isso à guilda de Arruaceiro";
+			mes "imediatamente e enviar uma resposta";
+			mes "ao meu pai. Hmm. Deixe-me";
+			mes "escrever uma carta para ele agora.";
+			mes "Por favor, me dê um momento...";
+			next;
+			mes "[Jay Greg]";
+			mes "Pronto, está feito. Por favor,";
+			mes "entregue isso ao meu pai com";
+			mes "toda a pressa que puder.";
+			mes "Sei que é pedir demais, mas";
+			mes "eu não consigo encontrar o caminho para";
+			mes "a sala de pânico escondida...";
+			close;
+		}
+		else if (ROG_SK == 5) {
+			mes "[Jay Greg]";
+			mes "Por favor, entregue minha resposta";
+			mes "ao meu pai assim que";
+			mes "puder. Ele ainda está escondido";
+			mes "na sala de pânico da guilda de Arruaceiro.";
+			mes "Isso é, se nossos inimigos";
+			mes "ainda não o tiverem encontrado.";
+			close;
+		}
+		else if (ROG_SK == 6) {
+			mes "[Jay Greg]";
+			mes "Você precisa treinar para";
+			mes "a habilidade Close Confine?";
+			mes "Acho que o Thor é o único";
+			mes "que tem acesso ao";
+			mes "campo de treinamento, então";
+			mes "fale com ele primeiro.";
+			close;
+		}
+		else if (ROG_SK == 7) {
+			mes "[Jay Greg]";
+			mes "Você precisa treinar para";
+			mes "a habilidade Close Confine?";
+			mes "Acho que o Thor é o único";
+			mes "que tem acesso ao";
+			mes "campo de treinamento, então";
+			mes "fale com ele primeiro.";
+			close;
+		}
+		else if (ROG_SK == 8) {
+			mes "[Jay Greg]";
+			mes "Ah, você terminou o";
+			mes "treinamento para Close Confine,";
+			mes "foi? Ótimo, agora vá e";
+			mes "fale com meu irmão, Thor.";
+			close;
+		}
+		else if (ROG_SK == 9) {
+			mes "[Jay Greg]";
+			mes "Hm. Você provavelmente deveria";
+			mes "falar com meu pai para aprender";
+			mes "mais sobre as nuances da";
+			mes "habilidade Close Confine.";
+			mes "Você o viu na sala de";
+			mes "pânico da guilda de Arruaceiro?";
+			close;
+		}
+		else if (ROG_SK == 12) {
+			mes "[Jay Greg]";
+			mes "Chae Takbae com certeza";
+			mes "parecia um cara teimoso";
+			mes "e bruto. Mas ele devia";
+			mes "ser bem inteligente para";
+			mes "inventar algumas de suas próprias habilidades.";
+			close;
+		}
+		mes "[Jay Greg]";
+		mes "Tenho a sensação";
+		mes "de que você será";
+		mes "um dos melhores Rogues";
+		mes "que existem, se já não for.";
+		close;
+	}
+	mes "[Jay Greg]";
+	mes "Desde que aprendi";
+	mes "Intimidar, fiquei";
+	mes "realmente agressivo, talvez até";
+	mes "masoquista. Quero dizer, se eles";
+	mes "te acertam com uma habilidade, você pode";
+	mes "retribuir com a mesma!";
+	close;
+}
+
+prt_are01,150,150,0	script	#1strecog	-1,10,10,{
+OnTouch_:
+	donpcevent "#1st5min::OnEnable";
+	donpcevent "#1stmove::OnEnable";
+	disablenpc "#1strecog";
+	end;
+}
+
+prt_are01,135,135,0	script	#1st5min	-1,{
+OnInit:
+	disablenpc "#1st5min";
+	end;
+
+OnEnable:
+	enablenpc "#1st5min";
+	initnpctimer;
+	end;
+
+OnDisable:
+	stopnpctimer;
+	disablenpc "#1st5min";
+	end;
+
+OnTimer1000:
+	mapannounce "prt_are01","Bem-vindo ao Campo de Treinamento de Close Confine. Você será teleportado automaticamente para fora em 5 minutos.",bc_map,"0x00ff00";
+	end;
+
+OnTimer290000:
+	mapannounce "prt_are01","Você será teleportado para fora em 20 segundos.",bc_map,"0x00ff00";
+	end;
+
+OnTimer310000:
+	mapannounce "prt_are01","Você será teleportado para fora em 5 segundos.",bc_map,"0x00ff00";
+	end;
+
+OnTimer315000:
+	mapannounce "prt_are01","Você está sendo teleportado para fora agora.",bc_map,"0x00ff00";
+	disablenpc "Kienna#1st";
+	disablenpc "Kienna#2nd";
+	disablenpc "Kienna#3rd";
+	disablenpc "Kienna#4th";
+	disablenpc "Kienna#5th";
+	disablenpc "Kienna#6th";
+	disablenpc "Kienna#7th";
+	disablenpc "Kienna#8th";
+	donpcevent "#1stmove::OnDisable";
+	enablenpc "#1strecog";
+	donpcevent "Waiting Room#rogue10::OnEnable";
+	stopnpctimer;
+	mapwarp "prt_are01","in_rogue",264,124;
+	end;
+}
+
+prt_are01,135,135,0	script	#1stmove	-1,{
+OnInit:
+	disablenpc "#1stmove";
+	end;
+
+OnEnable:
+	enablenpc "#1stmove";
+	initnpctimer;
+	end;
+
+OnTimer3000:
+	mapannounce "prt_are01","Kienna aparecerá em 1 segundo. Por favor, aproxime-se dela o máximo possível.",bc_map,"0x00ff00";
+	end;
+
+OnTimer5000:
+	switch(rand(1,8)) {
+	case 1:
+		enablenpc "Kienna#1st";
+		break;
+	case  2:
+		enablenpc "Kienna#2nd";
+		break;
+	case  3:
+		enablenpc "Kienna#3rd";
+		break;
+	case  4:
+		enablenpc "Kienna#4th";
+		break;
+	case  5:
+		enablenpc "Kienna#5th";
+		break;
+	case  6:
+		enablenpc "Kienna#6th";
+		break;
+	case  7:
+		enablenpc "Kienna#7th";
+		break;
+	case 8:
+		enablenpc "Kienna#8th";
+	}
+	end;
+
+OnTimer8000:
+	disablenpc "Kienna#1st";
+	disablenpc "Kienna#2nd";
+	disablenpc "Kienna#3rd";
+	disablenpc "Kienna#4th";
+	disablenpc "Kienna#5th";
+	disablenpc "Kienna#6th";
+	disablenpc "Kienna#7th";
+	disablenpc "Kienna#8th";
+	end;
+
+OnTimer9000:
+	stopnpctimer;
+	donpcevent "#1stmove::OnEnable";
+	mapwarp "prt_are01","prt_are01",150,150;
+	end;
+
+OnDisable:
+	stopnpctimer;
+	disablenpc "#1stmove";
+	end;
+}
+
+prt_are01,149,162,0	script	Kienna#1st	700,1,1,{
+	end;
+OnTouch_:
+	callfunc "F_Kienna",strnpcinfo(2);
+	end;
+}
+prt_are01,136,150,0	duplicate(Kienna#1st)	Kienna#2nd	700,1,1
+prt_are01,150,138,0	duplicate(Kienna#1st)	Kienna#3rd	700,1,1
+prt_are01,163,147,0	duplicate(Kienna#1st)	Kienna#4th	700,1,1
+prt_are01,134,140,0	duplicate(Kienna#1st)	Kienna#5th	700,1,1
+prt_are01,161,140,0	duplicate(Kienna#1st)	Kienna#6th	700,1,1
+prt_are01,161,160,0	duplicate(Kienna#1st)	Kienna#7th	700,1,1
+prt_are01,138,159,0	duplicate(Kienna#1st)	Kienna#8th	700,1,1
+
+function	script	F_Kienna	{
+	if (ROG_SK == 6) {
+		donpcevent "#1stmove::OnDisable";
+		mes "[Kienna]";
+		mes "Muito bem, neste";
+		mes "exercício, você precisará";
+		mes "prever para qual lado eu";
+		mes "vou me mover e me";
+		mes "bloquear, essencialmente";
+		mes "me imobilizando. Prepare-se~";
+		set ROG_SK,7;
+		next;
+		for(set .@lim_1,0; .@lim_1<10; set .@lim_1,.@lim_1+1) {
+			set .@move_1,rand(1,3);
+			if (select("Bloqueá-la para a Esquerda:Bloqueá-la para a Direita:Bloquear seu recuo") == .@move_1) {
+				mes "[Kienna]";
+				mes "Hã...?";
+				mes "Você me bloqueou!";
+				mes "Muito bom trabalho~";
+				specialeffect EF_POTION1;
+				specialeffect2 EF_POTION7;
+				set .@suc_1,.@suc_1 + 1;
+			}
+			else {
+				mes "[Kienna]";
+				mes "Desculpe, mas eu não";
+				mes "estava me movendo nessa direção.";
+				mes "Sua tentativa de bloqueio falhou...";
+			}
+			next;
+		}
+		mes "[Kienna]";
+		mes "Muito bem, terminamos";
+		mes "por aqui. Você obteve uma";
+		switch(.@suc_1) { 
+		case 10:
+			mes "nota de treinamento ''^0000FFS^000000.''";
+			mes "Essa é uma pontuação perfeita!";
+			break;
+		case 9:
+			mes "nota de treinamento ''^0000FFA^000000.''";
+			mes "Você é muito bom nisso!";
+			break;
+		case 8:
+			mes "nota de treinamento ''^0000FFB +^000000.''";
+			mes "Isso é muito louvável!";
+			break;
+		case 7:
+			mes "nota de treinamento ''^0000FFB^000000.''";
+			mes "Isso é um ótimo trabalho~";
+			break;
+		case 6:
+			mes "nota de treinamento ''^0000FFC +^000000.''";
+			mes "Nada mal, mas você";
+			mes "quase não passou!";
+			break;
+		case 5:
+			mes "nota de treinamento ''^FF0000C^000000.''";
+			break;
+		case 4:
+			mes "nota de treinamento ''^FF0000D+^000000.''";
+			break;
+		case 3:
+			mes "nota de treinamento ''^FF0000D^000000.''";
+			break;
+		case 2:
+			mes "nota de treinamento ''^FF0000F^000000.''";
+			break;
+		case 1:
+			mes "nota de treinamento ''^FF0000F -^000000.''";
+			break;
+		case 0:
+			mes "nota de treinamento...";
+			mes "Na verdade, não consigo";
+			mes "calculá-la. O que";
+			mes "poderia ter acontecido?!";
+		}
+		next;
+		if (.@suc_1 > 5) {
+			mes "[Kienna]";
+			mes "Fico feliz em dizer que";
+			mes "você completou seu";
+			mes "treinamento! Deixe-me enviá-lo";
+			mes "de volta ao Thor Greg";
+			mes "agora, para que você possa terminar";
+			mes "de aprender ^FF0000Close Confine^000000.";
+			set ROG_SK,8;
+			disablenpc "Kienna#"+getarg(0);
+			donpcevent "#1st5min::OnDisable";
+			enablenpc "#1strecog";
+			close2;
+			donpcevent "Waiting Room#rogue10::OnEnable";
+			warp "in_rogue",264,124;
+			end;
+		}
+		else {
+			mes "[Kienna]";
+			mes "Hm. Com esta nota,";
+			mes "não acho que você esteja";
+			mes "pronto o suficiente para terminar";
+			mes "de aprender Close Confine.";
+			mes "Você gostaria de tentar o";
+			mes "exercício de treinamento novamente?";
+			next;
+			if (select("Sim!:Não, obrigado.") == 1) {
+				disablenpc "Kienna#"+getarg(0);
+				donpcevent "#1stmove::OnEnable";
+				set ROG_SK,6;
+				warp "prt_are01",150,150;
+				end;
+			}
+			disablenpc "Kienna#"+getarg(0);
+			donpcevent "#1st5min::OnDisable";
+			enablenpc "#1strecog";
+			set ROG_SK,6;
+			donpcevent "Waiting Room#rogue10::OnEnable";
+			warp "in_rogue",264,124;
+			end;
+		}
+	}
+	else if (ROG_SK == 7) {
+		mes "[Kienna]";
+		mes "Você deve ter cancelado";
+		mes "seu treinamento no meio";
+		mes "do exercício. Sinto muito,";
+		mes "mas você terá que começar";
+		mes "do início absoluto";
+		mes "deste treinamento.";
+		set ROG_SK,6;
+		close2;
+		disablenpc "Kienna#"+getarg(0);
+		donpcevent "#1stmove::OnEnable";
+		warp "prt_are01",150,150;
+		end;
+	}
+	else if (ROG_SK == 8) {
+		mes "[Kienna]";
+		mes "Você já completou";
+		mes "o exercício de treinamento para";
+		mes "a habilidade Close Confine.";
+		mes "Você não precisa mais";
+		mes "da minha ajuda.";
+		close2;
+		donpcevent "Waiting Room#rogue10::OnEnable";
+		warp "in_rogue",264,124;
+		end;
+	}
+	else {
+		mes "[Kienna]";
+		mes "Sinto muito, mas não";
+		mes "acho que você pertença a este lugar.";
+		mes "Deixe-me enviá-lo para a";
+		mes "guilda Arruaceiro se você estiver perdido...";
+		close2;
+		donpcevent "Waiting Room#rogue10::OnEnable";
+		warp "in_rogue",264,124;
+		end;
+	}
+
+OnInit:
+	disablenpc "Kienna#1st";
+	disablenpc "Kienna#2nd";
+	disablenpc "Kienna#3rd";
+	disablenpc "Kienna#4th";
+	disablenpc "Kienna#5th";
+	disablenpc "Kienna#6th";
+	disablenpc "Kienna#7th";
+	disablenpc "Kienna#8th";
+	end;
+}
+
+in_rogue,88,119,3	script	Waiting Room#rogue10	828,{
+OnEnable:
+	enablenpc "Waiting Room#rogue10";
+	enablewaitingroomevent "Waiting Room#rogue10";
+	end;
+
+OnInit:
+	waitingroom "Training Ground",10,"Waiting Room#rogue10::OnStartArena",1;
+	enablewaitingroomevent "Waiting Room#rogue10";
+	end;
+
+OnStartArena:
+	warpwaitingpc "prt_are01",150,150;
+	disablewaitingroomevent "Waiting Room#rogue10";
+	end;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0 for fully working skills only [Lupus]
+//= 1.1 Added more new skill quests for more classes [Lupus]
+//= Somehow eA engine doesn't let you keep learn't skill V_V'
+//= 1.2 Added to correct locations, correct NPC's, fixed
+//= some of the items required and made them into real
+//= quests. [Reddozen] 
+//= 1.3 Fixed bugs and minor typos. Optimized [Lupus]
+//= 1.3a fixed an item ID typo, thx 2Spiritual Kid
+//= 1.3b Splitted into different files [DracoRPG]
+//============================================================

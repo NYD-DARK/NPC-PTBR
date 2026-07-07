@@ -1,0 +1,2224 @@
+//===== rAthena Script ======================================= 
+//= Quest NPCs related to Amatsu
+//===== By: ================================================== 
+//= rAthena Dev Team & MasterOfMuppets
+//===== Current Version: ===================================== 
+//= 1.5
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Momotaro Event
+//= Sushi Quest
+//= Dungeon Quest
+//===== Additional Comments: ================================= 
+//= 1.3 Rescripted to Aegis 10.3 Standards. [L0ne_W0lf]
+//= 1.4 Added missing checkweight. [L0ne_W0lf]
+//= 1.4a Fixed typo in condition check [Gepard]
+//= 1.5 Added questlog support. [Euphy]
+//============================================================ 
+
+// Momotaro Event :: japan_momo_q
+//============================================================ 
+amatsu,223,236,3	script	Publisher#ama	763,{
+	if (checkweight(1201,1) == 0) {
+		mes "- Espere um momento!! -";
+		mes "- Atualmente você está carregando -";
+		mes "- muitos itens com você. -";
+		mes "- Por favor, guarde alguns itens no seu armazém da Kafra -";
+		mes "- e tente novamente. -";
+		close;
+	}
+	if (event_momo < 2) {
+		mes "[Publisher]";
+		mes "Olá~!!";
+		mes "Nossa ^009CFFEditora de Pergaminhos^000000";
+		mes "publica profissionalmente";
+		mes "contos.";
+		mes " ";
+		next;
+		mes "[Publisher]";
+		mes "Nós estabelecemos";
+		mes "^3163FFExcursão do Momotaro^000000";
+		mes "para celebrar ^009CFF<História do Momotaro>^000000 vendendo mais de um milhão de cópias.";
+		next;
+		mes "[Publisher]";
+		mes "Torne-se o Momotaro e elimine";
+		mes "Dokebis, exatamente como na história!";
+		mes "Também haverá recompensas.";
+		next;
+		switch(select("O que é a História do Momotaro?:Eu quero tentar!:Estou ocupado agora...")) {
+		case 1:
+			mes "[Publisher]";
+			mes "Eh~!? Como você pode não saber sobre";
+			mes "Momotaro? Eles não têm este";
+			mes "conto em Midgard?? Bem...";
+			mes "Deixe-me contar a história.";
+			next;
+			mes "[Publisher]";
+			mes "Há muito tempo, vivia um casal de idosos. Eles eram felizes, mas não tinham filhos.";
+			next;
+			mes "[Publisher]";
+			mes "Um dia, enquanto a senhora lavava a roupa, ela encontrou um pêssego";
+			mes "gigantesco. Ela o cortou ao meio e...";
+			mes "'Puff!' Havia um bebê dentro!";
+			next;
+			mes "[Publisher]";
+			mes "O velho e a senhora ficaram chocados.";
+			mes "Eles decidiram adotar aquele bebê,";
+			mes "e dar a ele todo o seu amor...";
+			next;
+			mes "[Publisher]";
+			mes "Aquele bebê cresceu tão rápido, como aquele pé de feijão de 'João e o Pé de Feijão', e tornou-se um garoto forte em apenas alguns dias.";
+			mes " ";
+			next;
+			mes "[Publisher]";
+			mes "O nome daquele garoto era...";
+			mes "<Momotaro>!!!";
+			mes "Momotaro viajou para eliminar";
+			mes "dokebis que estavam importunando";
+			mes "os habitantes da cidade.";
+			next;
+			mes "[Publisher]";
+			mes "Ele tornou-se amigo de";
+			mes "^3163FFYoyo, Picky e Lobo do Deserto^000000";
+			mes "e eliminou todos os Dokebis. Então, ele viveu feliz para sempre com o casal de idosos.";
+			next;
+			mes "[Publisher]";
+			mes "Como foi?";
+			mes "Ótimo, não é?";
+			mes "Digo, esta história vendeu um milhão de cópias!";
+			close;
+		case 2:
+			if (BaseLevel > 29) {
+				mes "[Publisher]";
+				mes "Oba-! Você parece empolgado!";
+				mes "Você estará pronto para ir em breve.";
+				mes "Por favor, preencha este cartão de registro.";
+				next;
+				mes "[Publisher]";
+				mes "....................";
+				mes "......Hmm.....Vamos ver.....";
+				mes ".............Muito bem!";
+				mes "Certo, então!";
+				mes "Que comece~~~!!!!!!!!!";
+				mes "<Excursão do Momotaro>~!";
+				next;
+				warp "ama_test",52,35;
+				end;
+			}
+			mes "[Publisher]";
+			mes "Hmm~";
+			mes "Por que você não treina mais";
+			mes "e volta depois?";
+			close;
+		case 3:
+			mes "[Publisher]";
+			mes "Eh?";
+			mes "...Mas há recompensas doces esperando...";
+			close;
+		}
+	}
+	else if (event_momo == 4) {
+		mes "[Publisher]";
+		mes "Ah~ Que clima agradável!";
+		mes "Este é o clima perfeito para fazer uma leitura.";
+		close;
+	}
+	else if (event_momo > 1) {
+		mes "[Publisher]";
+		mes "Como foi? Você se divertiu?";
+		mes "Espero que tenha aproveitado";
+		mes "durante a excursão.";
+		mes " ";
+		mes " ";
+		next;
+		mes "[Publisher]";
+		mes "Esta é a sua recompensa.";
+		mes "Por favor, continue curtindo histórias~";
+		mes " ";
+		set .@event_momo, event_momo;
+		set event_momo,4;
+		completequest 8128;
+		completequest 8129;
+		completequest 8130;
+		if (.@event_momo == 3) {
+			set .@gift_1,rand(1,10);
+			if (.@gift_1 == 1) {
+				getitem 659,1; //Heart_Of_Her
+			}
+			if (.@gift_1 == 2) {
+				getitem 633,1; //Baked_Yam
+			}
+			if (.@gift_1 == 3) {
+				getitem 634,1; //Tropical_Banana
+			}
+			if (.@gift_1 == 4) {
+				getitem 639,1; //Armlet_Of_Obedience
+			}
+			if (.@gift_1 == 5) {
+				getitem 636,1; //No_Recipient
+			}
+			if (.@gift_1 == 6) {
+				getitem 628,1; //Well_Dried_Bone
+			}
+			if (.@gift_1 == 7) {
+				getitem 637,1; //Old_Broom
+			}
+			if (.@gift_1 == 8) {
+				getitem 635,1; //Horror_Of_Tribe
+			}
+			if (.@gift_1 == 9) {
+				getitem 626,1; //Monster_Juice
+			}
+			if (.@gift_1 == 10) {
+				getitem 641,1; //Contracts_In_Shadow
+			}
+		}
+		else {
+			set .@gift_2,rand(1,10);
+			if (.@gift_2 == 1) {
+				getitem 622,1; //Rainbow_Carrot
+			}
+			if (.@gift_2 == 2) {
+				getitem 627,1; //Sweet_Milk
+			}
+			if (.@gift_2 == 3) {
+				getitem 629,1; //Singing_Flower
+			}
+			if (.@gift_2 == 4) {
+				getitem 632,1; //Fatty_Chubby_Earthworm
+			}
+			if (.@gift_2 == 5) {
+				getitem 623,1; //Earthworm_The_Dude
+			}
+			if (.@gift_2 == 6) {
+				getitem 619,1; //Unripe_Apple
+			}
+			if (.@gift_2 == 7) {
+				getitem 621,1; //Bitter_Herb
+			}
+			if (.@gift_2 == 8) {
+				getitem 620,1; //Orange_Juice
+			}
+			if (.@gift_2 == 9) {
+				getitem 625,1; //Lusty_Iron
+			}
+			if (.@gift_2 == 10) {
+				getitem 624,1; //Rotten_Fish
+			}
+		}
+		close;
+	}
+}
+
+ama_test,52,44,3	script	Assistant#ama	109,{
+	if (event_momo == 0) {
+		mes "[Satoshi]";
+		mes "Bem-vindo à <Excursão do Momotaro>";
+		mes " ";
+		next;
+		mes "[Satoshi]";
+		mes "Eu sou Satoshi, encarregado da sala de espera na <Excursão do Momotaro>.";
+		next;
+		mes "[Satoshi]";
+		mes "Originalmente, eu trabalhava para a editora, mas faltavam funcionários para a Excursão...";
+		mes "Mas trabalhar aqui é muito melhor!";
+		mes "Agora eu apenas observo as pessoas tentando cumprir a missão. Heh hehe~";
+		next;
+		mes "[Satoshi]";
+		mes "................";
+		mes "Brincadeirinha";
+		mes "*Limpa o suor*";
+		next;
+		mes "[Satoshi]";
+		mes "Bem, deixe-me explicar";
+		mes "sobre as regras da Excursão.";
+		mes " ";
+		next;
+		mes "[Satoshi]";
+		mes "Primeiro de tudo... Você ouviu";
+		mes "sobre a história da editora?";
+		next;
+		if (select("Sim:Não") == 1) {
+			mes "[Satoshi]";
+			mes "Hehe... Bom.";
+			mes "A História do Momotaro é nosso";
+			mes "orgulho. É a melhor história DE TODOS OS TEMPOS.";
+			mes "Hahahah!!!";
+			next;
+			mes "[Satoshi]";
+			mes "...Hmmhmm.";
+			next;
+			mes "[Satoshi]";
+			mes "A Excursão é simples.";
+			mes "Entre e elimine";
+			mes "Dokebis bravamente!!!";
+			mes "Exatamente como o Momotaro!!!";
+			mes "Entendido? Bravamente!!!";
+			next;
+			mes "[Satoshi]";
+			mes "Além disso, há três";
+			mes "coisas que você precisa saber.";
+			next;
+			mes "[Satoshi]";
+			mes "Primeiro....";
+			mes "Você não pode voltar depois de concluir a excursão. Mantenha isso em mente.";
+			next;
+			mes "[Satoshi]";
+			mes "Segundo....";
+			mes "Q-pet é proibido";
+			mes "dentro da excursão.";
+			mes "Se você estiver com um mascote,";
+			mes "por favor, mude-o para o status de ovo.";
+			next;
+			mes "[Satoshi]";
+			mes "E finalmente...";
+			mes "Uma pessoa pode ficar na";
+			mes "excursão por 6 minutos.";
+			next;
+			mes "[Satoshi]";
+			mes "Bem, então, por favor";
+			mes "aguarde sua vez";
+			mes "na sala de espera.";
+			mes "Boa sorte no combate!!";
+			close;
+		}
+		mes "[Assistant]";
+		mes "Eh? Você não pode simplesmente";
+		mes "pular a história";
+		mes "quando entrar na excursão!!";
+		mes "Não posso permitir que você faça isso";
+		mes "como fã do Momotaro!!!";
+		next;
+		mes "[Assistant]";
+		mes "Por favor, ouça a história";
+		mes "da editora.";
+		mes "Obrigado.";
+		mes "Tchau~~";
+		next;
+		warp "amatsu",223,230;
+		end;
+	}
+	else if (event_momo == 1) {
+		mes "[Satoshi]";
+		mes "Oh céus... Você está bem?";
+		mes "Eu achei que fosse divertido, mas talvez tenha sido muito difícil para você?";
+		next;
+		mes "[Satoshi]";
+		mes "Agora, o que você vai fazer?";
+		mes "Você quer entrar novamente?";
+		next;
+		if (select("Sim:Não, eu quero voltar") == 1) {
+			mes "[Satoshi]";
+			mes "Quanto mais esforço você dedicar a isso, mais doce será o sabor da vitória.";
+			mes "Boa sorte no combate!";
+			close;
+		}
+		mes "[Satoshi]";
+		mes "Bem, acho que a realidade da situação é que você simplesmente não consegue cumprir o papel de Momotaro...";
+		mes "Ainda assim, não fique deprimido.";
+		next;
+		mes "[Satoshi]";
+		mes "Acho que você ganhou experiência suficiente com a excursão.";
+		next;
+		mes "[Assistant]";
+		mes "Se você ouvir uma boa história,";
+		mes "por favor, entre em contato com a";
+		mes "nossa editora.";
+		mes "Tchau-";
+		close2;
+		percentheal 100,0;
+		set event_momo,0;
+		warp "amatsu",223,230;
+		end;
+	}
+	else if (event_momo == 2) {
+		mes "[Satoshi]";
+		mes "Uau~ Parabéns!!";
+		mes "Você foi incrível!";
+		next;
+		mes "[Satoshi]";
+		mes "É hora de dizer adeus.";
+		mes "Se você ouvir uma boa história,";
+		mes "por favor, entre em contato com a";
+		mes "nossa editora.";
+		mes "Tchau-";
+		close2;
+		percentheal 100,0;
+		warp "amatsu",223,230;
+		end;
+	}
+	mes "[Satoshi]";
+	mes "Uau~ Parabéns!!";
+	mes "Você foi incrível!!";
+	mes "Embora o seu final tenha sido um pouco fraco...";
+	next;
+	mes "[Satoshi]";
+	mes "É hora de dizer adeus.";
+	mes "Se você ouvir uma boa história,";
+	mes "por favor, entre em contato com a";
+	mes "nossa editora.";
+	mes "Tchau-";
+	close2;
+	warp "amatsu",223,230;
+	end;
+
+OnInit:
+	waitingroom "Waiting Exhibit.",10,"Assistant#ama::OnStartArena",1;
+	enablewaitingroomevent "Assistant#ama";
+	end;
+
+OnStartArena:
+	disablenpc "Coach#ama";
+	donpcevent "Am Mut#ama::OnReset";
+	donpcevent "Dokebi#ez::OnReset";
+	donpcevent "Dokebi#hd::OnReset";
+	enablenpc "Grandma#ama1";
+	enablenpc "Grandpa#ama";
+	warpwaitingpc "ama_test",50,83;
+	donpcevent "Timer#ama::OnEnable";
+	disablewaitingroomevent "Assistant#ama";
+	end;
+
+OnReset:
+	enablewaitingroomevent "Assistant#ama";
+	end;
+}
+
+ama_test,34,25,0	script	Hanako chan#ama	-1,2,2,{
+OnTouch_:
+	mes "[Hanako chan]";
+	mes ".......Eeeeheeheehee";
+	mes ".....................";
+	next;
+	mes "[Hanako chan]";
+	mes "..Eeeeheeheeheeheeheehee";
+	mes "..........................";
+	next;
+	mes "[Hanako chan]";
+	mes "......................";
+	mes "...Quer papel higiênico vermelho....";
+	mes ".....ou papel higiênico azul....";
+	close;
+}
+
+ama_test,49,93,4	script	Grandpa#ama	766,{
+	end;
+
+OnInit:
+	disablenpc "Grandpa#ama";
+	end;
+}
+
+ama_test,50,93,4	script	Grandma#ama1	761,10,10,{
+	end;
+
+OnInit:
+	disablenpc "Grandma#ama1";
+	end;
+
+OnTouch_:
+	mes "[Grandma]";
+	mes "Arrrk!!!";
+	next;
+	mes "[Grandma]";
+	mes "Querido!! Alguém invadiu minha conta e roubou meus equipamentos!!";
+	next;
+	mes "[Grandpa]";
+	mes "Hmm. O Chefe disse que o Dokebi ganhou 20 milhões de zenys hackeando as contas dos outros...";
+	next;
+	setquest 8127;
+	mes "[Grandma]";
+	mes "Dohhhhhhh!!!!";
+	next;
+	mes "[Grandpa]";
+	mes "....Huh, ouvi isso em algum lugar.. .....";
+	next;
+	mes "[Grandpa]";
+	mes "De qualquer forma, Momotaro...";
+	next;
+	mes "[Grandpa]";
+	mes "Como sabe, já que nós, habitantes da cidade, passamos nosso tempo sentados e conversando,";
+	mes "não podemos matar Dokebis porque somos de nível baixo, então... por favor, faça isso por nós.";
+	next;
+	mes "[Grandma]";
+	mes "Momotaro...";
+	mes "Eu realmente queria te dar";
+	mes "uma ^3163FFPoção Vermelha Mais Saborosa do mundo inteiro^000000 feita à mão ...mas...";
+	mes ".....Eu falhei ao fazê-las ....";
+	next;
+	mes "[Grandma]";
+	mes "...Sinto muito. Eu deveria ter subido de nível antes... *Soluço*";
+	next;
+	mes "[Vovó & Vovô]";
+	mes "Então... Faça esse favor para mim, garoto~";
+	close2;
+	set event_momo,1;
+	if (countitem(9010) > 0 || countitem(9005) > 0 || countitem(9016) > 0) {
+		disablenpc "Grandpa#ama";
+		disablenpc "Grandma#ama1";
+		donpcevent "Dokebi#ez::OnEnable";
+	}
+	else {
+		disablenpc "Grandpa#ama";
+		disablenpc "Grandma#ama1";
+		donpcevent "Dokebi#hd::OnEnable";
+	}
+	end;
+}
+
+ama_test,34,15,0	script	Dokebi#ez	-1,{
+OnInit:
+	disablenpc "Dokebi#ez";
+	end;
+
+OnEnable:
+	enablenpc "Dokebi#ez";
+	set .MyMobs,9;
+	monster "ama_test",45,95,"Dokebi",1110,1,"Dokebi#ez::OnMyMobDead";
+	monster "ama_test",45,99,"Dokebi",1110,1,"Dokebi#ez::OnMyMobDead";
+	monster "ama_test",47,101,"Dokebi",1110,1,"Dokebi#ez::OnMyMobDead";
+	monster "ama_test",51,101,"Dokebi",1110,1,"Dokebi#ez::OnMyMobDead";
+	monster "ama_test",55,101,"Dokebi",1110,1,"Dokebi#ez::OnMyMobDead";
+	monster "ama_test",55,97,"Dokebi",1110,1,"Dokebi#ez::OnMyMobDead";
+	monster "ama_test",55,93,"Dokebi",1110,1,"Dokebi#ez::OnMyMobDead";
+	monster "ama_test",53,91,"Dokebi",1110,1,"Dokebi#ez::OnMyMobDead";
+	monster "ama_test",49,91,"Dokebi",1110,1,"Dokebi#ez::OnMyMobDead";
+	end;
+
+OnReset:
+	killmonster "ama_test","Dokebi#ez::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mapannounce "ama_test","Eu... Eu voooltarei~~~~!!!",bc_map;
+		enablenpc "Coach#ama";
+		set event_momo,2;
+	}
+	else {
+		set .@dokebi_tel,rand(1,4);
+		if (.@dokebi_tel == 1) {
+			mapannounce "ama_test","!!É UMA INVASÃO!!!! CORRA!!",bc_map;
+		}
+		else if (.@dokebi_tel == 2) {
+			mapannounce "ama_test","Ai, Ui!!!",bc_map;
+		}
+		else if (.@dokebi_tel == 3) {
+			mapannounce "ama_test","Mas eu nem fiz nada de maaal~!!",bc_map;
+		}
+		else if (.@dokebi_tel == 4) {
+			mapannounce "ama_test","Desculpe~~ Waaaaah~~",bc_map;
+		}
+	}
+	end;
+}
+
+ama_test,34,16,0	script	Dokebi#hd	-1,{
+OnInit:
+	disablenpc "Dokebi#hd";
+	end;
+
+OnEnable:
+	enablenpc "Dokebi#hd";
+	set .MyMobs,9;
+	monster "ama_test",45,95,"Dokebi",1110,1,"Dokebi#hd::OnMyMobDead";
+	monster "ama_test",45,99,"Dokebi",1110,1,"Dokebi#hd::OnMyMobDead";
+	monster "ama_test",47,101,"Dokebi",1110,1,"Dokebi#hd::OnMyMobDead";
+	monster "ama_test",51,101,"Dokebi",1110,1,"Dokebi#hd::OnMyMobDead";
+	monster "ama_test",55,101,"Dokebi",1110,1,"Dokebi#hd::OnMyMobDead";
+	monster "ama_test",55,97,"Dokebi",1110,1,"Dokebi#hd::OnMyMobDead";
+	monster "ama_test",55,93,"Dokebi",1110,1,"Dokebi#hd::OnMyMobDead";
+	monster "ama_test",53,91,"Dokebi",1110,1,"Dokebi#hd::OnMyMobDead";
+	monster "ama_test",49,91,"Dokebi",1110,1,"Dokebi#hd::OnMyMobDead";
+	end;
+
+OnReset:
+	killmonster "ama_test","Dokebi#hd::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mapannounce "ama_test","Eu voooltarei~~~~!!!",bc_map;
+		enablenpc "Coach#ama";
+		set event_momo,2;
+	}
+	else {
+		set .@dokebi_tel,rand(1,4);
+		if (.@dokebi_tel == 1) {
+			mapannounce "ama_test","!! É UMA INVASÃO!!!! CORRA!!",bc_map;
+		}
+		if (.@dokebi_tel == 2) {
+			mapannounce "ama_test","Ai, Ui!!!",bc_map;
+		}
+		if (.@dokebi_tel == 3) {
+			mapannounce "ama_test","Mas eu nem fiz nada de maaaal~!",bc_map;
+		}
+		if (.@dokebi_tel == 4) {
+			mapannounce "ama_test","Desculpe~~! Waaaaah~~",bc_map;
+		}
+	}
+	end;
+}
+
+ama_test,50,100,3	script	Coach#ama	762,15,15,{
+	mes "[Coach]";
+	mes "Hoho~ Bom.";
+	mes "Estive observando você na sala VIP. Você foi realmente algo especial.";
+	mes "Fiquei verdadeiramente impressionado.";
+	next;
+	mes "[Coach]";
+	mes "Eu achei que você era realmente";
+	mes "o Momotaro da história!";
+	mes "Hohohoho...";
+	next;
+	switch(select("Bem, bem. Não é nada~:Foi entediante.")) {
+	case 1:
+		mes "[Coach]";
+		mes "...Hohoho..";
+		mes "Não fique tão orgulhoso de si mesmo.";
+		mes "Quando eu era jovem como você,";
+		mes "eu esmagava Dokebi com";
+		mes "o meu dedo mindinho. Hohoho~";
+		next;
+		mes "[Coach]";
+		mes "..............";
+		mes "...Não me olhe assim.";
+		mes "Eu estava apenas brincando. Hmmhmm.";
+		next;
+		changequest 8127,8128;
+		mes "[Coach]";
+		mes "Agora, a história de Momotaro acabou.";
+		mes "Você pode receber sua recompensa quando falar com a moça da editora que você viu primeiro.";
+		next;
+		mes "[Coach]";
+		mes "Não perca sua autoestima elevada";
+		mes "no futuro. Adeus.";
+		close2;
+		donpcevent "Timer#ama::OnDisable";
+		warp "amatsu",223,230;
+		disablenpc "Coach#ama";
+		donpcevent "Assistant#ama::OnReset";
+		end;
+	case 2:
+		mes "[Coach]";
+		mes ".....!!!!!!";
+		mes "....Hohohoho..";
+		mes "Você é bem engraçado.";
+		mes "Tudo bem, bonitão.";
+		mes "Você quer ouvir minha proposta?";
+		next;
+		changequest 8127,8129;
+		mes "[Coach]";
+		mes "A esta altura, eu deveria mandar você de volta... MAS!";
+		mes "Eu realmente quero saber";
+		mes "do que você é capaz. Hehe~";
+		mes "Hohoho~";
+		next;
+		mes "[Coach]";
+		mes "Então, vou lhe dar uma chance.";
+		mes "Mas se você falhar,";
+		mes "^3163FFvocê não poderá aceitar este desafio.^000000";
+		mes "Além disso, esta missão será bem difícil.";
+		next;
+		if (select("Nah.. Estou bem.:Manda ver, cara!") == 1) {
+			erasequest 8129;
+			mes "[Coach]";
+			mes "Hoho~ Eu entendo...";
+			mes "Você deve estar exausto da batalha anterior. Teria sido uma grande batalha, no entanto...";
+			next;
+			mes "[Coach]";
+			mes "Agora, a história de Momotaro acabou.";
+			mes "Você pode receber sua recompensa";
+			mes "quando falar com";
+			mes "a moça da editora com quem você falou primeiro.";
+			next;
+			mes "[Coach]";
+			mes "Não perca sua autoestima elevada";
+			mes "no futuro. Adeus.";
+			next;
+			setquest 8128;
+			warp "amatsu",223,230;
+			disablenpc "Coach#ama";
+			donpcevent "Timer#ama::OnDisable";
+			donpcevent "Assistant#ama::OnReset";
+			end;
+		}
+		mes "[Coach]";
+		mes "Hohoho~ Gosto da sua atitude.";
+		mes "Agora, esta é a última batalha!";
+		mes "Mostre-me o que você tem.";
+		mes "Estou ansioso por isso.";
+		percentheal 70,0;
+		disablenpc "Coach#ama";
+		donpcevent "Am Mut#ama::OnEnable";
+		close;
+	}
+
+OnInit:
+	disablenpc "Coach#ama";
+	end;
+
+OnTouch_:
+	mes "[Coach]";
+	mes "Bum bam Buuum!!!";
+	mes "Tada~~~ !";
+	close;
+}
+
+ama_test,34,17,0	script	Am Mut#ama	-1,{
+OnInit:
+	disablenpc "Am Mut#ama";
+	end;
+
+OnEnable:
+	enablenpc "Am Mut#ama";
+	set .MyMobs,3;
+	monster "ama_test",35,102,"Am Mut",1301,1,"Am Mut#ama::OnMyMobDead";
+	monster "ama_test",40,91,"Am Mut",1301,1,"Am Mut#ama::OnMyMobDead";
+	monster "ama_test",56,108,"Am Mut",1301,1,"Am Mut#ama::OnMyMobDead";
+	end;
+
+OnReset:
+	killmonster "ama_test","Am Mut#ama::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		enablenpc "Coach#after";
+	}
+	else {
+		set .@am_mut_tel,rand(1,3);
+		if (.@am_mut_tel == 1) {
+			mapannounce "ama_test","Ai!! Eu, eu cometi um erro...!",bc_map;
+		}
+		if (.@am_mut_tel == 2) {
+			mapannounce "ama_test","Ugh... Como eu pude perder?!...",bc_map;
+		}
+		if (.@am_mut_tel == 3) {
+			mapannounce "ama_test","Mamãaaae~~!!!",bc_map;
+		}
+	}
+	end;
+}
+
+ama_test,50,100,3	script	Coach#after	762,5,5,{
+	end;
+
+OnInit:
+	disablenpc "Coach#after";
+	end;
+
+OnTouch_:
+	mes "[Coach]";
+	mes "( Aplauso- Aplauso- Aplauso- )";
+	next;
+	mes "[Coach]";
+	mes "Hohoho~ Você é realmente incrível.";
+	mes "Você tem talento, garoto(a).";
+	mes "Tenho que admitir.";
+	next;
+	mes "[Coach]";
+	mes "Bem, o tempo acabou, então...";
+	mes "Deixe-me mostrar a saída.";
+	mes "Eu me diverti muito...";
+	mes "Não se esqueça de pegar sua recompensa~";
+	close2;
+	set event_momo,3;
+	changequest 8129,8130;
+	warp "amatsu",223,230;
+	disablenpc "Coach#after";
+	donpcevent "Timer#ama::OnDisable";
+	donpcevent "Assistant#ama::OnReset";
+	end;
+}
+
+ama_test,34,18,0	script	Timer#ama	-1,{
+OnInit:
+	disablenpc "Timer#ama";
+	end;
+
+OnEnable:
+	enablenpc "Timer#ama";
+	initnpctimer;
+	end;
+OnDisable:
+	stopnpctimer;
+	end;
+
+OnTimer1000:
+	mapannounce "ama_test","O Cronômetro foi ativado. Você tem 6 minutos. Aniquile os monstros a tempo!",bc_map;
+	end;
+
+OnTimer181000:
+	mapannounce "ama_test","Restam 3 minutos.",bc_map;
+	end;
+
+OnTimer301000:
+	mapannounce "ama_test","Resta 1 minuto.",bc_map;
+	end;
+OnTimer361000:
+	mapannounce "ama_test","Bipe- Bipe- Bipe- Tempo esgotado.",bc_map;
+	end;
+
+OnTimer361500:
+	enablenpc "backwarp#ama";
+	end;
+
+OnTimer362000:
+	disablenpc "backwarp#ama";
+	end;
+
+OnTimer362500:
+	donpcevent "Assistant#ama::OnReset";
+	donpcevent "Timer#ama::OnDisable";
+	end;
+}
+
+ama_test,50,100,0	script	backwarp#ama	-1,25,25,{
+OnInit:
+	disablenpc "backwarp#ama";
+	end;
+
+OnTouch_:
+	warp "amatsu",115,95;
+	end;
+}
+
+// Sushi Quest :: japan_sushi
+//============================================================ 
+ama_in01,162,17,1	script	Sushi Master#ama	765,{
+	if (MaxWeight - Weight < 5000) {
+		mes "[Magumagu]";
+		mes "Ei. Você parece muito pesado.";
+		mes "Você não tem problemas para andar?";
+		mes "Sinto muito, mas não há espaço";
+		mes "para colocar suas coisas na minha loja.";
+		next;
+		mes "[Magumagu]";
+		mes "Guarde algumas de suas coisas em algum lugar.";
+		mes "Por que você está carregando tanta coisa...?";
+		mes "Huhuhu...";
+		close;
+	}
+	else if (ama_sushi == 4) {
+		mes "[Magumagu]";
+		mes "Treinar para fatiar peixe cru";
+		mes "diariamente fará de você um mestre chef de sushi.";
+		mes "Então não desperdice seu tempo aqui, e aprenda o que você sabe fazer bem.";
+		mes " ";
+		close;
+	}
+	else if (fish_r == 1) {
+		if (countitem(529) > 9) {
+			mes "[Magumagu]";
+			mes "Oh! Eu realmente agradeço.";
+			mes "Bem na hora!";
+			mes "Eu realmente preciso deles para fazer uma sobremesa.";
+			next;
+			mes "[Magumagu]";
+			mes "Obrigado. Não é nada, mas";
+			mes "eu lhe darei a culinária especial da minha loja, Fatias de Peixe, em troca.";
+			next;
+			set fish_r,0;
+			erasequest 10036;
+			delitem 529,10; //Candy
+			getitem 544,15; //Fish_Slice
+			mes "[Magumagu]";
+			mes "Aqui estão 15 fatias de peixe.";
+			mes "Por favor, aproveite esta comida com seus amigos.";
+			mes "E volte sempre que sentir falta do sabor da culinária de Amatsu.";
+			close;
+		}
+		mes "[Magumagu]";
+		mes "Ah cara, você não preparou";
+		mes "o que eu pedi...";
+		mes "Não se esqueça do que eu pedi.";
+		next;
+		mes "[Magumagu]";
+		mes "10 ^0000FFBalas^000000";
+		mes "Você não esqueceu, certo?";
+		mes "Traga-me estes suprimentos, por favor.";
+		close;
+	}
+	else if (fish_r == 2) {
+		if (countitem(964) > 9) {
+			mes "[Magumagu]";
+			mes "Oh! Eu realmente agradeço.";
+			mes "Bem na hora!";
+			mes "Eu preciso deles para fazer um molho.";
+			next;
+			mes "[Magumagu]";
+			mes "Obrigado. Não é nada, mas";
+			mes "eu lhe darei dois conjuntos de Sushi em troca.";
+			next;
+			set fish_r,0;
+			erasequest 10037;
+			delitem 964,10; //Crap_Shell
+			getitem 551,20; //Shusi
+			mes "[Magumagu]";
+			mes "Compartilhe com seus amigos";
+			mes "e membros da família.";
+			mes "Por favor, volte novamente.";
+			close;
+		}
+		mes "[Magumagu]";
+		mes "Ah cara, você não preparou";
+		mes "o que eu pedi...";
+		mes "Não se esqueça do que eu pedi.";
+		next;
+		mes "[Magumagu]";
+		mes "10 ^0000FFCascos de Caranguejo^000000...";
+		mes "Você não esqueceu, certo?";
+		mes "Traga-me estes suprimentos, por favor.";
+		close;
+	}
+	else if (fish_r == 3) {
+		if (countitem(961) > 9) {
+			mes "[Magumagu]";
+			mes "Oh! Eu realmente agradeço.";
+			mes "Bem na hora!";
+			mes "Eu estava preparando aperitivos...";
+			next;
+			mes "[Magumagu]";
+			mes "Obrigado. Não é nada, mas";
+			mes "eu lhe darei vários conjuntos de Sushi em troca.";
+			next;
+			set fish_r,0;
+			erasequest 10038;
+			delitem 961,10; //Conch
+			getitem 551,30; //Shusi
+			mes "[Magumagu]";
+			mes "Estes são para três pessoas,";
+			mes "então compartilhe com seus amigos.";
+			mes "Volte novamente se sentir vontade de ajudar mais um pouco.";
+			close;
+		}
+		mes "[Magumagu]";
+		mes "Ah cara, você não preparou";
+		mes "o que eu pedi...";
+		mes "Não se esqueça do que eu pedi.";
+		next;
+		mes "[Magumagu]";
+		mes "10 ^0000FFConchas^000000";
+		mes "Você não esqueceu, certo?";
+		mes "Traga-me estes suprimentos, por favor.";
+		close;
+	}
+	else if (fish_r == 4) {
+		if (countitem(1023) > 9) {
+			mes "[Magumagu]";
+			mes "Oh! Eu realmente agradeço.";
+			mes "Bem na hora!";
+			mes "Eu estava decorando uma travessa.";
+			next;
+			mes "[Magumagu]";
+			mes "Obrigado. Não é nada, mas";
+			mes "eu lhe darei uma grande quantidade de comida em troca.";
+			next;
+			set fish_r,0;
+			erasequest 10039;
+			delitem 1023,10; //Fish_Tail
+			getitem 544,20; //Fish_Slice
+			getitem 551,30; //Shusi
+			mes "[Magumagu]";
+			mes "Você pode alimentar sua guilda";
+			mes "com esta comida.";
+			mes "Volte com um amigo.";
+			close;
+		}
+		mes "[Magumagu]";
+		mes "Ah cara, você não preparou";
+		mes "o que eu pedi...";
+		mes "Não se esqueça do que eu pedi.";
+		next;
+		mes "[Magumagu]";
+		mes "10 ^0000FFRabo de Peixe^000000";
+		mes "Você não esqueceu, certo?";
+		mes "Traga-me estes suprimentos, por favor.";
+		close;
+	}
+	else if (fish_r == 5) {
+		if (countitem(736) > 0) {
+			mes "[Magumagu]";
+			mes "Oh! Eu realmente agradeço.";
+			mes "Bem na hora!";
+			mes "Eu não tinha uma travessa branca.";
+			next;
+			mes "[Magumagu]";
+			mes "Obrigado. Não é nada, mas";
+			mes "eu lhe darei dois conjuntos de Sushi em troca.";
+			next;
+			delitem 736,1; //White_Platter
+			set fish_r,0;
+			erasequest 10040;
+			getitem 551,20; //Shusi
+			mes "[Magumagu]";
+			mes "Compartilhe com seus amigos";
+			mes "e membros da família.";
+			mes "Por favor, volte novamente.";
+			close;
+		}
+		mes "[Magumagu]";
+		mes "Ah cara, você não preparou";
+		mes "o que eu pedi...";
+		mes "Não se esqueça do que eu pedi.";
+		next;
+		mes "[Magumagu]";
+		mes "Eu preciso de uma travessa branca:";
+		mes "1 ^0000FFPorcelana^000000";
+		mes "Você não esqueceu, certo?";
+		mes "Traga-a para mim, ok?";
+		close;
+	}
+	else if (fish_r == 6) {
+		if (countitem(950) > 99) {
+			if (ama_sushi == 2) {
+				mes "[Magumagu]";
+				mes "..............................";
+				next;
+				mes "[Magumagu]";
+				mes "Você é uma pessoa muito gentil.";
+				mes "Você trouxe tudo";
+				mes "que eu lhe pedi...";
+				next;
+				mes "[Magumagu]";
+				mes "Você não é o primeiro estrangeiro";
+				mes "que eu encontrei. Amatsu está recebendo cada vez mais turistas.";
+				mes "Eu só queria testar você.";
+				mes " ";
+				next;
+				mes "[Magumagu]";
+				mes "Seu trabalho era apenas fazer recados, mas";
+				mes "eu queria saber...";
+				mes "como você se dedica,";
+				mes "quão sério você é ao completar seu trabalho e não desistir.";
+				next;
+				mes "[Magumagu]";
+				mes "Eu estava pensando:";
+				mes "'Se existir uma pessoa assim,";
+				mes "eu daria a essa pessoa tudo sobre culinária que eu dominei'";
+				next;
+				mes "[Magumagu]";
+				mes "E.....";
+				mes "Você...";
+				mes "Você é a pessoa certa.";
+				next;
+				mes "[Magumagu]";
+				mes "Estou velho agora. Ninguém sabe por quanto tempo mais conseguirei segurar esta faca. Você foi escolhido para herdar minha arte culinária...";
+				mes " ";
+				next;
+				delitem 950,100; //Heart_Of_Mermaid
+				set ama_sushi,4;
+				completequest 10041;
+				getitem 1144,1; //Sasimi
+				mes "[Magumagu]";
+				mes "Aqui, pegue minha faca.";
+				mes "De agora em diante, prepare uma culinária refinada com essa faca.";
+				mes "...Aprenda a fatiar um peixe.";
+				mes " ";
+				mes " ";
+				next;
+				mes "[Magumagu]";
+				mes "De agora em diante, não pedirei mais favores a você nem darei fatias de peixe em troca....";
+				mes "Pratique sua habilidade com essa faca e ensine aos habitantes do continente o prazer da culinária refinada...";
+				close;
+			}
+			else {
+				mes "[Magumagu]";
+				mes "Uau... estes são corações de";
+				mes "sereia verdadeiros. As lendas dizendo";
+				mes "que eles podiam ser encontrados em outro continente eram verdadeiras...";
+				mes " ";
+				next;
+				mes "[Magumagu]";
+				mes "Reunir tudo isso deve ter sido difícil... Bem, então.";
+				mes "Hoje, usarei todos os meus";
+				mes "ingredientes para fazer uma culinária especial para você!";
+				next;
+				mes "[Magumagu]";
+				mes "Dê-me um momento...";
+				mes "Eu lhe mostrarei minha ^0000FFverdadeira habilidade culinária^000000.";
+				next;
+				delitem 950,20; //Heart_Of_Mermaid
+				getitem 551,20; //Shusi
+				mes "[Magumagu]";
+				mes "Experimente isto primeiro.";
+				mes "Feito com os ingredientes mais frescos.";
+				next;
+				delitem 950,20; //Heart_Of_Mermaid
+				getitem 544,20; //Fish_Slice
+				mes "[Magumagu]";
+				mes "Experimente isto também.";
+				mes "As fatias de peixe da minha loja são as melhores entre as melhores!";
+				next;
+				delitem 950,20; //Heart_Of_Mermaid
+				getitem 551,20; //Shusi
+				mes "[Magumagu]";
+				mes "Coma mais um pouco. Não diga não...!";
+				mes "Não é bom? Hã? Não é bom?";
+				next;
+				delitem 950,20; //Heart_Of_Mermaid
+				getitem 544,20; //Fish_Slice
+				mes "[Magumagu]";
+				mes "Haha~! Ainda não acabou!";
+				mes "Tudo bem, coma mais um pouco!";
+				next;
+				delitem 950,20; //Heart_Of_Mermaid
+				getitem 544,10; //Fish_Slice
+				getitem 551,10; //Shusi
+				mes "[Magumagu]";
+				mes "Leve as sobras.";
+				mes "Você parece satisfeito...";
+				mes "Compartilhe o restante com seus amigos e familiares.";
+				next;
+				set ama_sushi,ama_sushi+1;
+				set fish_r,0;
+				erasequest 10041;
+				mes "[Magumagu]";
+				mes "Muito obrigado pelo dia de hoje! Haha!";
+				mes "Volte novamente quando sentir vontade de ajudar. Se cuide...!!!";
+				close;
+			}
+		}
+		mes "[Magumagu]";
+		mes "Ah cara, você não preparou";
+		mes "o que eu pedi...";
+		mes "Não se esqueça do que pedi.";
+		next;
+		mes "[Magumagu]";
+		mes "100 ^0000FFCorações de Sereia^000000, certo?";
+		mes "Você não esqueceu, né?";
+		mes "Traga-me os suprimentos, por favor.";
+		close;
+	}
+	mes "[Magumagu]";
+	mes "Minha nossa~";
+	mes "Isso é um problema.....";
+	mes "Tem tantos clientes, mas não consigo todos os ingredientes que preciso...";
+	next;
+	mes "[Magumagu]";
+	mes "Isso é horrível...";
+	mes "Alguns dos meus clientes não terão";
+	mes "a chance de provar a culinária refinada de Amatsu...";
+	mes " ";
+	next;
+	mes "[Magumagu]";
+	mes "Ora, ora. Você é um cliente?";
+	mes "Bem-vindo. Como sempre, minha loja";
+	mes "valoriza muito o frescor das";
+	mes "fatias de peixe. O que o traz aqui...?";
+	next;
+	switch(select("Eu gostaria de comprar Sushi:Eu gostaria de comprar fatia de peixe:Você precisa de ajuda?:Continue com o bom trabalho")) {
+	case 1:
+		mes "[Magumagu]";
+		mes "Tudo bem...! Quantos?";
+		mes "Um conjunto de Sushi custa 700z. Se você";
+		mes "quiser apenas 1 Sushi, custa 74z.";
+		mes "Se quiser mais, me avise.";
+		next;
+		switch(select("700z Um conjunto!:74z Uma unidade!:Vou experimentar mais tarde")) {
+		case 1:
+			if (Zeny < 700) {
+				mes "[Magumagu]";
+				mes "Ah cara, você não tem dinheiro suficiente.";
+				mes "Se você quer comer deliciosas fatias de peixe, é melhor trazer mais dinheiro.";
+				close;
+			}
+			set Zeny, Zeny-700;
+			getitem 551,10; //Shusi
+			mes "[Magumagu]";
+			mes "Aqui está. Se gostar do sabor, por favor, peça mais.";
+			close;
+		case 2:
+			if (Zeny < 74) {
+				mes "[Magumagu]";
+				mes "Ah cara, você não tem dinheiro suficiente.";
+				mes "Se você quer comer um delicioso Sushi,";
+				mes "é melhor trazer mais dinheiro.";
+				close;
+			}
+			set Zeny, Zeny-74;
+			getitem 551,1; //Shusi
+			mes "[Magumagu]";
+			mes "Aqui está. Se gostar do sabor, por favor, peça mais.";
+			close;
+		case 3:
+			mes "[Magumagu]";
+			mes "Você que sabe. Meu Sushi é";
+			mes "o melhor entre os melhores! O sabor";
+			mes "e o frescor são os melhores do";
+			mes "mundo. Se tiver tempo, experimente meu Sushi.";
+			close;
+		}
+	case 2:
+		mes "[Magumagu]";
+		mes "Tudo bem...! Quantos?";
+		mes "Um conjunto de fatias de peixe custa 350z.";
+		mes "1 fatia de peixe custa 37z.";
+		mes "Se quiser mais, me avise.";
+		next;
+		switch(select("350z Um conjunto!:37z Uma unidade!:Vou experimentar mais tarde")) {
+		case 1:
+			if (Zeny < 350) {
+				mes "[Magumagu]";
+				mes "Ah cara, você não tem dinheiro suficiente.";
+				mes "Se você quer comer deliciosas fatias de peixe, é melhor trazer mais dinheiro.";
+				close;
+			}
+			set Zeny, Zeny-350;
+			getitem 544,10; //Fish_Slice
+			mes "[Magumagu]";
+			mes "Aqui está. Se gostar do sabor, por favor, peça mais.";
+			close;
+		case 2:
+			if (Zeny < 37) {
+				mes "[Magumagu]";
+				mes "Ah cara, você não tem dinheiro suficiente.";
+				mes "Se você quer comer uma deliciosa fatia de peixe, é melhor trazer mais dinheiro.";
+				close;
+			}
+			set Zeny, Zeny-37;
+			getitem 544,1; //Fish_Slice
+			mes "[Magumagu]";
+			mes "Aqui está. Se gostar do sabor, por favor, peça mais.";
+			close;
+		case 3:
+			mes "[Magumagu]";
+			mes "Você que sabe. Minha fatia de peixe é";
+			mes "a melhor entre as melhores! O sabor";
+			mes "e o frescor são os melhores do";
+			mes "mundo. Se tiver tempo, experimente minhas fatias de peixe.";
+			close;
+		}
+	case 3:
+		if (BaseJob == Job_Novice) {
+			mes "[Magumagu]";
+			mes "Haha~ VOCÊ é quem precisa";
+			mes "de ajuda! Ajude os outros";
+			mes "quando puder cuidar de si mesmo.";
+			mes " ";
+			close;
+		}
+		else {
+			mes "[Magumagu]";
+			mes "Alguma ajuda seria ótima~!!";
+			mes "Eu estava preocupado porque sempre";
+			mes "ficamos sem ingredientes...";
+			mes "Você me faria um favor?";
+			mes "Eu vou recompensá-lo.";
+			next;
+			set .@fish_m1,rand(1,10);
+			if (.@fish_m1 == 1 || .@fish_m1 == 2) {
+				set fish_r,1;
+				setquest 10036;
+				mes "[Magumagu]";
+				mes "Preciso de alguns doces para fazer";
+				mes "uma sobremesa para os clientes.";
+				mes "Traga-me ^0000FF10 Doces^000000.";
+				mes "Não é difícil, certo?";
+				mes " ";
+			}
+			else if (.@fish_m1 == 3 || .@fish_m1 == 4) {
+				set fish_r,2;
+				setquest 10037;
+				mes "[Magumagu]";
+				mes "Preciso de algumas carapaças de caranguejo para fazer";
+				mes "um molho para minha culinária...";
+				mes "Se você me trouxer ^0000FF10 Carapaças de Caranguejo^000000,";
+				mes "eu vou recompensá-lo.";
+				mes "Tudo bem?";
+			}
+			else if (.@fish_m1 == 5 || .@fish_m1 == 6) {
+				set fish_r,3;
+				setquest 10038;
+				mes "[Magumagu]";
+				mes "Usei todas as minhas conchas.";
+				mes "Preciso delas para fazer uma entrada...";
+				mes "Por favor, traga-me ^0000FF10 Conchas^000000.";
+				mes "É difícil encontrar conchas por aqui...";
+				mes "Por favor, faça-me este favor.";
+			}
+			else if (.@fish_m1 == 7 || .@fish_m1 == 8) {
+				set fish_r,4;
+				setquest 10039;
+				mes "[Magumagu]";
+				mes "Caudas de peixe decorativas estão fora de";
+				mes "estoque. Isso é urgente...";
+				mes "Por favor, traga-me ^0000FF10 Caudas de Peixe^000000.";
+				mes "Elas sempre somem quando preciso muito delas...";
+				mes "Por favor, faça-me este favor.";
+			}
+			else if (.@fish_m1 == 9) {
+				set fish_r,5;
+				setquest 10040;
+				mes "[Magumagu]";
+				mes "Estamos sem um prato para servir";
+				mes "fatias de peixe aos clientes.";
+				mes "Isso é horrível...";
+				mes "Você compraria para mim alguma ^0000FFPorcelana^000000 fina?";
+				mes "Não posso colocar comida em qualquer lugar...";
+			}
+			else {
+				if (rand(1,10) == 1) {
+					set fish_r,6;
+					setquest 10041;
+					mes "[Magumagu]";
+					mes "Não me pergunte o porquê...";
+					mes "Mas eu preciso de algo especial...";
+					mes "^0000FF100 Corações de Sereia^000000.....";
+					mes "Sei que parece impossível, mas é muito importante para mim...";
+					next;
+					mes "[Magumagu]";
+					mes "Não faça perguntas";
+					mes "sobre meu pedido...";
+					mes "Apenas mantenha o que eu quero em mente.";
+				}
+				else {
+					set fish_r,5;
+					setquest 10040;
+					mes "[Magumagu]";
+					mes "Estamos sem um prato para servir";
+					mes "fatias de peixe aos clientes.";
+					mes "Isso é horrível...";
+					mes "Você compraria para mim alguma ^0000FFPorcelana^000000 fina? Não posso colocar comida em qualquer lugar...";
+				}
+			}
+			next;
+			mes "[Magumagu]";
+			mes "Bem, boa sorte para você...";
+			mes "Estarei esperando por você.";
+			mes "Não se esqueça do que pedi...";
+			close;
+		}
+	case 4:
+		mes "[Magumagu]";
+		mes "Haha, você não esquecerá o sabor da minha fatia de peixe depois de tê-la";
+		mes "provado. Se tiver tempo, experimente minhas fatias de peixe.";
+		mes " ";
+		close;
+	}
+}
+
+// Dungeon Quest :: japan_mono
+//============================================================ 
+amatsu,112,164,4	script	Gate Soldier#ama1	767,{
+	mes "[Gate Soldier]";
+	mes "Este é o grande palácio,";
+	mes "Toukoujyo.";
+	mes "Os habitantes locais são proibidos";
+	mes "de entrar...";
+	next;
+	mes "[Gate Soldier]";
+	mes "Suas vestimentas parecem desconhecidas.";
+	mes "Você é de outro continente?";
+	mes "O lorde concedeu a entrada aos";
+	mes "turistas, então você pode entrar.";
+	mes " ";
+	close;
+}
+	
+amatsu,119,164,4	script	Gate Soldier#ama2	767,{
+	mes "[Gate Soldier]";
+	mes "Você é de Midgard?";
+	mes "Bem-vindo a Amatsu.";
+	mes "Visite nosso lorde em Chun-Su-Gak";
+	mes "quando entrar.";
+	mes " ";
+	next;
+	mes "[Gate Soldier]";
+	mes "Ele é muito gentil.";
+	mes "Ele investiu em várias áreas de";
+	mes "Amatsu, e o comércio intercontinental foi ideia dele.";
+	close;
+}
+	
+ama_in02,207,40,6	script	Gate Soldier#ama3	767,{
+	mes "[Gate Soldier]";
+	mes "Bem-vindo. O lorde do palácio";
+	mes "permitiu especialmente a entrada de convidados";
+	mes "de outros continentes.";
+	next;
+	mes "[Gate Soldier]";
+	mes "Dê uma olhada ao redor e sinta-se à vontade.";
+	mes "Por favor, aproveite sua estadia.";
+	close;
+}
+	
+ama_in02,207,49,6	script	Gate Soldier#ama4	767,{
+	mes "[Gate Soldier]";
+	mes "O lorde é um homem muito bom.";
+	mes "Quem diria que nossa cidade já foi";
+	mes "uma pequena vila?";
+	next;
+	mes "[Gate Soldier]";
+	mes "Agradeço a ele por me contratar.";
+	mes "Ultimamente, ele parece ter";
+	mes "preocupações em mente.";
+	mes "Recentemente, ele tem parecido bem melancólico.";
+	mes " ";
+	close;
+}
+	
+amatsu,164,174,4	script	Gate Soldier#ama5	767,{
+	mes "[Gate Soldier]";
+	if (event_amatsu == 0) {
+		mes "Você não pode entrar aqui.";
+		mes "A mãe do nosso lorde está descansando aqui. Ela precisa de repouso.";
+		next;
+		set event_amatsu,1;
+		setquest 8131;
+		mes "[Gate Soldier]";
+		mes "Ela está doente há meses.";
+		mes "É por isso que ela está ficando aqui.";
+		mes "É uma doença bem assustadora...";
+	}
+	else if (event_amatsu == 1) {
+		mes "Ela deveria recuperar sua saúde...";
+		mes "Mas, ainda assim, meu lorde se preocupa muito.";
+		mes " ";
+	}
+	else if (event_amatsu == 5) {
+		mes "Ah! Fiquei surpreso com aquele barulho alto.";
+		mes "O que aconteceu? Hã?";
+		mes " ";
+	}
+	else if (event_amatsu == 6) {
+		mes "A mãe do nosso lorde não";
+		mes "recuperou totalmente sua saúde.";
+		mes "Ainda assim, ela está melhor do que antes.";
+		mes " ";
+	}
+	else {
+		mes "Se você foi enviado pelo meu lorde,";
+		mes "tudo bem entrar...";
+		mes "Mas você não seria capaz de curá-la.";
+		mes "Muitos outros tentaram e falharam.";
+	}
+	close;
+}
+	
+amatsu,171,174,4	script	Gate Soldier#ama6	767,{
+	mes "[Gate Soldier]";
+	if (event_amatsu == 0) {
+		mes "Você não pode entrar aqui.";
+		mes "A mãe do nosso lorde está descansando aqui.";
+		mes " ";
+		next;
+		setquest 8131;
+		set event_amatsu,1;
+		mes "[Gate Soldier]";
+		mes "Ela está doente há meses.";
+		mes "É por isso que ela está ficando aqui.";
+		mes "...";
+	}
+	else if (event_amatsu == 1) {
+		mes "Por favor, fique em silêncio.";
+		mes "A mãe do lorde está ficando aqui. Ela precisa relaxar.";
+		next;
+		mes "[Gate Soldier]";
+		mes "Por que isso está acontecendo";
+		mes "com meu bondoso lorde...";
+		mes "Como pode ser? *Soluço*...";
+	}
+	else if (event_amatsu == 5) {
+		mes "Eh? Algo estava voando";
+		mes "no céu... Você não viu? Ugh.";
+		mes "Aquele som me surpreendeu.";
+	}
+	else if (event_amatsu == 6) {
+		mes "Agora nosso lorde está aliviado.";
+		mes "Estávamos tão preocupados com isso.";
+		mes "Agora, está tudo bem... *soluço*.";
+	}
+	else {
+		mes "Oh... cara. Pessoas de outros";
+		mes "continentes são todas médicas!";
+		mes "Quantos médicos vieram visitar?! Eu nem consigo mais contar!";
+	}
+	close;
+}
+	
+ama_in02,187,57,2	script	Soldier#ama1	767,{
+	mes "[Ichiro]";
+	mes "Bem-vindo.";
+	mes "Nosso lorde preparou quartos de hóspedes";
+	mes "para viajantes como você.";
+	next;
+	mes "[Ichiro]";
+	mes "Se você estiver tendo algum problema,";
+	mes "fale comigo. Eu agradeceria se você falasse com nosso lorde do";
+	mes "palácio. Tudo isso é providenciado por ele.";
+	close;
+}
+	
+ama_in02,170,62,4	script	Soldier#ama2	767,{
+	mes "[Jiro]";
+	mes "Sou Jiro, o administrador";
+	mes "deste Palácio. O que posso fazer por você?";
+	next;
+	switch(select("Emita uma Permissão de Trânsito para mim:Eu quero morar em Amatsu:Nada")) {
+	case 1:
+		if (event_amatsu == 6) {
+			if (countitem(7160) > 0) {
+				mes "[Jiro]";
+				mes "Você já tem uma...";
+				mes "Você não precisa ter duas delas.";
+				close;
+			}
+			mes "[Jiro]";
+			mes "Você perdeu sua Permissão de Trânsito?";
+			mes "Você precisa pagar 10.000 zenys como imposto";
+			mes "para emitir outra Permissão de Trânsito.";
+			next;
+			if (select("Emitir uma:Falo com você depois") == 1) {
+				set Zeny, Zeny-10000;
+				getitem 7160,1; //Lord's_Passable_Ticket
+				mes "[Jiro]";
+				mes "Aqui está.";
+				mes "Não perca desta vez.";
+				close;
+			}
+			mes "[Jiro]";
+			mes "Certo, então...";
+			mes "Fale comigo quando precisar de ajuda.";
+			close;
+		}
+		mes "[Gate Soldier]";
+		mes "O lorde anunciou que";
+		mes "ele concede aos convidados de Midgard o direito de ir a qualquer lugar.";
+		mes "Você não precisa que eu emita uma Permissão de Trânsito para você.";
+		close;
+	case 2:
+		mes "[Jiro]";
+		mes "Isso é impossível. Você está livre para";
+		mes "ir a qualquer lugar em Amatsu, mas meu lorde não quer se preocupar com imigração.";
+		mes "Em vez disso, você pode ficar aqui o quanto quiser.";
+		close;
+	case 3:
+		mes "[Jiro]";
+		mes "Bem, então...";
+		mes "Fale comigo quando precisar de ajuda.";
+		close;
+	}
+}
+	
+ama_in02,37,157,4	script	Soldier#ama3	767,{
+	mes "[Saburo]";
+	mes "Este é o campo de treinamento para melhorar nossas habilidades de combate.";
+	mes "Por favor, dê uma olhada ao redor...";
+	next;
+	mes "[Saburo]";
+	mes "A propósito, ultimamente senti";
+	mes "que os soldados mudaram";
+	mes "recentemente. Como posso dizer...";
+	mes "Seus rostos estão melancólicos e";
+	mes "alguns deles não estão mais por aqui.";
+	mes "Será que foram para Midgard??";
+	next;
+	mes "[Saburo]";
+	mes "Neste trabalho, encontro";
+	mes "muitos estranhos. Mas lá embaixo,";
+	mes "há um convidado de uma terra distante que parece suspeito...";
+	mes "Eu disse aos meus guardas para observá-lo...";
+	next;
+	mes "[Saburo]";
+	mes "Claro, meu lorde sabe precisamente tudo o que está acontecendo.";
+	mes "Haha, não leve a sério o que eu disse~";
+	mes "Até mais...";
+	close;
+}
+	
+ama_in02,32,51,6	script	Soldier#ama4	767,{
+	mes "[Shiro]";
+	mes "*Tosse, Tosse* O que...";
+	mes "Não fale comigo...";
+	mes "*Tosse, Tosse*... Oh, meu pescoço, droga.";
+	next;
+	mes "[Shiro]";
+	mes "O remédio para tosse daquele charlatão";
+	mes "é inútil! Eu nunca deveria ter confiado em pessoas de Midgard!";
+	mes "*Tosse, Tosse*...";
+	next;
+	mes "[Shiro]";
+	mes "Não sei por que, mas...";
+	mes "Estou ficando cada vez pior...";
+	mes "Que tipo de resfriado é esse?";
+	mes "*Tosse*... *Tosse*...";
+	close;
+}
+	
+ama_in02,40,167,3	script	Soldier#ama5	767,{
+	mes "[Goro]";
+	mes "*Psiu*... Por favor, fique em silêncio.";
+	mes "Vou te contar uma história, certo?";
+	mes " ";
+	next;
+	mes "[Goro]";
+	mes "Existe um boato em Amatsu.";
+	mes "O lorde deste palácio não é";
+	mes "real... *Psiu*, Silêncio!";
+	mes "Não entre em pânico e me escute.";
+	next;
+	mes "[Goro]";
+	mes "Existe um lorde verdadeiro por trás";
+	mes "do bondoso lorde e ele está planejando";
+	mes "algo. Ele está controlando";
+	mes "nossa cidade de algum lugar escondido.";
+	mes "...Nosso bondoso lorde é apenas um fantoche~!";
+	next;
+	mes "[Goro]";
+	mes "É real! Acredite em mim~";
+	mes "Eu o vi. O lorde que estava";
+	mes "rindo da cidade no";
+	mes "TenguGak!!";
+	mes "Apenas não conte a ninguém que eu te contei isso, ok?";
+	close;
+}
+	
+ama_in02,32,167,5	script	Soldier#ama6	767,{
+	mes "[Rokuro]";
+	mes "Ele sempre fala bobagens.";
+	mes "Ele diz que nosso lorde";
+	mes "não é real, mas uma farsa.";
+	mes "Não tem nem graça.";
+	next;
+	mes "[Rokuro]";
+	mes "No entanto, é verdade que";
+	mes "recentemente, coisas estranhas estão";
+	mes "acontecendo. Não havia";
+	mes "lugares proibidos antes...";
+	next;
+	mes "[Rokuro]";
+	mes "Ouço sons estranhos às vezes.";
+	mes "A mãe do lorde recebeu a visita";
+	mes "de médicos várias vezes.";
+	mes "Acho que a saúde dela não";
+	mes "melhorou após as visitas deles...";
+	close;
+}
+	
+ama_in02,42,34,2	script	Soldier#ama7	767,{
+	mes "[Shichiro]";
+	mes "Divirta-se.";
+	mes "Meu lorde preparou alguns";
+	mes "quartos de hóspedes.";
+	next;
+	mes "[Shichiro]";
+	mes "Se você tiver algum problema,";
+	mes "por favor me chame. Além disso, tente não incomodar os outros convidados.";
+	mes " ";
+	next;
+	mes "[Shichiro]";
+	mes "Tenha um bom dia.";
+	close;
+}
+	
+ama_in02,203,156,4	script	Soldier#ama8	767,{
+	mes "[Hachiro]";
+	mes "Meu senhor está lá dentro.";
+	mes "Se quiser cumprimentá-lo, sinta-se à vontade para entrar.";
+	next;
+	mes "[Hachiro]";
+	mes "Não seja rude na frente dele.";
+	mes "Ele não está se sentindo muito bem.";
+	mes "Geralmente, ele cumprimenta pessoas de";
+	mes "outros continentes com alegria, mas...";
+	mes "O que será que aconteceu com ele...?";
+	close;
+}
+	
+ama_in02,195,156,4	script	Soldier#ama9	767,{
+	mes "[Kyuro]";
+	mes "Isso não é bom.";
+	mes "Meu senhor é muito gentil, mas";
+	mes "recentemente ele não está nada bem...";
+	next;
+	mes "[Kyuro]";
+	mes "Ouvi alguns boatos,";
+	mes "mas confio nele. Ele transformou";
+	mes "Amatsu em uma grande cidade.";
+	mes "É por isso que o sigo";
+	mes "como soldado.";
+	close;
+}
+	
+ama_in02,115,177,7	script	Soldier#ama10	767,{
+	mes "[Jyuro]";
+	mes "O que você está fazendo aqui?";
+	mes "Não há nada de interessante aqui.";
+	next;
+	if (select("Isso é verdade.:Abra o portão.") == 1) {
+		mes "[Jyuro]";
+		mes "Há coisas muito melhores para aproveitar na cidade. Divirta-se...";
+		close;
+	}
+	if (event_amatsu == 6) {
+		if (countitem(7160) > 0) {
+			mes "[Jyuro]";
+			mes "Você tem o passe...";
+			mes "Quer que eu o envie agora ou precisa de algumas instruções?";
+			next;
+			if (select("Eu vou entrar.:Instruções, por favor.") == 1) {
+				mes "[Jyuro]";
+				mes "Vou abrir o portão.";
+				mes "Cuide-se...";
+			}
+			else {
+				mes "[Jyuro]";
+				mes "A área além deste portão é";
+				mes "protegida por algum tipo de magia.";
+				mes "Você pode acabar morrendo por alguém";
+				mes "ou se perder.";
+				mes " ";
+				next;
+				mes "[Jyuro]";
+				mes "Não posso lhe contar muito.";
+				mes "Eu não fui muito longe lá dentro e";
+				mes "só dei uma olhada rápida.";
+				mes " ";
+				mes " ";
+				next;
+				mes "[Jyuro]";
+				mes "Primeiro.....";
+				mes "'Não confie no que você está";
+				mes "vendo.' Não sei o que";
+				mes "isso significa, mas acho que você não deveria acreditar em tudo o que vê.";
+				next;
+				mes "[Jyuro]";
+				mes "Segundo.....";
+				mes "'Existem certas regras na";
+				mes "magia.' Tudo tem uma";
+				mes "razão para existir. A magia não é exceção. Você provavelmente pode encontrar a resposta...";
+				next;
+				mes "[Jyuro]";
+				mes "Bem, vou abrir este portão.";
+				mes "Cuide-se...";
+			}
+			close2;
+			warp "ama_dun01",229,10;
+			end;
+		}
+		mes "[Jyuro]";
+		mes "Sinto muito.";
+		mes "Você precisa de uma Autorização de Trânsito para entrar.";
+		mes "Por favor, volte.";
+		close;
+	}
+	mes "[Jyuro]";
+	mes "De que portão você está falando?";
+	mes "Um portão? No último andar do edifício??? Com certeza, você deve estar enganado.";
+	emotion ET_SWEAT;
+	next;
+	if (countitem(7160) > 0) {
+		if (select("Mostrar o passe para ele:Cancelar") == 1) {
+			mes "[Jyuro]";
+			mes "O quê? Esse passe é...?";
+			mes "Essa Autorização de Trânsito é do";
+			mes "senhor, mas acho que foi";
+			mes "emitida para a pessoa errada.";
+			next;
+			delitem 7160,1; //Lord's_Passable_Ticket
+			mes "[Jyuro]";
+			mes "Vou ficar com este passe porque";
+			mes "ele foi emitido sem permissão.";
+			mes "Isto é um aviso.";
+			mes "Tenha cuidado.";
+			close;
+		}
+		mes "[Jyuro]";
+		mes "Há mais coisas para aproveitar na cidade. Divirta-se...";
+		close;
+	}
+	mes "[Jyuro]";
+	mes "Há mais coisas para aproveitar na cidade. Aproveite bem o seu tempo...";
+	close;
+}
+	
+ama_dun01,229,7,0	script	Soldier#ama11	767,{
+	mes "[Jyuro]";
+	mes "Você quer voltar?";
+	next;
+	if (select("Sim, eu quero.:Vou ficar aqui.") == 1) {
+		mes "[Jyuro]";
+		mes "Cuide-se.";
+		close2;
+		warp "ama_in02",119,181;
+		end;
+	}
+	mes "[Jyuro]";
+	mes "Cuide-se...";
+	close;
+}
+	
+ama_in02,200,176,4	script	Lord of Palace#ama	768,{
+	if (event_amatsu == 0) {
+		mes "[Ishida Yoshinaga]";
+		mes "O quê! Um estrangeiro...? *Ufa*";
+		mes "Sinto muito, mas não estou";
+		mes "com vontade de conhecer pessoas novas!";
+		next;
+		mes "[Ishida Yoshinaga]";
+		mes "Vá embora! Não estou interessado";
+		mes "em saber quem você é.";
+		mes "Não estou me sentindo bem!";
+		close;
+	}
+	else if (event_amatsu == 1) {
+		mes "[Ishida Yoshinaga]";
+		mes "O quê! Um estrangeiro? O que o traz";
+		mes "aqui? Se não for urgente,";
+		mes "venha falar comigo outra hora...!";
+		next;
+		switch(select("Ouvi dizer sobre sua mãe...:Seu sobrenome é legal.:Quem é você?")) {
+		case 1:
+			mes "[Ishida Yoshinaga]";
+			mes "Oh... Então você sabe sobre a doença dela?";
+			mes "Ouvi dizer que, em terras estrangeiras,";
+			mes "o conhecimento médico pode";
+			mes "ser bastante surpreendente.";
+			next;
+			mes "[Ishida Yoshinaga]";
+			mes "Bem-vindo. Como sabe, sou o";
+			mes "lorde de Toukoujyo,";
+			mes "Ishida Yoshinaga. Prazer";
+			mes "em conhecê-lo.";
+			next;
+			mes "[Ishida Yoshinaga]";
+			mes "Vamos direto ao ponto.";
+			mes "Minha mãe não está bem ultimamente. Sei que você está aqui por causa disso.";
+			mes "Você pode curar a doença dela?";
+			next;
+			mes "[Ishida Yoshinaga]";
+			mes "Até agora, muitos médicos famosos";
+			mes "a visitaram, mas todos";
+			mes "falharam em curar sua doença";
+			mes "e a deixaram pior...";
+			mes "Eles me decepcionaram.";
+			next;
+			mes "[Ishida Yoshinaga]";
+			mes "Você, que vem de Midgard,";
+			mes "pode conseguir curar a doença da minha mãe. Vou recompensá-lo bem se tiver sucesso...";
+			next;
+			set event_amatsu,2;
+			if (isbegin_quest(8131) == 1)
+				changequest 8131,8132;
+			else
+				setquest 8132;
+			mes "[Ishida Yoshinaga]";
+			mes "Eu lhe imploro... Por favor.";
+			mes "Minha mãe mora em uma casa fora do palácio.";
+			mes "Venha falar comigo quando terminar o tratamento.";
+			close;
+		case 2:
+			mes "[Ishida Yoshinaga]";
+			mes "Legal!? E daí?!";
+			mes "Leia meu nome até ficar";
+			mes "cansado dele! Droga!";
+			next;
+			mes "[Ishida Yoshinaga]";
+			mes "Brincando, mesmo nesta situação crítica... *Ufa*...";
+			mes "Por favor, divirta-se em Amatsu.";
+			mes "...Tanto faz!";
+			close;
+		case 3:
+			mes "[Ishida Yoshinaga]";
+			mes "...eu? Você não sabe? Hã?";
+			mes "Sou o lorde deste palácio.";
+			mes "Se você não sabe, fale com";
+			mes "os soldados lá fora!";
+			close;
+		}
+	}
+	else if (event_amatsu == 5) {
+		if (countitem(1022) > 0) {
+			mes "[Ishida Yoshinaga]";
+			mes "Ouvi as ótimas notícias!";
+			mes "Parece que minha mãe melhorou. Qual era a doença dela?";
+			next;
+			mes "[Ishida Yoshinaga]";
+			mes "Uma raposa? É isso mesmo? Oh...";
+			mes "Não era uma doença...!!";
+			mes "Por que eu não percebi?!";
+			next;
+			mes "[Ishida Yoshinaga]";
+			mes "Maldita raposa. Fugir e";
+			mes "se vingar de mim dessa";
+			mes "forma... Bem, então. Não há chance de vingança agora... Hahaha!";
+			next;
+			mes "[Ishida Yoshinaga]";
+			mes "Hmm, Mmm. Hmm...";
+			next;
+			mes "[Ishida Yoshinaga]";
+			mes "De qualquer forma, obrigado por me ajudar.";
+			mes "Minha mãe ficará bem agora...";
+			mes "Eu quero recompensá-lo...";
+			mes "Mas o que seria bom...?";
+			next;
+			mes "[Ishida Yoshinaga]";
+			mes "Tudo bem, eu vou lhe dar";
+			mes "uma Permissão de Trânsito.";
+			mes "Você pode ir a qualquer lugar";
+			mes "com este bilhete.";
+			next;
+			set event_amatsu,6;
+			completequest 8135;
+			delitem 1022,1; //Fox_Tail
+			getitem 7160,1; //Lord's_Passable_Ticket
+			mes "[Ishida Yoshinaga]";
+			mes "Não é uma grande recompensa, mas";
+			mes "algum dia será útil para você.";
+			mes "Pergunte ao meu soldado, 'Jyuro', sobre os detalhes.";
+			close;
+		}
+		mes "[Ishida Yoshinaga]";
+		mes "Hmm, ouvi dizer que minha mãe";
+		mes "melhorou... mas";
+		mes "como posso saber se você a";
+		mes "curou ou não?";
+		next;
+		mes "[Ishida Yoshinaga]";
+		mes "Existe alguma evidência para provar";
+		mes "que você a curou?";
+		next;
+		mes "[Ishida Yoshinaga]";
+		mes "Mostre-me a evidência que comprove";
+		mes "seu tratamento. Tenho";
+		mes "conhecido muitos estrangeiros.";
+		mes "Mas nem todos são confiáveis.";
+		mes "Bem... Divirta-se.";
+		close;
+	}
+	else if (event_amatsu == 6) {
+		mes "[Ishida Yoshinaga]";
+		mes "*Risada* Divirta-se";
+		mes "em Amatsu.....";
+		mes "Estrangeiros são sempre bem-vindos.";
+		close;
+	}
+	mes "[Ishida Yoshinaga]";
+	mes "Como está o estado da minha mãe?";
+	mes "Se você descobrir o nome da doença, por favor, me conte.";
+	mes "Fiquei preocupado com";
+	mes "ela a noite toda.";
+	next;
+	mes "[Ishida Yoshinaga]";
+	mes "Porque você carrega consigo";
+	mes "conhecimento de Midgard,";
+	mes "tenho fé na sua habilidade.";
+	close;
+}
+	
+ama_in01,22,111,0	script	Grandma#ama2	761,{
+	if (event_amatsu == 4) {
+		mes "[....]";
+		mes "^FF6060Uivo, Uivo, outro humano";
+		mes "tolo! O que você vai fazer";
+		mes "para se livrar de mim!?^000000";
+		next;
+		mes "[....]";
+		mes "^FF6060Parece que você aprendeu";
+		mes "algo em algum lugar, mas";
+		mes "isso não vai me machucar!! Uivo!^000000";
+		next;
+		select("Taaaah!!");
+		if (BaseJob == Job_Priest) {
+			if (rand(1,4) == 1)
+				set .@fox_kill,0;
+			else
+				set .@fox_kill,1;
+		}
+		else if (BaseJob == Job_Acolyte || BaseJob == Job_Monk || countitem(523) > 0 || countitem(948) > 0 || countitem(1029) > 0) {
+			if (rand(1,2) == 1)
+				set .@fox_kill,0;
+			else
+				set .@fox_kill,1;
+		}
+		else {
+			if (rand(1,4) == 1)
+				set .@fox_kill,1;
+			else
+				set .@fox_kill,0;
+		}
+		if (.@fox_kill == 1) {
+			mes "[....]";
+			mes "^FF6060Uivo! Uivo! Uivo! Humano!";
+			mes "Me expulsar deste corpo assim!";
+			mes "Maldito seja! Desgraçado!!^000000";
+			next;
+			mes "[....]";
+			mes "^FF6060Eu amaldiçoarei a família Ishida";
+			mes "que me fez ficar assim! Para sempre!";
+			mes "É melhor tomar cuidado, humano!^000000";
+			next;
+			monster "ama_in01",22,111,"Nine Tails",1180,1;
+			killmonsterall "ama_in01";
+			set event_amatsu,5;
+			changequest 8134,8135;
+			getitem 1022,1; //Fox_Tail
+			mes "[....]";
+			mes "^FF6060Tudo o que";
+			mes "Yoshinaga fizer lhe causará";
+			mes "infelicidade...^000000";
+			mes "^FF0000Uaaaaaaaaaaaaap!!^000000";
+			close;
+		}
+		mes "[....]";
+		mes "^FF6060Uivo! Haha! Uivo! Hahaha!";
+		mes "Está tentando me expulsar deste corpo!?";
+		mes "Xô!! Uivo!^000000";
+		close2;
+		warp "amatsu",167,197;
+		end;
+	}
+	else if (event_amatsu == 5) {
+		mes "[Ishida Saoko]";
+		mes "...Hã? Por que você está aqui...?";
+		mes "*Urrmmm* Minha cabeça dói...";
+		mes "Mas estou começando a me lembrar de tudo...";
+		next;
+		mes "[Ishida Saoko]";
+		mes "Obrigado, viajante de uma terra";
+		mes "distante. Tenho uma grande dívida com você... Muito obrigada...";
+		next;
+		mes "[Ishida Saoko]";
+		mes "Vou dizer ao meu filho que";
+		mes "você exorcizou a raposa...";
+		mes "Obrigado...";
+		next;
+		mes "[Ishida Saoko]";
+		mes "Devo descansar um pouco.";
+		mes "Minha cabeça dói, jovem.....";
+		mes "Vá até meu filho...";
+		close;
+	}
+	else if (event_amatsu == 6) {
+		mes "[Ishida Saoko]";
+		mes "Oh, é você...? Você é quem";
+		mes "exorcizou a raposa... Bem-vindo.";
+		mes "Por favor, sente-se...";
+		next;
+		mes "[Ishida Saoko]";
+		mes "Pensando bem, ser possuída";
+		mes "pela raposa foi minha culpa. Eu criei";
+		mes "mal o meu filho... Oh~";
+		mes "Ele era um bom menino quando era";
+		mes "pequeno. Eu não fui rigorosa com ele...";
+		next;
+		mes "[Ishida Saoko]";
+		mes "Há muito tempo, esta cidade não era tão grande";
+		mes "como é hoje. Não havia um grande";
+		mes "palácio como Toukoujyo. Então, um";
+		mes "dia, meu filho trouxe grandes riquezas";
+		mes "para a vila. Ele nunca me contou o que fez para ganhar essa fortuna...";
+		next;
+		mes "[Ishida Saoko]";
+		mes "Ele construiu o palácio e ajudou";
+		mes "os habitantes e fez a cidade crescer.";
+		mes "Ele era perfeito até...";
+		mes "começar a fazer coisas estranhas.";
+		next;
+		mes "[Ishida Saoko]";
+		mes "Coisas... que irritaram a Deus.";
+		mes "Ele aprendeu magia proibida,";
+		mes "realizou experimentos";
+		mes "no palácio, enjaulou monstros,";
+		mes "fez todo tipo de coisas horríveis...";
+		next;
+		mes "[Ishida Saoko]";
+		mes "Essa é a razão pela qual existem";
+		mes "monstros em Toukoujyo... Finalmente,";
+		mes "a ira de Deus foi desencadeada. Até o Sacerdote no santuário não pôde ajudar...";
+		next;
+		mes "[Ishida Saoko]";
+		mes "Por fim, a raiva voltou-se";
+		mes "contra mim... Parece que Deus tentou avisar meu filho com a raposa.";
+		mes "No entanto, meu filho não vai parar.";
+		next;
+		mes "[Ishida Saoko]";
+		mes "Se não for pedir muito, por favor, pare meu filho.";
+		mes "Eu não tenho muito tempo.";
+		mes "Não sei o que fazer...";
+		mes "Por favor, salve esta vila pacífica.";
+		mes "Eu imploro, por favor...";
+		mes "O que ele está realmente pensando...?";
+		close;
+	}
+	mes "[....]";
+	mes "^FF6060Uivo, Uivo, outro humano tolo!";
+	mes "Uivo, Uivo, Quem! Humano!?";
+	mes "O que você está fazendo!";
+	mes "Xô... Uivo! Uivo!^000000";
+	next;
+	mes "[....]";
+	mes "^FF6060Eu estarei aqui até";
+	mes "que a linhagem da família Ishida se extinga!";
+	mes "Não me perturbe! Uivo!^000000";
+	close2;
+	warp "amatsu",167,197;
+	end;
+}
+	
+amatsu,189,166,5	script	Kouji#ama	764,{
+	mes "[Kouji]";
+	mes "Ralralrah Ralralrah Ralralrahralralrah~";
+	mes "Ralralrah Ralralrah Ralralrahralralrah~";
+	next;
+	mes "[Kouji]";
+	if (event_amatsu == 1) {
+		mes "Quando você está doente, bolinhos de arroz não fazem bem~";
+		mes "A família é a melhor ajuda, como deve ser~";
+		mes "Quando a medicina não ajuda, é quando você verá~";
+		mes "Que o amor da mamãe é o melhor para mim~";
+	}
+	else if (event_amatsu == 2) {
+		set event_amatsu,3;
+		mes "Sacerdote, Sacerdote~";
+		mes "Uma raposa está me seguindo!";
+		mes "É engraçado e um pouco absurdo,";
+		mes "Mas vou precisar de macarrão com tofu frito!";
+	}
+	else if (event_amatsu == 3) {
+		mes "Sacerdote, Sacerdote~";
+		mes "Uma raposa está me seguindo!";
+		mes "Se ele não for embora quando eu gritar e berrar!";
+		mes "O Sacerdote do Santuário Norte deve me ajudar~";
+		if (isbegin_quest(8132) == 1)
+			changequest 8132,8133;
+	}
+	else if (event_amatsu == 4) {
+		mes "Sacerdote, Sacerdote~";
+		mes "Uma raposa está me seguindo.";
+		mes "Se apenas gritos não assustarem a Raposa,";
+		mes "Talvez eu precise de ajuda do Tigre e do Urso~!";
+		next;
+		mes "[Kouji]";
+		mes "Mais alguma coisa que eu precise nesta luta???";
+		mes "Talvez um pouco de água de um Noviço~!";
+	}
+	else if (event_amatsu == 5) {
+		mes "Assustador, assustador navio do porto~";
+		mes "Vazio de pessoas, cheio de tesouros~";
+		mes "Mas eu não me lembro~!";
+		mes "do resto dessa... música???";
+	}
+	else {
+		mes "Telhado azul sob o céu azul";
+		mes "Parede azul no lago azul";
+		mes "Desejos azuis em mentes azuis";
+		mes "Azul, Azul, Tudo é Azul";
+	}
+	next;
+	mes "[Kouji]";
+	mes "Ralralrah Ralralrah Ralralrahralralrah~";
+	mes "Ralralrah Ralralrah Ralralrahralralrah~";
+	close;
+}
+	
+ama_in01,169,173,1	script	Shaman#ama	769,{
+	mes "[Tokako]";
+	mes "Er, eu não sou realmente um xamã...";
+	mes "Meu amigo, Takehue-kun, me trouxe";
+	mes "aqui e me convidou para experimentar estas roupas.";
+	next;
+	mes "[Tokako]";
+	mes "Ele me pede para fazer um monte de";
+	mes "coisas estranhas, mas ele é engraçado.";
+	mes "Às vezes, não sei o que";
+	mes "ele está pensando. Ainda assim, ele é um bom amigo.";
+	next;
+	mes "[Tokako]";
+	mes "Se você estiver curioso sobre";
+	mes "algo, pergunte ao Takehue-kun.";
+	mes "Ele sabe coisas sobre";
+	mes "misticismo e ocultismo que outras pessoas não sabem.";
+	mes " ";
+	close;
+}
+	
+ama_in01,180,173,3	script	Kitsune Mask#ama	762,{
+	if (event_amatsu == 3) {
+		mes "[Takehue]";
+		mes "Ei, você é um estrangeiro.";
+		mes "Tenho certeza de que me visitou porque";
+		mes "está tendo problemas com raposas.";
+		mes "Posso ver isso em seu rosto.";
+		next;
+		mes "[Takehue]";
+		mes "Originalmente, o Sacerdote principal deveria";
+		mes "ajudá-lo, mas este santuário foi";
+		mes "abandonado há muito tempo.";
+		next;
+		mes "[Takehue]";
+		mes "É difícil expulsar uma raposa de";
+		mes "um corpo humano. Se você tiver bebida";
+		mes "e macarrão com tofu frito,";
+		mes "seria fácil, mas são difíceis de encontrar.";
+		next;
+		mes "[Takehue]";
+		mes "Eu sei um pouco sobre raposas, então deixe-me te contar algo...";
+		mes "Raposas gostam de provocar as pessoas, mas";
+		mes "é raro elas desejarem";
+		mes "vingança.";
+		mes " ";
+		next;
+		mes "[Takehue]";
+		mes "Se uma raposa busca vingança, significa que um humano a prejudicou.";
+		mes "A raposa se vingará";
+		mes "de você, de sua família,";
+		mes "e até mesmo de seus amigos próximos!";
+		next;
+		mes "[Takehue]";
+		mes "De qualquer forma, um espírito";
+		mes "mais forte expulsará a raposa de um humano.";
+		mes "Vamos, grite e me mostre o seu espírito!";
+		mes " ";
+		next;
+		select("Taaaaah!!");
+		set event_amatsu,4;
+		mes "[Takehue]";
+		mes "Bom. Mostre essa energia";
+		mes "espiritual para a raposa várias vezes.";
+		mes "Cedo ou tarde, você terá sucesso.";
+		if (isbegin_quest(8132) == 1)
+			changequest 8132,8134;
+		else if (isbegin_quest(8133) == 1)
+			changequest 8133,8134;
+		close;
+	}
+	else if (event_amatsu == 4) {
+		mes "[Takehue]";
+		mes "Não se esqueça. Você também precisa da";
+		mes "personificação de animais mais fortes";
+		mes "do que a raposa. Sem isso, sua";
+		mes "concentração não terá utilidade.";
+		close;
+	}
+	else {
+		mes "[Takehue]";
+		mes "Ei? Um estrangeiro. Este santuário";
+		mes "está sem sacerdotes há";
+		mes "muito tempo. Minha amiga, Tokako e eu vimos aqui para brincar.";
+		next;
+		mes "[Takehue]";
+		mes "Se você foi perseguido por";
+		mes "monstros, por favor, relaxe.";
+		mes "Monstros não podem vir aqui, então";
+		mes "descanse um pouco aqui.";
+		close;
+	}
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0 Rewrote parts of other/momotaro.txt to make it work.
+//=     I'm sorry for the mess, I couldn't do much better with
+//=     the current code I had.
+//= 1.1 Added Sushi Quest and Amatsu Event from cities/ [Evera]
+//= 1.2 Fixed Momotaro Quest, thanks to .~Abism0~. [Lupus]
+//============================================================ 

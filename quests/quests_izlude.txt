@@ -1,0 +1,98 @@
+//===== rAthena Script ======================================= 
+//= Quest NPCs related to Izlude
+//===== By: ================================================== 
+//= Evera and The rAthena Dev Team
+//= L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Edgar's Offer:
+//= - [Official Conversion]
+//= - Variables in use: MISC_QUEST (Bit 16)
+//===== Additional Comments: ================================= 
+//= 1.0 Initial release [Evera]
+//= 1.1 Updated to 10.3 standard. [L0ne_W0lf]
+//============================================================
+
+// Edgar's Offer :: iz_npc
+//============================================================
+-	script	::Edgar_izlude	-1,{
+	if (MISC_QUEST & 16) {
+		mes "[Edgar]";
+		mes "Então, você está indo para Alberta novamente? Deixe-me lhe dar o mesmo desconto e cobrar apenas 250 Zenys, exatamente como da última vez.";
+		mes "O que acha?";
+		next;
+		if (select("Tudo bem~!:Por que você está sendo tão legal comigo?!") == 1) {
+			if (Zeny < 250) {
+				mes "[Edgar]";
+				mes "Hum...";
+				mes "Isso não é";
+				mes "dinheiro suficiente.";
+				mes "Por que você não vai";
+				mes "conseguir mais dinheiro?";
+				close ;
+			}
+			set Zeny, Zeny-250;
+			warp "alberta",195,164;
+			end;
+		}
+		mes "[Edgar]";
+		mes "É apenas o meu jeito. Além disso, seu sorriso diabólico me lembra meu amado filho loiro que saiu de casa há anos para se tornar um marinheiro em seu próprio navio. Que Deus o abençoe, onde quer que ele esteja.";
+		close;
+	}
+	mes "[Edgar]";
+	mes "Minha cidade, Izlude, é conectada a Alberta pelo porto no oeste. Há tanto movimento entre nós que eu quase me torno um habitante de Alberta. Hehehe~";
+	next;
+	mes "[Edgar]";
+	mes "Tem um cara que conheço muito bem, Phelix, que mora em Alberta. Aquele cara é muito mesquinho... Ele cobra por tudo!";
+	next;
+	mes "[Edgar]";
+	mes "Mas ele é um cara muito legal e gosta de ajudar as outras pessoas. Ele tem um bom coração e lhe dará apoio se você pagar o preço dele.";
+	next;
+	mes "[Edgar]";
+	mes "Ultimamente, as pessoas em Alberta dizem que ele realmente está tentando ajudar o pessoal e que sua demanda por Geleias é apenas um disfarce. Bem, você deveria dar uma olhada no que ele tem a oferecer.";
+	next;
+	if (select("Pode me dizer como chegar a Alberta?:Encerrar conversa") == 1) {
+		mes "[Edgar]";
+		mes "Hã? Bem, você pode usar seus pés e simplesmente caminhar. Mas se você tiver dinheiro, eu gostaria de sugerir que pegue um navio.";
+		next;
+		if (select("Certo, entendi.:Mas estou cansado de andar e estou sem dinheiro!") == 1) {
+			mes "[Edgar]";
+			mes "Tudo bem, cuide-se~";
+			close;
+		}
+		mes "[Edgar]";
+		mes "Ok...";
+		mes "Você não quer andar E está sem dinheiro, mas ainda quer ir até lá? Ah, céus...";
+		next;
+		mes "[Edgar]";
+		mes "Tudo bem, tudo bem. Eu, sendo capitão de um navio, posso me dar ao luxo de levar você até lá por um preço menor. O que acha de 250 Zenys?";
+		next;
+		if (select("Tudo bem~!:Bah, que roubo!!") == 1) {
+			set MISC_QUEST,MISC_QUEST | 16;
+			if (Zeny < 250) {
+				mes "[Edgar]";
+				mes "Hum...";
+				mes "Isso não é";
+				mes "dinheiro suficiente.";
+				mes "Vá buscar";
+				mes "um pouco mais.";
+				close;
+			}
+			set Zeny, Zeny-250;
+			warp "alberta",195,164;
+			end;
+		}
+		mes "[Edgar]";
+		mes "Rapaz, rapaz,";
+		mes "se você acha";
+		mes "que isso é um roubo...";
+		close;
+	}
+	mes "[Edgar]";
+	mes "Sim, tudo bem.";
+	mes "Até mais~";
+	close;
+}

@@ -1,0 +1,3057 @@
+//===== rAthena Script =======================================
+//= Quest NPCs related to Ayothaya
+//===== By ===================================================
+//= Fredzilla, MasterOfMuppets
+//===== Version ==============================================
+//= 2.6
+//===== Compatible With ======================================
+//= rAthena Project
+//===== Description ==========================================
+//= [Official Conversion]
+//= Ayothaya Ring Quest
+//= Ayothaya Dungeon Quest
+//= Tom Yum Goong Quest
+//===== Comments =============================================
+//= 1.0 First Release, made with infomation from RagnaInfo
+//= 1.1 Added anti-novice protection [Lupus]
+//= 1.3 Fixed exploit [Lupus]
+//= 1.4 Updated, more close to the official. Thanks to birkiczd
+//=     Also optimized it again, remove unused global variable [Lupus]
+//= 1.5 Removed Duplicates [Silent]
+//= 1.6 Moved quests from cities/ to here:
+//=     Shrimp, Dungeon, Tom Yum Goong [Evera]
+//= 1.7 Updated the Ayothaya Ring quest to the official one [MasterOfMuppets]
+//= 1.8 Fixed experience gains to match upcoming rate adjustments. [SinSloth]
+//= 1.9 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 2.0 Rescripted Tom Yum Goong and Dungeon quest to Aegis [L0ne_W0lf]
+//=     10.3 standards.
+//= 2.0a Corrected a Typo error ";;". [Samuray22]
+//= 2.1 Added missing checkweights. [L0ne_W0lf]
+//= 2.2 Replaced effect numerics with constants. [L0ne_W0lf]
+//= 2.3 Replaced effect numerics with constants. [Samuray22]
+//= 2.4 Updated RE/Pre-RE EXP. [Euphy]
+//= 2.5 Added questlog support. [Euphy]
+//= 2.6 Added Renewal quest items. [Euphy]
+//============================================================
+
+// Ayothaya Ring Quest :: ayo_ring
+//============================================================
+ayothaya,233,105,3	script	Powerful-Looking Woman	838,2,2,{
+	if (thai_find == 14) {
+		mes "[Shuda]";
+		mes "Você encontrou";
+		mes "o Annon?";
+		next;
+		mes "[Shuda]";
+		mes "Você ainda não";
+		mes "o encontrou?";
+		mes "Então, onde diabos";
+		mes "ele está?!";
+		next;
+		mes "[Shuda]";
+		mes "Ah, bem...";
+		mes "Não tenho certeza se posso acreditar em tudo o que você disse, mas já que encontrou o anel para mim, isso basta. Obrigada pela sua ajuda.";
+		next;
+		mes "[Shuda]";
+		mes "Se por acaso encontrar o Annon durante suas viagens, diga a ele para voltar imediatamente. Pode seguir em frente e continuar suas aventuras agora~";
+		next;
+		mes "[Shuda]";
+		mes "Se eu o vir";
+		mes "novamente...";
+		mes "Ele será ^660000punido^000000...";
+		mes "^666666*range os dentes*^000000";
+		close;
+	} else if (thai_find > 2 && thai_find < 14) {
+		mes "[Shuda]";
+		mes "^666666*Suspiro...*^000000";
+		mes "Você ainda não";
+		mes "encontrou o Annon?";
+		mes "Entendo. Bem, tudo bem.";
+		mes "O tempo não é um problema para nós.";
+		next;
+		mes "[Shuda]";
+		mes "E por \"nós\", eu quero dizer \"^660000você^000000\". Não me importo com seus planos ou qualquer outra coisa que você tenha agendado, porque você vai arranjar";
+		mes "tempo para mim! Oho ho ho ho ho!";
+		close;
+	} else if (thai_find == 2) {
+		if (countitem(7288)) {
+			mes "[Shuda]";
+			mes "Ah... É ele...?!!";
+			mes "Sim, é esse mesmo!";
+			mes "Meu anel de noivado que foi";
+			mes "jogado na água por aquele estúpido do Annon!";
+			next;
+			mes "[Shuda]";
+			mes "Muito obrigada! Em sua homenagem, nossos primeiros sete filhos receberão o seu nome! Oho ho ho ho ho ho ho~";
+			next;
+			mes "[Shuda]";
+			mes "Agora...";
+			mes "Tudo o que eu preciso fazer";
+			mes "é encontrar o Annon.";
+			mes "Onde será que aquele";
+			mes "idiota se meteu?!";
+			next;
+			mes "[Shuda]";
+			mes "^666666*Ehem*^000000";
+			mes "E-Eu não queria";
+			mes "assustá-lo, tudo o que eu queria era";
+			mes "meu anel de noivado de volta.";
+			next;
+			mes "[Shuda]";
+			mes "^666666*Suspiro*^000000";
+			mes "Acho que os dias";
+			mes "de ser uma noiva feliz";
+			mes "ainda estão muito distantes para mim...";
+			next;
+			mes "^3355FFShuda olha diretamente";
+			mes "para você com um olhar pidão.^000000";
+			next;
+			switch(select("N-Não me olhe desse jeito!:Tudo bem, tudo bem.")) {
+			case 1:
+				mes "[Shuda]";
+				mes "Ah, qual é, você sabe de tudo o que aconteceu, e eu sei que você vai continuar se aventurando";
+				mes "por esta área.";
+				next;
+				mes "[Shuda]";
+				mes "Eu só estava te pedindo para encontrar o Annon enquanto faz isso. Agora, não é um favor tão pequeno? Obrigada por fazer isso por mim~";
+				next;
+				mes "[Shuda]";
+				mes "Enquanto isso, vou pensar em como vou dar o troco no Annon por me deixar na miséria! Então, apresse-se e encontre o Annon! Hoo ho ho ho ho!";
+				emotion ET_SMILE;
+				next;
+				emotion ET_THINK, playerattached();
+				mes "["+strcharinfo(0)+"]";
+				mes "(Ela é tão assustadora!";
+				mes "Me fazendo fazer coisas";
+				mes "para ela de novo...)";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "(Por que eu sempre";
+				mes "faço coisas para as outras";
+				mes "pessoas, afinal?!)";
+				break;
+			case 2:
+				mes "[Shuda]";
+				mes "Sim, eu sabia que podia contar com você! Então encontre o Annon! É o meu destino fazê-lo ^660000meu^000000. Hoo ho ho ho ho!";
+				next;
+				mes "[Shuda]";
+				mes "Não o vejo pela vila há um tempo. E não acho que ele tenha pulado na água para procurar meu anel, já que ele é muito covarde para isso. Provavelmente ele não tem coragem de me encarar sem ele.";
+				next;
+				mes "[Shuda]";
+				mes "Você poderia, por favor, dizer ao Annon que";
+				mes "eu recuperei meu anel para que ele possa voltar para mim agora? Espero que se lembre disso para mim, aventureiro.";
+				break;
+			}
+			delitem 7288,1; //Thai_Ring
+			changequest 12030,12031;
+			set thai_find,3;
+			close;
+		} else {
+			mes "[Shuda]";
+			mes "Hã...?";
+			mes "Você encontrou meu anel?";
+			mes "Mostre-me, mostre-o para mim!";
+			next;
+			mes "[Shuda]";
+			mes "O que é isso...";
+			mes "Você não trouxe nada!";
+			mes "Não minta para mim,";
+			mes "traga o meu anel!";
+			next;
+			mes "[Shuda]";
+			mes "Apresse-se e encontre";
+			mes "meu anel. Estarei esperando";
+			mes "aqui pelas boas notícias.";
+			mes "Oho ho ho ho ho~!";
+			if (checkquest(12029) == -1)
+				setquest 12029;
+			close;
+		}
+	} else if (thai_find == 1) {
+		mes "[Shuda]";
+		mes "Sinto-me um pouco mal por te pedir isso, especialmente porque você é";
+		mes "um estranho.";
+		next;
+		mes "[Shuda]";
+		mes "Mas aquele anel é muito importante para mim. Se você pudesse encontrá-lo, eu seria a mulher mais feliz de todo o mundo.";
+		next;
+		mes "[Shuda]";
+		mes "Então, por favor, eu imploro.";
+		mes "Por favor, traga meu anel de volta.";
+		mes "Eu quero viver com o Annon como um casal feliz para sempre. Você não consegue entender isso?!";
+		close;
+	} else {
+		mes "[Powerful-Looking Woman]";
+		mes "Hmm...?";
+		mes "Ah, você deve ser um dos turistas. Eu te guiaria por aqui e ouviria suas histórias sobre o mundo exterior, mas...";
+		next;
+		if (rand(0,1)) {
+			mes "[Powerful-Looking Woman]";
+			mes "Estou reeealmente";
+			mes "ocupada agora.";
+			mes "Muito ocupada mesmo.";
+			next;
+			mes "[Powerful-Looking Woman]";
+			mes "Hã...?";
+			mes "Você não acha que pareço ocupada só porque estou parada em um lugar e não me movendo?! Meu. Deus. Você é tão mal-educado!";
+			next;
+			mes "[Powerful-Looking Woman]";
+			mes "Agora, preciso encontrar meu";
+			mes "anel de noivado. Se ao menos";
+			mes "meu noivo não o tivesse";
+			mes "jogado...";
+			next;
+			switch(select("O quê...?:Mentiras~!")) {
+			case 1:
+				mes "[Powerful-Looking Woman]";
+				mes "Como assim \"o quê?\"";
+				mes "Você ainda acha que estou";
+				mes "parada por aí para minha";
+				mes "própria diversão ou algo assim?!";
+				next;
+				emotion ET_KIK, playerattached();
+				mes "["+strcharinfo(0)+"]";
+				mes "Não, não, não, não...";
+				mes "Eu quis dizer que não";
+				mes "acredito que você";
+				mes "esteja noiva de alguém!";
+				next;
+				mes "[Powerful-Looking Woman]";
+				mes "Wwwwaaaaaahhhhh!";
+				mes "Qu-quem é você para dizer";
+				mes "algo tão rude para uma dama tão gentil como eu. Vá embora, não quero falar com você!";
+				close;
+			case 2:
+				mes "[Powerful-Looking Woman]";
+				mes "Que mentiras?";
+				mes "Não vou tolerar desaforo";
+				mes "se você vier dizer algo como \"não acredito que você esteja noiva de alguém!\"";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "Opa, opa, opa~";
+				mes "Calma aí, madame.";
+				mes "Ouça-me primeiro.";
+				mes "O que eu me pergunto é...";
+				next;
+				mes "[Powerful-Looking Woman]";
+				mes "Eu sei, eu sei.";
+				mes "Você está se perguntando por que estou";
+				mes "parada perto da água, certo? Bem, é porque meu anel foi jogado lá e eu preciso";
+				mes "recuperá-lo.";
+				next;
+				mes "[Powerful-Looking Woman]";
+				mes "O que estou fazendo, falando com um turista assim? ^666666*Suspiro...*^000000 Bem, você aprendeu o que queria saber. Espero que esteja satisfeito agora.";
+				next;
+				mes "[Powerful-Looking Woman]";
+				mes "...";
+				next;
+				mes "[Powerful-Looking Woman]";
+				mes "...";
+				mes "......";
+				next;
+				mes "[Powerful-Looking Woman]";
+				mes "...";
+				mes "......";
+				mes "........Ei.";
+				next;
+				mes "[Powerful-Looking Woman]";
+				mes "Por que você está me encarando?";
+				mes "Você não tem nada para fazer?";
+				next;
+				switch(select("Não.:Não~ e você é uma garota interessante.")) {
+				case 1:
+					mes "[Powerful-Looking Woman]";
+					mes "Entendo. Hmmm...";
+					mes "Você faz o meu tipo.";
+					if (Sex == SEX_MALE) {
+						mes "Não, não, isso não significa que estou interessada em você. Além disso, estou";
+						mes "noiva.";
+					} else
+						mes "Antes que pense algo estranho, quis dizer que acho que você e eu somos bem parecidos.";
+					next;
+					mes "[Powerful-Looking Woman]";
+					mes "Deixe-me me apresentar.";
+					mes "Meu nome é Shuda, vivi em Ayothaya toda a minha vida. Já que você não tem nada para fazer, tenho";
+					mes "um favor a lhe pedir.";
+					next;
+					mes "[Shuda]";
+					mes "Meu noivo, Annon, só se interessa por coisas que não sou eu. Não entendo o porquê, e não acho que mereço ser ignorada!";
+					next;
+					mes "[Shuda]";
+					mes "^666666*Suspiro...*^000000";
+					mes "De qualquer forma, estamos noivos";
+					mes "e trocamos anéis...";
+					next;
+					mes "[Shuda]";
+					mes "Achei que ficar noivos melhoraria nosso relacionamento. Mas ele simplesmente pegou meu anel e jogou na água.";
+					next;
+					mes "[Shuda]";
+					mes "Fiquei chateada e gritei para ele recuperar meu anel, e então";
+					mes "nunca mais o vi depois daquilo.";
+					mes "Então, o que quero pedir é...";
+					next;
+					mes "[" +strcharinfo(0)+ "]";
+					mes "Você quer que";
+					mes "eu encontre seu";
+					mes "anel, não quer?";
+					next;
+					mes "[Shuda]";
+					mes "Ah...";
+					mes "Então você sabe";
+					mes "o que eu quero.";
+					mes "Isso torna tudo";
+					mes "muito mais simples.";
+					next;
+					mes "[Shuda]";
+					mes "E assim que eu recuperar";
+					mes "o anel, farei com que";
+					mes "ele me leve para um merecido";
+					mes "as férias em Jawaii...";
+					next;
+					mes "[Shuda]";
+					mes "...Onde eu vou";
+					mes "^660000escravizá-lo^000000.";
+					mes "^666666*Range os dentes*^000000";
+					next;
+					emotion ET_SURPRISE, playerattached();
+					mes "[" +strcharinfo(0)+ "]";
+					mes "(...H-Horripilante!)";
+					next;
+					mes "[Shuda]";
+					mes "Enfim, quero que você saia e encontre meu anel de noivado. Como a água é calma e parada por aqui, o anel provavelmente ainda está no fundo e não foi levado pela correnteza.";
+					next;
+					mes "[Shuda]";
+					mes "E assim, essa é a missão que tenho para você. Deve te manter entretido por um tempo. Então entre na água, e eu supervisionarei daqui.";
+					mes "Oho ho ho ho ho!";
+					emotion ET_SMILE;
+					set thai_find,1;
+					close;
+				case 2:
+					mes "[Powerful-Looking Woman]";
+					mes "^666666*Suspiro...*^000000";
+					mes "Você vai apenas ficar olhando e";
+					mes "não ajudar em nada? Achei que a palavra aventureiro fosse sinônimo";
+					mes "de 'herói', não de 'preguiçoso'.";
+					next;
+					mes "[Powerful-Looking Woman]";
+					mes "Oh, entendo...";
+					mes "Não ajuda estranhos, é isso?";
+					mes "Bem, meu nome é Shuda, uma bela donzela esperando seu anel de noivado emergir da água.";
+					next;
+					mes "[Powerful-Looking Woman]";
+					mes "Pronto...!";
+					mes "Não somos";
+					mes "mais estranhos!";
+					mes "Oho ho ho ho ho!";
+					next;
+					mes "[Shuda]";
+					mes "Você não sente pena de mim e da minha situação trágica? Se alguém ajudasse esta donzela preciosa a encontrar seu anel, ela seria a noiva mais feliz do mundo inteiro.";
+					next;
+					mes "[Shuda]";
+					mes "E seu salvador";
+					mes "seria conhecido como";
+					mes "o herói de Ayothaya.";
+					next;
+					mes "[" +strcharinfo(0)+ "]";
+					mes "...Diz o quê?!";
+					next;
+					mes "[Shuda]";
+					mes "Basicamente, você vai encontrar meu anel de noivado, e eu serei a noiva mais feliz do mundo e viveremos felizes para sempre. O que é tão difícil de entender";
+					mes "sobre isso?";
+					next;
+					mes "[Shuda]";
+					mes "Claro, Annon, meu noivo, não tem espinha dorsal e desaparece sempre que";
+					mes "digo algo um pouco mais duro. Que criancinha! Será que ele não vê que estou tentando torná-lo um homem melhor?!";
+					next;
+					mes "[" +strcharinfo(0)+ "]";
+					mes "Ele fugiu";
+					mes "de você, não foi?";
+					next;
+					mes "[Shuda]";
+					mes "Eh...?";
+					mes "O que foi isso?";
+					next;
+					mes "["+strcharinfo(0)+"]";
+					mes "^666666*Ehem*^000000";
+					mes "Você é boa demais";
+					mes "para ele.";
+					mes "(Eu mesmo teria fugido!)";
+					next;
+					mes "[Shuda]";
+					mes "Sim, sim, eu sei.";
+					mes "Mas o que importa";
+					mes "é que, assim que eu recuperar meu anel, Annon será meu permanentemente. Até que ^660000a morte nos separe^000000.";
+					next;
+					mes "[Shuda]";
+					mes "Então, você";
+					mes "vai me ajudar ou não?!";
+					mes "Se você fizer isso, eu e Annon daremos seu nome aos nossos primeiros sete filhos.";
+					next;
+					mes "[Shuda]";
+					mes "Então vá procurar debaixo d'água! Não há correnteza, então tenho certeza de que ainda está lá! O que você está esperando? Deve ser um mergulho fácil para você! Oho ho ho ho ho!";
+					if (checkquest(12029) == -1)
+						setquest 12029;
+					set thai_find,1;
+					close;
+				}
+			break;
+			}
+		} else {
+			mes "[Powerful-Looking Woman]";
+			mes "^666666*Suspiro...*^000000";
+			mes "Por que não está subindo da água? Talvez se eu mexesse com um bastão de madeira...?";
+			next;
+			mes "[Powerful-Looking Woman]";
+			mes "...?!";
+			mes "O que você";
+			mes "está olhando?!";
+			mes "Estou ocupada, então se";
+			mes "você quer algo,";
+			mes "não posso te ajudar!";
+			next;
+			mes "[Powerful-Looking Woman]";
+			mes "^666666Turistas estúpidos, correndo";
+			mes "por toda Ayothaya,";
+			mes "importunando e incomodando";
+			mes "garotas bonitas como eu...^000000";
+			close;
+		}
+	}
+
+OnTouch_:
+	if (thai_find == 0) {
+		mes "[Powerful-Looking Woman]";
+		mes "^666666*Suspiro...*^000000";
+		mes "Onde raios";
+		mes "isso foi parar!?";
+		next;
+		mes "[Powerful-Looking Woman]";
+		mes "O que você";
+		mes "está olhando?";
+		mes "Nunca viu uma donzela delicada suspirar antes? Me deixe em paz!";
+		close;
+	}
+}
+
+ayo_dun02,91,263,0	script	#Annonblood	111,2,3,{
+if (!$@annonactive) {
+	if (thai_find == 13) {
+		mes "["+strcharinfo(0)+"]";
+		mes "Uma mancha de sangue?";
+		mes "O que está acontecendo?";
+		mes "Devo dar uma olhada...";
+		next;
+		mes "^3355FFSob uma árvore gigante,";
+		mes "você encontra alguns arbustos com";
+		mes "sangue manchado em algumas";
+		mes "das folhas.^000000";
+		next;
+		mes "^3355FFDentro dos arbustos, você vê";
+		mes "que o rastro de sangue continua, como se um animal sangrando tivesse lutado para encontrar refúgio entre";
+		mes "os arbustos.^000000";
+		next;
+		mes "[" +strcharinfo(0)+ "]";
+		mes "Hmmm....";
+		next;
+		switch(select("Espalhar os arbustos.:Escavar os arbustos.")) {
+		case 1:
+			if (!rand(0,2)) {
+				mes "[" +strcharinfo(0)+ "]";
+				mes "^666666*Tosse, tosse*^000000";
+				mes "Está tão empoeirado!";
+				next;
+				mes "[?]";
+				mes "...Aaaaaah";
+				mes "Oh... Meu Deus...!";
+				next;
+				emotion ET_SURPRISE, playerattached();
+				mes "[" +strcharinfo(0)+ "]";
+				mes "Huh...?";
+				mes "Ouvi algo";
+				mes "lá debaixo! Vamos";
+				mes "escavar!";
+				next;
+				mes "^3355FFVocê puxa os arbustos,";
+				mes "^3355FFe sob a poeira e";
+				mes "^3355FFa vegetação, você encontra";
+				mes "uma pequena toca.^000000";
+				next;
+				set $@annonactive,1;
+				enablenpc "Haggard Man";
+				mes "[Haggard Man]";
+				mes "^666666*Tosse, tosse!*^000000";
+				mes "Qu...quem está aí?";
+				mes "Shuda?! Se é você,";
+				mes "fique longe, ou eu me mato!";
+				emotion ET_HUK, playerattached();
+				next;
+				switch(select("O que está fazendo aqui?:Eu não sou a Shuda!")) {
+				case 1:
+					mes "["+strcharinfo(0)+"]";
+					mes "Ei...";
+					mes "O que você está fazen--";
+					next;
+					set $@annonactive,0;
+					disablenpc "Haggard Man";
+					mes "^3355FFEle desapareceu!^000000";
+					close;
+				case 2:
+					mes "[Haggard Man]";
+					mes "Hmmm...?";
+					mes "Sinto bondade, sinceridade e um amor geral pela humanidade em sua voz. Na verdade, você não é Shuda.";
+					next;
+					mes "[Haggard Man]";
+					mes "Você não me é familiar, forasteiro. Não sei como encontrou meu esconderijo, mas se tem algo a dizer, seja breve!";
+					close;
+				}
+			} else {
+				mes "^3355FFVocê escava os arbustos, levantando";
+				mes "uma grande nuvem de poeira sufocante.^000000";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "^666666*Tosse, tosse!*^000000";
+				mes "Que grande,";
+				mes "nuvem sufocante";
+				mes "de poeira!";
+				close;
+			}
+		case 2:
+			mes "^3355FFEnquanto você escava os arbustos, o chão sob um deles desmorona e você ouve um grito";
+			mes "vindo de baixo.^000000";
+			next;
+			if (!rand(0,2)) {
+				set $@annonactive,1;
+				enablenpc "Haggard Man";
+				mes "[?]";
+				mes "^666666*Tosse, tosse*^000000";
+				mes "...M-minhas pernas!";
+				close;
+			} else {
+				mes "[" +strcharinfo(0)+ "]";
+				mes "Hmmm...?";
+				mes "Que barulho foi esse?";
+				mes "Ugh, está terrivelmente empoeirado.";
+				mes "É melhor eu parar de escavar.";
+				mes "^666666*tosse tosse tosse*^000000";
+				close;
+			}
+		}
+	} else if (thai_find == 14) {
+		mes "^3355FFVocê descobre que a toca está vazia. Parece que Annon encontrou um novo esconderijo.^000000";
+		close;
+	} else {
+		mes "^3355FFVocê encontra uma pilha de arbustos mortos sob uma árvore grande. A área ao redor dos arbustos parece terrivelmente empoeirada.^000000";
+		close;
+	}
+
+OnTouch_:
+	if (thai_find == 12) {
+		if (!rand(0,2)) {
+			emotion ET_SURPRISE, playerattached();
+			mes "[" +strcharinfo(0)+ "]";
+			mes "Huh...?";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Isso parece";
+			mes "sangue!";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Hmm...";
+			mes "Sim...";
+			mes "Isso é definitivamente sangue.";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Estranho ver";
+			mes "uma mancha de sangue em";
+			mes "um lugar como este...";
+			set thai_find,13;
+			changequest 12033,12034;
+			close;
+		}
+	}
+}
+
+}
+
+ayo_dun02,91,264,3	script	Haggard Man	841,{
+	//completequest 12034;
+	if (thai_find == 13) {
+		mes "[Haggard Man]";
+		mes "^666666*...Tosse, tosse*^000000";
+		mes "Não...! Meu esconderijo!";
+		next;
+		mes "[Haggard Man]";
+		mes "Hmmm...?";
+		mes "Estou sangrando?!";
+		mes "Oh, como isso aconteceu?";
+		mes "Meu treinamento espiritual não deveria ter sido assim...!";
+		next;
+		switch(select("Trate o ferimento dele primeiro.:É você, Annon?")) {
+		case 1:
+			mes "[" +strcharinfo(0)+ "]";
+			mes "De qualquer forma, acho que você precisa ser tratado. Deixe-me ver se tenho algumas poções.";
+			next;
+			if (countitem(504)) {
+				mes "["+strcharinfo(0)+"]";
+				mes "Ah...";
+				mes "Aqui está,";
+				mes "uma Poção Branca.";
+				delitem 504,1; //White_Potion
+				next;
+				mes "[Haggard Man]";
+				mes "Você quer dizer a Poção Branca,";
+				mes "a bebida definitiva para cura?";
+				mes "Agradeço por me fazer este favor. ^666666*Ufa*^000000 Agora, sinto-me muito melhor.";
+				next;
+				mes "[Annon]";
+				mes "Ah, minhas desculpas por não me apresentar antes.";
+				mes "Eu me chamo Annon. Você deve estar se perguntando o que estou fazendo";
+				mes "aqui debaixo da terra.";
+				next;
+				mes "[Annon]";
+				mes "Bem, estou realizando um exercício especial para meu treinamento espiritual. Embora possa ser difícil de acreditar.";
+				next;
+				mes "[Annon]";
+				mes "O quê...?";
+				mes "Shuda te enviou?! Bem...";
+				mes "Agradeço por me curar. Agora, é hora de retomar meu treinamento.";
+				next;
+				mes "[" +strcharinfo(0)+ "]";
+				specialeffect EF_CLOAKING;
+				mes "Espere, não posso deixar você ir! Você não sabe o quão difícil foi para mim te encontrar! Você não pode simplesmente ir embora!";
+				next;
+				mes "[Annon]";
+				mes "Hm? Então o que você quer? Eu imploro, não diga à Shuda que você me encontrou. Não importa o que aconteça, eu não vou voltar para ela!";
+				next;
+				mes "[Annon]";
+				mes "Eh...?";
+				mes "Você já encontrou";
+				mes "o anel dela?";
+				mes "Ooh, eu esperava que";
+				mes "ele nunca fosse encontrado.";
+				next;
+				mes "[Annon]";
+				mes "Ela provavelmente te disse que eu fugi por vergonha de perder o anel, e que se você recuperasse o anel, eu ficaria feliz em voltar, certo?";
+				next;
+				mes "[Annon]";
+				mes "Bem...";
+				mes "Eu joguei fora";
+				mes "aquele anel de propósito!";
+				mes "Estou falando sério sobre não";
+				mes "voltar para a Shuda.";
+				next;
+				mes "[Annon]";
+				mes "Parece que você deseja saber mais. Se você me prometer que não mencionará meu paradeiro";
+				mes "para Shuda, então eu explicarei.";
+				next;
+				switch(select("Você acha que o mundo gira em torno de você?:O que você quer que eu faça?")) {
+				case 1:
+					mes "[" +strcharinfo(0)+ "]";
+					mes "Você acha que o mundo";
+					mes "gira em torno de você?";
+					mes "Você não pode simplesmente fugir!";
+					next;
+					mes "[Annon]";
+					mes "Ah, eu sei, eu sei!";
+					mes "Mas você não entende. Obviamente, Shuda é linda.";
+					next;
+					mes "[Annon]";
+					mes "Mas nossos pais arranjaram nosso casamento quando ainda éramos bebês.";
+					mes "Esse tipo de arranjo não importa para mim, mas ela obviamente se importa com isso.";
+					next;
+					mes "[Annon]";
+					mes "Para ser sincero, ela me morre de";
+					mes "medo. Sempre que estou com ela,";
+					mes "não consigo evitar suar frio. E quando ela está perto, tenho pesadelos com ela. ^666666*Brrr...*^000000";
+					next;
+					mes "[Annon]";
+					mes "Ela acha engraçado me eletrocutar. E me amarra em";
+					mes "um quarto escuro e só me dá food para comer sempre que não a obedeço. Agora você entende por que eu desejo a liberdade?";
+					next;
+					mes "[Annon]";
+					mes "Claro, se você revelar a ela que me encontrou, eu retribuirei o favor. Eu imploro, apenas finja que não me encontrou, por favor?";
+					next;
+					select("...Tudo bem, tudo bem.");
+					mes "[Annon]";
+					mes "Muito obrigado!";
+					mes "Agora, para retribuir, deixe-me usar uma das habilidades que aprendi em meu treinamento espiritual.";
+					break;
+				case 2:
+					mes "[Annon]";
+					mes "Claro, o que eu quero que você faça é guardar segredo sobre mim para a Shuda. Apenas esqueça que você já me conheceu e deixe a Shuda saber que foi impossível me encontrar.";
+					next;
+					mes "[Annon]";
+					mes "Além disso, mesmo que você a ajude, tudo o que ela fará é oferecer colocar o seu nome nos filhos dela. Agora... Você realmente quer isso? Eu sei com certeza que ela e eu não teremos filhos. Já existe maldade suficiente no mundo.";
+					next;
+					mes "[Annon]";
+					mes "Agora, você deve estar se perguntando";
+					mes "como eu retribuiria o seu silêncio. Bem, deixe-me lhe mostrar uma das habilidades que aprendi em meu treinamento espiritual.";
+					break;
+				}
+				next;
+				mes "[Annon]";
+				mes "Vejamos...";
+				mes "Deixe-me torcer o";
+				mes "seu braço desta forma, e";
+				mes "aplicar pressão aqui...";
+				next;
+				mes "[" +strcharinfo(0)+ "]";
+				mes "Wahhh~!";
+				mes "Que diabos";
+				mes "você está fazendo!";
+				mes "Você está me machucando, cara!";
+				next;
+				mes "[Annon]";
+				mes "Ah, este é um tipo especial";
+				mes "de massagem. Não se preocupe, isso vai";
+				mes "aliviar sua fadiga. É algo divino, na verdade. Você verá~";
+				next;
+				mes "^3355FF*Estalo estalo estalo*";
+				mes "*Estalo estalo estalo*";
+				mes "*Crack crack crack*";
+				mes "*Crack crack crack*^000000";
+				next;
+				mes "^3355FFVocê sente como se Annon";
+				mes "tivesse realinhado cada osso do seu esqueleto, colocando-os nos lugares certos. Estranhamente, você sente um relaxamento intenso e frescor em vez de uma dor excruciante.";
+				set thai_find,14;
+				completequest 12034;
+				if (checkre(3)) {
+					if (BaseLevel < 56) getexp 900,0;
+					else if (BaseLevel > 55 && BaseLevel < 61) getexp 1050,0;
+					else if (BaseLevel > 60 && BaseLevel < 66) getexp 1868,0;
+					else if (BaseLevel > 65 && BaseLevel < 71) getexp 2741,0;
+					else if (BaseLevel > 70 && BaseLevel < 76) getexp 7075,0;
+					else if (BaseLevel > 75 && BaseLevel < 81) getexp 13024,0;
+					else if (BaseLevel > 80 && BaseLevel < 86) getexp 15034,0;
+					else if (BaseLevel > 85 && BaseLevel < 91) getexp 18205,0;
+					else getexp 40678,0;
+				} else {
+					if (BaseLevel < 56) getexp 9000,0;
+					else if (BaseLevel > 55 && BaseLevel < 61) getexp 10500,0;
+					else if (BaseLevel > 60 && BaseLevel < 66) getexp 18684,0;
+					else if (BaseLevel > 65 && BaseLevel < 71) getexp 27411,0;
+					else if (BaseLevel > 70 && BaseLevel < 76) getexp 70757,0;
+					else if (BaseLevel > 75 && BaseLevel < 81) getexp 130246,0;
+					else if (BaseLevel > 80 && BaseLevel < 86) getexp 150340,0;
+					else if (BaseLevel > 85 && BaseLevel < 91) getexp 182052,0;
+					else getexp 406786,0;
+				}
+				next;
+				mes "[" +strcharinfo(0)+ "]";
+				mes "Uau...?";
+				mes "Isso foi tão bom~";
+				mes "Parece até que minha mente";
+				mes "também foi purificada!";
+				mes "Fechado!";
+				next;
+				mes "[Annon]";
+				mes "Obrigado, muito obrigado.";
+				mes "Agora posso evitar ficar preso à Shuda, pelo menos por mais um pouco.";
+				next;
+				mes "[Annon]";
+				mes "Agora, se me dá licença,";
+				mes "preciso aproveitar para fugir";
+				mes "antes que outros me encontrem.";
+				mes "Até mais~!";
+				close2;
+				set $@annonactive,0;
+				disablenpc "Haggard Man";
+				end;
+			} else {
+				mes "[" +strcharinfo(0)+ "]";
+				mes "De jeito nenhum, de jeito nenhum.";
+				mes "Ele está gravemente";
+				mes "ferido demais para ser curado";
+				mes "com as poções normais";
+				mes "que eu tenho. Precisarei";
+				mes "de uma poção mais forte...";
+				next;
+				mes "[" +strcharinfo(0)+ "]";
+				mes "Certo, fique";
+				mes "aqui por um tempo.";
+				mes "Vou lhe trazer um";
+				mes "remédio e tratar";
+				mes "seu ferimento.";
+				next;
+				mes "[Haggard Man]";
+				mes "Não, você não precisa...";
+				mes "^666666*Tosse tosse tosse*^000000";
+				mes "E-espere, não me";
+				mes "empurre para dentro!";
+				mes "Wahhhhhh~!";
+				next;
+				set $@annonactive,0;
+				disablenpc "Haggard Man";
+				mes "[" +strcharinfo(0)+ "]";
+				mes "Certo, é hora";
+				mes "de eu brincar de médico!";
+				mes "Não tenho muito tempo!";
+				mes "Minha missão: Trazer uma";
+				mes "poção ultra poderosa para";
+				mes "esse pobre coitado~";
+				emotion ET_BEST, playerattached();
+				close;
+			}
+		case 2:
+			mes "[Haggard Man]";
+			mes "Annon...?";
+			mes "Quem é esse?";
+			mes "Nunca ouvi falar dele!";
+			mes "Eu não o conheço, tá legal!";
+			mes "Pare de atrapalhar meu treinamento!";
+			next;
+			mes "[" +strcharinfo(0)+ "]";
+			mes "Uh...";
+			mes "Hmm, não parece que você deveria estar gritando com esse tipo de ferimento. Tem certeza de que não é o Annon?";
+			next;
+			mes "[Haggard Man]";
+			mes "Eu já disse!";
+			mes "Eu nunca";
+			mes "ouvi falar dele!";
+			mes "D-deixe-me em paz!";
+			next;
+			mes "[Haggard Man]";
+			mes "Eu tenho que";
+			mes "me esconder da Shuda.";
+			mes "^666666*Chora*^000000";
+			close2;
+			set $@annonactive,0;
+			disablenpc "Haggard Man";
+			end;
+		}
+	} else {
+		mes "[Haggard Man]";
+		mes "Hã? Quem é você?";
+		mes "Este não é um lugar seguro para turistas! Você deve ir embora agora mesmo!";
+		close2;
+		set $@annonactive,0;
+		disablenpc "Haggard Man";
+		end;
+	}
+
+OnInit:
+	set $@annonactive,0;
+	disablenpc "Haggard Man";
+	end;
+}
+		
+ayothaya,253,99,3	script	Fisherman	843,{
+	if (thai_find == 1) {
+		mes "[Dannai]";
+		mes "Este lugar é conhecido por";
+		mes "estar cheio de peixes. Os peixes aqui tendem a comer tudo o que encontram,";
+		mes "então é fácil pescá-los.";
+		next;
+		mes "[Dannai]";
+		mes "Oferecemos um serviço de aluguel de varas de pesca. Toda vez que for pescar, você precisará de ^3355FF 1 Ração para Monstro^000000 como isca, e pagar";
+		mes "uma taxa de aluguel de vara de ^3355FF50 Zeny^000000.";
+		next;
+		mes "[Dannai]";
+		mes "Você gostaria";
+		mes "de tentar?";
+		next;
+		switch(select("Sim.:Não, obrigado.")) {
+		case 1:
+			if (countitem(528) && Zeny > 49) {
+				mes "^3355FFVocê lança sua";
+				mes "linha de pesca";
+				mes "na água.^000000";
+				next;
+				mes "...";
+				next;
+				mes "...";
+				mes "......";
+				next;
+				mes "^3355FFVocê fisgou um Phen!^000000";
+				next;
+				delitem 528,1; //Monster's_Feed
+				set Zeny, Zeny-50;
+				set .@randfish,rand(1,100);
+				if (.@randfish > 0 && .@randfish < 40) {
+					mes "^3355FFAo cozinhar o Phen, você";
+					mes "descobre que ele engoliu uma Pedra.^000000";
+					close2;
+					getitem 7049,1; //Stone
+					end;
+				} else if (.@randfish > 39 && .@randfish < 60) {
+					mes "^3355FFDentro do Phen,";
+					mes "você encontra uma Poção Vermelha.^000000";
+					close2;
+					getitem 501,1; //Red_Potion
+					end;
+				} else if (.@randfish > 59 && .@randfish < 70) {
+					mes "^3355FFDentro do Phen,";
+					mes "você encontra uma Poção Amarela.^000000";
+					close2;
+					getitem 503,1; //Yellow_Potion
+					end;
+				} else if (.@randfish > 69 && .@randfish < 80) {
+					mes "^3355FFNão há nada dentro...";
+					mes "Mas agora você pode comer Sushi!^000000";
+					close2;
+					getitem 551,1; //Shusi
+					end;
+				} else if (.@randfish > 79 && .@randfish < 90) {
+					mes "^3355FFVocê encontra";
+					mes "um Anel de Flor";
+					mes "dentro do Phen.^000000";
+					close2;
+					getitem 2612,1; //Flower_Ring
+					end;
+				} else if (.@randfish == 90) {
+					mes "^3355FFVocê encontra";
+					mes "um Anel de Diamante";
+					mes "dentro do Phen.^000000";
+					close2;
+					getitem 2613,1; //Diamond_Ring
+					end;
+				} else if (.@randfish > 90 && .@randfish < 101) {
+					mes "^3355FFVocê encontra um anel";
+					mes "com um nome gravado";
+					mes "dentro da aliança.^000000";
+					next;
+					mes "^3355FFVocê pega o";
+					mes "anel de noivado.^000000";
+					close2;
+					set thai_find,2;
+					changequest 12029,12030;
+					getitem 7288,1; //Thai_Ring
+					end;
+				}
+			} else {
+				mes "[Dannai]";
+				mes "Lembre-se, você precisa de ^3355FF1 Ração de Monstro^000000 para usar como isca e ^3355FF50 zenys^000000 para alugar uma vara.";
+				close;
+			}
+		case 2:
+			mes "[Dannai]";
+			mes "Sem problemas,";
+			mes "volte sempre que";
+			mes "quiser. Pescar relaxa";
+			mes "a mente e deixa você";
+			mes "em paz...";
+			close;
+		}
+		close;
+	} else if (thai_find < 1) {
+		mes "[Dannai]";
+		mes "Os peixes aqui tendem";
+		mes "a comer qualquer coisa que encontram.";
+		mes "Ao limpá-los, você pode";
+		mes "frequentemente encontrar coisas interessantes dentro.";
+		next;
+		mes "[Dannai]";
+		mes "Então, quando tiver uma chance,";
+		mes "por que não se senta, relaxa";
+		mes "e aproveita uma pescaria tranquila?";
+		close;
+	} else {
+		mes "[Dannai]";
+		mes "Bem-vindo, quanto tempo!";
+		mes "Parece que as pessoas souberam que você encontrou algum tipo de fortuna pescando aqui. Depois que a notícia se espalhou, tenho recebido muitos";
+		mes "clientes.";
+		next;
+		mes "[Dannai]";
+		mes "Eu entendo que você queira";
+		mes "pescar, mas no momento não";
+		mes "há pontos de pesca disponíveis";
+		mes "para você.";
+		next;
+		mes "[Dannai]";
+		mes "Por favor, deixe que outras";
+		mes "pessoas tenham a";
+		mes "chance de encontrar";
+		mes "suas próprias fortunas.";
+		close;
+	}
+}
+
+ayo_dun01,255,62,0	script	AyoFootprint1	139,2,0,{
+OnTouch_:
+	if (thai_find == 4) {
+		if (rand(1,3) < 2) {
+			emotion ET_SURPRISE, playerattached();
+			mes "^3355FFVocê encontra pegadas indo para o ^5C3317Norte^3355FF. Parece que alguém estava com muita pressa, exatamente como o aldeão disse!^000000";
+			set thai_find,5;
+			changequest 12032,12033;
+			close;
+		}
+	}
+	end;
+}
+
+ayo_dun01,74,142,0	script	AyoFootprint2	139,2,0,{
+OnTouch_:
+	if (thai_find == 5) {
+		if (rand(1,3) < 2) {
+			emotion ET_THINK, playerattached();
+			mes "^3355FFVocê encontra outro conjunto de pegadas. Parece que alguém estava fugindo de algo. Estas pegadas estão indo para o ^5C3317Leste^3355FF. É melhor você segui-las para ver o que";
+			mes "consegue encontrar.^000000";
+			set thai_find,6;
+			close;
+		}
+	}
+	end;
+}
+
+ayo_dun01,244,256,2	script	AyoFootprint3	139,2,0,{
+OnTouch_:
+	if (thai_find == 6) {
+		if (rand(1,3) < 2) {
+			emotion ET_STARE_ABOUT, playerattached();
+			mes "^3355FFAs pegadas terminam por esta área. Quem quer que estivesse correndo deve";
+			mes "estar exausto e tropeçou em algo. Talvez o dono das pegadas esteja por perto...^000000";
+			set thai_find,7;
+			close;
+		}
+	}
+	end;
+}
+
+ayo_dun01,17,257,0	script	AyoFootprint4	139,2,0,{
+OnTouch_:
+	if (thai_find == 7) {
+		if (rand(1,3) < 2) {
+			emotion ET_AHA, playerattached();
+			mes "^3355FFAo seguir as pegadas,";
+			mes "você chega à '^5C3317Entrada do Santuário^3355FF.' Quem quer que fosse essa pessoa, ela acabou de correr para o segundo nível.^000000";
+			set thai_find,8;
+			close;
+		}
+	}
+	end;
+}
+
+ayo_dun02,145,120,0	script	AyoFootprint5	139,2,0,{
+OnTouch_:
+	if (thai_find == 8) {
+		if (rand(1,3) < 2) {
+			mes "^3355FFVocê encontra as mesmas pegadas";
+			mes "neste lugar. Parece bem";
+			mes "perigoso, e você se pergunta por que";
+			mes "alguém viria aqui. As";
+			mes "pegadas continuam em direção";
+			mes "ao ^5C3317Norte^3355FF.^000000";
+			set thai_find,9;
+			close;
+		}
+	}
+	end;
+}
+
+ayo_dun02,135,168,0	script	AyoFootprint6	139,0,2,{
+OnTouch_:
+	if (thai_find == 9) {
+		if (rand(1,3) == 1) {
+			emotion ET_SURPRISE, playerattached();
+			mes "^3355FFO rastro de pegadas";
+			mes "continua aqui, e parece";
+			mes "estar mais recente.^000000.";
+			next;
+			mes "^3355FFHmm...?";
+			mes "Tem algo aqui...^000000";
+			next;
+			switch(select("Ignorar.:^5C3317Investigar.^000000")) {
+			case 1:
+				mes "["+strcharinfo(0)+"]";
+				mes "Bem, provavelmente não é nada. Mas por qual caminho devo seguir agora?";
+				set thai_find,10;
+				close;
+			case 2:
+				set .@randayo,rand(1,10);
+				if (.@randayo < 2) {
+					mes "["+strcharinfo(0)+"]";
+					mes "Ora, este é um pacote de Poções Brancas. Quem quer que fosse o dono deve ter deixado cair por acidente. Hmm, eu poderia usar isso depois...";
+					next;
+					mes "["+strcharinfo(0)+"]";
+					mes "Espere...";
+					mes "Há mais";
+					mes "pegadas indo";
+					mes "em direção ao ^5C3317Leste^000000.";
+					mes "É melhor eu";
+					mes "verificar isso.";
+					set thai_find,10;
+					getitem 504,10; //White_Potion
+					close;
+				} else if (.@randayo > 2 && .@randayo < 5) {
+					mes "["+strcharinfo(0)+"]";
+					mes "Ora, este é um pacote de Poções Amarelas. Quem quer que fosse o dono deve ter deixado cair por acidente. Hmm, eu poderia usar isso depois...";
+					next;
+					mes "["+strcharinfo(0)+"]";
+					mes "Espere...";
+					mes "Há mais";
+					mes "pegadas indo";
+					mes "em direção ao ^5C3317Leste^000000.";
+					mes "É melhor eu";
+					mes "verificar isso.";
+					set thai_find,10;
+					getitem 503,10; //Yellow potion
+					close;
+				} else {
+					mes "[Rat]";
+					mes "^FF0000Squeak!";
+					mes "^FF0000Squeak Squeak!^000000";
+					emotion ET_HUK, playerattached();
+					next;
+					mes "["+strcharinfo(0)+"]";
+					mes "^8C1717Wah^000000!";
+					mes "O que foi isso?!";
+					next;
+					mes "^3355FFEra apenas um rato.";
+					mes "Parece muito bobo ficar com medo de um simples ratinho, não é?^000000";
+					next;
+					mes "^3355FFVocê encontra outro rastro";
+					mes "de pegadas que vai";
+					mes "em direção ao ^5C3317Leste^3355FF.^000000";
+					set thai_find,10;
+					close;
+				}
+			}
+			close;
+		}
+	}
+	end;
+}
+
+ayo_dun02,77,213,0	script	AyoFootprint7	139,1,1,{
+OnTouch_:
+	if (thai_find == 10) {
+		if (rand(1,3) < 2) {
+			emotion ET_SURPRISE, playerattached();
+			mes "^3355FFOnde ele está...?";
+			mes "Ele parece ter ido";
+			mes "fundo na masmorra.";
+			mes "Só de procurar por esse";
+			mes "cara já estou exausto...^000000";
+			set thai_find,11;
+			close;
+		}
+	}
+	end;
+}
+
+ayo_dun02,86,254,0	script	AyoFootprint8	139,1,1,{
+OnTouch_:
+	if (thai_find == 11) {
+		if (rand(1,3) < 2) {
+			emotion ET_SURPRISE, playerattached();
+			mes "^3355FFVocê encontra vestígios de sangue. Quem quer que estivesse correndo nesta direção pode estar ferido. O rastro de sangue leva ao ^5C3317Norte^3355FF.^000000";
+			changequest 12032,12033;
+			set thai_find,12;
+			close;
+		}
+	}
+	end;
+}
+
+ayothaya,193,171,3	script	Old Man#02	842,{
+	if (thai_find == 3) {
+		mes "[Tham]";
+		mes "Estranho...";
+		mes "Por que aquele cara";
+		mes "estava correndo para o";
+		mes "santuário daquele jeito?";
+		mes "Isso realmente";
+		mes "me incomoda...";
+		next;
+		mes "[Tham]";
+		emotion ET_SURPRISE;
+		mes "Ah, você não é";
+		mes "de Midgard?";
+		mes "Olá~";
+		next;
+		mes "[Tham]";
+		mes "Ah...";
+		mes "Você me ouviu falando sozinho? Bem, eu não vi quem era, mas um cara correu para a floresta que leva ao santuário. Ele parecia muito aterrorizado com alguma coisa.";
+		next;
+		mes "[Tham]";
+		mes "Ele surgiu do nada, então me deu um baita susto. Você acha que ele poderia ser um criminoso?";
+		next;
+		mes "[Tham]";
+		emotion ET_AHA;
+		mes "Ah! Acho que, em seu medo intenso, ele estava gritando algo sobre algum tipo de '^FF0000Shuda^000000', ou algo assim. Mas o que isso poderia significar?";
+		next;
+		mes "[Tham]";
+		mes "Bem, não se preocupe. Nem todos os nossos aldeões são assim. De qualquer forma, espero que você aproveite suas viagens em Ayothaya.";
+		set thai_find,4;
+		changequest 12031,12032;
+		close;
+	} else {
+		set .@randayo,rand(1,7);
+		if (.@randayo < 5) {
+			mes "[Tham]";
+			mes "Oh, olá~";
+			mes "Pelas suas roupas, posso dizer que você deve ser de Midgard.";
+			next;
+			mes "[Tham]";
+			mes "Recentemente, parece que";
+			mes "nossa vila tem recebido";
+			mes "mais turismo, e posso ver que";
+			mes "nossa vila está sendo influenciada";
+			mes "de uma maneira positiva.";
+			next;
+			mes "[Tham]";
+			mes "Ah...";
+			mes "Enquanto você estiver aqui,";
+			mes "por que não experimenta um pouco da";
+			mes "autêntica culinária de Ayothaya";
+			mes "para você mesmo?";
+			next;
+			mes "[Tham]";
+			mes "Somos conhecidos por nossos";
+			mes "frutos do mar apimentados e doces,";
+			mes "e há ótimos";
+			mes "restaurantes por aqui.";
+			next;
+			mes "[Tham]";
+			mes "De qualquer forma, tenho certeza de que você vai gostar. Espero que você venha visitar Ayothaya sempre que puder~";
+			close;
+		} else if (.@randayo > 4 && .@randayo < 7) {
+			mes "[Tham]";
+			mes "Ah~";
+			mes "Estou com um desejo da comida da Sra. Mali, a Apimentada, especialmente seu 'Tom Yum Goong'.";
+			next;
+			mes "[Tham]";
+			mes "Acho que é o";
+			mes "prato mais delicioso";
+			mes "de todo o mundo!";
+			close;
+		} else {
+			mes "[Tham]";
+			mes "Oh, olá~";
+			mes "Pelas suas roupas, posso dizer que você deve ser de Midgard.";
+			next;
+			mes "[Tham]";
+			mes "Espero que aproveite sua estadia aqui e que venha visitar Ayothaya sempre que puder~";
+			close;
+		}
+	}
+}
+
+// Ayothaya Dungeon Quest :: ayo_tiger
+//============================================================
+ayothaya,83,132,0	script	Dusit#thai	843,{
+	if (ayodunquest == 0) {
+		mes "[Dusit]";
+		mes "Oh...!";
+		mes "Você deve ser um viajante.";
+		mes "Tenho um conto que talvez queira ouvir, se estiver interessado.";
+		next;
+		if (select("O que é?:Eu sei qual é a história.") == 1) {
+			mes "[Dusit]";
+			mes "Ayothaya tem uma longa história. Talvez pareça calma e pacífica agora, mas, no passado, nossa vila foi aterrorizada por uma criatura terrível.";
+			next;
+			mes "[Dusit]";
+			mes "Esta besta é conhecida por nós como";
+			mes "o ^660000Tigre Sa-mhing^000000, que costumava";
+			mes "habitar as profundezas das ruínas antigas.";
+			next;
+			mes "[Dusit]";
+			mes "O Tigre Sa-mhing é viciado";
+			mes "no gosto da carne humana. Ele é conhecido por se transformar na forma de uma pessoa que comeu para atrair seus familiares e amigos.";
+			next;
+			mes "[Dusit]";
+			mes "O povo local ainda teme que a criatura possa se transformar em alguém que conhecem e entrar furtivamente em suas casas para devorá-los.";
+			next;
+			mes "[Dusit]";
+			mes "No entanto, existe uma maneira de identificar o Tigre Sa-mhing de um ser humano. Como é um tigre, ele não consegue fazer algumas coisas";
+			mes "que os humanos aprendem,";
+			mes "como acender um fósforo.";
+			next;
+			mes "[Dusit]";
+			mes "Então, se por acaso você vir";
+			mes "um amigo agindo de forma estranha";
+			mes "de repente, peça para ele acender";
+			mes "um fósforo. Certifique-se de que ele não seja";
+			mes "o Tigre Sa-mhing.";
+			next;
+			mes "[Dusit]";
+			mes "Contudo...";
+			mes "Não tenho certeza se isso realmente funciona. Acho que o melhor a fazer é apenas correr por sua vida se você suspeitar que alguém seja";
+			mes "o Tigre Sa-mhing.";
+			next;
+			mes "[Dusit]";
+			mes "Você acredita";
+			mes "na existência";
+			mes "de tigres devoradores de homens?";
+			next;
+			if (select("Bem, não exatamente.:Sim, acredito, e acho que são assustadores!") == 1) {
+				mes "[Dusit]";
+				mes "Hmm...";
+				mes "Bem, meu falecido avô me contou sobre o Tigre Sa-mhing quando";
+				mes "eu era uma criança pequena. Claro,";
+				mes "eu nunca o vi.";
+				next;
+				mes "[Dusit]";
+				mes "A coisa mais parecida que vi com o Tigre Sa-mhing foi um gato dourado com um sino. De alguma forma, não acho que ele comia homens.";
+				close;
+			}
+			mes "[Dusit]";
+			mes "Corra pela sua vida se você encontrar o Tigre Sa-mhing!";
+			mes "Ele vai te comer vivo!";
+			next;
+			mes "[Dusit]";
+			mes "Se você tem interesse em descobrir";
+			mes "mais sobre essa história, posso lhe apresentar alguém que";
+			mes "conhece essa criatura melhor do que";
+			mes "qualquer outra pessoa.";
+			next;
+			mes "[Dusit]";
+			mes "Por que você não fala com Boonthom? Ele é uma pessoa bem estranha, mas há algo nele...";
+			next;
+			mes "[Dusit]";
+			mes "...";
+			mes "......";
+			next;
+			mes "[Dusit]";
+			mes "Ah, bem, você entenderá do que estou falando. Espero que ele possa ajudá-lo a aprender mais sobre essa criatura maligna.";
+			set ayodunquest,1;
+			setquest 12035;
+			close;
+		}
+		mes "[Dusit]";
+		mes "Você quer saber agora?";
+		mes "Então tome cuidado!";
+		mes "Ele vai te comer vivo!";
+		close;
+	} else if (ayodunquest > 0) {
+		mes "[Dusit]";
+		mes "Como vai você?";
+		mes "Se você se interessa";
+		mes "pelo Tigre Sa-mhing,";
+		mes "por favor, fale com Boonthom.";
+		next;
+		mes "[Dusit]";
+		mes "Mas cuidado!";
+		mes "O Tigre Sa-mhing pode estar";
+		mes "mais perto de você do que imagina!";
+		close;
+	}
+}
+
+ayo_in01,181,193,4	script	Shaman#thai	840,{
+
+	// For both parts of the quest:
+	// - Pre-Renewal requires Needle Packet and Spool.
+	// - Renewal requires Fabric and Nine Tails.
+	if (checkre(0))
+		setarray .@items[0],7213,7217; //Needle_Pouch, Spool
+	else
+		setarray .@items[0],1059,1022; //Transparent_Cloth, Fox_Tail
+
+	if (ayodunquest == 1) {
+		mes "[Boonthom]";
+		mes "Você...!";
+		mes "Não é....!";
+		mes "Oooooohhhhhhh!";
+		next;
+		mes "[Boonthom]";
+		mes "Oh...?";
+		next;
+		mes "[Boonthom]";
+		mes "...";
+		next;
+		mes "[Boonthom]";
+		mes "...";
+		mes "......";
+		next;
+		mes "[Boonthom]";
+		mes "...";
+		mes "......";
+		mes ".........";
+		next;
+		mes "[Boonthom]";
+		mes "Deixa para lá.";
+		mes "Hah! Perdi o fio";
+		mes "da meada.";
+		next;
+		mes "[Boonthom]";
+		mes "Então, você veio até mim buscando ajuda? Posso ver o medo em seus olhos. Deixe-me olhar para sua alma e ver por mim mesmo qual é o seu medo. Hmmm...";
+		next;
+		mes "[Boonthom]";
+		mes "...";
+		next;
+		mes "[Boonthom]";
+		mes "...";
+		mes "......";
+		next;
+		mes "[Boonthom]";
+		mes "...";
+		mes "......";
+		mes ".........";
+		next;
+		mes "[Boonthom]";
+		mes "O que...!";
+		mes "Vejo que você teme o Tigre Sa-mhing! Não ouço notícias desse monstro há muito tempo...";
+		next;
+		mes "[Boonthom]";
+		mes "Há muito tempo,";
+		mes "o Tigre Sa-mhing";
+		mes "realmente vagava pela vila";
+		mes "e comia pessoas inocentes.";
+		next;
+		mes "[Boonthom]";
+		mes "No entanto, seu terror";
+		mes "chegou ao fim quando ele";
+		mes "foi finalmente capturado. Eu fui um dos envolvidos na captura do Tigre Sa-mhing.";
+		next;
+		mes "[Boonthom]";
+		mes "Eu insisti em matá-lo, mas as outras pessoas estavam com medo demais para fazê-lo. Em vez disso, o Tigre Sa-mhing";
+		mes "foi trancado em uma caverna dentro das ruínas antigas.";
+		next;
+		mes "[Boonthom]";
+		mes "Acredito que isso foi há pelo menos 10 anos. Talvez ele já esteja morto agora. No entanto, ninguém";
+		mes "sabe o quão poderoso o tigre realmente";
+		mes "é. Ele ainda pode estar vivo.";
+		next;
+		mes "[Boonthom]";
+		mes "Não acho que precisemos nos preocupar, no entanto. Ele está trancado e lá deverá permanecer.";
+		next;
+		switch(select("Quero explorar as ruínas antigas.:Trancado! Ótimo! Não estou com medo!")) {
+		case 1:
+			mes "[Boonthom]";
+			mes "Você...";
+			mes "Você é estranho.";
+			mes "Você quer explorar as ruínas antigas. Todos os aventureiros ignoram a própria segurança desse jeito?";
+			next;
+			mes "[Boonthom]";
+			mes "A escolha é sua. Mas lembre-se, é muito perigoso seguir pelo caminho até o centro do edifício. Normalmente, eu proíbo isso.";
+			next;
+			mes "[Boonthom]";
+			mes "Mas se você quer entrar,";
+			mes "posso lhe dar algumas dicas úteis.";
+			mes "Gostaria de ouvir?";
+			next;
+			if (select("Se é tão perigoso assim, prefiro não tentar.:Com certeza!") == 1) {
+				mes "[Boonthom]";
+				mes "Você tomou uma boa decisão.";
+				mes "É melhor ter cuidado se";
+				mes "você quiser continuar vivo.";
+				close;
+			}
+			mes "[Boonthom]";
+			mes "Hum, tudo bem.";
+			mes "Já que você está";
+			mes "tão interessado...";
+			next;
+			mes "[Boonthom]";
+			mes "Se deseja entrar no edifício antigo, você deve ter proteção contra espíritos malignos e malícia.";
+			next;
+			if (Class == Job_Priest || Class == Job_Acolyte || Class == Job_Crusader) {
+				mes "[Boonthom]";
+				mes "Mesmo que você saiba";
+				mes "manejar o poder da";
+				mes "santidade, ainda precisará da proteção espiritual de nossa terra.";
+			} else {
+				mes "[Boonthom]";
+				mes "Existem muitos fantasmas e";
+				mes "demônios dentro da caverna, e eles atacarão pessoas que não possuem poder sagrado... Como você.";
+			}
+			next;
+			mes "[Boonthom]";
+			mes "Posso fazer um objeto para você";
+			mes "contendo esse poder sagrado, se desejar. Para criá-lo, precisarei de alguns materiais.";
+			next;
+			mes "[Boonthom]";
+			mes "^3366991"+getitemname(.@items[0])+"^000000,";
+			mes "^3366991"+getitemname(.@items[1])+"^000000,";
+			mes "^3366991 Casca Sólida^000000 e";
+			mes "^3366991 Água Benta^000000...";
+			mes "É tudo que preciso.";
+			next;
+			mes "[Boonthom]";
+			mes "Por favor, volte";
+			mes "quando tiver preparado todos";
+			mes "os materiais.";
+			set ayodunquest,2;
+			changequest 12035,12036;
+			close;
+		}
+		mes "[Boonthom]";
+		mes "Hmmm...";
+		mes "Não tem medo";
+		mes "disso, tem?";
+		next;
+		mes "[Boonthom]";
+		mes "............";
+		mes "............";
+		close;
+	} else if (ayodunquest == 2) {
+		if (countitem(.@items[0]) > 0 && countitem(.@items[1]) > 0 && countitem(7190) > 0 && countitem(523) > 0) {
+			mes "[Boonthom]";
+			mes "Excelente!";
+			mes "Agora você trouxe";
+			mes "tudo o que preciso. Deixe-me fazer";
+			mes "o item para você, como prometido...";
+			next;
+			mes "[Boonthom]";
+			mes "Ooooohmmmmm...";
+			next;
+			mes "[Boonthom]";
+			mes "Hmmmmmm...";
+			mes "Hmmmmmmmmm.";
+			next;
+			mes "[Boonthom]";
+			mes "Pffff pffff...";
+			next;
+			mes "[Boonthom]";
+			mes "Aqui está.";
+			mes "Por favor, aceite estes fios sagrados.";
+			mes "Com isso, você poderá entrar nas ruínas com menos preocupação.";
+			delitem .@items[0],1;
+			delitem .@items[1],1;
+			delitem 7190,1; //Solid_Peeling
+			delitem 523,1; //Holy_Water
+			set ayodunquest,3;
+			changequest 12036,12037;
+			getitem 7285,1; //Thread_Skein
+			next;
+			mes "[Boonthom]";
+			mes "Mesmo que perca isto, não se preocupe. Apenas traga-me os materiais e";
+			mes "farei outro para você.";
+			next;
+			mes "[Boonthom]";
+			mes "O edifício antigo consiste";
+			mes "de 2 níveis. Antes de entrar no 2º nível subterrâneo, por favor, volte até mim para que eu possa lhe dizer como entrar naquele lugar.";
+			close;
+		}
+		mes "[Boonthom]";
+		mes "Você esqueceu quais materiais";
+		mes "precisa para criar meu objeto de poder sagrado? Por favor, ouça";
+		mes "com atenção desta vez.";
+		next;
+		mes "[Boonthom]";
+		mes "^3366991"+getitemname(.@items[0])+"^000000,";
+		mes "^3366991"+getitemname(.@items[1])+"^000000,";
+		mes "^3366991 Casca Sólida^000000 e";
+		mes "^3366991 Água Benta^000000.";
+		next;
+		mes "[Boonthom]";
+		mes "Até mais.";
+		close;
+	} else if (ayodunquest == 3) {
+		if (countitem(.@items[0]) > 0 && countitem(.@items[1]) > 0 && countitem(7190) > 0 && countitem(523) > 0) {
+			mes "[Boonthom]";
+			mes "Excelente! Agora que você trouxe tudo o que eu preciso, deixe-me fazer o item para você, como prometi...";
+			next;
+			mes "[Boonthom]";
+			mes "Ooooohmmmmm...";
+			next;
+			mes "[Boonthom]";
+			mes "Hmmmmmm...";
+			mes "Hmmmmmmmmm.";
+			next;
+			mes "[Boonthom]";
+			mes "Pffff pffff...";
+			next;
+			mes "[Boonthom]";
+			mes "Aqui está.";
+			mes "Por favor, aceite estes fios sagrados.";
+			mes "Com isso, você poderá entrar nas ruínas com menos preocupação.";
+			delitem .@items[0],1;
+			delitem .@items[1],1;
+			delitem 7190,1; //Solid_Peeling
+			delitem 523,1; //Holy_Water
+			getitem 7285,1; //Thread_Skein
+			next;
+			mes "[Boonthom]";
+			mes "Mesmo que perca isto, não se preocupe. Apenas traga-me os materiais, eu posso fazer outro para você.";
+			close;
+		}
+		mes "[Boonthom]";
+		mes "Se você perder os fios sagrados, não se preocupe. Posso fazer outros para você. Basta reunir os seguintes itens.";
+		next;
+		mes "[Boonthom]";
+		mes "^3366991"+getitemname(.@items[0])+"^000000,";
+		mes "^3366991"+getitemname(.@items[1])+"^000000,";
+		mes "^3366991 Casca Sólida^000000 e";
+		mes "^3366991 Água Benta^000000.";
+		next;
+		mes "[Boonthom]";
+		mes "Até mais.";
+		close;
+	} else if (ayodunquest > 3 && ayodunquest < 9) {
+		mes "[Boonthom]";
+		mes "Você finalmente começou a procurar o tigre. Espero que você fique a salvo de qualquer dano.";
+		next;
+		mes "[Boonthom]";
+		mes "Sinta-se à vontade para me";
+		mes "pedir ajuda a qualquer momento.";
+		close;
+	} else if (ayodunquest == 9) {
+		mes "["+strcharinfo(0)+"]";
+		mes "Eu copiei esta";
+		mes "mensagem enquanto explorava";
+		mes "a masmorra. Você poderia";
+		mes "dar uma olhada nisto?";
+		next;
+		mes "[Stone Slate]";
+		mes "^333333Não entre no";
+		mes "2º nível subterrâneo";
+		mes "...é perigo... Você vai...";
+		mes "...encontrar... tigre...^000000";
+		next;
+		mes "[Stone Slate]";
+		mes "^333333Você deve matar... Para conseguir... DEVE... Como ir... o 2º nível subterrâneo...";
+		mes "Você precisa de mais... Poder sagrado... para... Caso contrário, é impossível...^000000";
+		next;
+		mes "[Boonthom]";
+		mes "Isso foi escrito por um dos meus companheiros que entrou nas ruínas,";
+		mes "pois ele se arrependeu de ter deixado o tigre vivo, com medo de que ele retornasse.";
+		next;
+		mes "[Boonthom]";
+		mes "Se você conseguiu encontrar este bilhete, deve ter uma forte determinação para se aventurar pelas ruínas.";
+		next;
+		mes "[Boonthom]";
+		mes "Como você pode deduzir pelo";
+		mes "bilhete, o 2º nível subterrâneo é muito, muito perigoso. Você precisará de fios sagrados que contenham ainda mais proteção sagrada.";
+		next;
+		mes "[Boonthom]";
+		mes "Agora, vá e junte alguns materiais para que eu possa criar fios sagrados mais poderosos para você.";
+		next;
+		mes "[Boonthom]";
+		mes "^3366992 Água Benta^000000,";
+		mes "^3366991 Folha de Yggdrasil^000000,";
+		mes "^3366992"+getitemname(.@items[0])+"^000000 e";
+		mes "^3366992"+getitemname(.@items[1])+"^000000.";
+		set ayodunquest,10;
+		changequest 12037,12038;
+		next;
+		mes "[Boonthom]";
+		mes "Volte para mim";
+		mes "assim que você tiver";
+		mes "reunido tudo.";
+		close;
+	} else if (ayodunquest == 10) {
+		if (countitem(523) > 1 && countitem(610) > 0 && countitem(.@items[0]) > 1 && countitem(.@items[1]) > 1) {
+			mes "[Boonthom]";
+			mes "Hmm~";
+			mes "Você trouxe";
+			mes "tudo. Bem";
+			mes "entusiasmado,";
+			mes "não é?";
+			next;
+			mes "[Boonthom]";
+			mes "Ooooohmmmmm...";
+			next;
+			mes "[Boonthom]";
+			mes "Hmmmmmm...";
+			mes "Hmmmmmmmmm.";
+			next;
+			mes "[Boonthom]";
+			mes "Pffff pffff...";
+			next;
+			mes "[Boonthom]";
+			mes "Aqui está.";
+			mes "Por favor, pegue estes fios sagrados.";
+			mes "Com isso, você poderá entrar nas ruínas com menos preocupação.";
+			delitem .@items[0],2;
+			delitem .@items[1],2;
+			delitem 610,1; //Leaf_Of_Yggdrasil
+			delitem 523,2; //Holy_Water
+			set ayodunquest,11;
+			getitem 7287,1; //Thread_Skein_
+			changequest 12038,12039;
+			next;
+			mes "[Boonthom]";
+			mes "Mesmo se você perder isso, não se preocupe. Apenas traga-me os materiais, e";
+			mes "eu farei outro para você.";
+			close;
+		}
+		mes "[Boonthom]";
+		mes "Hmm...?";
+		mes "Eu não lhe disse";
+		mes "o que preciso para fazer";
+		mes "um fio sagrado";
+		mes "mais poderoso?";
+		next;
+		mes "[Boonthom]";
+		mes "^3366992 Água Benta^000000,";
+		mes "^3366991 Folha de Yggdrasil^000000,";
+		mes "^3366992"+getitemname(.@items[0])+"^000000 e";
+		mes "^3366992"+getitemname(.@items[1])+"^000000.";
+		next;
+		mes "[Boonthom]";
+		mes "Volte para mim";
+		mes "com esses itens";
+		mes "e eu farei";
+		mes "fios sagrados mais";
+		mes "poderosos para você.";
+		close;
+	} else if (ayodunquest == 11) {
+		if (countitem(7287) > 0) {
+			mes "[Boonthom]";
+			mes "Esses fios";
+			mes "irão protegê-lo";
+			mes "dos perigos espirituais,";
+			mes "mas depende de você se";
+			mes "defender dos ataques";
+			mes "dos monstros, ok?";
+			close;
+		} else if (countitem(523) > 1 && countitem(610) > 0 && countitem(.@items[0]) > 1 && countitem(.@items[1]) > 1 && countitem(7287) == 0) {
+			mes "[Boonthom]";
+			mes "Ooooohmmmmm...";
+			next;
+			mes "[Boonthom]";
+			mes "Hmmmmmm...";
+			mes "Hmmmmmmmmm.";
+			next;
+			mes "[Boonthom]";
+			mes "Pffff pffff...";
+			next;
+			mes "[Boonthom]";
+			mes "Aqui está.";
+			mes "Por favor, pegue estes fios sagrados.";
+			mes "Com isso, você poderá entrar nas ruínas com menos preocupação.";
+			delitem .@items[0],2;
+			delitem .@items[1],2;
+			delitem 610,1; //Leaf_Of_Yggdrasil
+			delitem 523,2; //Holy_Water
+			getitem 7287,1; //Thread_Skein_
+			close;
+		}
+		mes "[Boonthom]";
+		mes "Hmm...?";
+		mes "Eu não lhe disse";
+		mes "o que preciso para fazer";
+		mes "um fio sagrado";
+		mes "mais poderoso?";
+		next;
+		mes "[Boonthom]";
+		mes "^3366992 Água Benta^000000,";
+		mes "^3366991 Folha de Yggdrasil^000000,";
+		mes "^3366992"+getitemname(.@items[0])+"^000000 e";
+		mes "^3366992"+getitemname(.@items[1])+"^000000.";
+		close;
+	} else if (ayodunquest == 12) {
+		mes "[Boonthom]";
+		mes "Huh...!";
+		mes "Você deve ter visto algo.";
+		mes "Posso dizer pela expressão sombria em seu rosto e pela sombra que paira sobre sua alma.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Eu encontrei";
+		mes "esta carta antiga";
+		mes "nas ruínas.";
+		next;
+		mes "[Old Letter]";
+		mes "^333333Querido, Boonthom... Fui um tolo... Existe o Tigre Sa-mhing... Aquele que... meus restos mortais... Por favor, leve... para Boonthom...";
+		next;
+		mes "[Boonthom]";
+		mes "Entendo...";
+		mes "Oh, meu querido";
+		mes "velho amigo...";
+		next;
+		mes "[Boonthom]";
+		mes "Obrigado por seu esforço.";
+		mes "Meu amigo deixou aquela caixa para mim.";
+		mes "Mas imagino que ele gostaria de dar essa caixa à pessoa que encontrou seus restos mortais.";
+		next;
+		mes "[Boonthom]";
+		mes "Se você deseja explorar o prédio novamente, mas não tem nenhum fio sagrado, sinta-se à vontade para me pedir a qualquer momento.";
+		set ayodunquest,13;
+		completequest 12039;
+		close;
+	} else if (ayodunquest > 12) {
+		if (countitem(7287) > 0) {
+			mes "[Boonthom]";
+			mes "Boa sorte em suas";
+			mes "expedições, bravo";
+			mes "aventureiro~";
+			close;
+		} else if (countitem(523) > 1 && countitem(610) > 0 && countitem(.@items[0]) > 1 && countitem(.@items[1]) > 1 && countitem(7287) == 0) {
+			mes "[Boonthom]";
+			mes "Perdeu os";
+			mes "fios sagrados";
+			mes "de alguma forma, não é?";
+			mes "Com os itens que você";
+			mes "tem, farei simplesmente";
+			mes "mais deles.";
+			next;
+			mes "[Boonthom]";
+			mes "Ooooohmmmmm...";
+			next;
+			mes "[Boonthom]";
+			mes "Hmmmmmm...";
+			mes "Hmmmmmmmmm.";
+			next;
+			mes "[Boonthom]";
+			mes "Pffff pffff...";
+			next;
+			mes "[Boonthom]";
+			mes "Aqui está.";
+			mes "Por favor, pegue estes fios sagrados.";
+			mes "Com isso, você poderá entrar nas ruínas com menos preocupação.";
+			delitem .@items[0],2;
+			delitem .@items[1],2;
+			delitem 610,1; //Leaf_Of_Yggdrasil
+			delitem 523,2; //Holy_Water
+			getitem 7287,1; //Thread_Skein_
+			close;
+		}
+		mes "[Boonthom]";
+		mes "Hmm...?";
+		mes "Eu não lhe disse";
+		mes "o que preciso para fazer";
+		mes "um fio sagrado";
+		mes "mais poderoso?";
+		next;
+		mes "[Boonthom]";
+		mes "^3366992 Água Benta^000000,";
+		mes "^3366991 Folha de Yggdrasil^000000,";
+		mes "^3366992"+getitemname(.@items[0])+"^000000 e";
+		mes "^3366992"+getitemname(.@items[1])+"^000000.";
+		close;
+	}
+	mes "[Boonthom]";
+	mes "Ooooohmmmmm...";
+	close;
+}
+
+ayo_fild01,129,197,0	script	Puraim#thai1	842,{
+	if ((ayodunquest > 2 && countitem(7285) > 0) || (ayodunquest > 2 && countitem(7287) > 0)) {
+		mes "[Puraim]";
+		mes "Huh...?";
+		mes "Eu sinto!";
+		mes "Eu posso sentir o";
+		mes "poder da santidade!";
+		mes "Está vindo de você!";
+		next;
+		mes "[Puraim]";
+		mes "Acho que você pode seguir";
+		mes "em frente para as ruínas. Então é";
+		mes "isso que você quer? Explorar";
+		mes "esta área?";
+		next;
+		mes "[Puraim]";
+		mes "Eu sugeriria";
+		mes "não entrar.";
+		mes "Até as pessoas locais";
+		mes "temem esta área.";
+		next;
+		mes "[Puraim]";
+		mes "Se o Tigre Sa-mhing não estivesse por perto, ainda haveria todos os espíritos malignos neste lugar. Mesmo com o fio sagrado, este lugar ainda é perigoso.";
+		next;
+		mes "[Puraim]";
+		mes "Então, o que você quer?";
+		mes "Você ainda quer";
+		mes "explorar a área,";
+		mes "aventureiro?";
+		next;
+		if (select("Sim.:Não! Estou com medo demais das ruínas agora.") == 1) {
+			mes "[Puraim]";
+			mes "Hmmm...";
+			mes "Parece que vocês, aventureiros, são tentados pela emoção do perigo,";
+			mes "ou talvez todos vocês tenham um desejo de morte.";
+			next;
+			mes "[Puraim]";
+			mes "Bem, isso não é da minha conta. Afinal, vocês já";
+			mes "possuem um espírito sagrado. Mesmo assim, tenham cuidado. Talvez não queiram ir ao 2º subnível das ruínas.";
+			next;
+			mes "[Puraim]";
+			mes "Como vocês, midgardianos,";
+			mes "costumam dizer: 'a curiosidade matou o gato'.";
+			mes "De qualquer forma, vão em frente!";
+			next;
+			mes "^3355FFEle te empurrou do morro";
+			mes "e você despenca como uma pedra.^000000";
+			close2;
+			percentheal -10,0;
+			warp "ayo_fild02",30,135;
+			end;
+		}
+		mes "[Puraim]";
+		mes "Boa decisão!";
+		mes "Como eu esperava, você é";
+		mes "inteligente o suficiente para";
+		mes "não arriscar sua vida estupidamente.";
+		close;
+	}
+	mes "[Puraim]";
+	mes "Se eu fosse você, eu nem";
+	mes "ousaria me aproximar";
+	mes "das ruínas lá embaixo.";
+	next;
+	mes "[Puraim]";
+	mes "Qualquer um que não tenha a proteção de um espírito sagrado será presa fácil para as criaturas malignas que vivem lá. Você seria morto";
+	mes "num piscar de olhos!";
+	next;
+	mes "[Puraim]";
+	mes "Volte, aventureiro.";
+	mes "Se deseja explorar";
+	mes "esta área, é melhor";
+	mes "me mostrar algum espírito sagrado.";
+	close;
+}
+
+ayo_fild02,25,154,0	script	Aik#thai	843,{
+	mes "[Aik]";
+	mes "Então, como foi sua expedição?";
+	mes "Espero que os espíritos malignos não o sigam para fora das ruínas e assombrem seus sonhos.";
+	next;
+	mes "[Aik]";
+	mes "Quando você voltar,";
+	mes "lembre-se de afastar";
+	mes "o mal da sua mente.";
+	mes "Caso contrário, você encontrará";
+	mes "problemas mais tarde...";
+	next;
+	mes "[Aik]";
+	mes "Então, você gostaria";
+	mes "de voltar?";
+	next;
+	if (select("Sim.:Não, preciso procurar mais um pouco...") == 1) {
+		mes "[Aik]";
+		mes "Tudo bem, então...";
+		mes "Vamos lá...";
+		next;
+		mes "^3355FFEle te agarrou de repente";
+		mes "e te lançou para o ar!^000000";
+		close2;
+		warp "ayo_fild01",115,200;
+		end;
+	}
+	mes "[Aik]";
+	mes "Entendo.";
+	mes "Tome cuidado.";
+	close;
+}
+
+// Water Traps
+ayo_dun01,273,26,0	script	 #th_dun1_1_1::AyoTrap1	111,0,4,{
+	mes "^3355FFVocê olha para baixo e vê uma poça";
+	mes "de água à distância. Parece ser uma queda longa até o fundo.^000000";
+	next;
+	mes "^3355FFVocê está tomado";
+	mes "de apreensão.";
+	mes "Afinal, se você cair,^000000";
+	mes "^2F2F4Fvocê pode ser morto.^000000";
+	close;
+
+OnTouch_:
+	mes "^3355FFVocê olha para baixo e vê uma poça";
+	mes "de água à distância. Parece ser uma queda longa até o fundo.^000000";
+	next;
+	mes "^3355FFVocê está tomado";
+	mes "de apreensão.";
+	mes "Afinal, se você cair,";
+	mes "^2F2F4Fvocê pode ser morto.^000000";
+	close;
+}
+
+ayo_dun01,273,27,0	duplicate(AyoTrap1)	 #th_dun1_1_2	111
+ayo_dun01,272,27,0	duplicate(AyoTrap1)	 #th_dun1_1_3	111,0,4
+ayo_dun01,272,26,0	duplicate(AyoTrap1)	 #th_dun1_1_4	111
+
+ayo_dun01,26,27,0	script	 #th_dun1_1::AyoTrap2	-1,1,1,{
+OnTouch_:
+	percentheal -100,0;
+	end;
+}
+
+ayo_dun01,28,27,0	duplicate(AyoTrap2)	 #th_dun1_2	-1,0,1
+ayo_dun01,27,25,0	duplicate(AyoTrap2)	 #th_dun1_3	-1,1,0
+ayo_dun01,25,25,0	duplicate(AyoTrap2)	 #th_dun1_4	-1
+ayo_dun01,272,273,0	duplicate(AyoTrap2)	 #th_dun1_5	-1,1,1
+ayo_dun01,274,273,0	duplicate(AyoTrap2)	 #th_dun1_6	-1,0,1
+ayo_dun01,273,271,0	duplicate(AyoTrap2)	 #th_dun1_7	-1,1,0
+ayo_dun01,271,271,0	duplicate(AyoTrap2)	 #th_dun1_8	-1
+ayo_dun01,26,273,0	duplicate(AyoTrap2)	 #th_dun1_9	-1,1,1
+ayo_dun01,28,273,0	duplicate(AyoTrap2)	 #th_dun1_10	-1,0,1
+ayo_dun01,27,271,0	duplicate(AyoTrap2)	 #th_dun1_11	-1,1,0
+ayo_dun01,25,271,0	duplicate(AyoTrap2)	 #th_dun1_12	-1
+
+// Hints
+ayo_dun01,156,148,0	script	 #hint01::AyoHint	-1,0,4,{
+OnTouch_:
+	if (rand(1,100) > 60 && ayodunquest < 11) {
+		mes "^3355FFO Fio Sagrado no seu bolso começou a brilhar de repente. Você sente que algo está perto de você...^000000";
+		close2;
+		viewpoint 1,198,164,0,0xFF0000;
+		viewpoint 1,87,16,1,0xFF0000;
+		viewpoint 1,268,214,2,0xFF0000;
+		viewpoint 1,147,274,3,0xFF0000;
+		viewpoint 1,99,118,4,0xFF0000;
+		viewpoint 1,16,188,5,0xFF0000;
+	}
+	end;
+}
+
+ayo_dun01,259,42,0	duplicate(AyoHint)	 #hint02	-1,2,0
+ayo_dun01,259,44,0	duplicate(AyoHint)	 #hint02_2	-1,2,0
+ayo_dun01,259,46,0	duplicate(AyoHint)	 #hint02_3	-1,2,0
+
+// Puzzle pieces
+ayo_dun01,198,164,0	script	 #hun_thai_1	111,{
+	if (ayodunquest == 3) {
+		set ayodunquest,4;
+		mes "^3355FFVocê encontra um pedaço de uma placa de pedra com letras gravadas nela. Parece ser a 1ª parte da placa.^000000";
+		next;
+		mes "^3355FFEstá escrito '^0000FFNão entre no 2º subnível^3355FF.' Você não consegue ler o restante da mensagem.^000000";
+		close;
+	}
+	mes "^3355FFVocê encontra um pedaço de uma placa de pedra com letras gravadas nela. Parece ser a 1ª parte da placa.^000000";
+	close;
+}
+
+ayo_dun01,87,16,0	script	 #hun_thai_2	111,{
+	if (ayodunquest == 4) {
+		set ayodunquest,5;
+		mes "^3355FFVocê encontra um pedaço de uma placa de pedra com letras gravadas nela. Parece ser a 2ª parte da placa.^000000";
+		next;
+		mes "^3355FFEstá escrito '^0000FF...é perigo... Você vai...^3355FF.' Você não consegue ler o restante da mensagem.^000000";
+		close;
+	}
+	mes "^3355FFVocê encontra um pedaço de uma placa de pedra com letras gravadas nela. Parece ser a 2ª parte da placa.^000000";
+	close;
+}
+
+ayo_dun01,268,214,0	script	 #hun_thai_3	111,{
+	if (ayodunquest == 5) {
+		set ayodunquest,6;
+		mes "^3355FFVocê encontra um pedaço de uma placa de pedra com letras gravadas nela. Parece ser a 3ª parte da placa.^000000";
+		next;
+		mes "^3355FFEstá escrito '^0000FF...encontrar... tigre...^3355FF.' Você não consegue ler o restante da mensagem.^000000";
+		close;
+	}
+	mes "^3355FFVocê encontra um pedaço de uma placa de pedra com letras gravadas nela. Parece ser a 3ª parte da placa.^000000";
+	close;
+}
+
+ayo_dun01,147,274,0	script	 #hun_thai_4	111,{
+	if (ayodunquest == 6) {
+		set ayodunquest,7;
+		mes "^3355FFVocê encontra um pedaço de uma placa de pedra com letras gravadas nela. Parece ser a 4ª parte da placa.^000000";
+		next;
+		mes "^3355FFEstá escrito '^0000FFVocê deve matar... Para conseguir... DEVE... Como ir... o 2º subnível...^3355FF' Você não consegue ler o restante da mensagem.^000000";
+		close;
+	}
+	mes "^3355FFVocê encontra um pedaço de uma placa de pedra com letras gravadas nela. Parece ser a 4ª parte da placa.^000000";
+	close;
+}
+
+ayo_dun01,99,118,0	script	 #hun_thai_5	111,{
+	if (ayodunquest == 7) {
+		set ayodunquest,8;
+		mes "^3355FFVocê encontra um pedaço de uma placa de pedra com letras gravadas nela. Parece ser a 5ª parte da placa.^000000";
+		next;
+		mes "^3355FFEstá escrito '^0000FFVocê precisa de mais... Poder sagrado... para...^3355FF' Você não consegue ler o restante da mensagem.^000000";
+		close;
+	}
+	mes "^3355FFVocê encontra um pedaço de uma placa de pedra com letras gravadas nela. Parece ser a 5ª parte da placa.^000000";
+	close;
+}
+
+ayo_dun01,16,188,0	script	 #hun_thai_6	111,{
+	if (ayodunquest == 8) {
+		set ayodunquest,9;
+		// setquest 12036;
+		mes "^3355FFVocê encontra um pedaço de uma placa de pedra com letras gravadas nela. Parece ser a última parte da placa.^000000";
+		next;
+		mes "^3355FFEstá escrito '^0000FFCaso contrário, é impossível...^3355FF' Você não consegue ler o restante da mensagem.^000000";
+		close;
+	}
+	mes "^3355FFVocê encontra um pedaço de uma placa de pedra com letras gravadas nela. Parece ser a última parte da placa.^000000";
+	close;
+}
+
+ayo_dun01,24,283,0	script	 #2_dun_in	111,{
+	if (ayodunquest > 10) {
+		if (countitem(7287) > 0) {
+			mes "^3355FFOs fios sagrados";
+			mes "emanam uma sensação poderosa";
+			mes "de segurança e proteção.";
+			mes "Com a proteção da";
+			mes "santidade, você começa sua";
+			mes "descida ao 2º nível.^000000.";
+			close2;
+			if (rand(1,10) > 5) {
+				warp "ayo_dun02",23,26;
+			} else {
+				warp "ayo_dun02",275,26;
+			}
+			end;
+		}
+		mes "^3355FFVocê encontra o que parece ser a entrada para o 2º nível. No entanto, você é tomado por uma sensação avassaladora de medo. De alguma forma, você não consegue se obrigar a descer...^000000";
+		close;
+	}
+	mes "^3355FFVocê encontra o que parece ser a entrada para o 2º nível. No entanto, você é tomado por uma sensação avassaladora de pavor. De alguma forma, você não consegue se convencer a descer...^000000";
+	close;
+}
+
+ayo_dun02,268,108,0	script	 #reward_tiger	111,{
+	if (ayodunquest == 11 && countitem(7287) > 0) {
+		mes "^3355FFVocê encontra metade dos restos mortais esqueléticos de uma pessoa saindo do chão. Parece ser o camarada de Boonthom.^000000";
+		next;
+		mes "^3355FFVocê encontra um pedaço de papel ao lado do esqueleto, bem como uma caixa.^000000";
+		next;
+		mes "^3355FFVocê lê o que está escrito na velha folha de papel. As letras desbotaram com o tempo e é difícil de ler.^000000";
+		next;
+		mes "[Old Letter]";
+		mes "^333333Caro Boonthom,";
+		mes "Eu fui um tolo. Existe o 'Sa-mhing Tig'... Aquele que... meus restos mortais... Por favor, leve... para Boonthom...";
+		next;
+		mes "^3355FFVocê pega";
+		mes "a caixa.^000000";
+		set ayodunquest,12;
+		// completequest 12039;
+		getitem 603,1; //Old_Blue_Box
+		close;
+	}
+}
+
+// Tom Tung Goong Quest :: ayo_tom
+//============================================================
+ayothaya,196,265,3	script	Einon#ayo	842,{
+	if (tomyumgoong == 0) {
+		mes "[Einon]";
+		mes "Você sabe qual é a";
+		mes "culinária mais popular";
+		mes "desta vila?";
+		next;
+		mes "[Einon]";
+		mes "Ayothaya é mundialmente famosa";
+		mes "por sua culinária regional, mas";
+		mes "de todos os pratos de Ayothaya,";
+		mes "o '^3131FFTom Yum Goong^000000' é o melhor.";
+		next;
+		mes "[Einon]";
+		mes "Tom Yum Goong é um tipo";
+		mes "de sopa que é muito apimentada. Prove uma vez e você ficará impressionado com seu sabor profundo. Prove duas vezes e ficará encantado com seu aroma tentador.";
+		next;
+		mes "[Einon]";
+		mes "É realmente um dos alimentos mais deliciosos do mundo!";
+		mes "Todo mundo no mundo";
+		mes "gostaria de experimentar isso pelo menos uma vez na vida. Então, você gostaria";
+		mes "de experimentar?";
+		next;
+		if (select("Com certeza.:Não, obrigado. Odeio comida apimentada.") == 1) {
+			mes "[Einon]";
+			mes "Tudo bem...!";
+			mes "Agora, quem seria a";
+			mes "pessoa ideal para preparar";
+			mes "um Tom Yum Goong para você?";
+			mes "Hmmmm...";
+			next;
+			mes "[Einon]";
+			mes "Todos na vila";
+			mes "sabem como fazer, mas";
+			mes "recomendo que você visite";
+			mes "a ^3131FFMali, a Apimentada^000000.";
+			next;
+			emotion ET_BEST;
+			set tomyumgoong,1;
+			setquest 8123;
+			mes "[Einon]";
+			mes "Ela é a melhor cozinheira quando se";
+			mes "trata de Tom Yum Goong!";
+			mes "Por que você não pede para";
+			mes "ela preparar um para você?";
+			close;
+		}
+		mes "[Einon]";
+		mes "Oh, entendo...";
+		mes "No entanto, quando você";
+		mes "mudar de ideia,";
+		mes "por favor, volte.";
+		close;
+	} else if (tomyumgoong == 1) {
+		mes "[Einon]";
+		mes "Ah, você quer saber";
+		mes "onde a ^3131FFMali, a Apimentada^000000 está?";
+		mes "Bem, não existem muitos lugares";
+		mes "onde uma cozinheira ficaria além de";
+		mes "um restaurante, certo? Hahaha~";
+		close;
+	}
+	mes "[Einon]";
+	mes "Dourada Ayothaya...";
+	mes "Embora eu tenha crescido";
+	mes "nesta vila,";
+	mes "ainda acho que minha vila";
+	mes "é magnífica e bela.";
+	next;
+	mes "[Einon]";
+	mes "O que você acha?";
+	mes "Não concorda comigo?";
+	close;
+}
+
+ayo_in01,145,163,3	script	Cook#ayo	839,{
+	if (tomyumgoong < 2) {
+		mes "[Mali the Spicy]";
+		mes "Olá!";
+		mes "Eu sou a Mali, a Apimentada.";
+		mes "Todos os meus pratos sempre surpreendem";
+		mes "meus clientes com seus aromas tentadores e sabores profundos.";
+		next;
+		mes "[Mali the Spicy]";
+		mes "Tenho especial orgulho do meu";
+		mes "^3131FFTom Yum Goong^000000, que é o";
+		mes "melhor da vila. Acho que";
+		mes "é meu destino cozinhar o melhor Tom Yum Goong de todos.";
+		if (tomyumgoong == 0) {
+			close;
+		} else {
+			next;
+			mes "[Mali the Spicy]";
+			mes "Oh, entendo...";
+			mes "Você quer que eu prepare";
+			mes "um Tom Yum Goong para você,";
+			mes "não é?";
+			next;
+			mes "[Mali the Spicy]";
+			mes "Honestamente, tenho estado muito";
+			mes "ocupada desde que abri este restaurante. Se você realmente deseja provar meu Tom Yum Goong, você poderia";
+			mes "fazer algo por mim?";
+			next;
+			if (select("Com certeza!:Eh... Não sei.") == 1) {
+				mes "[Mali the Spicy]";
+				mes "Primeiro, você poderia pegar";
+				mes "os ingredientes para fazer";
+				mes "Tom Yum Goong para mim? Preciso de alguns ^CE0000Camarões^000000, ^CE0000Pimentas^000000 e ^CE0000Limões^000000.";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Lembre-se, o Camarão é o ingrediente principal deste prato. Portanto, quanto mais fresco for o Camarão, mais saborosa será sua comida.";
+				next;
+				select("Onde posso encontrá-los?");
+				mes "[Mali the Spicy]";
+				mes "Eu esperava que você";
+				mes "me perguntasse isso.";
+				mes "Para os Camarões, procure pela";
+				mes "praia. Você deve ver";
+				mes "muitos deles lá.";
+				next;
+				mes "[Mali the Spicy]";
+				mes "No entanto, pode ser difícil encontrá-los, já que você nunca fez isso antes. Então, compre alguns Camarões do sujeito que vende";
+				mes "os Camarões mais frescos por perto.";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Hmmm...";
+				mes "Se você mencionar";
+				mes "meu nome, aquele sujeito";
+				mes "talvez lhe dê um desconto.";
+				set tomyumgoong,2;
+				changequest 8123,8124;
+				next;
+				mes "[Mali the Spicy]";
+				mes "O nome dele é ^3131FFThongpool^000000.";
+				mes "Ele estará em algum lugar perto da vila vendendo Camarões. Vá até ele e peça 20 Camarões para cozinhar o Tom Yum Goong.";
+				close;
+			}
+			mes "[Mali the Spicy]";
+			mes "Entendo que isso possa ser difícil de fazer, mas vale a pena";
+			mes "tentar se você realmente quer provar o melhor Tom Yum Goong.";
+			close;
+		}
+	} else if (tomyumgoong > 1 && tomyumgoong < 4) {
+		if (tomyumgoong == 2 && countitem(567) > 19) {
+			mes "[Mali the Spicy]";
+			mes "Errr...";
+			mes "O que há de errado com esses Camarões?";
+			mes "Eles estão todos arranhados e rasgados! Não acredito que Thongpool tenha vendido camarões tão ruins";
+			mes "para seus clientes!";
+			next;
+			mes "[Mali the Spicy]";
+			mes "Sinto muito, mas";
+			mes "não consigo cozinhar o melhor";
+			mes "Tom Yum Goong com";
+			mes "estes Camarões.";
+			next;
+			mes "[Mali the Spicy]";
+			mes "Sei que é um inconveniente, mas você poderia voltar até Thongpool";
+			mes "e pedir que ele lhe dê os Camarões mais frescos para cozinhar o melhor";
+			mes "Tom Yum Goong?";
+			close;
+		} else if (tomyumgoong == 3) {
+			if (countitem(567) > 19) {
+				mes "[Mali the Spicy]";
+				mes "Ah, você voltou!";
+				mes "Agora, deixe-me ver o que";
+				mes "você trouxe. Hmm...";
+				mes "Estes são...";
+				next;
+				emotion ET_BEST;
+				mes "[Mali the Spicy]";
+				mes "Os Camarões mais frescos que";
+				mes "eu estava procurando! Muito bem~";
+				mes "Com estes Camarões grandes e frescos,";
+				mes "posso preparar o melhor Tom Yum Goong para você! Muito obrigada!";
+				delitem 567,20; //Prawn
+				next;
+				mes "[Mali the Spicy]";
+				mes "Ficará uma refeição perfeita com a doçura natural do Camarão, a acidez dos Limões e um pouco de molho de peixe!";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Oh... Certo.";
+				mes "Mas só temos o Camarão.";
+				mes "Agora, quero que você me traga";
+				mes "alguns ^CE0000Limões^000000.";
+				next;
+				if (select("Onde posso encontrar Limões?:Eu odeio comida ácida. É melhor eu desistir!") == 1) {
+					set tomyumgoong,4;
+					changequest 8124,8125;
+					mes "[Mali the Spicy]";
+					mes "Alguns dias atrás, vi uma boa";
+					mes "árvore de Limão enquanto caminhava.";
+					mes "Mas essa árvore pertence a um homem comum que não é um Mercador de Frutas.";
+					next;
+					mes "[Mali the Spicy]";
+					mes "Não tenho certeza se";
+					mes "ele venderia Limões";
+					mes "para você, mas pode tentar,";
+					mes "suponho.";
+					close;
+				}
+				emotion ET_ANGER;
+				mes "[Mali the Spicy]";
+				mes "Que estúpido...!";
+				mes "Se você desistir só porque realmente odeia sabores azedos, não deve estar tão ansioso assim para provar meu Tom Yum Goong!";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Assim que você provar";
+				mes "meu Tom Yum Goong, você";
+				mes "vai se arrepender do que acabou de dizer!";
+				close;
+			}
+			mes "[Mali the Spicy]";
+			mes "Huh...?";
+			mes "O que você fez";
+			mes "com os Camarões?";
+			mes "Você não os comeu";
+			mes "no caminho até aqui, comeu?";
+			close;
+		}
+		mes "[Mali the Spicy]";
+		mes "Certifique-se de pedir";
+		mes "ao Sr. Thongpool para lhe dar";
+		mes "20 Camarões.";
+		mes "Agora corra~";
+		close;
+	} else if (tomyumgoong > 3 && tomyumgoong < 6) {
+		if (tomyumgoong == 4 && countitem(568) > 9) {
+			mes "[Mali the Spicy]";
+			mes "Você acha que estes são";
+			mes "os Limões da melhor qualidade?";
+			mes "Dê uma olhada mais de perto!";
+			next;
+			mes "[Mali the Spicy]";
+			mes "A casca destes";
+			mes "Limões não tem brilho";
+			mes "e eles nem sequer cheiram";
+			mes "a fresco! São apenas";
+			mes "Limões comuns!";
+			close;
+		} else if (tomyumgoong == 5) {
+			if (countitem(568) > 9) {
+				emotion ET_SURPRISE;
+				mes "[Mali the Spicy]";
+				mes "Bem-vindo de volta!";
+				mes "Uau, você voltou";
+				mes "muito rápido! Ok, deixe-me";
+				mes "ver os Limões";
+				mes "que você trouxe?";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Uau, ótimo!";
+				mes "Estes Limões são realmente frescos!";
+				mes "Como você conseguiu trazer tudo isso sozinho? Obrigado pelo trabalho~";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Agora, você deve ir comprar";
+				mes "algumas ^CE0000Pimentas^000000 e alguns";
+				mes "outros materiais no Mercado.";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Quando você falar";
+				mes "com os Mercadores";
+				mes "no Mercado, eles";
+				mes "saberão o que você quer.";
+				next;
+				if (select("Ok, voltarei logo.:Ah, estou cansado agora. Deixe-me descansar primeiro...") == 1) {
+					delitem 568,10; //Lemon
+					set tomyumgoong,6;
+					changequest 8125,8126;
+					mes "[Mali the Spicy]";
+					mes "Até logo~";
+					close;
+				}
+				mes "[Mali the Spicy]";
+				mes "A decisão é sua.";
+				mes "Mas lembre-se...";
+				mes "Os Camarões podem estragar";
+				mes "enquanto você descansa.";
+				close;
+			}
+			mes "[Mali the Spicy]";
+			mes "Huh...?";
+			mes "O que você";
+			mes "fez com os Limões?";
+			mes "Você não os comeu";
+			mes "todos no caminho até aqui, comeu?";
+			close;
+		}
+		mes "[Mali the Spicy]";
+		mes "Tudo bem...";
+		mes "Estou contando com você";
+		mes "para conseguir os melhores Limões";
+		mes "com o cara que é dono daquela árvore.";
+		next;
+		mes "[Mali the Spicy]";
+		mes "De alguma forma, você tem";
+		mes "que conseguir esses Limões de";
+		mes "alta qualidade para que eu possa fazer";
+		mes "um pouco de Tom Yum Goong!";
+		close;
+	} else if (tomyumgoong == 6) {
+		if (countitem(7286) > 29) {
+			mes "[Mali the Spicy]";
+			mes "Não entendo...";
+			mes "Onde você conseguiu esses";
+			mes "ingredientes ruins?! Eu não disse";
+			mes "a você que meu";
+			mes "Tom Yum Goong";
+			mes "requer os melhores?!";
+			close;
+		}
+		mes "[Mali the Spicy]";
+		mes "Sei que você tem trabalhado duro para me fazer esse favor. Espero que você faça esse último esforço para terminar isso.";
+		next;
+		mes "[Malli the Spicy]";
+		mes "Por favor, dê uma olhada no Mercado. Não duvido que será uma boa experiência. Afinal, meu fantástico Tom Yum Goong está esperando por você!";
+		close;
+	} else if (tomyumgoong == 7) {
+		if (MaxWeight - Weight > 1499) {
+			if (countitem(7286) > 29) {
+				delitem 7286,30; //Chilli
+				emotion ET_SURPRISE;
+				mes "[Mali the Spicy]";
+				mes "Agora...";
+				mes "Tudo pronto!";
+				mes "Antes de começarmos, deixe-me";
+				mes "verificar os materiais.";
+				next;
+				mes "[Mali the Spicy]";
+				mes "^CE0000Camarão^000000, ^CE0000Pimentas^000000, ^CE0000Limões^000000...";
+				mes "Molho de peixe e outras coisinhas...";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Perfeito!";
+				mes "Vamos começar?";
+				next;
+				mes "^FF0000*Tuk*^000000";
+				mes "^9C009C*Tup*^000000";
+				mes "^009C00*Puk*^000000";
+				specialeffect EF_ENCHANTPOISON;
+				next;
+				mes "^FF0031*Corta corta*^000000";
+				mes "^FF9C00*Tup tup tup*^000000";
+				mes "^639CFF*Pu pu^000000 -";
+				specialeffect EF_VENOMDUST;
+				next;
+				mes "[Mali the Spicy]";
+				mes "- ^9C6300Tup tup^000000 ^006363chook^000000";
+				mes "^316363Corta corta^000000";
+				mes "^FF0000Tup tup tup^000000 ^009C00Pu pu^000000 -";
+				specialeffect EF_STONECURSE;
+				specialeffect EF_HASTEUP;
+				specialeffect EF_BEGINSPELL;
+				next;
+				mes "[Mali the Spicy]";
+				mes "Uah^00009Cah^0000FFahhhh^0063FFaaaahhh^000000!";
+				emotion ET_HUK;
+				specialeffect EF_FLASHER;
+				specialeffect EF_LORD;
+				next;
+				mes "[Mali the Spicy]";
+				mes " ...";
+				mes " ......";
+				mes " .........";
+				next;
+				set tomyumgoong,8;
+				completequest 8126;
+				getitem 566,10; //Tomyumkung
+				emotion ET_BEST;
+				mes "[Mali the Spicy]";
+				mes "Aqui está o seu";
+				mes "Tom Yum Goong!";
+				mes "Ah~ Este sabor,";
+				mes "este aroma... Sim.";
+				mes "Sei que fiz um bom trabalho.";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Você sabe qual é o segredo do Tom Yum Goong? Não é apenas comida. Isso tem o poder de curar você e ajudá-lo a entrar em melhor forma.";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Porque...";
+				mes "Ele contém o";
+				mes "poder de Deus.";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Ok...!";
+				mes "Estou lhe dando";
+				mes "10 Tom Yum Goong";
+				mes "de graça~";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Obrigado por todo o trabalho que você teve para conseguir esses ingredientes. Eu ficaria feliz se você compartilhasse o Tom Yum Goong com seus amigos.";
+				next;
+				mes "[Mali the Spicy]";
+				mes "Compartilhe o sabor de Ayothaya e deixe-os saber como nossa terra é bela. Foi bom ver você, cuide-se agora~";
+				close;
+			}
+			mes "[Mali the Spicy]";
+			mes "Huh? O que você fez com as Pimentas? Você não as comeu todas no caminho até aqui, comeu?";
+			close;
+		}
+		mes "[Mali the Spicy]";
+		mes "Hmm...";
+		mes "Você parece estar carregando coisas demais. Por que não libera um pouco de espaço no seu inventário primeiro e depois volta?";
+		close;
+	}
+	emotion ET_KEK;
+	mes "[Mali the Spicy]";
+	mes "Ah...!";
+	mes "Tão ocupado, tão ocupado!";
+	mes "Meus clientes nunca se cansam";
+	mes "do sabor do meu Tom Yum Goong!";
+	mes "Heh heh heh~!";
+	close;
+}
+
+ayothaya,153,86,5	script	Thongpool#ayo	843,{
+	if ((MaxWeight-Weight) < 2000 || checkweight(1201,1) == 0) {
+		mes "- Espere um minuto! -";
+		mes "- Atualmente você está carregando -";
+		mes "- muitos itens com você. -";
+		mes "- Por favor, alivie seu peso -";
+		mes "- e tente novamente. -";
+		close;
+	}
+	if (tomyumgoong == 2) {
+		mes "[Thongpool]";
+		mes "Venham aventureiros,";
+		mes "deem uma olhada! Tenho";
+		mes "bastante Camarão!";
+		next;
+		mes "[Thongpool]";
+		mes "Você está procurando por Camarão,";
+		mes "não está? Quantos Camarões";
+		mes "você precisa? Vinte? Quarenta?";
+		next;
+		if (select("Eu preciso de Camarão para Tom Yum Goong.:Err, eles parecem caros.") == 1) {
+			mes "[Thongpool]";
+			mes "Ah! Suponho que a Sra. Mali a Apimentada recomendou-me a você. Suponho";
+			mes "que isso também significa que você quer comprá-los em grande quantidade?";
+			next;
+			mes "[Thongpool]";
+			mes "Afinal,";
+			mes "você precisará de uma quantidade";
+			mes "maior de Camarão para";
+			mes "cozinhar Tom Yum Goong.";
+			next;
+			mes "[Thongpool]";
+			mes "Oh sim, você precisará de 20 Camarões para o Tom Yum Goong da Sra. Mali.";
+			mes "Vou até te dar um desconto:";
+			mes "11.000 zenys por 20 camarões.";
+			mes "O que me diz?";
+			next;
+			if (select("Eu vou levá-los.:Eu poderia conseguir 100 Gelatinas por esse preço!") == 1) {
+				if (Zeny > 10999) {
+					if (MaxWeight - Weight > 3999) {
+						set Zeny, Zeny-11000;
+						set tomyumgoong,3;
+						getitem 567,20; //Prawn
+						emotion ET_BEST;
+						mes "[Thongpool]";
+						mes "Ótimo, agora você tem o";
+						mes "Camarão mais fresco desta vila! É hora de você voltar e pedir para a Sra. Mali cozinhá-los para você.";
+						close;
+					}
+					mes "[Thongpool]";
+					mes "Awww...";
+					mes "Você está carregando muita coisa com você. Não acho que você possa carregar mais do que o que você tem agora.";
+					close;
+				}
+				mes "[Thongpool]";
+				mes "Awww...";
+				mes "Você não tem";
+				mes "dinheiro suficiente.";
+				close;
+			}
+			mes "[Thongpool]";
+			mes "Bem, bem, bem...";
+			mes "Você pode encher seu estômago faminto com tantas Gelatinas, mas elas não teriam um sabor tão bom quanto o meu Camarão!";
+			close;
+		}
+		mes "[Thongpool]";
+		mes "O quê...?";
+		mes "Você acha";
+		mes "que é caro?";
+		mes "Mas o sabor fantástico";
+		mes "do Tom Yum Goong";
+		mes "não tem preço!";
+		close;
+	} else if (tomyumgoong == 3) {
+		mes "[Thongpool]";
+		mes "Mmm...?";
+		mes "Você precisava de";
+		mes "mais Camarões?";
+		mes "Você gostaria";
+		mes "de comprar mais?";
+		next;
+		if (select("Sim!:Não, obrigado.") == 1) {
+			if (Zeny > 10999) {
+				if (MaxWeight - Weight > 3999) {
+					set Zeny, Zeny-11000;
+					getitem 567,20; //Prawn
+					mes "[Thongpool]";
+					mes "Aqui está~";
+					mes "O Camarão mais fresco que você pode conseguir nesta vila, e talvez até no mundo!";
+					close;
+				}
+				mes "[Thongpool]";
+				mes "Awww...";
+				mes "Você está carregando muita coisa com você. Não acho que você possa carregar mais do que o que você tem agora.";
+				close;
+			}
+			mes "[Thongpool]";
+			mes "Awww...";
+			mes "Você não tem";
+			mes "dinheiro suficiente.";
+			close;
+		}
+		mes "[Thongpool]";
+		mes "Ótimo, agora você conseguiu os camarões mais frescos desta vila!";
+		mes "É hora de você voltar e pedir para a Sra. Mali cozinhar para você.";
+		close;
+	}
+	mes "[Thongpool]";
+	mes "Bem-vindo, bem-vindo!";
+	mes "Eu tenho o melhor Camarão capturado nas águas mais limpas do mundo~!";
+	close;
+}
+
+ayothaya,121,240,7	script	Mr. Jun#ayo	842,1,1,{
+	if (MaxWeight - Weight < 2000 || checkweight(1201,1) == 0) {
+		mes "- Espere um minuto! -";
+		mes "- Atualmente você está carregando -";
+		mes "- muitos itens com você. -";
+		mes "- Por favor, alivie seu peso -";
+		mes "- e tente novamente. -";
+		close;
+	}
+	if (tomyumgoong == 5) {
+		emotion ET_SWEAT;
+		mes "[Mr. Jun]";
+		mes "Umm...?";
+		mes "Você não precisa de";
+		mes "mais Limões";
+		mes "novamente, precisa?";
+		next;
+		switch(select("Não.:Me dê Limões, velho!:Posso pegar mais alguns Limões, por favor?")) {
+		case 1:
+			emotion ET_DELIGHT;
+			mes "[Mr. Jun]";
+			mes "Então, por que você não experimenta";
+			mes "os Limões que eu te dei da última vez? Eles são muito azedos, mas também muito deliciosos!";
+			close;
+		case 2:
+			emotion ET_FRET;
+			mes "[Mr. Jun]";
+			mes "O que...!?";
+			mes "O que há de errado com você, garoto?";
+			mes "O que você fez com os";
+			mes "Limões que eu te dei da última vez?";
+			close;
+		case 3:
+			mes "[Mr. Jun]";
+			mes "Oh, sinto muito... recentemente meu estoque de limões";
+			mes "foi atacado por ^3131FF'Gatos de Folha'^000000 que vagam pelo Santuário.";
+			next;
+			mes "[Mr. Jun]";
+			mes "Eu gostaria de poder te ajudar,";
+			mes "mas nem tenho limões suficientes para o meu negócio.";
+			mes "Se você precisa de limões, por que não vai caçá-los?";
+			close;
+		}
+	}
+	mes "[Mr. Jun]";
+	mes "...";
+	close;
+
+OnTouch_:
+	if (MaxWeight - Weight < 2000 || checkweight(1201,1) == 0) {
+		mes "- Espere um minuto! -";
+		mes "- Atualmente você está carregando -";
+		mes "- muitos itens com você. -";
+		mes "- Por favor, alivie seu peso -";
+		mes "- e tente novamente. -";
+		close;
+	}
+	if (tomyumgoong == 4) {
+		mes "[Mr. Jun]";
+		mes "Olá, tem alguém aí?";
+		mes "Você precisava";
+		mes "de alguma ajuda...?";
+		emotion ET_SCRATCH;
+		next;
+		if (select("Eu preciso de alguns Limões.:Não, obrigado.") == 1) {
+			mes "[Mr. Jun]";
+			mes "Umm...";
+			mes "Limões?";
+			mes "Como você vê, eu tenho muitos";
+			mes "Limões na minha árvore.";
+			mes "Você realmente precisa de alguns?";
+			next;
+			if (select("Sim, eu vou te pagar.:Não, obrigado.") == 1) {
+				mes "[Mr. Jun]";
+				mes "Eu comecei a cultivar este limoeiro como um hobby, mas não esperava ter uma colheita tão boa de limões doces e";
+				mes "suculentos.";
+				next;
+				mes "[Mr. Jun]";
+				mes "Você acabou de dizer que ia";
+				mes "me pagar pelos Limões?";
+				mes "Oh, você me entendeu mal. Eu não pretendo vendê-los.";
+				next;
+				mes "[Mr. Jun]";
+				mes "Mas...";
+				mes "estou mais do que disposto";
+				mes "a compartilhar alguns deles com";
+				mes "você, mas apenas se você puder...";
+				next;
+				mes "[Mr. Jun]";
+				mes "Jogar um joguinho comigo!";
+				mes "Que tal? Eu tenho ficado entediado até a morte. Até um velho como eu precisa se divertir!";
+				next;
+				mes "[Mr. Jun]";
+				mes "Hahahaha~!";
+				mes "O que me diz?";
+				mes "Você gostaria de tentar?";
+				next;
+				if (select("Claro, por que não!:Não, obrigado.") == 1) {
+					mes "[Mr. Jun]";
+					mes "Ótimo!";
+					mes "O jogo que eu quero";
+					mes "que joguemos é um";
+					mes "jogo infantil fácil.";
+					next;
+					mes "[Mr. Jun]";
+					mes "^660000Pedra,";
+					mes "Papel e Tesoura!^000000";
+					mes "Talvez você tenha ouvido";
+					mes "falar dele em sua terra.";
+					emotion ET_SCISSOR;
+					next;
+					mes "[Mr. Jun]";
+					mes "Não, não olhe para mim assim. Sou um velho, e quero jogar este jogo e reviver um pouco a minha juventude.";
+					mes "Você entenderá quando tiver a minha idade.";
+					next;
+					mes "[Mr. Jun]";
+					mes "Muito bem, se você vencer";
+					mes "^3131FF3^000000 de ^3131FF5^000000 partidas,";
+					mes "Os Limões são seus.";
+					mes "Você está pronto?";
+					next;
+					mes "[Mr. Jun]";
+					mes "Certo...";
+					mes "Como vocês jovens dizem,";
+					mes "^990000Vamos ficar radicais!^000000";
+					next;
+					set @user_score,0;
+					set @pc_score,0;
+					mes "[Mr. Jun]";
+					mes "Pedra!";
+					mes "Papel!";
+					mes "Tesoura!";
+					next;
+					while(1) {
+						if (@pc_score == 5 || @user_score == 3) {
+							break;
+						}
+						else {
+							set .@jun_mark,rand(1,3);
+							switch(select("Tesoura:Pedra:Papel")) {
+							case 1:
+								if (.@jun_mark == 1) {
+									emotion ET_SCISSOR;
+									emotion ET_SCISSOR, playerattached();
+									mes "[Mr. Jun]";
+									mes "Hmpf.";
+									mes "Empatamos.";
+									mes "Mais uma vez!";
+									mes "Pedra! Papel!";
+									mes "Tesoura!";
+									next;
+								}
+								else if (.@jun_mark == 2) {
+									emotion ET_ROCK;
+									emotion ET_SCISSOR, playerattached();
+									set @pc_score,@pc_score + 1;
+									mes "[Mr. Jun]";
+									mes "Sim...!";
+									mes "Ai meu Deus, sim!";
+									next;
+								}
+								else {
+									emotion ET_WRAP;
+									emotion ET_SCISSOR, playerattached();
+									set @pc_score,@pc_score + 1;
+									set @user_score,@user_score + 1;
+									mes "[Mr. Jun]";
+									mes "O quê...?";
+									mes "Eu não acredito!";
+									mes "Bah...!";
+									next;
+								}
+								break;
+							case 2:
+								if (.@jun_mark == 1) {
+									emotion ET_SCISSOR;
+									emotion ET_ROCK, playerattached();
+									set @pc_score,@pc_score + 1;
+									set @user_score,@user_score + 1;
+									mes "[Mr. Jun]";
+									mes "Não...!";
+									mes "Sacrilégio!";
+									next;
+								}
+								else if (.@jun_mark == 2) {
+									emotion ET_ROCK;
+									emotion ET_ROCK, playerattached();
+									mes "[Mr. Jun]";
+									mes "Hmpf.";
+									mes "Empatamos.";
+									mes "Mais uma vez!";
+									mes "Pedra! Papel!";
+									mes "Tesoura!";
+									next;
+								}
+								else {
+									emotion ET_WRAP;
+									emotion ET_ROCK, playerattached();
+									set @pc_score,@pc_score + 1;
+									mes "[Mr. Jun]";
+									mes "Bwahahaha!";
+									mes "Você perdeu, garoto!";
+									next;
+								}
+								break;
+							case 3:
+								if (.@jun_mark == 1) {
+									emotion ET_SCISSOR;
+									emotion ET_WRAP, playerattached();
+									set @pc_score,@pc_score + 1;
+									mes "[Mr. Jun]";
+									mes "He he~";
+									mes "Jovem tolo!";
+									next;
+								}
+								else if (.@jun_mark == 2) {
+									emotion ET_ROCK;
+									emotion ET_WRAP, playerattached();
+									set @user_score,@user_score + 1;
+									set @pc_score,@pc_score + 1;
+									mes "[Mr. Jun]";
+									mes "Nãoooo...!";
+									mes "Isso não pode ser!";
+									next;
+								}
+								else {
+									emotion ET_WRAP;
+									emotion ET_WRAP, playerattached();
+									mes "[Mr. Jun]";
+									mes "Hmpf.";
+									mes "Empatamos.";
+									mes "Mais uma vez!";
+									mes "Pedra! Papel!";
+									mes "Tesoura!";
+									next;
+								}
+								break;
+							}
+						}
+					}
+					if (@user_score == 3) {
+						emotion ET_HNG;
+						mes "[Mr. Jun]";
+						mes "Você... venceu.";
+						mes "Estou exausto.";
+						mes "Acho que não consigo mais";
+						mes "competir com vocês,";
+						mes "jovens. Ha ha ha!";
+						next;
+						mes "[Mr. Jun]";
+						mes "Como prometido,";
+						mes "compartilharei alguns";
+						mes "dos meus Limões com você.";
+						mes "Pegue quantos quiser!";
+						mes "^3355FFVocê colheu";
+						mes "10 Limões da árvore.^000000";
+						set tomyumgoong,5;
+						getitem 568,10; //Lemon
+						next;
+						emotion ET_THINK;
+						mes "[Mr. Jun]";
+						mes "Hum...";
+						mes "Parece que você precisa de muitos deles. Bem, tudo bem para mim. Eu me diverti com você.";
+						next;
+						mes "[Mr. Jun]";
+						mes "Mas não se esqueça disso:";
+						mes "Não seja egoísta e sempre compartilhe o que tem com os outros. Esse é um dos valores mais importantes para os seres humanos.";
+						close;
+					}
+					emotion ET_SCISSOR;
+					mes "[Mr. Jun]";
+					mes "Muhahahaha!";
+					mes "A vitória é minha!";
+					mes "Parece que você não vai ganhar";
+					mes "nenhum Limão por enquanto! Mas sinta-se à vontade para me desafiar a qualquer momento!";
+					close;
+				}
+				mes "[Mr. Jun]";
+				mes "Estamos com medo?";
+				mes "Não há como te enganar:";
+				mes "Eu sou um dos melhores em jogos!";
+				close;
+			}
+			mes "[Mr. Jun]";
+			mes "Hum...";
+			mes "O que será que";
+			mes "eu posso fazer";
+			mes "com todos esses";
+			mes "Limões?";
+			close;
+		}
+		mes "[Mr. Jun]";
+		mes "Sinta-se à vontade para";
+		mes "me pedir ajuda";
+		mes "a qualquer momento, está bem?";
+		close;
+	}
+	mes "[Mr. Jun]";
+	mes "...";
+	close;
+}
+
+ayothaya,213,94,7	script	Merchant#ayo	841,{
+	if (tomyumgoong == 6) {
+		mes "[Merchant Thongdum]";
+		mes "Olá~";
+		mes "Você está procurando";
+		mes "ingredientes para fazer";
+		mes "Tom Yum Goong?";
+		next;
+		mes "[Merchant Thongdum]";
+		mes "Vamos ver...";
+		mes "Estou vendendo pimentas,";
+		mes "molho de peixe e alguns";
+		mes "temperos que você";
+		mes "vai precisar. Vou vender";
+		mes "tudo para você por 2.000 zenys.";
+		next;
+		if (select("Obrigado, eu aceito.:Isso é um roubo, cara!") == 1) {
+			emotion ET_THANKS;
+			if (Zeny > 1999) {
+				if (MaxWeight - Weight > 1199) {
+					set Zeny, Zeny-2000;
+					set tomyumgoong,7;
+					getitem 7286,30; //Chilli
+					mes "[Merchant Thongdum]";
+					mes "Obrigado.";
+					mes "Espero que você aproveite";
+					mes "seu Tom Yum Goong~";
+					close;
+				}
+				mes "[Merchant Thongdum]";
+				mes "Ah não...";
+				mes "Parece que";
+				mes "você está carregando";
+				mes "coisas demais";
+				mes "agora.";
+				next;
+				mes "[Merchant Thongdum]";
+				mes "Eu não posso te dar";
+				mes "nada se você não";
+				mes "tiver espaço para carregar!";
+				close;
+			}
+			mes "[Merchant Thongdum]";
+			mes "Hum...?";
+			mes "Agora, parece";
+			mes "que você não tem o";
+			mes "dinheiro para comprar o que";
+			mes "precisa de mim.";
+			close;
+		}
+		emotion ET_STARE_ABOUT;
+		mes "[Merchant Thongdum]";
+		mes "Não diga isso.";
+		mes "Meus preços são sempre";
+		mes "razoáveis. Quero que saiba";
+		mes "que sou um Mercador respeitável.";
+		close;
+	} else if (tomyumgoong == 7) {
+		mes "[Merchant Thongdum]";
+		mes "Achei que tinha fornecido";
+		mes "ingredientes suficientes, mas";
+		mes "agora que penso nisso, não";
+		mes "sei quanto Tom Yum Goong";
+		mes "você está fazendo.";
+		next;
+		mes "[Merchant Thongdum]";
+		mes "Gostaria de";
+		mes "comprar mais Pimentas?";
+		next;
+		if (select("Não, obrigado.:Sim, por favor.") == 1) {
+			mes "[Merchant Thongdum]";
+			mes "Fique bem~";
+			close;
+		}
+		if (Zeny > 1999) {
+			if (MaxWeight - Weight > 1199) {
+				set Zeny, Zeny-2000;
+				getitem 7286,30; //Chilli
+				mes "[Merchant Thongdum]";
+				mes "Obrigado,";
+				mes "volte sempre!";
+				close;
+			}
+			mes "[Merchant Thongdum]";
+			mes "Ah não...";
+			mes "Parece que";
+			mes "você está carregando";
+			mes "coisas demais";
+			mes "agora.";
+			next;
+			mes "[Merchant Thongdum]";
+			mes "Eu não posso te dar";
+			mes "nada se você não";
+			mes "tiver espaço para carregar!";
+			close;
+		}
+		mes "[Merchant Thongdum]";
+		mes "Hum...?";
+		mes "Agora, parece";
+		mes "que você não tem o";
+		mes "dinheiro para comprar o que";
+		mes "precisa de mim.";
+		close;
+	}
+	mes "[Merchant Thongdum]";
+	mes "Olá!";
+	mes "Já experimentou uma Pimenta antes?";
+	next;
+	mes "[Merchant Thongdom]";
+	mes "Apesar da aparência pequena,";
+	mes "ela tem um sabor muito forte. Também é quente e picante, então você deve ter cuidado ao comer uma.";
+	next;
+	mes "[Merchant Thongdum]";
+	mes "O povo de Ayothaya gosta de comidas sensacionais com sabores distintos e picantes. Na culinária de Ayothaya, usamos coisas como Pimentas, alho, gengibre e coentro.";
+	next;
+	mes "[Merchant Thongdum]";
+	mes "Estou vendendo chili,";
+	mes "então, se precisar de algum,";
+	mes "por favor, venha até mim~";
+	close;
+}

@@ -1,0 +1,3354 @@
+//===== rAthena Script =======================================
+//= Airship Related Quests
+//===== By: ==================================================
+//= Samuray22
+//===== Current Version: =====================================
+//= 3.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Quest from the airplane to einbroch and einbech.
+//= Reward: -Free Ticket for Flyship.
+//=		-Free System to Repair.
+//= Quest about how work the airship
+//= Reward: -Base Experience 200,000
+//=		-Job Experience 10,000
+//===== Additional Comments: =================================
+//= 1.0 First Beta.
+//= 1.1 Added Heart Fragment quest. [SinSloth]
+//= 1.2 Change the laboratory code text to make it easier to
+//=	 understand. [SinSloth]
+//= 1.3 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 1.3a Corrected a Typo error ";;". [Samuray22]
+//= 1.4 Fixed incorrect variable type used. [L0ne_W0lf]
+//= 1.5 Replaced effect numerics with constants. [Samuray22]
+//= 1.6 Changed some variables to scope instead of permanent char. [brianluau]
+//= 1.7 some minor cleanup updates to the airship invasion. [L0ne_W0lf]
+//= 1.8 Added quest log entries for:
+//=	 - Airship Ticket Quest
+//=	 - How the Airship Works
+//= 1.9 Fixed missing checks for How the Airship Works quest. [Joseph]
+//= 2.0 Updated RE/Pre-RE EXP. [Euphy]
+//= 2.1 Updated Airship Ticket Quest with some missing parts. [Euphy]
+//= 3.0 Updated to match official version & clean-up. [Capuche]
+//============================================================
+
+// Airship Ticket Quest :: ein_tre
+//============================================================
+
+//----------------------------------------------------------------------------
+// Kain Himere
+//----------------------------------------------------------------------------
+airplane,47,61,7	script	Crewman	4_M_ZONDAOYAJI,{
+	mes "[Kain Himere]";
+	if (kain_ticket == 4) {
+		mes "Ah...";
+		mes "Aqui está!";
+		next;
+		mes "[Kain Himere]";
+		mes "Há alguns dias, um cliente";
+		mes "de Einbroch deixou isto no";
+		mes "Dirigível. Ele ligou e nos";
+		mes "avisou que não pode voltar";
+		mes "para buscar, mas que está";
+		mes "hospedado no Hotel de Einbroch.";
+		next;
+		mes "[Kain Himere]";
+		mes "Sei que é um favor";
+		mes "estranho a se pedir, mas você";
+		mes "poderia entregar isto para Defru";
+		mes "Ark no Hotel de Einbroch?";
+		mes "É claro que eu o recompensarei";
+		mes "quando você retornar.";
+		next;
+		setquest 2079;
+		kain_ticket = 5;
+		mes "^3355FFKain Himere lhe deu uma pequena caixa.^000000";
+		close;
+	}
+	mes "Bem-vindo ao Dirigível~";
+	mes "Se tiver perguntas ou";
+	mes "precisar de alguma ajuda, por favor,";
+	mes "não hesite em perguntar a mim ou";
+	mes "a qualquer um dos outros tripulantes.";
+	next;
+	if (kain_ticket == 0 || kain_ticket == 1) {
+		switch(select("Sobre o Dirigível...", "Deixar um comentário" )) {
+		case 1:
+			mes "[Kain Himere]";
+			kain_ticket++;
+			if (kain_ticket == 1) {
+				mes "É a sua primeira vez voando?";
+				mes "Eu entendo se estiver nervoso. Antes de trabalhar aqui, eu me sentia do mesmo jeito. Ainda assim, este";
+				mes "Dirigível é incrível. É impressionante o que a ciência pode fazer...";
+				next;
+				mes "[Kain Himere]";
+				mes "Ouvi dos estudiosos";
+				mes "que desenvolveram a tecnologia do";
+				mes "Dirigível que apenas um pequeno";
+				mes "pedaço do coração de Ymir";
+				mes "gera a energia para esta";
+				mes "nave voar. Incrível...";
+				next;
+				mes "[Kain Himere]";
+				mes "Sabe, a pesquisa científica";
+				mes "tornou a vida mais fácil e";
+				mes "confortável na República de Schwarzwald,";
+				mes "da mesma forma que a pesquisa mágica";
+				mes "mudou a vida no Reino de Rune-Midgarts.";
+			}
+			else {
+				mes "Quer saber mais";
+				mes "sobre o Dirigível? Hmm,";
+				mes "não sei muita coisa,";
+				mes "mas deixe-me ver...";
+				next;
+				mes "[Kain Himere]";
+				mes "Bem, dizem os boatos que";
+				mes "uma corporação muito grande";
+				mes "administra este Dirigível. Supostamente,";
+				mes "eles têm envolvimento em";
+				mes "todo tipo de empreendimento.";
+				next;
+				mes "[Kain Himere]";
+				mes "Como os Aeronaves são nossa";
+				mes "forma de transporte nacional,";
+				mes "os chefões devem estar ganhando";
+				mes "muito dinheiro. É uma loucura.";
+			}
+			close;
+		case 2:
+			mes "[Kain Himere]";
+			mes "Você deseja deixar";
+			mes "um comentário sobre nosso";
+			mes "serviço? Diga-me sua";
+			mes "mensagem e eu a reportarei";
+			mes "aos superiores.";
+			mes "Para cancelar, pressione '0'.";
+			next;
+			input .@comment$;
+			if (.@comment$ == "kafra") {
+				mes "[Kain Himere]";
+				mes "K-Kafra...?";
+				mes "Hmm, talvez seja melhor";
+				mes "eu não enviar isso afinal...";
+				emotion ET_FRET;
+			} else if (.@comment$ == "0") {
+				mes "[Kain Himere]";
+				mes "Ah, bem, se você tiver alguma";
+				mes "crítica útil sobre nosso";
+				mes "serviço, fique à vontade para me";
+				mes "deixar um comentário a qualquer momento.";
+			} else {
+				mes "["+strcharinfo(0)+"]";
+				mes .@comment$+".";
+				next;
+				mes "[Kain Himere]";
+				mes "Hmmmm...";
+				mes "Entendi. Bem, eu";
+				mes "enviarei sua mensagem";
+				mes "aos meus superiores assim";
+				mes "que possível.";
+				mes "Muito obrigado.";
+			}
+			close;
+		}
+	} else if (kain_ticket == 2 || kain_ticket == 3) {
+		if (kain_ticket == 3) {
+			mes "[Kain Himere]";
+			mes "Oh, como você está?";
+			mes "Se não se importa que";
+			mes "eu pergunte, para onde";
+			mes "você vai desta vez?";
+		} else {
+			select("Sobre o Dirigível...");
+			next;
+			mes "[Kain Himere]";
+			mes "Você realmente quer saber tudo sobre o Dirigível, não é? Desculpe, mas não sei muito mais do que já lhe contei.";
+			next;
+			mes "[Kain Himere]";
+			mes "Acho que, se quiser saber mais, deveria estudar para se tornar um Sábio em Juno e fazer suas próprias pesquisas sobre o Dirigível...";
+			next;
+			mes "[Kain Himere]";
+			mes "^666666*Soluço...*^000000";
+			mes "D-desculpe-me...";
+			mes "^666666*Sniff*^000000";
+			next;
+			switch(select("Que diabos...?:O que houve?")) {
+			case 1:
+				mes "[Kain Himere]";
+				mes "D-desculpe...";
+				mes "Isso foi tão";
+				mes "antiprofissional.";
+				mes "T-tenha uma viagem segura";
+				mes "e o-obrigado por";
+				mes "usar o Dirigível! ^333333*Soluço*^000000";
+				close;
+			case 2:
+				mes "[Kain Himere]";
+				mes "Desculpe, mas é";
+				mes "uma longa história. Além disso,";
+				mes "você não entenderia...";
+				next;
+				select("Tenho tempo para uma longa história.");
+				mes "[Kain Himere]";
+				mes "Certo, é melhor eu colocar";
+				mes "isso para fora. Acho que";
+				mes "tudo começou quando eu era um jovem";
+				mes "vivendo em Einbech.";
+				next;
+				mes "[Kain Himere]";
+				mes "Naqueles dias, eu era bem";
+				mes "cabeça quente e impaciente,";
+				mes "mas trabalhar como mineiro sempre";
+				mes "me trazia um sentimento de paz. Arriscando minha vida com meus amigos, picareta na mão. É...";
+				next;
+				mes "[Kain Himere]";
+				mes "Podia ser perigoso,";
+				mes "mas era um trabalho bom, duro e honesto. Sabe, as minas conectadas ao veio de Einbech";
+				mes "costumavam ser tudo para nossa pequena cidade. Mas então, as coisas mudaram...";
+				next;
+				mes "[Kain Himere]";
+				mes "As fábricas começaram a surgir";
+				mes "e todos os minérios foram levados";
+				mes "para onde as chaminés nunca";
+				mes "paravam de soltar fumaça. Mais mineiros";
+				mes "começaram a trabalhar nas fábricas e as minas ficaram mais solitárias...";
+				next;
+				mes "[Kain Himere]";
+				mes "Mas eu amava trabalhar na";
+				mes "terra tanto que continuei";
+				mes "até o acidente acontecer.";
+				mes "Agora não consigo usar meu braço direito";
+				mes "como costumava, então tive que";
+				mes "desistir do meu trabalho como mineiro...";
+				next;
+				select("Sinto muito por ouvir isso.");
+				next;
+				mes "[Kain Himere]";
+				mes "É...";
+				mes "Eu fiquei muito devastado";
+				mes "quando aconteceu. Aqueles";
+				mes "foram provavelmente os piores";
+				mes "anos de toda a minha vida.";
+				next;
+				mes "[Kain Himere]";
+				mes "Eu não conseguia pensar em";
+				mes "viver sem minerar e";
+				mes "eu simplesmente perdi todo o entusiasmo";
+				mes "pela vida. Desenvolvi um problema com bebida e comecei a me afastar da minha família. Fui tão estúpido...";
+				next;
+				mes "[Kain Himere]";
+				mes "Ainda não consigo acreditar em";
+				mes "como minha esposa foi solidária";
+				mes "durante aqueles dias. Mesmo quando";
+				mes "eu estava no fundo do poço, ela tentou acalmar minha dor e até aceitou um trabalho";
+				mes "para sustentar a mim e à nossa filha.";
+				next;
+				mes "[Kain Himere]";
+				mes "^666666*Soluço*^000000 Foi só depois que ela";
+				mes "morreu que percebi o quanto";
+				mes "ela deve ter sofrido. Para piorar";
+				mes "as coisas, tive que deixar minha filha com um vizinho";
+				mes "enquanto procurava por trabalho...";
+				next;
+				mes "[Kain Himere]";
+				mes "Passei anos vagando";
+				mes "de cidade em cidade, vivendo";
+				mes "uma vida bem selvagem até conseguir me reerguer. E finalmente, tornei-me um tripulante do Dirigível.";
+				next;
+				mes "[Kain Himere]";
+				mes "Faz vinte anos";
+				mes "desde que perdi minha família.";
+				mes "Minha filha está em algum";
+				mes "lugar por aí, mas eu nem";
+				mes "consigo lembrar do nome dela...";
+				next;
+				select("Você tentou procurá-la?");
+				mes "[Kain Himere]";
+				mes "Eu tentei ir até a casa";
+				mes "onde meu vizinho morava,";
+				mes "mas eles se mudaram faz anos.";
+				mes "Eu realmente não tenho ideia de onde";
+				mes "ela possa estar. Mas não mereço vê-la. Eu fui um pai horrível!";
+				next;
+				mes "[Kain Himere]";
+				mes "^666666*Soluço*^000000 Sinto muito que";
+				mes "você tenha tido que ouvir tudo isso,";
+				mes "mas realmente agradeço que";
+				mes "você tenha me ouvido. Agora";
+				mes "me diga, para onde você vai?";
+				break;
+			}
+		}
+		next;
+		switch(select("Einbroch:Juno")) {
+		case 1:
+			kain_ticket = 4;
+			mes "["+strcharinfo(0)+"]";
+			mes "Estou indo";
+			mes "para Einbroch.";
+			next;
+			mes "[Kain Himere]";
+			mes "Perfeito...!";
+			mes "Se não se importar,";
+			mes "você poderia me fazer";
+			mes "um favor? Primeiro, deixe-me";
+			mes "encontrar aquele pacote...";
+			close;
+		case 2:
+			kain_ticket = 3;
+			mes "["+strcharinfo(0)+"]";
+			mes "Estou indo";
+			mes "para Juno.";
+			next;
+			mes "[Kain Himere]";
+			mes "Ah, entendo...";
+			mes "Havia algo que eu";
+			mes "precisava enviar para Einbroch.";
+			mes "De qualquer forma, tenha uma boa viagem.";
+			mes "Ah, e obrigado por me ouvir.";
+			close;
+		}
+	} else if (kain_ticket > 4 && kain_ticket < 10) {
+		mes "[Kain Himere]";
+		mes "Oh, olá!";
+		mes "As coisas estão um pouco";
+		mes "agitadas agora, mas";
+		mes "você entregou-- Oh!";
+		mes "Espere, com licença! Senhor--!";
+		next;
+		mes "^3355FFKain parece ocupado";
+		mes "demais para falar com";
+		mes "você agora...^000000";
+	} else if (kain_ticket == 10) {
+		mes "[Kain Himere]";
+		mes "Bem-vindo de volta à Dirigível. Então, você entregou aquela caixinha em segurança?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Não, infelizmente. Ele não estava lá quando cheguei. Deixe-me devolver esta caixa para você.";
+		next;
+		mes "[Kain Himere]";
+		mes "Ah...";
+		mes "O que devo fazer agora? Bem, sinto muito por lhe causar tanto transtorno.";
+		next;
+		switch(select("Mencionar casualmente a Canção do Mineiro", "Mencionar suavemente Tarsha")) {
+		case 1:
+			mes "["+ strcharinfo(0) +"]";
+			mes "Já que estamos no assunto";
+			mes "de caixas e entregas,";
+			mes "você já ouviu falar da";
+			mes "''Canção do Mineiro?''";
+			next;
+			mes "[Kain Himere]";
+			mes "''Canção do Mineiro...''";
+			mes "Sinto falta de cantar isso";
+			mes "enquanto trabalhava nas minas.";
+			mes "Eu costumava cantar o tempo todo";
+			mes "quando eu era mais jovem, na verdade.";
+			next;
+			mes "[Kain Himere]";
+			mes "Acho que eu cantava tanto,";
+			mes "que até fiz minha filhinha";
+			mes "cantar comigo~";
+			mes "(Mas qual era o nome dela?!)";
+			break;
+		case 2:
+			mes "["+ strcharinfo(0) +"]";
+			mes "^333333*Tosse tosse*";
+			mes "*Tos--TARSHA--Tosse*^000000";
+			next;
+			mes "[Kain Himere]";
+			mes "O que...?";
+			mes "Espere. T-Tarsha...";
+			mes "Por que sinto como se esse";
+			mes "nome significasse algo?";
+			break;
+		}
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Sabe...";
+		mes "Conheci uma garotinha em Einbroch";
+		mes "que estava cantando a ''Canção do";
+		mes "Mineiro.'' Parece que a mãe dela,";
+		mes "Tarsha, a ensinou.";
+		next;
+		mes "[Kain Himere]";
+		mes "Interessante. Mas normalmente,";
+		mes "apenas mineiros conheceriam";
+		mes "essa música. Isso tem";
+		mes "algo a ver comigo?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Bem, a mãe desta garotinha, Tarsha, aprendeu a música com";
+		mes "seu pai, que pode ter sido";
+		mes "um mineiro. Mas ele desapareceu";
+		mes "misteriosamente anos atrás...";
+		next;
+		mes "[Kain Himere]";
+		mes "Pobre garota...!";
+		mes "O pai dela simplesmente";
+		mes "a deixou?! Por que,";
+		mes "ela é exatamente como...";
+		next;
+		mes "[Kain Himere]";
+		mes "Espere...";
+		mes "Meu Deus...";
+		mes "O mineiro que ensinou";
+		mes "essa música para Tarsha pode";
+		mes "ter sido... ^0000FFeu^000000.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Bem, por enquanto, não";
+		mes "podemos ter certeza. Você tem";
+		mes "algo que possa provar";
+		mes "que você é o pai de Tarsha?";
+		next;
+		mes "[Kain Himere]";
+		mes "Ehhmmm...";
+		mes "Antes de sair da cidade, enterrei";
+		mes "algumas das minhas coisas debaixo";
+		mes "de uma árvore em Einbech. Não me lembro exatamente onde, mas o diário da minha esposa deve estar lá.";
+		mes "[NOME PRÓPRIO]";
+		next;
+		mes "[Kain Himere]";
+		mes "Como minha esposa anotava";
+		mes "tudo em seu diário,";
+		mes "ela deveria ter escrito o suficiente";
+		mes "sobre nossa filha para sabermos se essa Tarsha pode ser minha filha perdida há muito tempo.";
+		next;
+		mes "[Kain Himere]";
+		mes "Agora, eu realmente não posso deixar";
+		mes "a Dirigível, então você me ajudaria";
+		mes "encontrando aquele diário e";
+		mes "vendo se Tarsha é realmente parente minha de alguma forma? Eu ficaria grato";
+		mes "se pudesse fazer isso por mim...";
+		changequest 2081,2082;
+		kain_ticket = 11;
+	} else if (kain_ticket == 11 || kain_ticket == 12) {
+		mes "[Kain Himere]";
+		mes "Você encontraria o diário da minha";
+		mes "esposa e veria se Tarsha";
+		mes "é realmente minha filha? O";
+		mes "diário deve estar enterrado";
+		mes "debaixo de uma árvore em Einbech.";
+	} else if (kain_ticket == 13) {
+		mes "^3355FFÉ melhor você cumprir o pedido";
+		mes "de Kain encontrando o diário de sua";
+		mes "esposa e confrontando Tarsha";
+		mes "antes de falar com ele novamente.^000000";
+	} else if (kain_ticket == 14) {
+		if (countitem(7276) == 1) {// Picture_Letter
+			mes "^3355FFVocê entrega o diário da esposa";
+			mes "dele para Kain e diz a ele que";
+			mes "descobriu que Tarsha é realmente";
+			mes "sua filha, que ela é feliz e casada";
+			mes "e é uma inventora em Einbroch.";
+			mes "um inventor em Einbroch.^000000";
+			next;
+			mes "^3355FFOs olhos de Kain se enchem";
+			mes "de lágrimas e todo o seu";
+			mes "corpo treme com uma";
+			mes "alegria incontrolável.";
+			next;
+			mes "[Kain Himere]";
+			mes "Ela deve ter";
+			mes "passado por momentos difíceis...";
+			mes "Mas ela não";
+			mes "me odeia nem um pouco.";
+			next;
+			mes "[Kain Himere]";
+			mes "Rashelle?";
+			mes "Você consegue me ver?";
+			mes "Posso realmente ser tão";
+			mes "feliz? Sinto muito,";
+			mes "meu amor... ^666666*Soluço...*^000000";
+			next;
+			mes "[Kain Himere]";
+			mes "Obrigado por toda";
+			mes "sua ajuda, jovem.";
+			mes "E por favor, aceite isto";
+			mes "como um símbolo da minha gratidão.";
+			next;
+			mes "[Kain Himere]";
+			mes "Sei que não é";
+			mes "muito, mas por favor,";
+			mes "entenda que é";
+			mes "tudo o que tenho para lhe dar.";
+			mes "Que Deus o abençoe por tudo";
+			mes "o que fez por mim~";
+			completequest 2085;
+			kain_ticket = 15;
+			delitem 7276,1;// Picture_Letter
+			getitem 7311,4;// Free_Flying_Ship_Ticket
+		} else {
+			mes "^3355FFHmmm...";
+			mes "Seria melhor";
+			mes "se você abordasse";
+			mes "Kain com a Carta Rabiscada";
+			mes "que você recebeu.^000000";
+		}
+	} else {
+		mes "[Kain Himere]";
+		mes "Oh, como você está";
+		mes "ultimamente, meu amigo?";
+		mes "Tenho passado muito bem,";
+		mes "especialmente desde que você";
+		mes "me ajudou a encontrar minha filha.";
+		mes "Aproveite suas viagens~";
+	}
+	close;
+}
+
+//----------------------------------------------------------------------------
+// Empty Room 201
+//----------------------------------------------------------------------------
+ein_in01,227,279,3	script	#door_ein	-1,5,5,{
+OnTouch_:
+	if (kain_ticket == 5) {
+		kain_ticket = 6;
+		mes "["+strcharinfo(0)+"]";
+		mes "Com licença...?";
+		next;
+		mes "^3355FFNão há ninguém aqui!^000000";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Deve ser este o quarto...";
+		mes "Mas onde diabos ele está?";
+		mes "Não posso simplesmente deixar estas";
+		mes "coisas aqui se ele não voltar.";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "Bem...";
+		mes "Acho que posso";
+		mes "simplesmente devolver isso";
+		mes "para Kain na";
+		mes "Dirigível.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Enquanto estiver em Einbroch,";
+		mes "posso dar uma olhada";
+		mes "por aqui e ver se encontro";
+		mes "algo interessante. Ainda assim, não consigo deixar de pensar na filha";
+		mes "perdida de Kain Himere...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Talvez...";
+		mes "Só talvez...";
+		mes "Eu consiga encontrar";
+		mes "algum tipo de pista";
+		mes "sobre onde ela está. Ela pode";
+		mes "até viver aqui em Einbroch.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Acho que vou fazer isso.";
+		mes "Talvez até neste";
+		mes "exato minuto. Trate como";
+		mes "uma espécie de missão ou algo assim.";
+		mes "Sim, isso pode funcionar.";
+		close;
+	}
+}
+
+//----------------------------------------------------------------------------
+// Elle Cherno
+//----------------------------------------------------------------------------
+ein_in01,261,241,3	script	Elle Cherno	4_F_KID2,3,3,{
+OnTouch_:
+	mes "[Elle Cherno]";
+	mes "Vamos ao trabalho";
+	mes "destemidos camaradas~!";
+	mes "Vamos dar o nosso melhor! Nada";
+	mes "pode nos parar, rapazes~!";
+	if (kain_ticket == 6) {
+		next;
+		switch(select("Olá!:O que você está cantando?")) {
+		case 1:
+			mes "[Elle Cherno]";
+			mes "Vamos ao trabalho";
+			mes "destemidos camaradas~!";
+			mes "Vamos dar o nosso melhor! Nada";
+			mes "pode nos parar, rapazes~!";
+			next;
+			mes "[Elle Cherno]";
+			mes "Eu gosto muito dessa música!";
+			mes "Especialmente quando eu grito";
+			mes "''camaradas!'' CAMARADAS!";
+			close;
+		case 2:
+			changequest 2079,2080;
+			kain_ticket = 7;
+			mes "[Elle Cherno]";
+			mes "Isto...?";
+			mes "É a ''Canção do Mineiro!''";
+			mes "Minha mamãe me ensinou";
+			mes "e ela canta muito. O papai";
+			mes "diz que é muito barulhento, no entanto.";
+			next;
+			mes "[Elle Cherno]";
+			mes "Mmm, quando minha mamãe canta";
+			mes "essa música, às vezes ela parece";
+			mes "um pouco triste. Hoje mesmo ela cantou um pouco e parecia que ia chorar. ^666666*Ofegante!*^000000 Espere, você";
+			mes "acha que talvez a mamãe esteja doente?";
+			next;
+			mes "[Elle Cherno]";
+			mes "Oh, não, oh, não...";
+			mes "Ei, você pode ir ver";
+			mes "se a mamãe está bem para mim?";
+			mes "Por favor? Nossa casa fica atrás";
+			mes "do Hotel, então me diga se ela";
+			mes "não estiver se sentindo bem, promete?";
+			close;
+		}
+	} else if (kain_ticket == 7) {
+		next;
+		mes "[Elle Cherno]";
+		mes "Nossa casa fica logo";
+		mes "atrás do Hotel.";
+		mes "Você vai lá e";
+		mes "vê a mamãe para mim,";
+		mes "por favor? Estou preocupada...";
+	} else if (kain_ticket == 13) {
+		next;
+		if (checkweight(7276,1) == 0) {
+			mes "[Elle Cherno]";
+			mes "Ei! Eu tenho algo";
+			mes "para te dar, mas você tem";
+			mes "muitasss coisas! Ei,";
+			mes "volte mais tarde para que eu possa";
+			mes "te entregar, está bem?";
+			close;
+		}
+		mes "[Elle Cherno]";
+		mes "Você viu meu vovô?";
+		mes "Você é amigo dele, né?";
+		mes "V-você vai ver";
+		mes "ele mais tarde? Porque... porque...";
+		next;
+		mes "[Elle Cherno]";
+		mes "Eu fiz isso para ele.";
+		mes "Eu não sei escrever,";
+		mes "mas fiz uma carta para o Vovô";
+		mes "o melhor que pude. Você";
+		mes "promete entregar isso para ele";
+		mes "para mim, por favooooor?";
+		next;
+		mes "^3355FFElle colocou uma grande";
+		mes "mensagem rabiscada";
+		mes "em suas mãos.^000000";
+		changequest 2084,2085;
+		kain_ticket = 14;
+		getitem 7276, 1; //Picture_Letter
+	}
+	close;
+}
+
+//----------------------------------------------------------------------------
+// Theo Cherno
+//----------------------------------------------------------------------------
+ein_in01,123,94,1	script	Theo Cherno	4_M_REPAIR,{
+	if (kain_ticket == 7) {
+		callfunc "F_Cherno";
+		kain_ticket = 8;
+	} else if (kain_ticket > 7 && kain_ticket < 10) {
+		mes "[Theo Cherno]";
+		mes "Você é muito gentil,";
+		mes "aventureiro(a). Deveria";
+		mes "haver mais pessoas";
+		mes "no mundo como você.";
+	} else if (kain_ticket > 9 && kain_ticket < 13) {
+		mes "[Theo Cherno]";
+		mes "Você tem certeza";
+		mes "de que consegue encontrar";
+		mes "o pai de Tarsha? Oh,";
+		mes "você deve ser um presente dos céus!";
+	} else if (kain_ticket > 12) {
+		emotion ET_SMILE;
+		mes "[Theo Cherno]";
+		mes "Estou tão feliz";
+		mes "pela minha esposa. Eu....";
+		mes "Eu não sei como";
+		mes "posso te agradecer...";
+	} else {
+		mes "[Theo Cherno]";
+		mes "Hmm...";
+		mes "Podemos conversar mais tarde?";
+		mes "Estou bem ocupado tentando";
+		mes "consertar isto no";
+		mes "momento.";
+	}
+	close;
+}
+
+//----------------------------------------------------------------------------
+// Tarsha Cherno
+//----------------------------------------------------------------------------
+ein_in01,125,99,3	script	Tarsha Cherno	4_F_EINWOMAN,{
+	if (kain_ticket == 7) {
+		callfunc "F_Cherno";
+		kain_ticket = 8;
+	} else if (kain_ticket == 8) {
+		mes "[Tarsha Cherno]";
+		mes "Embora a maioria dessas";
+		mes "engenhocas não valha a pena";
+		mes "exibir, colocamos muito";
+		mes "esforço na invenção destas";
+		mes "máquinas. Então, é claro,";
+		mes "elas nos dão orgulho~";
+		next;
+		mes "[Tarsha Cherno]";
+		mes "Talvez todos esses pequenos";
+		mes "projetos não sejam";
+		mes "tão impressionantes, mas gosto";
+		mes "de pensar neles como degraus";
+		mes "para conquistas futuras.";
+	} else if (kain_ticket == 9) {
+		mes "["+strcharinfo(0)+"]";
+		mes "Com licença, senhora,";
+		mes "mas você tem uma cicatriz";
+		mes "no seu ombro. Isso é";
+		mes "de um acidente?";
+		next;
+		mes "[Tarsha Cherno]";
+		mes "Oh, isso é um ferimento";
+		mes "antigo que aconteceu";
+		mes "anos atrás. Suponho que";
+		mes "eu tenha sido bastante travessa";
+		mes "para as pessoas";
+		mes "que me criaram...";
+		next;
+		mes "[Tarsha Cherno]";
+		mes "Veja bem, perdi meus pais";
+		mes "quando era muito jovem. Foi";
+		mes "só mais tarde que percebi";
+		mes "que fui criada por pais adotivos.";
+		mes "Soube que minha mãe biológica";
+		mes "morreu há muito tempo...";
+		next;
+		mes "[Tarsha Cherno]";
+		mes "Quanto ao meu pai, ninguém";
+		mes "sabe se ele está morto";
+		mes "ou vivo. Tentei ao máximo";
+		mes "fazer meus pais adotivos felizes,";
+		mes "mas acabei sendo rebelde demais e causando tristeza a eles.";
+		next;
+		mes "[Tarsha Cherno]";
+		mes "Finalmente saí de casa e";
+		mes "estudei mecânica. Conheci";
+		mes "meu marido na escola e";
+		mes "foi a melhor coisa que";
+		mes "já aconteceu comigo~";
+		emotion ET_THROB, getnpcid(0, "Theo Cherno");
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "A propósito, ouvi";
+		mes "sua filha cantando";
+		mes "algum tipo de Canção do Mineiro.";
+		mes "Foi você quem a ensinou?";
+		emotion ET_HUK;
+		emotion ET_HUK, getnpcid(0, "Theo Cherno");
+		next;
+		mes "[Theo Cherno]";
+		mes "Não entendo";
+		mes "por que a pequena Elle gosta";
+		mes "de uma canção tão barulhenta e masculina.";
+		mes "Isso é tudo culpa sua, Tarsha!";
+		emotion ET_ANGER, getnpcid(0, "Theo Cherno");
+		next;
+		emotion ET_SMILE;
+		mes "[Tarsha Cherno]";
+		mes "Oh~hohohoho~";
+		mes "Eu era jovem demais para";
+		mes "lembrar claramente,";
+		mes "mas tenho certeza de que meu";
+		mes "pai biológico amava essa música.";
+		next;
+		mes "[Tarsha Cherno]";
+		mes "Mal me lembro que";
+		mes "ele costumava cantá-la enquanto";
+		mes "limpava nossa antiga casa.";
+		mes "Sim, não me lembro de como";
+		mes "ele era, mas ele deve";
+		mes "ter sido um mineiro na época.";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "Um mineiro...?";
+		mes "(Espere, aquele tripulante,";
+		mes "Kain Himere! Ele era";
+		mes "um mineiro que perdeu sua";
+		mes "filha! Talvez...)";
+		next;
+		emotion ET_SURPRISE;
+		mes "["+ strcharinfo(0) +"]";
+		mes "...!";
+		mes "Tarsha...";
+		mes "Seu pai";
+		mes "ainda pode estar vivo!";
+		next;
+		mes "[Tarsha Cherno]";
+		mes "...O quê?";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "Preciso ir verificar";
+		mes "algo agora, mas";
+		mes "espero que eu volte";
+		mes "logo com boas notícias!";
+		changequest 2080,2081;
+		kain_ticket = 10;
+	} else if (kain_ticket == 10 || kain_ticket == 11) {
+		mes "["+strcharinfo(0)+"]";
+		mes "Tarsha, conheço alguém";
+		mes "que pode ser seu pai!";
+		mes "Apenas me espere e espero";
+		mes "trazer boas notícias em breve!";
+	} else if (kain_ticket == 12) {
+		mes "[Tarsha Cherno]";
+		mes "Oh, bem-vindo(a) de volta~";
+		mes "Então, você conseguiu";
+		mes "trazer boas notícias?";
+		emotion ET_SMILE;
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Ora, sim.";
+		mes "Por falar nisso,";
+		mes "permita-me... verificar";
+		mes "algo primeiro...";
+		next;
+		switch(select("Verifique o pescoço dela.:Verifique as mãos dela.:Verifique as pernas dela.:Verifique a testa dela.")) {
+		case 1:
+			mes "^3355FFUh oh...";
+			mes "Não tem nada aqui!^000000";
+			next;
+			mes "[Theo Cherno]";
+			mes "Q-que indelicadeza!";
+			mes "Tocar na esposa";
+			mes "de outro homem...?!";
+			next;
+			specialeffect2 EF_PIERCE;
+			percentheal -10,0;
+			close;
+		case 2:
+			mes "^3355FFVocê encontrou";
+			mes "uma marca de queimadura";
+			mes "na mão dela.^000000";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "É isso!";
+			mes "Tarsha, o nome do seu";
+			mes "pai é Kain Himere e ele";
+			mes "trabalha na Dirigível";
+			mes "como um dos tripulantes.";
+			mes "como um dos tripulantes.";
+			next;
+			mes "["+ strcharinfo(0) +"]";
+			mes "Ele sente muito a sua falta";
+			mes "e espera";
+			mes "que você possa perdoá-lo...";
+			mes "Algum dia.";
+			next;
+			mes "[Tarsha Cherno]";
+			mes "Você...";
+			mes "Você está falando sério?";
+			mes "Meu pai está vivo!";
+			mes "Oh, graças a Deus! Muito";
+			mes "obrigada, aventureiro(a)!";
+			next;
+			mes "[Tarsha Cherno]";
+			mes "...........";
+			mes "Então isso significa que meu";
+			mes "nome verdadeiro seria";
+			mes "^3131FFTarsha Himere Cherno^000000.";
+			next;
+			mes "[Tarsha Cherno]";
+			mes "Oh, você é um presente dos céus!";
+			mes "Nunca esquecerei o que você";
+			mes "fez por mim! Devo te retribuir";
+			mes "de alguma forma! Mas tudo o que sei";
+			mes "é engenharia mecânica...";
+			next;
+			mes "[Tarsha Cherno]";
+			mes "Oh, já sei~";
+			mes "Se você tiver qualquer";
+			mes "^3131FFequipamento quebrado^000000,";
+			mes "posso consertá-lo com este";
+			mes "Especialista em Reparos. É";
+			mes "uma das nossas melhores invenções!";
+			next;
+			mes "[Tarsha Cherno]";
+			mes "Preciso ir ver meu pai";
+			mes "biológico logo!";
+			mes "Sinto falta dele há anos!";
+			mes "Obrigada novamente por tudo";
+			mes "que fez pela minha família~";
+			next;
+			mes "[Tarsha Cherno]";
+			mes "Oh, e antes de você";
+			mes "ir, você poderia ver";
+			mes "a Elle novamente? Ela queria";
+			mes "falar com você por algum motivo.";
+			changequest 2083,2084;
+			kain_ticket = 13;
+			close;
+		case 3:
+			mes "^3355FFUh oh...";
+			mes "Não tem nada aqui!^000000";
+			next;
+			mes "[Theo Cherno]";
+			mes "Q-que indelicadeza!";
+			mes "Tocar na esposa";
+			mes "de outro homem...?!";
+			next;
+			specialeffect2 EF_PIERCE;
+			percentheal -20,0;
+			close;
+		case 4:
+			mes "^3355FFUh oh...";
+			mes "Não tem nada aqui!^000000";
+			next;
+			mes "[Theo Cherno]";
+			mes "Q-que indelicadeza!";
+			mes "Tocar na esposa";
+			mes "de outro homem...?!";
+			next;
+			specialeffect2 EF_PIERCE;
+			percentheal -10,0;
+			close;
+		}
+	} else if (kain_ticket > 12) {
+		mes "[Tarsha Cherno]";
+		mes "Tenho me sentido ótima";
+		mes "depois de tudo o que você fez";
+		mes "por nós. Mais uma vez, gostaria";
+		mes "de agradecer, gentil aventureiro(a).";
+	} else {
+		mes "[Tarsha Cherno]";
+		mes "Sinto muito, mas";
+		mes "estamos bem ocupados.";
+		mes "Por favor, nos dê licença~";
+	}
+	close;
+}
+
+ein_in01,127,94,3	script	#exp_ein	HIDDEN_NPC,{ end; }
+
+function	script	F_Cherno	{
+	specialeffect EF_COMBOATTACK1,AREA,"#exp_ein";
+	mes "^33355F*Bang*^000000";
+	next;
+	specialeffect EF_COMBOATTACK2,AREA,"#exp_ein";
+	mes "^33355F*Baque*^000000";
+	next;
+	specialeffect EF_COMBOATTACK3,AREA,"#exp_ein";
+	mes "^33355F*Baque*^000000";
+	next;
+	specialeffect EF_POISONATTACK,AREA,"#exp_ein";
+	mes "^33355F*Estrondo!*^000000";
+	mes ".....";
+	emotion ET_SWEAT, getnpcid(0, "Theo Cherno");
+	emotion ET_SWEAT, getnpcid(0, "Tarsha Cherno");
+	next;
+	mes "[Theo Cherno]";
+	mes "Querido...";
+	mes "Acho que há";
+	mes "um problema estrutural";
+	mes "crítico na junta.";
+	next;
+	mes "[Tarsha Cherno]";
+	mes "Elas não devem";
+	mes "estar conectadas corretamente.";
+	mes "Talvez se nós... Hmmm.";
+	next;
+	mes "[Theo Cherno]";
+	mes "Bem, vamos encerrar";
+	mes "por hoje e terminar";
+	mes "isso amanhã, certo?";
+	next;
+	emotion ET_QUESTION, getnpcid(0, "Tarsha Cherno");
+	mes "[Tarsha Cherno]";
+	mes "Oh~";
+	mes "Eu não sabia que";
+	mes "tínhamos uma visita. Olá,";
+	mes "como vai você?";
+	mes "Você tem interesse em";
+	mes "alguma de nossas invenções?";
+	next;
+	switch(select("Nada.:Sua filha pediu que eu viesse visitá-los.")) {
+	case 1:
+		mes "[Theo Cherno]";
+		mes "Ah sim, minha esposa e";
+		mes "eu estamos nos mantendo";
+		mes "ocupados com pesquisas.";
+		mes "Estamos tentando inventar novas";
+		mes "coisas para uma vida melhor.";
+		mes "É o que fazemos...";
+		close;
+	case 2:
+		emotion ET_SWEAT, getnpcid(0, "Tarsha Cherno");
+		emotion ET_SWEAT, getnpcid(0, "Theo Cherno");
+		mes "[Tarsha Cherno]";
+		mes "Hahaha, Elle?";
+		mes "Por que nossa";
+		mes "filha enviaria";
+		mes "você para nos visitar?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Bem, uh...";
+		mes "Ela queria que eu";
+		mes "verificasse se a mãe";
+		mes "dela estava doente ou triste";
+		mes "...Ou algo assim?";
+		next;
+		emotion ET_HUK, getnpcid(0, "Tarsha Cherno");
+		mes "[Tarsha Cherno]";
+		mes "Meu Deus...!";
+		mes "O que ela está pensando?";
+		mes "Peço desculpas por incomodá-lo";
+		mes "com esse tipo de engano";
+		mes "bobo, aventureiro!";
+		next;
+		mes "[Theo Cherno]";
+		mes "Mas espere, querida.";
+		mes "Concordo que às vezes";
+		mes "você parece a pessoa";
+		mes "mais solitária do mundo, olhando";
+		mes "pela janela com aqueles";
+		mes "olhos impossivelmente melancólicos.";
+		next;
+		mes "[Tarsha Cherno]";
+		mes "Ah, eu devo estar";
+		mes "deixando minha família";
+		mes "muito ansiosa. Mas";
+		mes "não se preocupe, meu amor.";
+		mes "Sou muito feliz com";
+		mes "você e com a Elle.";
+		next;
+		mes "[Tarsha Cherno]";
+		mes "E...";
+		mes "Bondoso aventureiro,";
+		mes "poderia me dizer seu nome?";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "Eu me chamo,";
+		mes ""+ strcharinfo(0) +".";
+		emotion ET_SMILE;
+		next;
+		mes "[Tarsha Cherno]";
+		mes ""+ strcharinfo(0) +",";
+		mes "Agradeço sua";
+		mes "preocupação conosco. Gostaria";
+		mes "de ficar para uma xícara de chá?";
+		next;
+		mes "[Tarsha Cherno]";
+		mes "Agora, por favor, perdoe a";
+		mes "bagunça. Meu marido e eu somos";
+		mes "engenheiros mecânicos focados";
+		mes "em criar máquinas que reduzam";
+		mes "o risco na mineração de minérios.";
+		next;
+		mes "[Tarsha Cherno]";
+		mes "Como trabalhamos em casa, não";
+		mes "podemos evitar ter peças";
+		mes "de máquinas espalhadas por aqui";
+		mes "às vezes. De qualquer forma,";
+		mes "esperamos criar uma máquina que torne a vida dos mineiros mais segura...";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "Ah...";
+		mes "Então é por isso";
+		mes "que existem tantas";
+		mes "coisas interessantes";
+		mes "na sua casa...";
+		next;
+		mes "^3355FFVocê começa a";
+		mes "dar uma olhada ao redor";
+		mes "da casa dos Cherno.^000000";
+		return;
+	}
+}
+
+//----------------------------------------------------------------------------
+// Unidentified Machine
+//----------------------------------------------------------------------------
+ein_in01,122,103,5	script	Unidentified Machine#ein	HIDDEN_NPC,{
+	mes "^3355FFÉ...";
+	mes "É uma máquina";
+	mes "de aparência muito";
+	mes "estranha. Será que ela";
+	mes "serve para alguma coisa?^000000";
+	close;
+}
+
+//----------------------------------------------------------------------------
+// Mirror
+//----------------------------------------------------------------------------
+ein_in01,121,99,3	script	Mirror#ein	HIDDEN_NPC,{
+	if (kain_ticket == 8) {
+		mes "^3355FFÉ um espelho.";
+		mes "Então, é claro que a";
+		mes "primeira coisa que você";
+		mes "verá é você mesmo.";
+		next;
+		.@r = rand(1,5);
+		if (.@r == 5) {
+			mes "["+strcharinfo(0)+"]";
+			mes "Oh, uau...";
+			mes "Eu pareço muito bem.";
+			mes "Não, espere. Realmente, muito";
+			mes "bem. Então deve ser por isso";
+			mes "que recebo um serviço tão ótimo";
+			mes "nos restaurantes...";
+		} else if (Sex == SEX_MALE) {
+			switch(.@r) {
+			case 1:
+				mes "["+strcharinfo(0)+"]";
+				mes "Cara...";
+				mes "Eu não sabia";
+				mes "que era tão";
+				mes "bonito! Ooh yah~";
+				break;
+			case 2:
+				mes "["+strcharinfo(0)+"]";
+				mes "Uau...";
+				mes "Então é por isso que as";
+				mes "damas continuam olhando";
+				mes "para mim. Eu sou um";
+				mes "espetáculo ambulante!";
+				break;
+			case 3:
+				mes "["+strcharinfo(0)+"]";
+				mes "É uma pena que eu não possa mudar";
+				mes "de classe para Modelo Masculino.";
+				mes "Claramente, eu seria, tipo,";
+				mes "Nível de Classe 87 ou algo assim.";
+				mes "Cara, eu sou lindo...";
+				break;
+			case 4:
+				mes "["+strcharinfo(0)+"]";
+				mes "Esse é o meu reflexo?!";
+				mes "Ninguém pode ser tão bonito";
+				mes "assim, não sem efeitos";
+				mes "especiais! Quero dizer, não";
+				mes "é justo com os outros...";
+				break;
+			}
+		} else {
+			switch(.@r) {
+			case 1:
+				mes "["+strcharinfo(0)+"]";
+				mes "Oh. Uau.";
+				mes "Eu nunca percebi...";
+				mes "Tudo está em";
+				mes "proporção perfeita!";
+				mes "Não é à toa que as pessoas";
+				mes "querem formar grupo comigo~";
+				break;
+			case 2:
+				mes "["+strcharinfo(0)+"]";
+				mes "Meu Deus~";
+				mes "Como posso estar tão";
+				mes "bem sem maquiagem?";
+				mes "I-Isso não é justo com todas as outras";
+				mes "garotas... Uau, sou eu mesma?";
+				break;
+			case 3:
+				mes "["+strcharinfo(0)+"]";
+				mes "Estou ficando louca?";
+				mes "Aquela garota no";
+				mes "espelho sou realmente eu...?";
+				mes "Como não percebi";
+				mes "o quão linda eu sou?";
+				break;
+			case 4:
+				mes "["+strcharinfo(0)+"]";
+				mes "Então...";
+				mes "O que você fez com";
+				mes "este espelho? Porque estou";
+				mes "olhando para o meu reflexo";
+				mes "e não consigo encontrar";
+				mes "nenhuma falha na minha figura...";
+				next;
+				emotion ET_PROFUSELY_SWEAT, getnpcid(0, "Tarsha Cherno");
+				mes "[Tarsha Cherno]";
+				mes "Na verdade...";
+				mes "Essa não é uma";
+				mes "das nossas invenções.";
+				mes "É só um espelho normal...";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "Ora essa...!";
+				mes "Você tem certeza?";
+				mes "Porque meu rosto parece";
+				mes "incrivelmente imaculado! E";
+				mes "é como se eu fosse sexy demais!";
+				break;
+			}
+		}
+		next;
+		mes "^3355FFDepois de apreciar essa";
+		mes "pequena epifania, você";
+		mes "vê um reflexo do pescoço";
+		mes "de Tarsha ao colocar o";
+		mes "espelho de volta.^000000";
+		next;
+		mes "^3355FFAo dar uma olhada";
+		mes "mais de perto, você descobre que";
+		mes "há uma marca estranha ao redor do";
+		mes "pescoço dela. O que será que significa?^000000";
+		kain_ticket = 9;
+		close;
+	}
+}
+
+//----------------------------------------------------------------------------
+// Tree from Einbech
+//----------------------------------------------------------------------------
+einbech,45,113,5	script	Tree#t1-1::Tree	HIDDEN_NPC,{
+	if (kain_ticket == 11) {
+		mes "^3355FFVocê se agacha";
+		mes "sob a árvore e";
+		mes "começa a cavar o";
+		mes "chão.^000000";
+		next;
+		mes "...";
+		mes "......";
+		next;
+		mes "...";
+		mes "......";
+		mes ".........";
+		next;
+		.@find_diary = rand(1,100);
+		if (.@find_diary > 10) {
+			mes "^3355ffInfelizmente,";
+			mes "você não conseguiu";
+			mes "encontrar nada.^000000";
+		} else {
+			mes "^3355FFVocê encontrou um diário";
+			mes "entre outros objetos que";
+			mes "foram enterrados por Kain.";
+			mes "Você abre o diário e começa";
+			mes "a ler o que está escrito dentro.^000000";
+			callsub L_Diary;
+			next;
+			mes "...";
+			mes "......";
+			next;
+			mes "^3355FFEssa foi a última página do diário. Você a pegou para poder levá-la para ^3131FFTarsha.^000000";
+			changequest 2082,2083;
+			kain_ticket = 12;
+		}
+	} else if (kain_ticket == 12) {
+		mes "^3355FFVocê abre";
+		mes "o diário";
+		mes "e começa a ler...^000000";
+		callsub L_Diary;
+	}
+	else
+		end;
+	close;
+
+L_Diary:
+	next;
+	mes "...";
+	mes "......";
+	next;
+	mes "<Data: OX OX>";
+	mes "^856363Estou tão feliz";
+	mes "por estar com Kain.";
+	mes "Ele é um homem tão honesto";
+	mes "e sincero, mesmo sendo";
+	mes "silencioso às vezes.";
+	next;
+	mes "^856363Embora ele seja um";
+	mes "marido muito bom para mim,";
+	mes "não sou tão boa sendo";
+	mes "uma dona de casa. Mas farei";
+	mes "o meu melhor por nós dois.";
+	next;
+	mes "<Data : OX OX>";
+	mes "^856363Adormeci enquanto";
+	mes "preparava o jantar e queimei";
+	mes "toda a comida. Como pude ser";
+	mes "tão descuidada? Mas Kain comeu";
+	mes "cada pedaço, mesmo que tivesse";
+	mes "que fingir que gostou.^000000";
+	next;
+	mes "<Data : OX OX>";
+	mes "^856363Kain e eu teremos";
+	mes "um filho em breve! Estou tão feliz,";
+	mes "mas às vezes também fico";
+	mes "um pouco preocupada. Kain, porém,";
+	mes "só sorri e me traz alívio.^000000";
+	next;
+	mes "<Data : OX OX>";
+	mes "^856363Mais pessoas estão";
+	mes "deixando as minas para trabalhar";
+	mes "nas novas fábricas, muitas";
+	mes "delas amigas de Kain. Acho que";
+	mes "o orgulho de Kain ficou bem ferido.";
+	mes "Como será que posso ajudá-lo?^000000";
+	next;
+	mes "<Data : OX OX>";
+	mes "^856363Kain e eu somos agora os";
+	mes "orgulhosos pais de uma linda";
+	mes "menina. Nós a chamamos de ^000000Tarsha^856363";
+	mes "e ela tem os olhos do pai.";
+	mes "Vou ser a melhor mãe";
+	mes "que eu puder ser para ela.";
+	next;
+	mes "<Data : OX OX>";
+	mes "^856363Tarsha me chamou de";
+	mes "''Mamãe'' pela primeira";
+	mes "vez! É um milagre!";
+	mes "Não quero outra coisa no";
+	mes "mundo além de que ela";
+	mes "seja feliz e saudável.^000000";
+	next;
+	mes "<Data : OX OX>";
+	mes "^856363Kain sofreu um acidente";
+	mes "na mina. Enquanto eles";
+	mes "extraíam minérios, gás tóxico";
+	mes "foi liberado de alguma forma. Não foi";
+	mes "letal, mas o braço de Kain";
+	mes "ficou parcialmente paralisado...^000000";
+	next;
+	mes "^856363Quando o médico disse que";
+	mes "isso poderia até afetar as memórias dele";
+	mes "mais tarde, ele ficou tão deprimido.";
+	mes "Tentei fazê-lo se sentir melhor";
+	mes "fazendo sua sopa favorita.";
+	mes "Ele sorriu, mas eu percebi...^000000";
+	next;
+	mes "^856363Eu percebi que ele";
+	mes "não está bem com isso.";
+	mes "Espero que ele se sinta melhor";
+	mes "logo. O desespero dele é";
+	mes "pelo menos tão grande quanto sua";
+	mes "paixão pelo trabalho.^000000";
+	next;
+	mes "...";
+	mes "......";
+	next;
+	mes "<Data : OX OX>";
+	mes "^856363A bebida de Kain está";
+	mes "piorando. Ele chega";
+	mes "em casa cedo demais gritando";
+	mes "e berrando. Há muita";
+	mes "raiva nele e ele não é";
+	mes "mais o mesmo...";
+	next;
+	mes "...";
+	mes "......";
+	next;
+	mes "<Data : OX OX>";
+	mes "^856363Tarsha queimou a mão";
+	mes "com água fervendo";
+	mes "enquanto brincava na";
+	mes "cozinha. Embora tenha sido";
+	mes "tratada, ela sempre terá";
+	mes "aquela ^000000marca de queimadura^856363.^000000";
+	next;
+	mes "^856363Depois que chegamos do";
+	mes "médico, Tarsha riu";
+	mes "e brincou com sua boneca como se";
+	mes "nada tivesse acontecido. Mas, por";
+	mes "algum motivo, não consegui";
+	mes "parar de chorar...^000000";
+	next;
+	mes "...";
+	mes "......";
+	next;
+	mes "<Data : OX OX>";
+	mes "^856363Kain vem menos para casa";
+	mes "ultimamente. Tive que";
+	mes "começar a trabalhar na loja";
+	mes "depois que gastamos todas as";
+	mes "nossas economias. É difícil trabalhar";
+	mes "e cuidar da família.";
+	next;
+	mes "^856363Ainda assim, vale tudo";
+	mes "a pena para ver o sorriso de Tarsha.";
+	mes "Mas nunca consigo parar de me preocupar";
+	mes "com meu pobre e querido Kain...";
+	next;
+	mes "...";
+	mes "......";
+	next;
+	mes "<Data : OX OX>";
+	mes "^856363Todos os dias, sinto-me mais";
+	mes "fraca, como se eu morresse";
+	mes "apenas um pouco mais a cada dia.";
+	mes "Eu queria contar a Kain sobre";
+	mes "o que o médico disse, mas ele";
+	mes "ainda não está pronto para esta notícia...^000000";
+	next;
+	mes "^856363Ultimamente, Tarsha chora";
+	mes "muito. Minha pobre bebê ama";
+	mes "seu pai, mas ele está sempre";
+	mes "tão distante. Mas, às vezes,";
+	mes "eu o vejo sorrir tristemente para";
+	mes "Tarsha, ainda que por um momento.^000000";
+	return;
+}
+einbech,36,100,5	duplicate(Tree)	Tree#t1-2	HIDDEN_NPC
+einbech,44,90,5	duplicate(Tree)	Tree#t1-3	HIDDEN_NPC
+einbech,53,94,5	duplicate(Tree)	Tree#t1-4	HIDDEN_NPC
+
+//----------------------------------------------------------------------------
+// Expert Repairman
+//----------------------------------------------------------------------------
+ein_in01,117,80,5	script	Unidentified Machine#as	HIDDEN_NPC,{
+	if (kain_ticket > 12) {
+		mes "["+strcharinfo(0)+"]";
+		mes "Este é o";
+		mes "^FF0000Reparador Especialista^000000?!";
+		mes "Parece que ele mesmo";
+		mes "precisa de reparos...";
+		next;
+		if (select("Consertar Item", "Cancelar.") == 1) {
+			if (getbrokenid(1) == 0) {
+				mes "*Bip-*";
+				mes "Você não tem";
+				mes "nada para consertar.";
+				close;
+			}
+			getinventorylist;
+			for (.@i = 0; .@i < @inventorylist_count; .@i++)
+				.@total = .@total + @inventorylist_attribute[.@i];
+			mes "*Bip-*";
+			mes "Você tem um total";
+			mes "de" + .@total + "itens danificados.";
+			mes "Devo consertá-los?";
+			next;
+			if (select("Sim", "Não") == 1) {
+				getinventorylist;
+				for (.@i = 0; .@i < @inventorylist_count; .@i++)
+					.@total2 = .@total2 + @inventorylist_attribute[.@i];
+				if (.@total == .@total2) {
+					repairall;
+					mes "*Bip-*";
+					mes "Reparo concluído.";
+				} else {
+					mes "*Bip-*";
+					mes "Por favor, verifique";
+					mes "seus itens novamente.";
+				}
+				close;
+			}
+		}
+		mes "Você optou por parar.";
+	} else {
+		mes "^3355FFÉ algum tipo de";
+		mes "máquina estranha.";
+		mes "Sua função e propósito";
+		mes "são completamente indecifráveis.^000000";
+	}
+	close;
+}
+
+// "How Does The Airship Work" Quest :: lght_air & lght_ymir
+//============================================================
+
+//----------------------------------------------------------------------------
+// Monsters Attack :: lght_air
+//----------------------------------------------------------------------------
+airplane_01,1,1,0	script	Airship#airplane02	-1,{
+	end;
+OnEnable:
+	initnpctimer;
+	end;
+OnTimer25000:
+	mapannounce "airplane_01","Estamos indo para Izlude.",bc_map,0x00FF00;
+	end;
+OnTimer30000:
+	mapannounce "airplane_01","Capitão: Atenção, todos os passageiros.",bc_map,0x00FF00;
+	end;
+OnTimer34000:
+	mapannounce "airplane_01","Capitão: Estamos sendo abordados por um grupo de criaturas não identificadas.",bc_map,0x00ff00;
+	end;
+OnTimer38000:
+	mapannounce "airplane_01", "Capitão: Todos os passageiros no convés, por favor, procurem abrigo dentro do navio!",bc_map,0x00ff00;
+	hideonnpc "Airship Staff#airplane01";
+	end;
+OnTimer48000:
+	monster "airplane_01",245,57,"Gremlin",1632,1,"Airship#airplane02::OnMyMobDead";
+	monster "airplane_01",247,59,"Gremlin",1632,1,"Airship#airplane02::OnMyMobDead";
+	monster "airplane_01",249,52,"Gremlin",1632,1,"Airship#airplane02::OnMyMobDead";
+	monster "airplane_01",243,62,"Gremlin",1632,1,"Airship#airplane02::OnMyMobDead";
+	monster "airplane_01",239,52,"Beholder",1633,1,"Airship#airplane02::OnMyMobDead";
+	monster "airplane_01",234,56,"Beholder",1633,1,"Airship#airplane02::OnMyMobDead";
+	monster "airplane_01",227,49,"Beholder",1633,1,"Airship#airplane02::OnMyMobDead";
+	monster "airplane_01",233,41,"Beholder",1633,1,"Airship#airplane02::OnMyMobDead";
+	setarray .@x[0], 251,245,234,233;
+	setarray .@y[0],  47, 53, 46, 58;
+	for (.@i = 0; .@i < 4; .@i++) {
+		switch(rand(1,5)) {
+			case 1: monster "airplane_01",.@x[.@i],.@y[.@i],"Drainliar",1111,1,"Airship#airplane02::OnMyMobDead"; break;
+			case 2: monster "airplane_01",.@x[.@i],.@y[.@i],"Rotar Zairo",1392,1,"Airship#airplane02::OnMyMobDead"; break;
+			case 3: monster "airplane_01",.@x[.@i],.@y[.@i],"Farmiliar",1005,1,"Airship#airplane02::OnMyMobDead"; break;
+			case 4: monster "airplane_01",.@x[.@i],.@y[.@i],"Picky",1049,1,"Airship#airplane02::OnMyMobDead"; break;
+			case 5: monster "airplane_01",.@x[.@i],.@y[.@i],"Steel Chonchon",1042,1,"Airship#airplane02::OnMyMobDead"; break;
+		}
+	}
+	// it's possible this is an error, but in aegis it stops resetting the random var.
+	setarray .@mob_list[0], 1111, 1392, 1005, 1049, 1042;
+	.@mob_id = .@mob_list[ rand(5) ];
+	monster "airplane_01",243,60,"--ja--",.@mob_id,1,"Airship#airplane02::OnMyMobDead";
+	monster "airplane_01",228,54,"--ja--",.@mob_id,1,"Airship#airplane02::OnMyMobDead";
+	monster "airplane_01",232,41,"--ja--",.@mob_id,1,"Airship#airplane02::OnMyMobDead";
+	end;
+OnTimer48010:
+	monster "airplane_01",238,56,"Gremlin",1632,1,"Airship#airplane02::OnCaptainMobDead";
+	monster "airplane_01",239,56,"Gremlin",1632,1,"Airship#airplane02::OnCaptainMobDead";
+	monster "airplane_01",240,50,"Gremlin",1632,1,"Airship#airplane02::OnCaptainMobDead";
+	monster "airplane_01",241,56,"Gremlin",1632,1,"Airship#airplane02::OnCaptainMobDead";
+	monster "airplane_01",247,51,"Gremlin",1632,1,"Airship#airplane02::OnCaptainMobDead";
+	monster "airplane_01",237,44,"Beholder",1633,1,"Airship#airplane02::OnCaptainMobDead";
+	monster "airplane_01",233,54,"Beholder",1633,1,"Airship#airplane02::OnCaptainMobDead";
+	monster "airplane_01",237,62,"Beholder",1633,1,"Airship#airplane02::OnCaptainMobDead";
+	end;
+OnTimer53000:
+	mapannounce "airplane_01", "Atendente: Capitão Tarlock, estamos com problemas! Os monstros estão indo para os propulsores!",bc_map,0x00FF00;
+	end;
+OnTimer58000:
+	mapannounce "airplane_01", "Capitão Tarlock: O quê?! Eu tenho que pará-los!",bc_map,0x70DBDB;
+	end;
+OnTimer63000:
+	hideonnpc "Airship Captain#01";
+	hideoffnpc "Airship Captain#02";
+	end;
+OnTimer68000:
+	emotion ET_ANGER, getnpcid(0, "Airship Captain#02");
+	mapannounce "airplane_01", "Capitão Tarlock: Suas criaturas feias e malditas... Saiam do meu navio!",bc_map,0x70DBDB;
+	end;
+OnTimer73000:
+	mapannounce "airplane_01", "*Kzzz...Drrrr...Boom! CRASH!*",bc_map,0x00FF00;
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom6#airplane";
+	end;
+OnTimer73500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom7#airplane";
+	end;
+OnTimer74000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom8#airplane";
+	end;
+OnTimer74500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom9#airplane";
+	end;
+OnTimer75000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom10#airplane";
+	end;
+OnTimer75500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom6#airplane";
+	end;
+OnTimer76000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom7#airplane";
+	end;
+OnTimer76500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom8#airplane";
+	end;
+OnTimer77000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom9#airplane";
+	end;
+OnTimer77500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom10#airplane";
+	end;
+OnTimer78000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom6#airplane";
+	mapannounce "airplane_01", "Engenheiro: Oh não! Temos um problema com o Motor Traseiro Número Um!",bc_map,0x00FF00;
+	end;
+OnTimer79000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom7#airplane";
+	end;
+OnTimer80000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom8#airplane";
+	end;
+OnTimer81000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom9#airplane";
+	end;
+OnTimer82000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom10#airplane";
+	end;
+OnTimer83000:
+	mapannounce "airplane_01", "Piloto: Rápido! Levem as mulheres, idosos e crianças para um lugar seguro primeiro! Rápido!",bc_map,0x00FF00;
+	end;
+OnTimer84000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom6#airplane";
+	end;
+OnTimer85000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom7#airplane";
+	end;
+OnTimer86000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom8#airplane";
+	end;
+OnTimer87000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom7#airplane";
+	end;
+OnTimer88000:
+	emotion ET_ANGER, getnpcid(0, "Airship Captain#02");
+	mapannounce "airplane_01", "Capitão Tarlock: Vocês, monstros imundos, estão lidando com o capitão deste navio...",bc_map,0x70DBDB;
+	end;
+OnTimer93000:
+	emotion ET_ANGER, getnpcid(0, "Airship Captain#02");
+	mapannounce "airplane_01", "Capitão Tarlock: Eu protegerei este navio e minha tripulação com a minha vida!",bc_map,0x70DBDB;
+	end;
+OnTimer98000:
+	emotion ET_HNG, getnpcid(0, "Airship Captain#02");
+	mapannounce "airplane_01", "Capitão Tarlock: Aqui vai! Rifle Destruidor Exodus Joker XIII Especial!",bc_map,0x70DBDB;
+	end;
+OnTimer103000:
+	mapannounce "airplane_01", "*Bang! Bang Bang! Bang Bang! Bang Bang Bang!*",bc_map,0x00FF00;
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer103500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom1#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer104000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom2#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer104500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom3#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer105000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom4#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer105500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom5#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer106000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom0#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer106500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom1#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer107000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom2#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer107500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom4#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer108000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom5#airplane";
+	killmonster "airplane_01","Airship#airplane02::OnCaptainMobDead";
+	end;
+OnTimer113000:
+	emotion ET_HNG, getnpcid(0, "Airship Captain#02");
+	mapannounce "airplane_01","Capitão Tarlock: Animais imundos! Parem de destruir meu navio!",bc_map,0x70DBDB;
+	end;
+OnTimer118000:
+	mapannounce "airplane_01", "*Bang! Bang Bang! Bang Bang! Bang Bang Bang!*",bc_map,0x00FF00;
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer118500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom6#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer119000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom7#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer119500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom8#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer120000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom9#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer120500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom10#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer121000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom6#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer121500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom7#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer122000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom8#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer122500:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom9#airplane";
+	specialeffect EF_HIT5,AREA,"Airship Captain#02";
+	end;
+OnTimer123000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom8#airplane";
+	mapannounce "airplane_01", "*Boom! Boom Boom! Boom Boom! Boom!*",bc_map,0x00FF00;
+	end;
+OnTimer124000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom9#airplane";
+	end;
+OnTimer125000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom10#airplane";
+	end;
+OnTimer126000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom6#airplane";
+	end;
+OnTimer127000:
+	specialeffect EF_SUI_EXPLOSION,AREA,"boom7#airplane";
+	end;
+OnTimer128000:
+	emotion ET_FRET, getnpcid(0, "Airship Captain#02");
+	mapannounce "airplane_01", "Capitão Tarlock: São... Muitos para controlar!",bc_map,0x70DBDB;
+	end;
+OnTimer133000:
+	mapannounce "airplane_01", "Piloto: Capitão, senhor, a situação está ficando crítica!",bc_map,0x00FF00;
+	end;
+OnTimer138000:
+	emotion ET_SWEAT, getnpcid(0, "Airship Captain#02");
+	mapannounce "airplane_01", "Capitão Tarlock: Precisaremos de toda a ajuda possível!",bc_map,0x70DBDB;
+	end;
+OnTimer143000:
+	emotion ET_SORRY, getnpcid(0, "Airship Captain#02");
+	mapannounce "airplane_01", "Capitão Tarlock: Todos os tripulantes e passageiros que puderem lutar! Temos que expulsar esses monstros!",bc_map,0x70DBDB;
+	end;
+OnTimer148000:
+	hideonnpc "Airship Captain#02";
+	hideoffnpc "Airship Captain#01";
+	end;
+OnTimer400000:
+	killmonster "airplane_01","Airship#airplane02::OnMyMobDead";
+	end;
+OnTimer405000:
+	mapannounce "airplane_01","Ameaça dos monstros eliminada. A Dirigível voltou a operar normalmente.",bc_map,0x00FF00;
+	hideoffnpc "Airship Staff#airplane01";
+	end;
+OnTimer410000:
+	mapannounce "airplane_01","Chegaremos em Izlude em breve.",bc_map,"0x00ff00";
+	end;
+OnTimer420000:
+	$@airplanelocation2 = 1;
+	donpcevent "#AirshipWarp-3::OnUnhide";
+	donpcevent "#AirshipWarp-4::OnUnhide";
+	mapannounce "airplane_01","Bem-vindo a Izlude. Tenha uma boa viagem.",bc_map,"0x00ff00";
+	end;
+OnTimer430000:
+	mapannounce "airplane_01","Estamos atualmente em Izlude. A Dirigível decolará em breve.",bc_map,"0x00ff00";
+	end;
+OnTimer440000:
+	donpcevent "#AirshipWarp-3::OnHide";
+	donpcevent "#AirshipWarp-4::OnHide";
+	mapannounce "airplane_01","A Dirigível está decolando. Nosso próximo destino é Juno.",bc_map,"0x70dbdb";
+	end;
+OnTimer465000:
+	mapannounce "airplane_01","Estamos a caminho de Juno.",bc_map,"0x70dbdb";
+	end;
+OnTimer490000:
+	mapannounce "airplane_01","Chegaremos em Juno em breve.",bc_map,"0x70dbdb";
+	end;
+OnTimer500000:
+	$@airplanelocation2 = 2;
+	donpcevent "#AirshipWarp-3::OnUnhide";
+	donpcevent "#AirshipWarp-4::OnUnhide";
+	mapannounce "airplane_01","Bem-vindo a Juno. Tenha uma boa viagem.",bc_map,"0x70dbdb";
+	end;
+OnTimer510000:
+	mapannounce "airplane_01","Estamos atualmente em Juno. A Dirigível partirá em breve.",bc_map,"0x70dbdb";
+	end;
+OnTimer520000:
+	donpcevent "#AirshipWarp-3::OnHide";
+	donpcevent "#AirshipWarp-4::OnHide";
+	mapannounce "airplane_01","A Dirigível está deixando o solo. Nosso próximo destino é Rachel.",bc_map,"0xFF8200";
+	end;
+OnTimer545000:
+	mapannounce "airplane_01","Estamos a caminho de Rachel.",bc_map,"0xFF8200";
+	end;
+OnTimer570000:
+	mapannounce "airplane_01","Chegaremos em Rachel em breve.",bc_map,"0xFF8200";
+	end;
+OnTimer580000:
+	$@airplanelocation2 = 0;
+	donpcevent "#AirshipWarp-3::OnUnhide";
+	donpcevent "#AirshipWarp-4::OnUnhide";
+	mapannounce "airplane_01","Bem-vindo a Rachel. Tenha uma boa viagem.",bc_map,"0xFF8200";
+	end;
+OnTimer590000:
+	mapannounce "airplane_01","Estamos atualmente em Rachel. A Dirigível decolará em breve.",bc_map,"0xFF8200";
+	end;
+OnTimer600000:
+	donpcevent "#AirshipWarp-3::OnHide";
+	donpcevent "#AirshipWarp-4::OnHide";
+	mapannounce "airplane_01","A Dirigível está decolando. Nosso próximo destino é Izlude.",bc_map,"0x00ff00";
+	stopnpctimer;
+	set getvariableofnpc(.moninv, "International_Airship"),2;
+	donpcevent "International_Airship::OnEnable";
+	end;
+
+OnMyMobDead:
+OnCaptainMobDead:
+	end;
+}
+
+airplane_01,246,54,3	script	Airship Captain#02	4_M_REINDEER,{
+	cutin "fly_felrock",2;
+	mes "[Tarlock]";
+	mes "Eu sou Tarlock,";
+	mes "capitão desta";
+	mes "Dirigível. Vá e";
+	mes "lute contra os";
+	mes "Gremlins!";
+	close2;
+	cutin "",255;
+	end;
+	
+OnInit:
+	hideonnpc "Airship Captain#02";
+	end;
+}
+
+airplane_01,249,50,0	script	boom0#airplane	HIDDEN_WARP_NPC,{ end; }
+airplane_01,239,62,0	script	boom1#airplane	HIDDEN_WARP_NPC,{ end; }
+airplane_01,244,55,0	script	boom2#airplane	HIDDEN_WARP_NPC,{ end; }
+airplane_01,239,50,0	script	boom3#airplane	HIDDEN_WARP_NPC,{ end; }
+airplane_01,245,59,0	script	boom4#airplane	HIDDEN_WARP_NPC,{ end; }
+airplane_01,245,48,0	script	boom5#airplane	HIDDEN_WARP_NPC,{ end; }
+airplane_01,235,39,0	script	boom6#airplane	HIDDEN_WARP_NPC,{ end; }
+airplane_01,252,41,0	script	boom7#airplane	HIDDEN_WARP_NPC,{ end; }
+airplane_01,252,63,0	script	boom8#airplane	HIDDEN_WARP_NPC,{ end; }
+airplane_01,234,65,0	script	boom9#airplane	HIDDEN_WARP_NPC,{ end; }
+airplane_01,227,67,0	script	boom10#airplane	HIDDEN_WARP_NPC,{ end; }
+
+//----------------------------------------------------------------------------
+// Captain Tarlock :: lght_air
+//----------------------------------------------------------------------------
+airplane_01,238,154,3	script	Airship Captain#01	4_M_REINDEER,{
+	cutin "fly_felrock",2;
+	mes "[Tarlock]";
+	mes "Eu sou Tarlock,";
+	mes "capitão desta";
+	mes "Dirigível. Você tem";
+	mes "alguma pergunta?";
+	next;
+	if (lght_air >= 0 && lght_air <= 3 || lght_air == 7) {
+		.@question$ = "How does this Airship fly?";
+	} else if (lght_air == 4) {
+		.@question$ = "I handed the letter to Captain Ferlock.";
+	} else if (lght_air == 5) {
+		.@question$ = "You finished reading the letter?";
+	} else if (lght_air == 6) {
+		.@question$ = "Already finished reading?";
+	}
+	switch (select("V-você é uma rena?!", .@question$, "Não, na verdade não.")) {
+	case 1:
+		mes "[Tarlock]";
+		mes "Hm? Oh, isso...";
+		mes "Nós, renas, somos uma raça";
+		mes "orgulhosa que gosta de viajar pelo";
+		mes "mundo. Mas isso deveria ser";
+		mes "óbvio se você pensar nas";
+		mes "renas que trabalham para o Claus.";
+		next;
+		mes "[Tarlock]";
+		mes "Bem, sendo rena ou";
+		mes "não, eu conquistei o";
+		mes "comando deste navio";
+		mes "e a lealdade da minha tripulação.";
+		mes "Faremos tudo o que pudermos para";
+		mes "garantir que seu voo seja seguro.";
+		break;
+	case 2:
+		mes "[Tarlock]";
+		if (lght_air == 1) {
+			if (BaseLevel <= 59) {
+				mes "Mm...?";
+				mes "Você não me perguntou isso";
+				mes "antes? Bem, de qualquer forma,";
+				mes "peço desculpas, mas ainda não";
+				mes "tenho permissão para lhe contar esse segredo.";
+				break;
+			} else {
+				mes "Mm...?";
+				mes "Você não me perguntou isso";
+				mes "antes? Você está apenas curioso";
+				mes "ou realmente quer saber?";
+				next;
+				switch (select("Não, na verdade não...:Sim, eu realmente quero saber!")) {
+				case 1:
+					mes "[Tarlock]";
+					mes "Hahahaha~";
+					mes "Talvez um dia você";
+					mes "descubra como esta Dirigível";
+					mes "consegue se manter no ar e";
+					mes "voar pelos céus.";
+					break;
+				case 2:
+					mes "[Tarlock]";
+					mes "Sendo bem honesto, o";
+					mes "segredo do voo desta Dirigível";
+					mes "é algo que apenas capitães";
+					mes "estão autorizados a saber. Então";
+					mes "eu não deveria te contar";
+					mes "nada sobre isso.";
+					next;
+					mes "[Tarlock]";
+					mes "Mas nunca fui capaz de";
+					mes "confiar na administração superior,";
+					mes "então não tenho lealdade a eles.";
+					mes "Eu não me importaria de te contar";
+					mes "essa informação confidencial se você";
+					mes "fizer um pequeno favor para mim antes.";
+					next;
+					switch (select("Deixe-me pensar sobre isso.:Claro.")) {
+					case 1:
+						mes "[Tarlock]";
+						mes "Tudo bem. Mas não";
+						mes "se preocupe, eu não vou";
+						mes "pedir que você faça nada";
+						mes "que você não consiga lidar. Volte";
+						mes "depois que decidir, está bem?";
+						break;
+					case 2:
+						setquest 8032;
+						lght_air = 2;
+						mes "[Tarlock]";
+						mes "Ha-hah! Eu já gostei de você!";
+						mes "Tudo bem, aqui está";
+						mes "o acordo. Tenho um irmão mais";
+						mes "novo que raramente vejo, já que";
+						mes "ele também é um Capitão de Dirigível";
+						mes "que está sempre viajando.";
+						next;
+						mes "[Tarlock]";
+						mes "Você levaria esta";
+						mes "carta para meu irmão,";
+						mes "Ferlock? Além disso, por favor,";
+						mes "certifique-se de voltar";
+						mes "com a resposta dele, certo?";
+						mes "Obrigado, aventureiro.";
+						next;
+						mes "[Tarlock]";
+						mes "Ah, e quando você encontrar";
+						mes "meu irmão, por favor, ajude-o.";
+						mes "Ele explicará tudo";
+						mes "quando você o vir.";
+						next;
+						mes "^3131FFVocê recebeu a carta";
+						mes "do Capitão Tarlock para";
+						mes "entregar ao irmão dele,";
+						mes "o Capitão Ferlock.";
+						break;
+					}
+					break;
+				}
+			}
+		} else if (lght_air == 4) {
+			lght_air = 5;
+			changequest 8034,8035;
+			mes "Oh!";
+			mes "E ele te respondeu? Sério?!";
+			mes "Na verdade, eu não estava";
+			mes "esperando muito por isso...";
+			mes "Por favor, espere um pouco,";
+			mes "vou ler a carta dele.";
+		} else if (lght_air == 5) {
+			lght_air = 6;
+			mes "Um... Ha ha ha~!";
+			mes "Esse cara, ele é um verdadeiro apaixonado!";
+			mes "Mas seu verdadeiro eu interior";
+			mes "é limitado pelo seu dever.";
+			mes "O que você acha?";
+			mes "Hoh hoh hoh.";
+			next;
+			mes "^3131ffEle continua lendo";
+			mes "a carta.^000000";
+		} else if (lght_air == 6) {
+			mes "Sim, terminei.";
+			mes "Mesmo que eu o entenda,";
+			mes "tenho um ponto de vista";
+			mes "totalmente diferente. Mas nós";
+			mes "dois somos destemidos.";
+			next;
+			mes "[Tarlock]";
+			mes "Oh, quase me esqueci,";
+			mes "vou te ensinar o que";
+			mes "você queria saber.";
+			next;
+			mes "[Tarlock]";
+			mes "O segredo da Dirigível flutuar é...";
+			mes "A grande caldeira é incendiada,";
+			mes "isso move os pistões, engrenagens";
+			mes "e turbinas com o vapor";
+			mes "que é gerado quando a água";
+			mes "passa pela caldeira.";
+			next;
+			mes "[Tarlock]";
+			mes "Isso gira a hélice.";
+			mes "É só isso. Você entendeu?";
+			next;
+			select("Um? Só isso? Não tem mais nada?");
+			mes "[Tarlock]";
+			mes "Ha ha ha!";
+			mes "Eu expliquei de modo simples";
+			mes "para facilitar o seu";
+			mes "entendimento. Ainda assim, você";
+			mes "não está satisfeito? Eu disse";
+			mes "de uma forma clara que todos";
+			mes "pudessem entender.";
+			next;
+			mes "[Tarlock]";
+			mes "Obviamente, apenas com vapor";
+			mes "é impossível fazer isso voar.";
+			mes "Portanto, ela usa um amplificador";
+			mes "chamado ^ff0000Mecanismo Rúnico^000000.";
+			next;
+			select("Uh? O que é um Mecanismo Rúnico?");
+			mes "[Tarlock]";
+			mes "É um dispositivo que usa uma";
+			mes "pedra mágica como fonte de energia.";
+			mes "No entanto, eu não sei como";
+			mes "isso funciona...";
+			mes "Esqueci os detalhes, provavelmente";
+			mes "porque não prestei muita atenção.";
+			next;
+			mes "[Tarlock]";
+			mes "A única coisa que lembro é";
+			mes "que a energia é amplificada";
+			mes "enquanto passa pela";
+			mes "Runa que está conectada a um";
+			mes "motor a vapor.";
+			next;
+			mes "[Tarlock]";
+			mes "Na verdade, toda esta Dirigível";
+			mes "flutua graças ao poder";
+			mes "fornecido pela pedra, sem";
+			mes "exagero.";
+			mes "Ela tem um poder realmente forte.";
+			next;
+			specialeffect2 EF_MAPPILLAR;
+			mes "[Tarlock]";
+			mes "Você entendeu?";
+			mes "Vou descansar um pouco.";
+			mes "Estou cansado de ler";
+			mes "e escrever essas longas";
+			mes "cartas.";
+			completequest 8035;
+			lght_air = 7;
+			if (checkre(3))
+				getexp 20000,1000;
+			else
+				getexp 200000,10000;
+		} else if (lght_air == 7) {
+			mes "Eu não te ensinei antes?";
+			mes "Não vou explicar uma história";
+			mes "tão longa novamente!";
+		} else if (lght_air == 2 || lght_air == 3) {
+			mes "Hahahah! Não se preocupe, eu";
+			mes "te direi agora que esta Dirigível";
+			mes "voa assim que você entregar aquela";
+			mes "carta ao meu irmão, Ferlock,";
+			mes "e trouxer a resposta dele.";
+		} else {
+			mes "Hahaha! Como esta";
+			mes "Dirigível voa? Sim, é";
+			mes "bastante maravilhoso, não é?";
+			mes "Embora isso seja um segredo,";
+			mes "deixe-me garantir que não é";
+			mes "nada estranho ou perigoso.";
+			lght_air = 1;
+		}
+		break;
+	case 3:
+		mes "[Tarlock]";
+		mes "Muito bem, então.";
+		mes "Obrigado por voar";
+		mes "conosco, e espero que";
+		mes "aproveite suas viagens.";
+		break;
+	}
+	close2;
+	cutin "",255;
+	end;
+}
+
+//----------------------------------------------------------------------------
+// Captain Ferlock :: lght_ymir
+//----------------------------------------------------------------------------
+airplane,236,163,5	script	Airship Captain#03	4_M_REINDEER,{
+	cutin "fly_trock.bmp",2;
+	mes "[Ferlock]";
+	if (hg_ma1 == 3 || hg_ma1 == 4) {
+		mes "Bem-vindo à Dirigível. Eu sou o capitão Ferlock.";
+		mes "Há algo com que eu possa te ajudar hoje?";
+		next;
+		select("Estou procurando por um homem chamado Thierry.");
+		mes "[Ferlock]";
+		mes "Thierry? Bem, não creio que conheça essa pessoa.";
+		mes "Posso garantir pelo menos que ele não trabalha para mim.";
+		next;
+		select("Você me deixaria verificar o histórico das listas de passageiros?");
+		mes "[Ferlock]";
+		mes "Sinto muito, mas não posso divulgar tais informações pessoais a uma pessoa não autorizada.";
+		if (hg_ma1 == 3) close;
+		next;
+		mes "- O capitão Ferlock ouviu você atentamente enquanto você explicava o motivo pelo qual tem procurado por Thierry. -";
+		next;
+		mes "[Ferlock]";
+		mes "Ummm... entendo, compreendo perfeitamente a situação. Mas, é que não tenho permissão para divulgar nossas listas de passageiros para pessoas não autorizadas...";
+		next;
+		mes "[Ferlock]";
+		mes "*Suspiro*... Suponho que as regras existam apenas para serem quebradas um dia desses... Tudo bem, deixarei você verificar nossas listas de passageiros. Por favor, me dê um momento.";
+		next;
+		mes "- O capitão Ferlock pegou um livro pesado de algum lugar e escreveu o nome 'Thierry' na primeira página em branco. -";
+		mes "- Enquanto as letras desapareciam lentamente, as páginas do livro começaram a ser viradas por conta própria. -";
+		next;
+		mes "- As páginas pararam de virar em uma página onde o nome 'Thierry' estava escrito. -";
+		next;
+		mes "[Ferlock]";
+		mes "Haha, você deve estar surpreso com isso, né? Como vê, este livro é um livro mágico no qual você não precisa virar as páginas para encontrar uma página específica.";
+		mes "Bem, é assim que nós, da República de Schwarzwald, adotamos a magia em nossas vidas.";
+		next;
+		mes "[Ferlock]";
+		mes "Meu velho amigo me deu isso... bem, não é importante neste momento de qualquer forma.";
+		next;
+		mes "[Ferlock]";
+		mes "Vamos ver, Thierry, Thierry... Sim, ele estava na Dirigível há cerca de um mês. Ele estava indo para Hugel, e foi um dos primeiros passageiros da rota de Hugel.";
+		next;
+		mes "[Ferlock]";
+		mes "....Oh, você disse que ele era bom em pesquisar coisas? Agora me lembro dele, era ele mesmo!";
+		next;
+		mes "[Ferlock]";
+		mes "Foi no primeiro dia em que operamos a rota de Hugel. Enquanto seguíamos para Hugel, um grupo de dragões atacou nossa Dirigível.";
+		mes "Estávamos despreparados para tal ataque, então basicamente estávamos em um momento muito perigoso.";
+		next;
+		mes "[Ferlock]";
+		mes "Foi tudo culpa minha, porque eu sabia que os dragões eram um dos motivos pelos quais as pessoas não ousavam visitar Hugel.";
+		mes "Que estúpido fui! Mesmo até então, eu nem pensei duas vezes em preparar nossas tripulações para aqueles ataques brutais de dragões.";
+		next;
+		mes "[Ferlock]";
+		mes "Então, os dragões danificaram seriamente nossa Dirigível, e estávamos prestes a cair no chão. Então, este jovem se apresentou e reparou a Dirigível como se soubesse que isso aconteceria.";
+		mes "Tenho muita certeza de que Thierry foi o cara que salvou nossas vidas.";
+		next;
+		mes "[Ferlock]";
+		mes "Naquela época, eu me perguntava o que o fazia parecer tão triste e deprimido. E agora eu sei o porquê.";
+		mes "Estou tão feliz por ter decidido te ajudar a encontrar esse cara incrível. Agora você pode ir contar à noiva dele onde ele está.";
+		next;
+		mes "[Ferlock]";
+		mes "Se você encontrá-lo, por favor, envie meus cumprimentos a ele.";
+		changequest 8045,8046;
+		hg_ma1 = 5;
+	} else if (hg_ma1 == 5)
+		mes "Por favor, diga à noiva dele onde ele está.";
+	else if (lght_air == 7 && lhz_heart == 11) {
+		mes "Ah, obrigado por vir.";
+		mes "Agora, eu queria te perguntar";
+		mes "por que você estava investigando";
+		mes "o Pedaço do Coração de Ymir. Você está";
+		mes "meramente curioso, ou você";
+		mes "tinha algum motivo especial?";
+		next;
+		switch(select("Apenas curioso...:Bem, há alguém que preciso ajudar...")) {
+		case 1:
+			mes "[Ferlock]";
+			mes "Apenas curioso...?";
+			mes "Não sei se satisfazer";
+			mes "sua curiosidade vale os";
+			mes "riscos que você já";
+			mes "correu. Você deveria ser mais";
+			mes "cuidadoso no futuro...";
+			break;
+		case 2:
+			mes "[Ferlock]";
+			mes "Bem, eu não deveria estar";
+			mes "confiando tanto em você,";
+			mes "mas já que você ajudou";
+			mes "a mim e ao meu irmão, sinto";
+			mes "que você deve ser um daqueles aventureiros altruístas. Muito bem.";
+			next;
+			mes "[Ferlock]";
+			mes "Se você prometer que";
+			mes "nunca contará o que revelarei";
+			mes "a você, então suponho que";
+			mes "posso te contar sobre a Pedra";
+			mes "Rúnica e o Pedaço do Coração de Ymir.";
+			next;
+			select("Eu prometo...");
+			mes "[Ferlock]";
+			mes "Muito bem, então. Espero que";
+			mes "você cumpra sua palavra. Agora, você";
+			mes "já sabe que as Aeronaves";
+			mes "são movidas por Pedras Rúnicas, imitações dos pedaços do Coração de Ymir.";
+			next;
+			mes "[Ferlock]";
+			mes "Embora as Pedras Rúnicas sejam";
+			mes "inferiores aos verdadeiros pedaços";
+			mes "do Coração de Ymir, podemos fazer";
+			mes "quantas quisermos. Quanto aos verdadeiros Pedaços";
+			mes "do Coração de Ymir, são difíceis de encontrar ou reproduzir efetivamente.";
+			next;
+			mes "[Ferlock]";
+			mes "Você pode já ter";
+			mes "descoberto isso, mas todas as";
+			mes "Pedras Rúnicas são produzidas";
+			mes "no Laboratório de Einbroch";
+			mes "para uso nas Aeronaves. Então";
+			mes "você entende o que está acontecendo?";
+			next;
+			select("Espere, o que é o Projeto Varmunt?");
+			mes "[Ferlock]";
+			mes "O Projeto Varmunt é";
+			mes "uma continuação de um dos";
+			mes "projetos iniciados pelo";
+			mes "grande Sábio, Varmunt. Mesmo como";
+			mes "criança, ele era conhecido como um";
+			mes "gênio incrível, um prodígio.";
+			next;
+			mes "[Ferlock]";
+			mes "No entanto, não importa quanto";
+			mes "sucesso acadêmico ele";
+			mes "tenha desfrutado -- ele até se tornou";
+			mes "um Professor titular na Universidade de Juno";
+			mes "-- Varmunt nunca conseguiu financiar sua própria pesquisa.";
+			next;
+			mes "[Ferlock]";
+			mes "Eventualmente, ele aceitou uma";
+			mes "oferta da Rekenber Co. para";
+			mes "desenvolver uma fonte de energia em";
+			mes "troca de financiamento. O";
+			mes "resultado do seu trabalho para eles é a invenção da Pedra Rúnica.";
+			next;
+			mes "[Ferlock]";
+			mes "No entanto, o público não";
+			mes "deve saber que Varmunt";
+			mes "inventou as Pedras Rúnicas. Agora,";
+			mes "Varmunt desapareceu antes que";
+			mes "pudesse aperfeiçoar o processo de";
+			mes "criação da Pedra Rúnica.";
+			next;
+			mes "[Ferlock]";
+			mes "Portanto, as Pedras Rúnicas";
+			mes "que temos agora são instáveis e";
+			mes "tornam-se inúteis depois de um tempo.";
+			mes "O Projeto Varmunt visa";
+			mes "corrigir essas falhas e aperfeiçoar";
+			mes "a replicação do Coração de Ymir...";
+			next;
+			mes "[Ferlock]";
+			mes "Er, de qualquer forma, é por isso";
+			mes "que eu estava no Laboratório de";
+			mes "Einbroch hoje. Minha Pedra";
+			mes "Rúnica estava quase vazia,";
+			mes "então fui lá para pegar";
+			mes "uma totalmente carregada.";
+			next;
+			mes "[Ferlock]";
+			mes "^333333*Ufa...*^000000";
+			mes "Você poderia me dar";
+			mes "um momento para recuperar";
+			mes "o fôlego antes que";
+			mes "eu continue? Sim,";
+			mes "tem mais um pouco...";
+			lhz_heart = 12;
+			break;
+		}
+	} else if (lght_air == 7 && lhz_heart == 12) {
+		mes "Agora,"+strcharinfo(0)+",";
+		mes "você deve estar se perguntando";
+		mes "por que estou lhe contando tudo";
+		mes "isso. Acredito que algum";
+		mes "grupo deseja roubar as";
+		mes "Pedras Rúnicas das Dirigível.";
+		next;
+		mes "[Ferlock]";
+		mes "Você notou os";
+		mes "Gremlins e Beholders";
+		mes "que atacam o navio";
+		mes "do meu irmão? Acredite ou não,";
+		mes "Gremlins geralmente são apenas";
+		mes "inofensivos e travessos.";
+		next;
+		mes "[Ferlock]";
+		mes "As asas dos Gremlins também não";
+		mes "são naturalmente poderosas o suficiente";
+		mes "para permitir que voem. No entanto,";
+		mes "se alguém implantar Vontades";
+		mes "das Trevas neles, seus";
+		mes "poderes aumentam exponencialmente.";
+		next;
+		mes "[Ferlock]";
+		mes "Embora os Gremlins tendam";
+		mes "a não atacar humanos a menos";
+		mes "que sejam provocados, e tendam";
+		mes "a fugir das pessoas, eles";
+		mes "estão sendo controlados para roubar";
+		mes "as Pedras Rúnicas das nossas Dirigível.";
+		next;
+		mes "[Ferlock]";
+		mes "Quem quer que esteja controlando os";
+		mes "Gremlins também envia aqueles";
+		mes "monstros Beholder para";
+		mes "monitorar o progresso deles";
+		mes "e observar nossa resistência.";
+		next;
+		mes "[Ferlock]";
+		mes "Meu irmão e eu temos";
+		mes "investigado esse assunto, mas";
+		mes "até agora, não descobrimos";
+		mes "muito. Bem, minha Dirigível só";
+		mes "faz voos domésticos";
+		mes "e não foi atacada.";
+		next;
+		mes "[Ferlock]";
+		mes "Agora, a Dirigível do meu irmão";
+		mes "é especializada em voos";
+		mes "internacionais e sofre com as";
+		mes "invasões de Gremlins, então";
+		mes "suspeitamos que os atacantes sejam de fora da República de Schwarzwald.";
+		next;
+		mes "[Ferlock]";
+		mes "De qualquer forma, isso é tudo";
+		mes "que eu realmente sei. Por favor, guarde";
+		mes "essa informação para você";
+		mes "e me avise se souber de algo novo sobre essa situação.";
+		next;
+		mes "[Ferlock]";
+		mes "Se eu conseguir descobrir";
+		mes "algo sobre aqueles que estão";
+		mes "usando as Vontades";
+		mes "das Trevas para controlar os";
+		mes "Gremlins e roubar nossas Pedras";
+		mes "Rúnicas, eu lhe avisarei.";
+		next;
+		mes "[Ferlock]";
+		mes "Quem está enviando esses";
+		mes "monstros para invadir nossas";
+		mes "Dirigível, e com qual";
+		mes "propósito eles querem as";
+		mes "Pedras Rúnicas? Hmm. Bem, por";
+		mes "agora é um adeus, aventureiro.";
+		close2;
+		specialeffect2 EF_ABSORBSPIRITS;
+		completequest 8043;
+		lhz_heart = 13;
+		if (checkre(3))
+			getexp 70000,40000;
+		else
+			getexp 700000,400000;
+		cutin "",255;
+		end;
+	} else if (lght_air == 7 && lhz_heart == 13) {
+		mes "Ficarei bastante ocupado com meus";
+		mes "deveres de capitão e minha";
+		mes "investigação particular das";
+		mes "tentativas de roubo das Pedras Rúnicas.";
+		mes "Espero que possamos nos encontrar novamente. Por enquanto, cuide-se.";
+	} else {
+		mes "Ei, seja bem-vindo";
+		mes "a bordo da Dirigível. Sou";
+		mes "Ferlock, seu capitão";
+		mes "neste voo. Como posso";
+		mes "ser útil para você?";
+		next;
+		if (lght_air == 2)
+			.@question2$ = "Give him Tarlock's Letter.";
+		else if (lght_air == 3)
+			.@question2$ = "Here are the items I've found.";
+		switch(select("Como esta Dirigível voa?", .@question2$, "Cancelar.")) {
+		case 1:
+			mes "[Ferlock]";
+			mes "Sinto muito, mas não posso";
+			mes "lhe dar esse tipo de";
+			mes "informação confidencial.";
+			mes "É muito importante para a";
+			mes "segurança e o bem-estar";
+			mes "desta Dirigível, entende?";
+			break;
+		case 2:
+			if (lght_air == 2) {
+				changequest 8032,8033;
+				lght_air = 3;
+				mes "^3131FFVocê entrega ao Capitão Ferlock";
+				mes "a carta que seu irmão";
+				mes "Tarlock escreveu para ele.^000000";
+				next;
+				mes "[Ferlock]";
+				mes "Oh, isso é do meu";
+				mes "irmão? Ei, muito obrigado";
+				mes "por trazer isso para";
+				mes "mim por ele. Ah, me dê";
+				mes "um minuto para ler tudo";
+				mes "isso, quer fazer esse favor?";
+				next;
+				mes "[Ferlock]";
+				mes "...";
+				mes "Então é nisso que ele tem";
+				mes "trabalhado. Huh. Hahaha! Oh, isso é";
+				mes "engraçado. Ah, é sempre bom";
+				mes "ter notícias do Tarlock. Enfim,";
+				mes "sinto muito por fazê-lo esperar.";
+				next;
+				mes "[Ferlock]";
+				mes "Enfim, meu irmão escreveu";
+				mes "sobre as coisas de sempre, mas";
+				mes "mencionou que esperava finalmente";
+				mes "devolver algumas coisas que";
+				mes "ele pegou emprestado comigo.";
+				mes "No entanto, ele as perdeu...";
+				next;
+				mes "[Ferlock]";
+				mes "Acontece que aqueles gremlins";
+				mes "desagradáveis que às vezes";
+				mes "atacam o navio dele roubaram";
+				mes "minhas coisas, então ele estava";
+				mes "na verdade esperando que você";
+				mes "me ajudasse a recuperá-las.";
+				next;
+				mes "[Ferlock]";
+				mes "Sim, sim. Ele mencionou especificamente";
+				mes "que eu não deveria";
+				mes "lhe dar minha resposta até que";
+				mes "você caçasse aqueles monstros e";
+				mes "recuperasse minhas coisas. Sinto muito, mas";
+				mes "acho que você deve um favor ao irmão mais velho, hein?";
+				next;
+				mes "[Ferlock]";
+				mes "Bem, se você estiver disposto a";
+				mes "me ajudar, você poderia trazer";
+				mes "^ff00002 Vontade das Trevas^000000 e";
+				mes "^ff00002 Fruta Espinhosa^000000 de volta para mim?";
+				next;
+				mes "[Ferlock]";
+				mes "Os monstros que atacam";
+				mes "a Dirigível do Tarlock devem";
+				mes "tê-las. Eu ficaria grato";
+				mes "se você me ajudasse";
+				mes "com isso, aventureiro. Agradeço";
+				mes "antecipadamente e boa sorte~";
+			} else if (lght_air == 3) {
+				if (countitem(7340) >= 2 && countitem(576) >= 2) {// Will_Of_Darkness, Prickly_Fruit
+					delitem 7340, 2;
+					delitem 576, 2;
+					changequest 8033,8034;
+					lght_air = 4;
+					mes "[Ferlock]";
+					mes "Oh, isso é ótimo! Finalmente";
+					mes "estou com minhas coisas de volta! Ainda assim,";
+					mes "não faço ideia do porquê o Tarlock";
+					mes "queria essas coisas para começar.";
+					mes "Oh bem. Você poderia levar esta resposta ao Tarlock para mim?";
+					next;
+					mes "[Ferlock]";
+					mes "Obrigado novamente";
+					mes "por toda a sua ajuda!";
+					mes "Acho que eu nunca veria";
+					mes "essas coisas novamente";
+					mes "se não fosse por você~";
+					next;
+					mes "^3355FFVocê recebeu";
+					mes "a carta do Capitão Ferlock";
+					mes "para entregar ao seu irmão";
+					mes "mais velho, o Capitão Tarlock.^000000";
+				} else {
+					mes "[Ferlock]";
+					mes "Oh, sinto muito, mas parece";
+					mes "que está faltando alguma coisa.";
+					mes "Você poderia, por favor, ir e encontrar";
+					mes "^ff00002 Vontade das Trevas^000000 e";
+					mes "^ff00002 Fruta Espinhosa^000000? Obrigado,";
+					mes "corajoso aventureiro~";
+				}
+			}
+			break;
+		case 3:
+			mes "[Ferlock]";
+			mes "Bem, espero que";
+			mes "você aproveite seu tempo";
+			mes "aqui na Dirigível";
+			mes "e que tenha uma";
+			mes "viagem muito agradável.";
+			break;
+		}
+	}
+	close2;
+	cutin "",255;
+	end;
+}
+
+// Heart Fragment Quest :: lght_ymir
+//============================================================
+airplane,236,63,4	script	Hallen	4_M_KID1,{
+	mes "[Hallen]";
+	if (hg_ma1 == 3 || BaseLevel < 60) {
+		mes "Se precisar que eu";
+		mes "faça qualquer coisa, é só";
+		mes "dar um grito.";
+		mes "Bweh heh... grito~";
+		if (hg_ma1 == 3) {
+			next;
+			select("Ei, você conhece um cara chamado Thierry?");
+			mes "[Hallen]";
+			mes "Thierry? Hum... acho que não. Por que você não pergunta à Kaci? Ela pode saber.";
+		}
+	} else if (!lhz_heart) {
+		mes "Olá, olá~";
+		mes "Bem-vindo à Dirigível.";
+		next;
+		switch(select("Não sou passageiro.:Ei garoto, o que você está fazendo?")) {
+		case 1:
+			emotion ET_QUESTION;
+			mes "[Hallen]";
+			mes "Isso significa que você é";
+			mes "um dos membros da tripulação?";
+			mes "Acho que não nos vimos antes,";
+			mes "e eu deveria estar familiarizado com";
+			mes "todos que trabalham aqui a esta altura...";
+			next;
+			emotion ET_SURPRISE;
+			mes "[Hallen]";
+			mes "Ei...!";
+			mes "Se você está de serviço,";
+			mes "não deveria estar";
+			mes "de uniforme? Acho que";
+			mes "você não trabalha aqui afinal!";
+			mes "Heh, descobri sozinho~";
+			next;
+			mes "[Hallen]";
+			mes "Eh, preciso terminar";
+			mes "de varrer este convés. Então,";
+			mes "na minha pausa, posso jogar um";
+			mes "joguinho por Maçãs com";
+			mes "a Kaci. É assim que eu mando, yo.";
+			break;
+		case 2:
+			mes "[Hallen]";
+			mes "Ummm... Não é óbvio?";
+			mes "Estou varrendo o convés. Sou";
+			mes "o tripulante mais jovem, então";
+			mes "fico com os trabalhos mais chatos.";
+			mes "Mas assim que terminar, é hora";
+			mes "de Dados com a Kaci. Oh yeah~";
+			break;
+		}
+		next;
+		select("Kaci?");
+		mes "[Hallen]";
+		mes "Kaci... Sabe, a";
+		mes "negociante do jogo de Dados?";
+		mes "Você deveria tentar: basta";
+		mes "rolar alguns dados por uma chance";
+		mes "de ganhar algumas Maçãs. Ei,";
+		mes "você pode ter muita sorte!";
+		next;
+		mes "[Hallen]";
+		mes "Heh, tem um cara que";
+		mes "ganhou tantas Maçãs da Kaci";
+		mes "que conseguiu se tornar";
+		mes "um Mercador de Maçãs. Você";
+		mes "acredita nisso? É... A Kaci";
+		mes "não gosta muito dele...";
+		close2;
+		lhz_heart = 1;
+		end;
+	} else if (lhz_heart == 1) {
+		mes "Oh, ei, é você~";
+		mes "Nós conversamos mais cedo,";
+		mes "não é? É...";
+		mes "Ainda estou aqui varrendo";
+		mes "este chão. Vai levar";
+		mes "um bom tempo.";
+		next;
+		emotion ET_SURPRISE;
+		mes "[Hallen]";
+		mes "Não parece que";
+		mes "vou terminar isso";
+		mes "tão cedo. Ei, você";
+		mes "acha que poderia me fazer";
+		mes "um favor já que não posso";
+		mes "sair deste lugar?";
+		next;
+		switch(select("Sinto muito, mas estou ocupado...:O que foi?")) {
+		case 1:
+			mes "[Hallen]";
+			mes "Eh, tudo bem. Acho que";
+			mes "posso entender. Mas";
+			mes "ainda assim, eu poderia ter feito";
+			mes "valer a pena para você, se";
+			mes "sabe o que quero dizer~";
+			close;
+		case 2:
+			mes "[Hallen]";
+			mes "Não se preocupe, não é muito";
+			mes "trabalho. Era para eu entregar";
+			mes "cartas do Aeroporto de Juno para";
+			mes "os outros tripulantes, mas não";
+			mes "tenho tempo. Agora, tenho";
+			mes "esta carta para a Kaci aqui...";
+			next;
+			mes "[Hallen]";
+			mes "Você poderia ir";
+			mes "entregar esta carta";
+			mes "para ela para mim? É";
+			mes "de um sujeito chamado";
+			mes "Sr. Mawong, mentor dela";
+			mes "ou algo parecido.";
+			next;
+			mes "^3355FFHallen lhe entregou a";
+			mes "carta de Mawong para";
+			mes "ser entregue a Kaci.^000000";
+			setquest 8036;
+			lhz_heart = 2;
+			next;
+			mes "[Hallen]";
+			mes "Ei, muito obrigado, parceiro~";
+			mes "Você pode encontrar Kaci organizando";
+			mes "o jogo de Dados na Dirigível.";
+			close;
+		}
+	} else if (lhz_heart == 2) {
+		mes "^333333*Suspiro...*^000000";
+		mes "Estou tão farto e";
+		mes "cansado de varrer.";
+		mes "Parece que sou algum";
+		mes "tipo de grumete medíocre.";
+		mes "Mas... acho que sou mesmo!";
+		next;
+		mes "[Hallen]";
+		mes "Oh, ei, você já conseguiu";
+		mes "entregar aquela";
+		mes "carta para Kaci?";
+		mes "Acho que é muito";
+		mes "importante, então tente não";
+		mes "demorar muito, ok?";
+	} else if (lhz_heart == 3) {
+		mes "^333333*Suspiro...*^000000";
+		mes "Estou tão farto e";
+		mes "cansado de varrer.";
+		mes "Parece que sou algum";
+		mes "tipo de grumete medíocre.";
+		mes "Mas... acho que sou mesmo!";
+	} else if (lhz_heart == 4) {
+		mes "Ei, obrigado por entregar";
+		mes "aquela carta para Kaci para mim.";
+		mes "Ela não ficou muito feliz que";
+		mes "eu pedi a um passageiro para fazer";
+		mes "isso, mas ela entendeu que";
+		mes "eu estou atolado de trabalho.";
+		next;
+		mes "[Hallen]";
+		mes "Você não concorda";
+		mes "que as pessoas deveriam";
+		mes "ajudar umas às outras em";
+		mes "momentos de crise?";
+		next;
+		switch(select("De jeito nenhum. Cada um por si!:Sim, eu concordo.")) {
+		case 1:
+			mes "[Hallen]";
+			mes "O-o quê...?";
+			mes "Eu não consigo imaginar";
+			mes "que você realmente";
+			mes "acredite nisso...";
+			lhz_heart = 5;
+			changequest 8038,8039;
+			close;
+		case 2:
+			mes "[Hallen]";
+			mes "Aww, sério?";
+			mes "Eu sabia que você";
+			mes "sentiria o mesmo que";
+			mes "eu. Você e eu, estamos";
+			mes "na mesma sintonia~";
+			next;
+			if (checkweight(501,1) != 1) {
+				mes "[Hallen]";
+				mes "Oh... Ei, eu estava";
+				mes "planejando te dar";
+				mes "uma coisinha,";
+				mes "mas você está carregando";
+				mes "coisas demais agora...";
+				close;
+			}
+			lhz_heart = 5;
+			getitem 501,1;// Red_Potion
+			mes "[Hallen]";
+			mes "Sei que não é";
+			mes "muita coisa, mas eu gostaria";
+			mes "que você ficasse com isso. Além disso, nunca";
+			mes "se sabe o que pode ser";
+			mes "útil durante uma emergência.";
+			mes "Tudo bem então, até mais~";
+			close;
+		}
+	} else if (lhz_heart == 5) {
+		mes "Ei, ei~ Como vão as coisas?";
+		mes "Eu sei, eu sei, eu deveria";
+		mes "estar varrendo, e ainda não";
+		mes "terminei, mas às vezes,";
+		mes "sabe, você só precisa";
+		mes "descansar e fazer uma pausa, né?";
+		next;
+		mes "[Hallen]";
+		mes "Ahh, dias ocupados como estes";
+		mes "me lembram de quando trabalhava";
+		mes "em casa, em Juno, com meu vizinho,";
+		mes "Gyver. Ele é um inventor genial,";
+		mes "sabe, e é como se fosse";
+		mes "um herói ou modelo para mim.";
+		next;
+		mes "[Hallen]";
+		mes "Gyver é tão brilhante,";
+		mes "ele consegue praticamente fazer";
+		mes "qualquer coisa que quiser. Algum dia,";
+		mes "quero alcançar o nível dele e";
+		mes "criar coisas que ajudem as";
+		mes "pessoas e as façam felizes.";
+		next;
+		mes "[Hallen]";
+		mes "Essa é praticamente minha";
+		mes "ambição de vida... sabe,";
+		mes "o tipo de coisa com a qual quero";
+		mes "contribuir para o mundo. É claro,";
+		mes "duvido que possa me comparar";
+		mes "ao grande Sábio Varmunt.";
+		next;
+		select("Sábio Varmunt?");
+		mes "[Hallen]";
+		mes "Sim, Varmunt... Ele é como";
+		mes "um dos maiores Sábios da";
+		mes "história. Bem, ninguém sabe";
+		mes "muito sobre ele, mas 300 anos";
+		mes "atrás, ele foi responsável pela maioria das conquistas revolucionárias.";
+		next;
+		mes "[Hallen]";
+		mes "Supostamente, ele revolucionou";
+		mes "a ciência sozinho. Muitas das";
+		mes "máquinas convenientes para a vida hoje são invenções dele.";
+		mes "Infelizmente, ele desapareceu da história e ninguém sabe como ele sumiu.";
+		next;
+		mes "[Hallen]";
+		mes "O grande Sábio Varmunt...";
+		mes "É uma lenda bem conhecida";
+		mes "na República de Schwarzwald.";
+		mes "Enfim, para meu projeto,";
+		mes "eu queria aprender mais";
+		mes "sobre estas Aeronaves.";
+		next;
+		mes "[Hallen]";
+		mes "Estas aeronaves são tão enormes";
+		mes "e pesadas, e mal consigo";
+		mes "acreditar que elas possam voar. Como";
+		mes "isso é possível? Bem, se";
+		mes "você pudesse descobrir para mim,";
+		mes "seria uma grande ajuda.";
+		if (isbegin_quest(8039) == 0)
+			changequest 8038,8039;
+		lhz_heart = 6;
+	} else if (lhz_heart == 6) {
+		mes "Ei, você já descobriu";
+		mes "o que faz uma Dirigível";
+		mes "tão grande e pesada como esta";
+		mes "voar por tanto tempo no céu?";
+		next;
+		if (lght_air == 7) {
+			select("Humm, sim, mais ou menos.");
+			mes "[Hallen]";
+			mes "Sério...?";
+			mes "Você está falando sério?";
+			mes "Então qual é o segredo?";
+			mes "Me diga, estou morrendo de vontade de saber!";
+			next;
+			mes "^3355FFVocê conta a Hallen tudo";
+			mes "o que aprendeu com o";
+			mes "Capitão Tarlock, mas você tem";
+			mes "o cuidado de não mencionar";
+			mes "o Fragmento do Coração de Ymir.^000000";
+			next;
+			mes "[Hallen]";
+			mes "Então... As hélices são";
+			mes "movidas a vapor?";
+			mes "Isso não faz sentido.";
+			mes "De jeito nenhum, não pode ser tão simples. Além disso, o vapor tem seus limites.";
+			mes "Você tem certeza de que é só isso?";
+			next;
+			select("Na verdade, há outra fonte de energia.");
+			mes "^3355FFVocê revela o que aprende";
+			mes "sobre a Pedra Rúnica, uma";
+			mes "imitação do Fragmento do Coração";
+			mes "de Ymir: Hallen é um garoto bem-intencionado";
+			mes "que provavelmente não usará esse";
+			mes "conhecimento para fins malignos.";
+			next;
+			mes "[Hallen]";
+			mes "I-incrível! Então existe";
+			mes "alguma fonte de energia mágica";
+			mes "especial que ajuda esta Dirigível";
+			mes "a voar! Eu sabia! Agora, como";
+			mes "se chamava mesmo? Ah, a";
+			mes "Pedra Rúnica, certo?";
+			next;
+			mes "[Hallen]";
+			mes "Uma imitação do Fragmento do";
+			mes "Coração de Ymir. Onde será que";
+			mes "ouvi falar disso";
+			mes "antes? Hum, deixe-me pensar...";
+			changequest 8039,8040;
+			lhz_heart = 7;
+		} else {
+			select("Na verdade...");
+			mes "[Hallen]";
+			mes "Você ainda não aprendeu nada";
+			mes "sobre a Dirigível, hein?";
+			mes "Talvez o Capitão Ferlock saiba";
+			mes "de algo, ou qualquer outro";
+			mes "dos capitães da Dirigível.";
+			mes "Tomara que algum deles te conte...";
+			next;
+			mes "[Hallen]";
+			mes "Sei que os segredos do voo da";
+			mes "Dirigível são considerados";
+			mes "informações confidenciais, mas se";
+			mes "alguém consegue obter esses segredos,";
+			mes "são vocês, aventureiros. Então, por favor, me ajude aqui...";
+		}
+	} else if (lhz_heart == 7) {
+		mes "Então a Pedra Rúnica";
+		mes "é uma imitação de apenas";
+		mes "um pedaço do Coração de Ymir.";
+		mes "Mas onde eu já ouvi falar";
+		mes "disso antes...?";
+		next;
+		emotion ET_SURPRISE;
+		mes "[Hallen]";
+		mes "Oh, é verdade!";
+		mes "Kaci me contou sobre um";
+		mes "bêbado que sempre";
+		mes "menciona o Coração de Ymir";
+		mes "quando joga o jogo de Dados";
+		mes "por Maçãs!";
+		next;
+		if (Shinokas_Quest > 9) {
+			mes "["+strcharinfo(0)+"]";
+			mes "(^333333Espere, eu conheci aquele cara quando";
+			mes "estava ajudando Shinokas. Ele";
+			mes "era um dos diretores do";
+			mes "Laboratório de Einbroch que";
+			mes "tinha um pedaço do Coração de Ymir.";
+			mes "Vale a pena investigar...^000000)";
+			next;
+		}
+		mes "[Hallen]";
+		mes "Enfim, não é muita coisa,";
+		mes "mas deixe-me te dar um pouco";
+		mes "de algo por ter se dado ao trabalho";
+		mes "de aprender essa informação secreta";
+		mes "para mim...";
+		next;
+		if (checkweight(501,1) != 1) {
+			mes "[Hallen]";
+			mes "Ah, droga...";
+			mes "Você não tem";
+			mes "espaço suficiente para";
+			mes "receber meu pequeno presente.";
+			mes "Por favor, libere mais espaço";
+			mes "no seu inventário para mim, ok?";
+			close;
+		}
+		if (Shinokas_Quest > 9) {
+			lhz_heart = 9;
+			changequest 8040,8042;
+		} else {
+			lhz_heart = 8;
+			changequest 8040,8041;
+		}
+		getitem 501,1;
+		mes "[Hallen]";
+		mes "Aqui está~";
+		mes "Sei que é bem pouco";
+		mes "comparado às recompensas";
+		mes "que vocês aventureiros costumam ganhar,";
+		mes "mas ei... É a intenção que";
+		mes "conta, né? Até mais~";
+	} else if (lhz_heart == 8) {
+		mes "Ei, por que você não";
+		mes "pergunta para Kaci sobre aquele";
+		mes "bêbado que está sempre";
+		mes "jogando o jogo de Dados dela?";
+		mes "Você pode aprender mais sobre";
+		mes "o Fragmento do Coração de Ymir, sabe?";
+	} else {
+		mes "Obrigado por me ajudar";
+		mes "daquela última vez. Acho que";
+		mes "aprender sobre a Pedra Rúnica";
+		mes "me inspirou a construir uma";
+		mes "Dirigível própria um dia...";
+	}
+	close;
+}
+
+airplane,33,69,4	script	Kaci	1_F_MERCHANT_01,{
+	mes "[Kaci]";
+	if (hg_ma1 == 3) {
+		mes "Você deve estar tããão";
+		mes "entediado, aventureiro~";
+		mes "O que acha de";
+		mes "jogar uma partida de Dados?";
+		next;
+		select("Você conhece um sujeito chamado Thierry?");
+		mes "[Kaci]";
+		mes "Thierry? Hum... esse nome me soa familiar...";
+		next;
+		mes "[Kaci]";
+		mes "....................";
+		mes ".............";
+		mes ".......";
+		mes "...";
+		next;
+		mes "[Kaci]";
+		mes "Ah, é verdade! Thierry, Thierry, Thierry! Certo?";
+		next;
+		mes "[Kaci]";
+		mes "- Ela de repente chamou o nome várias vezes, -";
+		mes "- então você se assustou e deixou cair sua maçã comida pela metade. -";
+		next;
+		mes "[Kaci]";
+		mes "Ops, desculpe se te assustei. Não consegui me lembrar do nome porque faz tempo que não ouço falar dele.";
+		next;
+		mes "[Kaci]";
+		mes "Thierry era um cara que morava ao lado enquanto eu aprendia jogos e truques com o Sr. Mawong.";
+		mes "Lembro-me de que ele era um cara muito inteligente e fazia muitas pesquisas.";
+		next;
+		mes "[Kaci]";
+		mes "Ah sim, e ele era apaixonado pela irmã de Eukran.";
+		mes "E na época, eu e Eukran estudávamos jogos juntos com o Sr. Mawong.";
+		mes "Hmm... Eu me pergunto como eles estão.";
+		next;
+		mes "- Você contou a ela que Euslan e Thierry ficaram noivos, mas que Thierry teve que deixá-la para buscar remédios para sua doença. -";
+		next;
+		mes "[Kaci]";
+		mes "Oh... meu Deus... não acredito que Euslan tenha ficado doente... Oh......";
+		next;
+		mes "- Kaci parecia chocada com a notícia devastadora. -";
+		mes "- Ela murmurou algo por um tempo e depois recuperou a consciência. -";
+		next;
+		mes "[Kaci]";
+		mes "Sinto muito por ela... eu realmente quero ajudá-la... mas faz tempo que não os vejo. Então, não sei onde ele está.";
+		next;
+		mes "[Kaci]";
+		mes "Mas, deixe-me pensar se...";
+		next;
+		mes "[Kaci]";
+		mes "Ah, é verdade! O capitão do Dirigível pode conseguir te ajudar, porque é ele quem cuida da lista de passageiros.";
+		next;
+		mes "[Kaci]";
+		mes "Embora a lista de passageiros seja classificada e estritamente proibida de ser divulgada ao público...";
+		next;
+		mes "[Kaci]";
+		mes "Mas, se você contar a história a ele, talvez ele possa te ajudar. Por favor, vá pedir a ele, se puder.";
+		next;
+		mes "[Kaci]";
+		mes "E se você vir Euslan novamente, por favor, envie meus cumprimentos e bênçãos a ela.";
+		next;
+		mes "- Você prometeu a ela enviar seus cumprimentos e bênçãos para Euslan. -";
+		changequest 8044,8045;
+		hg_ma1 = 4;
+	} else if (hg_ma1 == 4)
+		mes "O capitão do Dirigível pode conseguir te ajudar a encontrar o paradeiro de Thierry.";
+	else if (lhz_heart == 2) {
+		mes "Você deve estar tããão";
+		mes "entediado, aventureiro~";
+		mes "Que tal você jogar";
+		mes "uma partida de Dados?";
+		next;
+		select("Entregue a ela a carta de Hallen.");
+		mes "[Kaci]";
+		mes "Ah, Hallen deve ter";
+		mes "pedido para você entregar isso.";
+		mes "Ele deveria fazer esse tipo";
+		mes "de coisa sozinho, em vez";
+		mes "de pedir favores aos clientes!";
+		mes "Mas ainda assim, ele é muito ocupado...";
+		next;
+		changequest 8036,8037;
+		lhz_heart = 3;
+		mes "[Kaci]";
+		mes "Obrigada por trazer";
+		mes "isso para mim. Se você";
+		mes "precisar de um pequeno favor";
+		mes "meu, sinta-se à vontade para";
+		mes "pedir, ok? Até mais~";
+	} else if (lhz_heart == 3) {
+		mes "Ah, olá. Obrigada por";
+		mes "entregar aquela carta do";
+		mes "Sr. Mawong para mim, especialmente";
+		mes "já que Hallen estava ocupado demais";
+		mes "para fazer isso ele mesmo. Ler";
+		mes "aquela carta melhorou meu dia~";
+		next;
+		while (.@a == 0 || .@b == 0 || .@c == 0) {
+			if (.@a || .@b || .@c) {
+				mes "[Kaci]";
+				mes "Por favor, não hesite";
+				mes "em me pedir qualquer coisa";
+				mes "se precisar de um favor,";
+				mes "ou se estiver apenas curioso";
+				mes "sobre mim em geral~";
+				next;
+			}
+			switch(select("Perguntar sobre Hallen:Perguntar sobre Mawong:Perguntar sobre o Dirigível")) {
+			case 1:
+				.@a = 1;
+				mes "[Kaci]";
+				mes "Hallen? Bem, ele e eu";
+				mes "somos bem próximos. Sabia";
+				mes "que somos primos? Na verdade,";
+				mes "o pai dele, meu tio, me trouxe";
+				mes "quando eu era criança, depois que";
+				mes "meu pai faleceu há 20 anos.";
+				next;
+				mes "[Kaci]";
+				mes "Houve algum tipo de";
+				mes "acidente de explosão em uma mina";
+				mes "em Einbech. Não me lembro.";
+				mes "De qualquer forma, eu e Hallen somos";
+				mes "como irmã e irmão, e";
+				mes "sempre andamos juntos.";
+				next;
+				mes "[Kaci]";
+				mes "Quando o Capitão Ferlock me viu";
+				mes "apresentando um jogo de Dados por acaso";
+				mes "e depois me contratou para trabalhar em seu Dirigível, Hallen insistiu em vir";
+				mes "junto. Ele é teimoso assim,";
+				mes "mas ele também é muito doce.";
+				break;
+			case 2:
+				.@b = 1;
+				mes "[Kaci]";
+				mes "Sr. Mawong? Ah, não leve";
+				mes "a mal! Ele é meu";
+				mes "mentor, aquele que me ensinou";
+				mes "a jogar todos esses";
+				mes "jogos maravilhosos. Ele é bem";
+				mes "famoso em Juno, sabe.";
+				next;
+				mes "[Kaci]";
+				mes "Eu costumava ser tão deprimida,";
+				mes "sem me importar com nada";
+				mes "do mundo, após a morte do meu pai.";
+				mes "Então, encontrei o Sr. Mawong,";
+				mes "e ele me ensinou a encontrar";
+				mes "a alegria de viver novamente.";
+				next;
+				mes "[Kaci]";
+				mes "Por causa dele, decidi";
+				mes "aprender seus jogos e";
+				mes "ajudar as pessoas a esquecerem";
+				mes "suas preocupações e apenas";
+				mes "se divertirem, mesmo que";
+				mes "seja só por um tempinho.";
+				break;
+			case 3:
+				.@c = 1;
+				mes "[Kaci]";
+				mes "O Dirigível? Ele é tão";
+				mes "enorme e lindo, e";
+				mes "eu sempre me maravilho que";
+				mes "ele possa voar tão graciosamente pelo";
+				mes "ar. Eu sempre quis morar perto do céu...";
+				next;
+				mes "[Kaci]";
+				mes "Um lugar onde eu possa ver";
+				mes "as nuvens e aproveitar o";
+				mes "sol. Então, quando o Capitão Ferlock";
+				mes "me convidou para trabalhar aqui, foi";
+				mes "como um sonho que se tornou realidade~";
+				break;
+			}
+			next;
+		}
+		mes "[Kaci]";
+		mes "A propósito, se Hallen";
+		mes "te incomodar com outro";
+		mes "pedido, por favor, recuse";
+		mes "ajudá-lo na próxima vez, ok?";
+		mes "Eu não vou deixar ele ser";
+		mes "mimado! Ho ho ho ho~";
+		next;
+		mes "[Kaci]";
+		mes "Bem, é melhor eu voltar";
+		mes "ao trabalho agora.";
+		mes "Tenha um bom dia,";
+		mes "e nos vemos mais tarde~";
+		changequest 8037,8038;
+		lhz_heart = 4;
+	} else if (lhz_heart == 8) {
+		mes "Olá,"+strcharinfo(0)+".";
+		mes "É bom ver você novamente.";
+		mes "Então, tem algo em que eu possa";
+		mes "te ajudar hoje?";
+		next;
+		select("Quem é aquele bêbado ali?");
+		mes "[Kaci]";
+		mes "Ah, ele? Ele é um dos meus";
+		mes "clientes fiéis, um cara que";
+		mes "deveria ser o Diretor do Laboratório de Einbroch.";
+		mes "Ele vive perdendo";
+		mes "Maçãs quando joga Dados:";
+		mes "acho que ele é viciado em apostas~";
+		next;
+		mes "[Kaci]";
+		mes "Na verdade, as perdas dele compensam";
+		mes "todas as Maçãs que perdi quando";
+		mes "aquele Mercador de Maçãs jogou aqui. Agora, é uma história lendária que";
+		mes "todos nós relembramos com carinho, mas na";
+		mes "época, quase me quebrou.";
+		next;
+		mes "[Kaci]";
+		mes "De qualquer forma, fora o fato";
+		mes "de que o Diretor do Laboratório de Einbroch";
+		mes "é um tanto chorão quando";
+		mes "está bêbado, e um péssimo jogador,";
+		mes "não sei muito sobre ele.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "(^333333Laboratório de Einbroch...";
+		mes "É tão suspeito. Aquele";
+		mes "diretor sabe sobre o Pedaço do Coração de Ymir,";
+		mes "então eles devem estar";
+		mes "guardando algo muito";
+		mes "importante por lá.^000000)";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "(^333333É melhor eu investigar";
+		mes "aquele laboratório em Einbroch";
+		mes "assim que puder, mesmo que seja";
+		mes "uma área fortemente restrita.^000000)";
+		changequest 8041,8042;
+		lhz_heart = 9;
+	} else {
+		mes "Você deve estar tããão";
+		mes "entediado, aventureiro~";
+		mes "Que tal você jogar";
+		mes "uma partida de Dados?";
+		next;
+		callfunc "applegamble","Kaci";
+	}
+	close;
+}
+
+ein_in01,279,25,0	script	#lab01_heart	HIDDEN_WARP_NPC,1,1,{
+	end;
+OnTouch_:
+	if (lhz_heart == 9) {
+		mes "["+strcharinfo(0)+"]";
+		mes "(^333333Eu... eu simplesmente";
+		mes "preciso investigar";
+		mes "aquele laboratório e";
+		mes "ver se algo estranho";
+		mes "está acontecendo lá dentro.^000000)";
+		close;
+	}
+}
+
+ein_in01,264,17,0	script	#lab02_heart	HIDDEN_WARP_NPC,1,1,{
+	end;
+OnTouch_:
+	if (lhz_heart == 9) {
+		mes "["+strcharinfo(0)+"]";
+		mes "O quê...";
+		mes "É algum tipo de";
+		mes "dispositivo estranho. O rótulo";
+		mes "aqui diz, ''Verificador de";
+		mes "Senha?'' Bem, isso";
+		mes "pode ser útil mais tarde.";
+		next;
+		mes "^3355FFVocê decide levar";
+		mes "o dispositivo Verificador de Senha";
+		mes "com você para dentro";
+		mes "do laboratório.^000000";
+		lhz_heart = 10;
+		close;
+	}
+}
+
+ein_in01,263,35,3	script	Ferlock#lab	4_M_REINDEER,{
+	end;
+
+OnEnter:
+	enablenpc "Ferlock#lab";
+	initnpctimer;
+	end;
+
+OnTimer120000:
+OnInit:
+	disablenpc "Ferlock#lab";
+	stopnpctimer;
+	end;
+}
+
+ein_in01,261,35,0	script	lab03#heart	HIDDEN_WARP_NPC,1,1,{
+	end;
+OnTouch_:
+	if (lhz_heart == 9) {
+		mes "[Security System]";
+		mes "^FF0000Pessoa não autorizada";
+		mes "detectada. Verificador de";
+		mes "Senha não detectado.";
+		mes "Acesso negado.^000000";
+		close;
+	} else if (lhz_heart == 10) {
+		mes "[Security System]";
+		mes "^FF0000Insira a senha de 3 dígitos.";
+		mes "Você terá 5 tentativas";
+		mes "dentro de 3 minutos para inserir";
+		mes "a senha correta, ou";
+		mes "a senha será reiniciada.^000000";
+		next;
+		mes "[Password Checker]";
+		mes "^333333Dica:";
+		mes "Não use o";
+		mes "número 0, e não";
+		mes "insira nenhum número";
+		mes "mais de uma vez. Certifique-se";
+		mes "de que a senha tenha 3 dígitos.";
+		while (.@yagu100 == .@yagu10 || .@yagu100 == .@yagu1 || .@yagu10 == .@yagu1) {
+			.@yagu100 = rand(1,9);
+			.@yagu10 = rand(1,9);
+			.@yagu1 = rand(1,9);
+		}
+		while (1) {
+			while (1) {
+				next;
+				input .@input;
+				if (.@input < 100 || .@input > 999) {
+					mes "[Security System]";
+					mes "^FF0000Erro.";
+					mes "A senha inserida";
+					mes "excede o limite";
+					mes "de dígitos. Você deve inserir";
+					mes "apenas senhas de 3 dígitos.^000000";
+					close;
+				}
+				.@input100 = .@input / 100;
+				.@input10 = (.@input % 100) / 10;
+				.@input1 = .@input % 10;
+				if ((.@input100 + .@input10 + .@input1 == 0) || .@input100 == .@input10 || .@input100 == .@input1 || .@input10 == .@input1) {
+					mes "[Security System]";
+					mes "^FF0000Erro.";
+					mes "Você não pode inserir o";
+					mes "número 0, nem usar qualquer";
+					mes "outro número mais de";
+					mes "uma vez. Por favor, tente novamente.^000000";
+					continue;
+				}
+				break;
+			}
+			.@retry++;
+			mes "[Security System]";
+			mes "^ff0000"+ strcharinfo(0) +"^000000";
+			mes "inseriu o seguinte:";
+			mes "^0000ff"+ .@input100 +"^000000 - ^0000ff"+ .@input10 +"^000000 - ^0000ff"+ .@input1 +"^000000.";
+			mes "Por favor, aguarde a conclusão da autorização.";
+			next;
+			.@strike = (.@yagu100 == .@input100) + (.@yagu10 == .@input10) + (.@yagu1 == .@input1);
+			.@ball = (.@yagu100 == .@input10 || .@yagu100 == .@input1) + (.@yagu10 == .@input100 || .@yagu10 == .@input1) + (.@yagu1 == .@input100 || .@yagu1 == .@input10);
+			if (.@strike == 3) {
+				mes "[Security System]";
+				mes "Autorização concluída.";
+				mes "Acesso ao arquivo concedido.";
+				next;
+				mes "^3355FFA porta do arquivo se abre,";
+				mes "revelando uma série de";
+				mes "documentos arquivados. Dentre";
+				mes "todos eles, um dos";
+				mes "arquivos chama sua atenção.^000000";
+				next;
+				mes "Projeto Varmunt Nº 3";
+				mes "Nível de Segurança: Grau 1-C";
+				mes " ";
+				mes "Cuidado: Apenas membros do projeto";
+				mes "de sintetização do Coração de Ymir estão autorizados a ver";
+				mes "este documento confidencial.";
+				next;
+				mes "Projeto Varmunt Nº 3";
+				mes "Nível de Segurança: Grau 1-C";
+				mes " ";
+				mes "Quaisquer outros encontrados lendo";
+				mes "este documento estão sujeitos";
+				mes "a punição ou demissão.";
+				next;
+				mes "^3355FFVocê percebe o som de";
+				mes "passos e rapidamente tenta";
+				mes "devolver o documento ao seu";
+				mes "lugar original. No entanto,";
+				mes "a pessoa que veio";
+				mes "ao arquivo já o viu";
+				mes "segurando o arquivo.^000000";
+				next;
+				donpcevent "Ferlock#lab::OnEnter";
+				mes "[Ferlock]";
+				mes "Com licença, mas você";
+				mes "é um funcionário aqui?";
+				mes "Eu vim buscar uma";
+				mes "nova Pedra Rúnica para a";
+				mes "Dirigível. Espere, espere...";
+				mes "Você me parece familiar...";
+				next;
+				emotion ET_HUK, getnpcid(0, "Ferlock#lab");
+				mes "[Ferlock]";
+				mes "É isso, não é você";
+				mes "quem me trouxe a";
+				mes "carta do meu irmão? Sim, você";
+				mes "estava me perguntando sobre a";
+				mes "mecânica de voo da Dirigível.";
+				mes "Então você não é um funcionário...";
+				next;
+				mes "[Ferlock]";
+				mes "Rapaz, você deve ser mais do que";
+				mes "curioso para estar procurando essa";
+				mes "informação em uma área";
+				mes "restrita. Mas não se preocupe, você";
+				mes "deve ter seus motivos,";
+				mes "então não vou chamar os guardas.";
+				next;
+				mes "[Ferlock]";
+				mes "Ainda assim, é melhor você sair";
+				mes "daqui. Os guardas patrulham";
+				mes "este lugar regularmente, então é";
+				mes "quase certo que você será pego. Hmm,";
+				mes "venha me ver mais tarde na";
+				mes "Dirigível, certo? Agora vá!";
+				close2;
+				donpcevent "Ferlock#lab::OnInit";
+				changequest 8042,8043;
+				lhz_heart = 11;
+				end;
+			}
+			mes "[Password Checker]";
+			mes " ";
+			mes "^333333Total de números corretos";
+			mes "na sequência correta: ^ff0000"+.@strike+"^333333";
+			mes "Total de números corretos na posição errada: ^ff0000"+.@ball+"^333333.";
+			mes "Por favor, use esses resultados";
+			mes "para fazer um palpite mais preciso.^000000";
+			next;
+			if (.@retry > 4) {
+				mes "[Security System]";
+				mes "^FF0000A senha correta";
+				mes "para esta sessão era";
+				mes "^000000"+.@yagu100+"^FF0000 - ^000000"+.@yagu10+"^000000 - ^000000"+.@yagu1+"^FF0000.";
+				mes "A senha será redefinida agora.^000000";
+				close;
+			}
+			mes "[Security System]";
+			mes "Biiiip!";
+			mes "Senha incorreta.";
+			mes " ";
+			switch (.@retry) {
+				case 1: mes "Iniciando 2ª tentativa...^000000"; break;
+				case 2: mes "Iniciando 3ª tentativa...^000000"; break;
+				case 3: mes "Iniciando 4ª tentativa...^000000"; break;
+				case 4: mes "Iniciando tentativa final...^000000"; break;
+			}
+		}
+	}
+	end;
+}

@@ -1,0 +1,282 @@
+//===== rAthena Script =======================================
+//= Archer Skill Quest
+//===== By: ==================================================
+//= rAthena Dev Team
+//===== Current Version: =====================================
+//= 1.7
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Quest for skills: Arrow Crafting, Arrow Repel
+//===== Additional Comments: ================================= 
+//= 1.5 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//= 1.6 Updated to latest available official file.
+//=     also fixed Item issue [bugreport:5607]. [Masao]
+//= 1.7 Fixed JobLevel requirements. [Euphy]
+//============================================================
+
+moc_ruins,118,99,5	script	Roberto	88,{
+	if (BaseClass == Job_Archer) {
+		if (getskilllv("AC_MAKINGARROW") == 1) {
+			mes "[Roberto]";
+			mes "Ah, você é da minha cidade natal!";
+			mes "Que bom te ver!";
+			mes "Como você está?";
+			mes "Ah! Aquela flecha!";
+			mes "Você conseguiu, não conseguiu!";
+			next;
+			mes "[Roberto]";
+			mes "Haha...!";
+			mes "Você acha que está muito melhor?";
+			mes "Haha... de qualquer forma, estou feliz.";
+			mes "Volte de vez em quando";
+			mes "com notícias de casa.";
+			mes "Então, tchau~";
+			close;
+		}
+		else if (JobLevel >= 30 || (BaseJob == Job_Hunter || BaseJob == Job_Bard || BaseJob == Job_Dancer)) {
+			mes "[Roberto]";
+			mes "Eh!";
+			mes " ";
+			mes "Você é...";
+			next;
+			if ((countitem(907) > 19) && (countitem(921) > 6) && (countitem(906) > 40) && (countitem(1019) > 12) && (countitem(501) > 0)) {
+				mes "[Roberto]";
+				mes "Você trouxe!";
+				mes "Muito obrigado.";
+				mes "Então, como prometido, vou te ensinar a habilidade.";
+				next;
+				delitem 907,20; //Resin
+				delitem 921,7; //Mushroom_Spore
+				delitem 906,41; //Pointed_Scale
+				delitem 1019,13; //Wooden_Block
+				delitem 501,1; //Red_Potion
+				skill "AC_MAKINGARROW",1,SKILL_PERM;
+				mes "[Roberto]";
+				mes "Não precisa mais se preocupar com flechas.";
+				mes "Ah, e por acaso você viu";
+				mes "alguém chamado Jason em payon?";
+				mes "Tome cuidado. Ele é um";
+				mes "sujeito feroz.";
+				next;
+				mes "[Roberto]";
+				mes "Você só precisa ter cuidado com o Jason em payon.";
+				mes "Lembre-se disso.";
+				mes "Então, tchauzinho~ Obrigado pelos presentes~";
+				close;
+			}
+			mes "[Roberto]";
+			mes "Um Arqueiro em Morocc!?";
+			mes "Que bom te ver! Encontrar um colega";
+			mes "Arqueiro em um lugar como este! *snif*!";
+			mes "Eu vim sozinho para Morocc...";
+			mes "mas eu era um novato, e a pressão... waaah~";
+			mes "Eu estava muito sozinho~";
+			next;
+			switch (select("Deve ser difícil. Está tudo bem, tenha fé.:Continue sofrendo.")) {
+			case 1:
+				mes "[Roberto]";
+				mes "Sim. Obrigado...";
+				mes "Você deve estar passando por um momento";
+				mes "difícil em um lugar como este.";
+				mes "Não é difícil encontrar flechas?";
+				mes "É por isso que eu faço as minhas.";
+				next;
+				select("Eh, sério?!");
+				mes "[Roberto]";
+				mes "Sim! Eu reúnes vários itens";
+				mes "e faço flechas usando eles.";
+				mes "É uma habilidade útil para me ajudar a";
+				mes "sobreviver sozinho neste mundo difícil.";
+				mes "Se quiser, posso te ensinar.";
+				next;
+				select("Isso seria maravilhoso.");
+				mes "[Roberto]";
+				mes "Mas... não posso fazer isso de graça.";
+				mes "Nada é de graça neste mundo~";
+				mes "Mmm... Que tal isso?";
+				mes "Você me traz o que eu pedir.";
+				mes "Então eu te ensinarei a habilidade.";
+				next;
+				mes "[Roberto]";
+				mes "Tenho me sentido muito sozinho desde que saí da minha cidade natal.";
+				mes "Eu gostaria de curar minha saudade";
+				mes "com coisas de lá.";
+				mes "Traga-me 20 Resinas das árvores na";
+				mes "floresta de payon, e 1 Poção Vermelha";
+				mes "vendida na loja.";
+				next;
+				mes "[Roberto]";
+				mes "Além disso, 13 Troncos dos Salgueiros que";
+				mes "vivem perto da floresta de payon,";
+				mes "41 Escamas Pontiagudas,";
+				mes "7 Esporos de Cogumelo.";
+				mes "Se você me trouxer tudo isso,";
+				next;
+				mes "[Roberto]";
+				mes "eu te ensinarei a habilidade.";
+				mes "Então... estarei esperando.";
+				mes "Por notícias de nossa casa.";
+				close;
+			case 2:
+				mes "[Roberto]";
+				mes "...ei,"+((Sex == SEX_MALE)?"senhor":"senhora")+".";
+				mes "...tenha cuidado à noite.";
+				close;
+			}
+		}
+		mes "[Roberto]";
+		mes "Hmm... Você";
+		mes "tem algo a dizer?";
+		mes "Não tenho nada.";
+		mes "A diferença de níveis";
+		mes "encerra as conversas.";
+		close;
+	}
+	mes "[?]";
+	mes "Eh... Primeira vez vendo um Arqueiro ou algo assim?";
+	mes "Apenas vá para onde você estava indo.";
+	mes "Eu só falo com arqueiros de nível alto.";
+	mes "Não abrirei a boca caso contrário!";
+	close;
+}
+
+payon,103,63,3	script	Jason	88,3,3,{
+	if (BaseClass == Job_Archer) {
+		if (getskilllv("AC_CHARGEARROW") == 1) {
+			mes "[Jason]";
+			mes "Eh, nos encontramos de novo.";
+			mes "Ehhhh, que estranho.";
+			mes "Sempre que vejo alguém novamente";
+			mes "eu começo a fazer \"eh\" o tempo todo.";
+			mes "Ehhh... de qualquer forma, bom te ver de novo.";
+			mes "Ehhhh... não venha mais, ehh...";
+			close;
+		}
+		else if (JobLevel >= 35 || (BaseJob == Job_Hunter || BaseJob == Job_Bard || BaseJob == Job_Dancer)) {
+			mes "[Jason]";
+			mes "Droga... meu ferimento não está cicatrizando.";
+			mes "Bleh... Fui descuidado demais...";
+			mes "chegar a este ponto... err...";
+			mes "Mas ainda assim, me machucar assim,";
+			mes "me causando tantos ferimentos...";
+			next;
+			mes "O que devo fazer com o Roberto?";
+			mes "Mmmm... Ah!";
+			mes "Você? Há quanto tempo você está aí?";
+			mes "Mmm... nível muito alto.";
+			mes "Alguém como você certamente saberia";
+			mes "como usar o Repelir Flecha.";
+			next;
+			switch (select("O que é isso?:Ensine-me.")) {
+			case 1:
+				mes "[Jason]";
+				mes "...você está brincando, né?";
+				mes "Ah, meu Deus, você nem conhece";
+				mes "o Repelir Flecha nesse nível?";
+				mes "Você é uma pessoa estranha.";
+				next;
+				mes "[Jason]";
+				mes "(Jason estava no mundo da lua.)";
+				next;
+				mes "[Jason]";
+				mes "Bem, ok. Vou te ensinar o que é";
+				mes "o Repelir Flecha.";
+				next;
+				mes "[Jason]";
+				mes "Repelir Flecha é uma habilidade que permite";
+				mes "empurrar o oponente assim que você ataca.";
+				mes "Você só pode usá-la quando mirar exatamente";
+				mes "no alvo. Mas ao contrário da magia,";
+				mes "ela não cancela feitiços.";
+				next;
+				mes "[Jason]";
+				mes "É muito útil para um Arqueiro";
+				mes "que é fraco em distâncias curtas.";
+				mes "Se você quiser aprender,";
+				mes "venha me procurar de novo.";
+				mes "Existem alguns materiais necessários.";
+				next;
+				mes "[Jason]";
+				mes "Primeiro, porque você deve modificar um arco,";
+				mes "traga uma besta que você não usa.";
+				mes "10 Tentáculos, 10 Bicos de Pássaro,";
+				mes "3 Caudas de Yoyo... elas são muito elásticas.";
+				mes "Além disso, 2 Esmeraldas. E por último, mas não menos importante...";
+				mes "36 garrafas de Suco de Banana que eu adoro!";
+				next;
+				mes "[Jason]";
+				mes "......Ehem!";
+				mes "Se você trouxer tudo isso,";
+				mes "eu te ensinarei o Repelir Flecha.";
+				mes "Então, até a próxima.";
+				mes "(Vou ficar furioso se você não trouxer o Suco de Banana.)";
+				close;
+			case 2:
+				if ((countitem(721) > 1) && (countitem(942) > 2) && (countitem(962) > 9) && (countitem(925) > 9) && (countitem(532) > 35)) {
+					mes "[Jason]";
+					mes "Ok! Perfeito!";
+					mes "Vou te ensinar a habilidade de";
+					mes "renome nacional, Repelir Flecha!";
+					next;
+					delitem 721,2; //Azure_Jewel
+					delitem 942,3; //Yoyo_Tail
+					delitem 962,10; //Tentacle
+					delitem 925,10; //Bill_Of_Birds
+					delitem 532,36; //Banana_Juice
+					skill "AC_CHARGEARROW",1,SKILL_PERM;
+					mes "[Jason]";
+					mes "Ah, funciona melhor do que eu esperava!";
+					mes "Não precisarei modificar o arco!";
+					mes "Você pode levar isso de volta~";
+					mes "E divirta-se usando sua nova";
+					mes "habilidade em campos e masmorras!";
+					mes "He~heh~!";
+					close;
+				}
+				mes "[Jason]";
+				mes "Mmm... que pena.";
+				mes "Estão faltando algumas coisas.";
+				mes "Mais uma vez, você precisa de 2 Esmeraldas,";
+				mes "3 Caudas de Yoyo, 10 Tentáculos,";
+				mes "10 Bicos de Pássaro e, por último, mas não";
+				mes "menos importante, 36 garrafas de Suco de Banana!";
+				next;
+				mes "[Jason]";
+				mes "Certifique-se de ter tudo e volte novamente!";
+				close;
+			}
+		}
+		mes "[Jason]";
+		mes "Ah... você é um Arqueiro.";
+		mes "Se você se esforçar um pouco mais";
+		mes "você terá uma grande";
+		mes "reputação como Arqueiro!";
+		mes "Esforce-se!";
+		close;
+	}
+	mes "[?]";
+	mes "O que a vida quer de";
+	mes "um rapaz solitário como eu?";
+	close;
+
+OnTouch_:
+	mes "[???]";
+	mes "Errrrrrr...";
+	close;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0 Roberto message text is based off RO npc.  Jason message
+//=     text is custom from old version.
+//=     All items are from official quests though.[kobra_k88]
+//= 1.0a Now using functions found in "Global_Functions.txt"
+//=     for class checks.[kobra_k88]
+//= 1.2 Added Baby Class Support [Lupus]
+//= 1.3 Removed callfunc Is_####_Class in favor of baseClass [Silentdragon]
+//= 1.4 Fixed exploits [Lupus]
+//= 1.4a Fixed some typos [IVBela]
+//= 1.4b changed perm. variables to temp ones [Lupus]
+//============================================================

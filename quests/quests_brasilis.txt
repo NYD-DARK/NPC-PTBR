@@ -1,0 +1,2940 @@
+//===== rAthena Script =======================================
+//= Brasilis Quests
+//===== Description: =========================================
+//= [Official Conversion]
+//= Lost Puppies (Repeatable, 24 hours.)
+//= Suspicious Beach (Repeatable, 24 hours. iRO/cRO version.)
+//= Guarana Candy Quest
+//= Brasilis Water Lily Quest
+//= Brasilis Dungeon Access Quest
+//= Iara (Buff reward. Repeatable, 24 hours.)
+//===== Changelog: ===========================================
+//= 1.0 First version. [L0ne_W0lf]
+//= 1.1 Hydra Ball (12408). [og2]
+//= 1.2 Optimization. [Euphy]
+//= 1.2a Added 'consumeitem' command. [Euphy]
+//= 1.3 Added VIP features and fixed some EXP values. [Euphy]
+//= 1.3a Clean-up. [Capuche]
+//= 1.4 Added pre-renewal differences [Daegaladh]
+//============================================================
+
+// Lost Puppies :: dogdog.sc
+//============================================================
+brasilis,297,307,5	script	Angelo#br	1_M_04,{
+	if (BaseLevel < 40) {
+		mes "[Angelo]";
+		mes "Os filhotes saíram da vila~!!";
+		mes "Puxa... o que eu posso fazer...?";
+		close;
+	}
+	if (checkquest(9032,PLAYTIME) == 2) {
+		erasequest 9032;
+	}
+	if (checkquest(9032,PLAYTIME) == 0) {
+		mes "[Angelo]";
+		mes "O dia ainda não terminou.";
+		mes "Você só pode ajudar uma vez por dia. Hehe.";
+		close;
+	}
+	if (checkquest(9030) == 1) {
+		mes "[Angelo]";
+		mes "Meus filhotes estão no campo fora da vila.";
+		mes "Por que eles foram embora? Por favor, encontre-os.";
+		close;
+	}
+	if (checkquest(9031) == 1) {
+		mes "[Angelo]";
+		mes "Ah, obrigado. Você encontrou todos os 3 filhotes.";
+		mes "Muito obrigado.";
+		mes "Espero que isso lhe seja útil. hoho.";
+		if (VIP_SCRIPT && vip_status(VIP_STATUS_ACTIVE))
+			getexp 75000,0;
+		else
+			getexp 50000,0;
+		erasequest 9031;
+		setquest 9032;
+		specialeffect2 EF_ASSUMPTIO;
+		if (checkre(0)) {
+			consumeitem 607; //Yggdrasilberry
+			.@rand = rand(1,10);
+			if (.@rand > 4 && .@rand < 9) getitem 504,2; //White_Potion
+			else if (.@rand > 8) getitem 608,1; //Seed_Of_Yggdrasil
+		}
+		close;
+	}
+	mes "[Angelo]";
+	mes "Você é um aventureiro? Você chegou bem na hora.";
+	mes "Os filhotes andam desaparecendo.";
+	mes "E alguém disse que os viu no campo, logo ali fora da vila...";
+	next;
+	mes "[Angelo]";
+	mes "É bem difícil e perigoso encontrá-los.";
+	mes "Você precisa encontrar ^0000FF3 filhotes^000000.";
+	setquest 9030;
+	close;
+
+OnInit:
+	initnpctimer;
+	end;
+
+OnTimer10000:
+	stopnpctimer;
+	donpcevent "Angelo#br::OnGo";
+	end;
+
+OnGo:
+	emotion ET_SURPRISE;
+	initnpctimer;
+	end;
+}
+
+-	script	Puppy#bra	-1,{
+	mes "[Puppy]";
+	mes "au! au au!";
+	if (checkquest(9030) == 1) {
+		if (brazil_kid < 3) {
+			next;
+			brazil_kid++;
+			mes "[" + strcharinfo(0) + "]";
+			if (brazil_kid == 3) {
+				mes "Ótimo. Encontrei todos os 3 filhotes.";
+				mes "Agora preciso ir avisar o Angelo.";
+				brazil_kid = 0;
+				erasequest 9030;
+				setquest 9031;
+			}
+			else {
+				mes "Ah... quem é um bom filhote?";
+				mes "Ok, onde estão os outros?";
+			}
+			if (compare(strnpcinfo(2),"1")) setarray .@i[0],2,3;
+			else if (compare(strnpcinfo(2),"2")) setarray .@i[0],1,3;
+			else setarray .@i[0],1,2;
+			donpcevent "Puppy#"+charat(strnpcinfo(2),0)+.@i[rand(2)]+"::OnEnable";
+			hideonnpc strnpcinfo(0);
+		}
+	}
+	close;
+
+OnInit:
+	if (!compare(strnpcinfo(2),"1")) hideonnpc strnpcinfo(0);
+	end;
+
+OnEnable:
+	hideoffnpc strnpcinfo(0);
+	end;
+
+OnDisable:
+	hideonnpc strnpcinfo(0);
+	end;
+}
+
+bra_fild01,98,96,3	duplicate(Puppy#bra)	Puppy#a1	4_DOG01
+bra_fild01,59,116,5	duplicate(Puppy#bra)	Puppy#a2	4_DOG01
+bra_fild01,62,142,3	duplicate(Puppy#bra)	Puppy#a3	4_DOG01
+bra_fild01,80,163,3	duplicate(Puppy#bra)	Puppy#b1	4_DOG01
+bra_fild01,73,210,3	duplicate(Puppy#bra)	Puppy#b2	4_DOG01
+bra_fild01,80,210,3	duplicate(Puppy#bra)	Puppy#b3	4_DOG01
+bra_fild01,38,235,3	duplicate(Puppy#bra)	Puppy#c1	4_DOG01
+bra_fild01,307,64,3	duplicate(Puppy#bra)	Puppy#c2	4_DOG01
+bra_fild01,260,60,3	duplicate(Puppy#bra)	Puppy#c3	4_DOG01
+bra_fild01,234,101,3	duplicate(Puppy#bra)	Puppy#d1	4_DOG01
+bra_fild01,200,84,3	duplicate(Puppy#bra)	Puppy#d2	4_DOG01
+bra_fild01,176,63,5	duplicate(Puppy#bra)	Puppy#d3	4_DOG01
+
+// Suspicious Beach :: Suspicious_Beach.sc
+//============================================================
+brasilis,192,133,6	script	Lucia#brasilis	4_F_BRZ_WOMAN,{
+	/* -------------- Hydra Ball -------------------------
+	if (countitem(12408) > 0) {
+		delitem 12408,1; //Leaf_Cat_Ball
+		getitem 12408,1; //Leaf_Cat_Ball
+	}
+	else if (countitem(6221) > 0) {
+		delitem 6221,1; //Mystic_Leaf_Cat_Ball
+		getitem 6221,1; //Mystic_Leaf_Cat_Ball
+	}
+	--------------------------------------------------- */
+	if (BaseLevel < 40) {
+		mes "[Lucia]";
+		mes "Olá.";
+		mes "Estou preocupado com a ^FF0000Strange Hydra^000000 no";
+		mes "litoral sul.";
+		mes "Espero que alguns aventureiros experientes";
+		mes "venham ajudar.";
+		emotion ET_OHNO;
+		close;
+	}
+	.@nQState1 = checkquest(9028);
+	.@nQState2 = checkquest(9029);
+	if (.@nQState1 == -1) {
+		mes "[Lucia]";
+		mes "Olá.";
+		mes "Você veio aqui para caçar a ^FF0000Strange Hydra^000000?";
+		next;
+		switch(select("Sim.:Não.:^006400O que está acontecendo aqui?^000000")) {
+		case 1:
+			setquest 9028;
+			getitem 12408,1; //Hydra_Ball
+			mes "[Lucia]";
+			mes "Aqui, pegue esta ^006400Hydra Ball^000000.";
+			mes "Use-a para capturar uma ^FF0000Strange Hydra^8B4513.^000000";
+			mes "Espero que você consiga~!";
+			close;
+		case 2:
+			mes "[Lucia]";
+			mes "Ah, eu entendi mal.";
+			mes "Até mais então.";
+			close;
+		case 3:
+		L_WhatHappen:
+			mes "[Lucia]";
+			mes "Um dia, as ^FF0000Strange Hydra^000000s";
+			mes "vieram aqui e cercaram a cidade.";
+			mes "Não temos certeza do que as atraiu, mas alguns dizem que é por causa de vocês, aventureiros.";
+			next;
+			mes "[Lucia]";
+			mes "De qualquer forma, para conter as ^FF0000Strange Hydra^000000s,";
+			mes "você precisa usar esta ferramenta especialmente projetada, conhecida como ^8B4513Hydra Ball^000000.";
+			next;
+			mes "[Lucia]";
+			mes "Se você ainda tiver a ^006400Hydra Ball^000000,";
+			mes "por favor, use-a nas ^FF0000Strange Hydra^000000s que";
+			mes "você pode encontrar na praia.";
+			mes "Se tiver sorte, a ferramenta funcionará perfeitamente.";
+			next;
+			mes "[Lucia]";
+			mes "Espero que muitos aventureiros";
+			mes "se voluntariem para este trabalho.";
+			mes " ";
+			mes "Eu realmente odeio Hidras!";
+			emotion ET_CRY;
+			close;
+		}
+	}
+	else if ((.@nQState1 == 0) || (.@nQState1 == 1)) {
+		if (countitem(6221) > 0) {
+			mes "[Lucia]";
+			mes "Olá, você realmente conseguiu!";
+			if (checkweight(11502,3)) {
+				//mes "I don't have enough ^006400Hydra Ball^000000s to give you."; //Poorly translated by iRO?
+				mes "Espero que você venha";
+				mes "novamente para me ajudar.";
+				mes "Tenha um bom dia~!";
+				delitem 6221,1; //Mystic_Leaf_Cat_Ball
+				completequest 9028;
+				//recall_completequest 9029;
+				if (.@nQState2 > -1) erasequest 9029;
+				setquest 9029;
+				if (checkre(0))
+					consumeitem 607; //Yggdrasilberry
+				consumeitem 12070; //Luk_Dish05
+				consumeitem 12055; //Vit_Dish05
+				consumeitem 12065; //Dex_Dish05
+				if (checkre(0))
+					getitem 11502,3; //Light_Blue_Pot
+				else
+					getitem 505,5; //Blue_Potion
+				close;
+			}
+			else {
+				mes " ";
+				mes "Eu gostaria de recompensá-lo,";
+				mes "porém suas bolsas estão cheias.";
+				mes "Por favor, abra espaço e volte!";
+				close;
+			}
+		}
+		else {
+			mes "[Lucia]";
+			if (countitem(12408) < 1) {
+				mes "Você precisa de outra ^006400Hydra Ball^000000?";
+				mes "Vou lhe dar mais uma.";
+				getitem 12408,1; //Leaf_Cat_Ball
+				close;
+			}
+			else {
+				mes "Algum problema?";
+				next;
+				switch(select("Não.:^006400Conte-me novamente o que aconteceu^000000")) {
+				case 1:
+					mes "[Lucia]";
+					mes "Ok, por favor, me faça um favor.";
+					close;
+				case 2:
+					goto L_WhatHappen;
+				}
+			}
+		}
+	}
+	else {
+		mes "[Lucia]";
+		mes "Oh, ^0000FF"+strcharinfo(0)+"^000000 você voltou.";
+		.@nCheckTime = checkquest(9029,PLAYTIME);
+		if ((.@nCheckTime == 0) || (.@nCheckTime == 1)) {
+			mes "Sou muito grato pela sua ajuda.";
+			mes "Cada ^006400Hydra Ball^000000 é fornecida ^006400a cada 24 horas^000000";
+			mes "Por favor, venha no momento apropriado.";
+			close;
+		}
+		else {
+			//recall_completequest 9028;
+			if (.@nQState1 > -1) erasequest 9028;
+			completequest 9029;
+			mes "Você veio aqui para caçar a ^FF0000Strange Hydra^000000?";
+			next;
+			switch(select("Sim.:Não.:^006400O que está acontecendo aqui?^000000")) {
+			case 1:
+				setquest 9028;
+				getitem 12408,1; //Leaf_Cat_Ball
+				mes "[Lucia]";
+				mes "Aqui, pegue esta ^006400Hydra Ball^000000.";
+				mes "Use-a para capturar uma ^FF0000Strange Hydra^8B4513.^000000";
+				mes "Espero que você consiga~!";
+				close;
+			case 2:
+				mes "[Lucia]";
+				mes "Ah, eu entendi mal.";
+				mes "Até mais então.";
+				close;
+			case 3:
+				goto L_WhatHappen;
+			}
+		}
+	}
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+
+OnTimer7000:
+	emotion ET_SURPRISE;
+	stopnpctimer;
+	initnpctimer;
+	end;
+}
+
+// Guarana Quest :: brazil_tre.sc
+//============================================================
+brasilis,187,162,5	script	Candy Maker	4_M_BRZ_MAN1,{
+	if (!checkweight(1201,1)) {
+		mes "- Você não pode iniciar a missão. Por favor, reduza o peso do seu inventário. -";
+		close;
+	}
+	if (brazil_gua == 0) {
+		mes "[Candy Maker]";
+		mes "Ei, você conhece uma baga chamada ^FF0000Guarana^000000?";
+		next;
+		mes "[Candy Maker]";
+		mes "O guaraná é uma baga muito especial cultivada em uma área específica, ela alivia a fadiga física e dá energia ao corpo. Ela até desintoxica o corpo.";
+		next;
+		mes "[Candy Maker]";
+		mes "Eu costumava vender balas feitas disso antigamente.";
+		mes "Eu ganhava um prêmio quase todos os anos no <concurso anual de melhor produto>. Aqueles eram os bons tempos.";
+		next;
+		mes "[Candy Maker]";
+		mes "Desde então, a produção dessa fruta diminuiu e o preço subiu, então agora os ingredientes das balas foram alterados para coco ou outras frutas tropicais. Sinto falta da bala de guaraná.";
+		next;
+		switch(select("Como posso provar essa bala de guaraná?:Encerrar conversa.")) {
+		case 1:
+			mes "[Candy Maker]";
+			mes "Hmm? Eu já vendi todo o meu estoque antigo.";
+			next;
+			mes "[Candy Maker]";
+			mes "Mas se você conseguir encontrar algum guaraná, posso fazer para você.";
+			next;
+			switch(select("Como encontro guaraná?:Encerrar conversa.")) {
+			case 1:
+				mes "[Candy Maker]";
+				mes "Você vai encontrar o guaraná?? Hoooooh~";
+				next;
+				mes "[Candy Maker]";
+				mes "Você consegue encontrar?";
+				mes "Provavelmente é muito caro.";
+				mes "Negociar não é minha praia. Deixe-me pensar.";
+				next;
+				mes "[Candy Maker]";
+				mes "Deixe-me apresentá-lo a alguém com quem eu costumava fazer negócios de guaraná.";
+				mes "Ele talvez ainda negocie isso.";
+				next;
+				mes "[Candy Maker]";
+				mes "O nome dele é Cherto.";
+				mes "Se você não conseguir encontrá-lo na cidade, vá ao museu.";
+				mes "Ele é uma pessoa vaidosa, então gosta de se exibir.";
+				mes "Ele provavelmente está vagando pelo museu tentando se gabar para alguém, com certeza.";
+				brazil_gua = 1;
+				setquest 2192;
+				close;
+			case 2:
+				mes "[Candy Maker]";
+				mes "Você não quer experimentar a bala de guaraná?";
+				close;
+			}
+		case 2:
+			mes "[Candy Maker]";
+			mes "Aqueles eram os bons e velhos tempos...";
+			close;
+		}
+	}
+	else if (brazil_gua == 1) {
+		mes "[Candy Maker]";
+		mes "Se você quer conseguir o guaraná, encontre o Cherto.";
+		mes "Talvez ele esteja no museu.";
+		close;
+	}
+	else if (brazil_gua == 10) {
+		if (!countitem(6237)) {
+			mes "- O guaraná que eu tinha desapareceu. -";
+			close;
+		}
+		delitem 6237,1; //Guarana_Fruit
+		mes "[Candy Maker]";
+		mes "Você conseguiu o guaraná?";
+		next;
+		mes "- Você entrega o guaraná para ele. -";
+		next;
+		mes "[Candy Maker]";
+		mes "Uau! Você tem um talento especial.";
+		mes "É a melhor coisa que eu vi até agora. Legal~!";
+		next;
+		mes "[Candy Maker]";
+		mes "Ótimo, vamos fazer a bala~!";
+		mes "Quanto tempo, minha maravilhosa bala de guaraná...";
+		next;
+		mes "- hash hash hash hash hash hash -";
+		mes "- hash hash hash hash hash hash -";
+		next;
+		mes "[Candy Maker]";
+		mes "Veja! É a famosa bala de guaraná.";
+		mes "Tente saborear seu gosto incrível, ei~ vá com calma. hahaha!!";
+		brazil_gua = 11;
+		completequest 2200;
+		getitem 12414,1; //Guarana_Candy
+		if (checkre(0)) {
+			if (VIP_SCRIPT && vip_status(VIP_STATUS_ACTIVE))
+				getexp 105000,15000;
+			else
+				getexp 70000,10000;
+		}
+		close;
+	}
+	else if (brazil_gua == 11) {
+		mes "[Candy Maker]";
+		mes "Bala de guaraná. Com certeza foi a obra-prima mais única da minha vida!";
+		next;
+		mes "[Candy Maker]";
+		mes "Desde que você me ajudou, o suprimento de guaraná tem aumentado constantemente.";
+		mes "Então, naturalmente, voltei a fazer bala de guaraná.";
+		next;
+		mes "[Candy Maker]";
+		mes "O que acha? Quer comprar algumas?";
+		mes "Custa 4000 zenys cada.";
+		next;
+		switch(select("Comprar uma Bala de Guaraná.:Cancelar.")) {
+		case 1:
+			if (Zeny > 3999) {
+				mes "[Candy Maker]";
+				mes "Aqui está uma deliciosa bala de guaraná.";
+				Zeny = Zeny-4000;
+				getitem 12414,1; //Guarana_Candy
+				close;
+			}
+			else {
+				mes "[Candy Maker]";
+				mes "O quê? Você deveria ter dito antes se não tinha dinheiro!";
+				mes "Mesmo que você seja pobre, não posso dar isso de graça.";
+				close;
+			}
+		case 2:
+			mes "[Candy Maker]";
+			mes "Às vezes, algumas pessoas não gostam por causa do seu efeito estimulante.";
+			close;
+		}
+		close;
+	}
+	else {
+		mes "[Candy Maker]";
+		mes "Bala de guaraná. Com certeza foi a obra-prima mais única da minha vida!";
+		close;
+	}
+}
+
+bra_in01,95,179,3	script	Cherto	4_M_BRZ_MAN2,{
+	if (brazil_gua <= 1) {
+		mes "[Cherto]";
+		mes "Hmm... ei, cara, você é de fora, não é?";
+		next;
+		mes "[Cherto]";
+		mes "Cherto consegue perceber mesmo se for a primeira vez. Você não pode enganar o Cherto.";
+		mes "Cherto tem olhos afiados como uma águia! Hahaha!";
+		next;
+		mes "[Cherto]";
+		mes "Ok, ok. Sim, sim. Entendo!";
+		next;
+		mes "[Cherto]";
+		mes "De qualquer forma, você chegou em Brasilis, mas não sabe o que fazer?";
+		mes "Estou certo?";
+		mes "Você não sabe o quão sortudo é por ter encontrado um ajudante tão prestativo quanto eu.";
+		next;
+		mes "[Cherto]";
+		mes "Cherto entende pela sua expressão que você quer dizer: ''Você é um mestre!'' Certo?";
+		mes "Cherto, eu consigo ler e entender tudo de uma vez! Isso está escrito no seu rosto!";
+		next;
+		if (brazil_gua == 0) {
+			mes "[Cherto]";
+			mes "Cherto adoraria ficar aqui e explicar tudo para você, mas ele é um homem ocupado.";
+			close;
+		}
+		else {// brazil_gua == 1
+			mes "[Cherto]";
+			mes "Se você tem algo curioso para perguntar ao Cherto, Cherto terá a bondade de responder.";
+			next;
+			select("Guaraná?");
+			mes "[Cherto]";
+			mes "O quê? Você quer encontrar um guaraná?";
+			next;
+			mes "[Cherto]";
+			mes "O guaraná só é cultivado nesta área, ele tem um interior macio e é coberto com uma penugem clara.";
+			mes "Parece um pouco estranho, mas a flor é realmente grande e tem um perfume maravilhoso.";
+			next;
+			mes "[Cherto]";
+			mes "Há muito tempo, o guaraná era usado para aliviar doenças e a sede. Mas, recentemente, tornou-se popular para revitalizar a força corporal e aumentar a circulação sanguínea.";
+			next;
+			mes "[Cherto]";
+			mes "Embora tenha efeitos tão bons, o Cherto lamenta informar que não conseguimos mais encontrá-lo.";
+			next;
+			select("O quêêêê??");
+			mes "[Cherto]";
+			mes "Já faz um tempo que os frutos do guaraná não crescem mais aqui.";
+			next;
+			mes "[Cherto]";
+			mes "Mesmo que o Cherto conseguisse encontrar um, ele apodreceria rapidamente.";
+			next;
+			mes "[Cherto]";
+			mes "Se ao menos isso não tivesse acontecido!";
+			next;
+			select("Do que você está falando?");
+			mes "[Cherto]";
+			mes "Quieto!!!!!!!!!!!!!!!!";
+			mes "Esta história foi proibida! Alguém pode estar ouvindo nossa conversa...";
+			next;
+			mes "[Cherto]";
+			mes "Se o Cherto contar, você pode nos colocar em apuros. Mas você parece querer muito saber, então vou te dar uma dica.";
+			mes "Aproxime-se. O Cherto vai sussurrar para que ninguém possa ouvir.";
+			brazil_gua = 2;
+			close;
+		}
+	}
+	else if (brazil_gua == 2) {
+		mes "[Cherto]";
+		mes "Um menino guaraná nasceu.";
+		next;
+		select("Menino guaraná?");
+		mes "[Cherto]";
+		mes "Havia uma mulher que era uma especialista em botânica.";
+		mes "A mulher era muito popular entre todas as criaturas vivas.";
+		next;
+		mes "[Cherto]";
+		mes "Por volta da época em que seu bebê nasceu, ela começou uma plantação de guaraná. Por algum motivo, seus irmãos ficaram com inveja, então destruíram a plantação e desapareceram.";
+		mes "Esse tipo de história...";
+		next;
+		mes "[Cherto]";
+		mes "Não podemos ter certeza de que aquele bebê nasceu no mundo, mas desde aquela época, todo o guaraná em Brasilis desapareceu.";
+		next;
+		mes "[Cherto]";
+		mes "Quem é o garoto do guaraná?";
+		mes "Pedro, que é famoso por ser um homem ganancioso?";
+		mes "Meto, que não consegue resistir a todas as frutas?";
+		mes "Hovenue, que é melancólico?";
+		mes "Eles podem saber~!";
+		next;
+		mes "[Cherto]";
+		mes "E quanto a você?";
+		mes "Quem é o garoto do guaraná?";
+		mes "Você vai descobrir? hohohhhhh~";
+		brazil_gua = 3;
+		changequest 2192,2193;
+		close;
+	}
+	else if (brazil_gua == 3) {
+		mes "[Cherto]";
+		mes "Você consegue encontrar o garoto do guaraná?";
+		mes "Talvez sim? Talvez não?";
+		close;
+	}
+	else if (brazil_gua == 4) {
+		mes "[Cherto]";
+		mes "Você encontrou o garoto do guaraná?";
+		next;
+		mes "- Eu conto ao Cherto sobre o garoto que faz sons de animais. -";
+		next;
+		mes "[Cherto]";
+		mes "Hoooh. Isso é inacreditável.";
+		mes "Esse garoto pode ser o garoto do guaraná. Com certeza...";
+		mes "De acordo com a história, o garoto consegue conversar com animais.";
+		next;
+		mes "[Cherto]";
+		mes "Se ele consegue fazer sons de choro de animais, eles podem ser capazes de conversar!";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Agora, o que posso fazer?";
+		mes "Se ele é o garoto da lenda, existe alguma maneira de fazer o guaraná crescer novamente?";
+		next;
+		mes "[Cherto]";
+		mes "Haha!! O que o Cherto disse?";
+		mes "O Cherto sabe de tudo~!!";
+		mes "O Cherto já pensou";
+		mes "no próximo passo.";
+		next;
+		mes "[Cherto]";
+		mes "Em Brasilis existe um Mago especialista.";
+		mes "O nome dele é Paje.";
+		mes "Leve este bilhete até ele.";
+		mes "Ele mostrará a solução para você e para o garoto.";
+		brazil_gua = 5;
+		changequest 2194,2195;
+		close;
+	}
+	else {
+		mes "[Cherto]";
+		mes "hoho cócegas~cócegas~~~~!!!";
+		close;
+	}
+}
+
+brasilis,203,64,3	script	Strange Kid#bra	4_M_KID1,{
+	if (brazil_gua < 3) {
+		mes "[Strange Kid]";
+		mes "................";
+		close;
+	}
+	else if (brazil_gua == 3) {
+		mes "[Strange Kid]";
+		mes "................";
+		next;
+		if(select("Tente conversar.:Finja que está apenas passando.") == 2) {
+			mes "[Strange Kid]";
+			mes "................";
+			close;
+		}
+		mes "O que posso dizer a ele?";
+		next;
+		while(1) {
+			switch(select("Qual é o seu nome?:Quantos anos você tem?:O que você está fazendo?:Encerrar conversa.")) {
+			case 1:
+				mes "[Strange Kid]";
+				mes "Kaaaaaaao~";
+				mes "Grrrrrrrrr - kaaan-";
+				next;
+				break;
+			case 2:
+				mes "[Strange Kid]";
+				mes "Booooowoooooo-";
+				mes "Booooowoooooo- -";
+				next;
+				break;
+			case 3:
+				mes "[Strange Kid]";
+				mes "penico braeee penico brae penico brae -";
+				mes "Bbeeeebbeee -";
+				next;
+				break;
+			case 4:
+				mes "[Strange Kid]";
+				mes "Kaaaaaaao~";
+				mes "Grrrrrrrrr - kaaan-";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "Ele faz sons estranhos como os de animais.";
+				mes "Devo pedir um conselho ao Cherto?";
+				brazil_gua = 4;
+				changequest 2193,2194;
+				close;
+			}
+		}
+	}
+	else if (brazil_gua == 4) {
+		mes "["+strcharinfo(0)+"]";
+		mes "Ele faz sons estranhos como os de um animal.";
+		mes "Devo pedir um conselho ao Cherto?";
+		close;
+	}
+	else if ((brazil_gua > 4) && (brazil_gua < 9)) {
+		mes "[Strange Kid]";
+		mes "Ah...? ah.....?";
+		close;
+	}
+	else if (brazil_gua == 9) {
+		mes "[Strange Kid]";
+		mes "ah... ahah.....";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Eu não tenho uma história, mas há muitos amigos esperando lá fora.";
+		next;
+		mes "- Você entrega a pena, a carne fresca e o ramo de uvas para o garoto -";
+		next;
+		mes "[Strange Kid]";
+		mes "Ah.............";
+		next;
+		mes "[Strange Kid]";
+		mes "Un, uhh....";
+		mes "muuu... mamãe.....";
+		next;
+		mes "[Strange Kid]";
+		mes "Ah..........";
+		mes "pássaro....";
+		mes "ma, ma, ma...caco......";
+		mes "au, auuu...........";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Cachorro?!";
+		mes "kkk, sim. Muitos amigos querem conhecer você.";
+		mes "Não fique mais sozinho e seja feliz com seus amigos.";
+		next;
+		mes "[Strange Kid]";
+		mes "ah....he...hehe....";
+		next;
+		mes "- Ele começa a sorrir levemente e dá risada. -";
+		next;
+		mes "[Strange Kid]";
+		mes "Si......sim.......";
+		mes "o... obri......obrigado.........você.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Tudo bem, que sorriso fofo!";
+		mes "Seja um garoto feliz como sempre.";
+		next;
+		mes "[Strange Kid]";
+		mes "Uh......";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "o quê?";
+		next;
+		mes "[Strange Kid]";
+		mes "ei..........";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Você quer dizer alguma coisa?";
+		next;
+		mes "- Você se aproxima e finge ter cuidado. -";
+		next;
+		emotion ET_CHUP;
+		mes "(beijo~)";
+		next;
+		mes "- A criança ri levemente de novo e coloca algo na sua mão. -";
+		next;
+		mes "- É uma baga fresca que tem cor vermelha e é dura. -";
+		next;
+		mes "[Strange Kid]";
+		mes "gua...ra...na...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Opa, baga de guaraná?";
+		mes "Ah! Muito obrigado!";
+		emotion ET_CHUPCHUP, playerattached();
+		emotion ET_SMILE;
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Se eu tiver isso, posso fazer uma bala de guaraná.";
+		mes "É melhor eu achar aquele Fabricante de Balas!";
+		brazil_gua = 10;
+		changequest 2199,2200;
+		getitem 6237,1; //Guarana_Fruit
+		close;
+	}
+	else if (brazil_gua == 10) {
+		if (!countitem(6237)) {
+			mes "[Strange Kid]";
+			mes "Ele.........";
+			getitem 6237,1; //Guarana_Fruit
+			close;
+		}
+	}
+	else {
+		mes "- A criança está sorrindo. -";
+		close;
+	}
+}
+
+brasilis,56,224,7	script	Mage Paje#bra	4_M_BIBI,{
+	mes "[Mage Paje]";
+	mes "Abracadabra~";
+	specialeffect EF_POISONHIT,AREA,"Poring#bra";
+	setarray .@display[0],800,876,909;
+	setnpcdisplay "Poring#bra",.@display[rand(3)];
+	if (brazil_gua != 5) close;
+	next;
+	mes "[Mage Paje]";
+	mes "Ohoooh~!";
+	mes "Tenho uma visita.";
+	mes "Bom ver você.";
+	mes "Eu sou o Mago Paje.";
+	next;
+	mes "["+strcharinfo(0)+"]";
+	mes "Olá. O Sr. Cherto me pediu para encontrar você.";
+	next;
+	mes "[Mage Paje]";
+	mes "Hum.. Sr. Cherto? O que houve?";
+	mes "Você veio aqui para perguntar sobre muitos rumores estranhos?";
+	next;
+	mes "- Você entrega a nota para Paje -";
+	next;
+	mes "[Mage Paje]";
+	mes "Ohoooh~";
+	mes "Hmm poxa.. foi isso que aconteceu.";
+	next;
+	mes "[Mage Paje]";
+	mes "Eu não posso ajudar você diretamente.";
+	mes "Mas vou lhe dar uma magia simples para que você possa descobrir por conta própria.";
+	next;
+	select("Que tipo de magia?");
+	mes "[Mage Paje]";
+	mes "É uma magia que fará você parecer um animal para outros animais. Bem legal, né?";
+	next;
+	mes "[Mage Paje]";
+	mes "Ok~ Eu vou lhe dar a magia.";
+	mes "A maioria dos animais é muito sensível, então eles podem perceber. Encontre um Tucano no campo que não saiba do feitiço. Você saberá quando falar com ele.";
+	next;
+	mes "[Mage Paje]";
+	mes "Boa sorte~!";
+	brazil_gua = 6;
+	changequest 2195,2196;
+	specialeffect2 EF_ASSUMPTIO;
+	close;
+}
+
+brasilis,59,226,3	script	Poring#bra	4_PORING,{}
+
+bra_fild01,75,83,5	script	Toucan#bra	2073,2,2,{
+OnTouch:
+	if (brazil_gua == 6) {
+		mes "[Toucan]";
+		mes "Baaeecc!";
+		mes "Eu nunca vi você antes.";
+		mes "Baaeec!";
+		next;
+		mes "[Toucan]";
+		mes "É o meio do continente novo e do antigo... Sei que nunca vi você antes, mas você parece familiar, como uma mulher dançando samba.";
+		next;
+		select("Do que você está falando?");
+		mes "[Toucan]";
+		mes "Posso sentir um poder semelhante ao do garoto do guaraná. bbaaaeeeccc!";
+		next;
+		mes "[Toucan]";
+		mes "Aquele garoto teve um tempo muito solitário, baaecc! Talvez você seja amigo dele? Baaeec!!";
+		next;
+		select("Ainda não... mas eu quero ser amigo.");
+		mes "[Toucan]";
+		mes "A criança que recebeu cuidados da mulher do guaraná também é amiga dos animais. Bbaaeecc!";
+		next;
+		mes "[Toucan]";
+		mes "Eu gostaria de dar o símbolo de um representante tucano para a criança. Bbaaeecc!";
+		next;
+		mes "[Toucan]";
+		mes "Se você quer aliviar a solidão dele, pode me ajudar?";
+		next;
+		select("Com certeza!");
+		mes "[Toucan]";
+		mes "É a minha pena.";
+		mes "Entregue para a criança.";
+		mes "Nós manteremos nossa promessa de amizade entre o garoto do guaraná e o Tucano para sempre. Bbaaeecc!";
+		next;
+		mes "- Você pega uma pena do Tucano. -";
+		next;
+		mes "[Toucan]";
+		mes "Deve haver outros por aqui como eu.";
+		mes "Por que você não encontra uma onça-pintada Bbaaeecc!";
+		next;
+		mes "[Toucan]";
+		mes "Vou lhe dar uma bênção do Tucano.";
+		next;
+		mes "[Toucan]";
+		mes "Voe, voe para longe. bbaaaeeeccc-!";
+		brazil_gua = 7;
+		changequest 2196,2197;
+		specialeffect2 EF_SEISMICWEAPON;
+		close2;
+		warp "bra_fild01",68,146;
+		end;
+	}
+	else {
+		mes "[Toucan]";
+		mes "Bbbaaeec~! Baaeec~!";
+		close;
+	}
+	end;
+}
+
+bra_fild01,34,184,5	script	Jaguar#bra	2072,2,2,{
+OnTouch_:
+	if (brazil_gua == 7) {
+		mes "[Jaguar]";
+		mes "Hhooww..hhooww.....";
+		next;
+		mes "[Jaguar]";
+		mes "Farejando! Esse cheiro é de um humano!";
+		mes "Em algum lugar, um humano!";
+		mes "Entendi. Você é!!!";
+		specialeffect EF_HIT1,AREA,"Jaguar#bra";
+		emotion ET_HUK, playerattached();
+		next;
+		mes "[Jaguar]";
+		mes "Não tenha medo, humano.";
+		mes "Não tenho poder suficiente para caçar humanos, apenas aguardo o tempo terminar minha vida nesta selva.";
+		next;
+		mes "[Jaguar]";
+		mes "De qualquer forma, você pode conversar comigo, você é um garoto guaraná?";
+		next;
+		select("Sim? N...ão... na verdade...");
+		mes "[Jaguar]";
+		mes "O filho da mulher guaraná também se tornou nosso amigo.";
+		mes "Eles trataram toda a vida com muita consideração.";
+		mes "Espero que você seja igual a ela.";
+		next;
+		mes "[Jaguar]";
+		mes "O canto dos pássaros me informou.";
+		mes "O filho da mulher guaraná tem um coração doente.";
+		mes "Os irmãos dela o deixaram solitário, não acha?";
+		next;
+		mes "[Jaguar]";
+		mes "Aqui está uma carne fresca que cacei há poucos dias.";
+		mes "Pegue-a e dê para aquele garoto pobre.";
+		next;
+		mes "[Jaguar]";
+		mes "Posso lhe dar esta pequena coisa, então não se esqueça disso.";
+		mes "A selva o receberá quando quiser!";
+		next;
+		mes "- Você recebe carne fresca do Jaguar. -";
+		next;
+		mes "[Jaguar]";
+		mes "O Macaco, que está sempre se metendo com os outros, quer conhecê-lo.";
+		next;
+		mes "[Jaguar]";
+		mes "Eu lhe darei a grande bênção do Jaguar.";
+		mes "Vá até o macaco fluindo pelo vento como uma abelha.";
+		mes "Vamos nos encontrar novamente, meu amigo!";
+		brazil_gua = 8;
+		changequest 2197,2198;
+		close2;
+		consumeitem 12016; //Speed_Up_Potion
+		end;
+	}
+	else {
+		mes "[Jaguar]";
+		mes "krrrrrr....";
+		close;
+	}
+	end;
+}
+
+bra_fild01,245,53,3	script	#Monkeybra	1057,{}
+
+bra_fild01,245,52,3	script	Monkey#bra	HIDDEN_NPC,{
+	if (brazil_gua == 8) {
+		mes "[Monkey]";
+		mes "O que é isso??!!";
+		mes "Nós não toleramos humanos? Vá embora~!!";
+		next;
+		mes "[Monkey]";
+		mes "Nãonão... espere... aquele perfume!!";
+		mes "Posso sentir cheiro de Jaguar em você, quem é você?";
+		mes "Puxa, talvez não exista jaguar sem pelo e com forma estranha!";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "........................";
+		mes "Você está dizendo que eu pareço um animal?!?!";
+		next;
+		mes "[Monkey]";
+		mes "Uh? Você não é um jaguar?";
+		next;
+		mes "[Monkey]";
+		mes "Ahhha. O Jaguar te enviou para mim, certo?? kkkikkki";
+		mes "Mas você não parece um garoto guaraná.";
+		next;
+		select("Eu vim aqui para ajudá-lo.");
+		mes "[Monkey]";
+		mes "Ouvi dizer que o garoto guaraná ficou solitário, é verdade?";
+		mes "Somos especialistas em atos acrobáticos, o garoto gosta disso?? kkkickkksk!";
+		next;
+		mes "[Monkey]";
+		mes "Dê este cacho de uvas para o garoto guaraná.";
+		mes "Faremos ele se divertir a noite toda sempre que ele vier nos ver!! kkkickkksk!";
+		next;
+		mes "- Você recebe um cacho de uvas do Macaco. -";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Bom~ Agora é hora de voltar para o garoto~!!";
+		brazil_gua = 9;
+		changequest 2198,2199;
+		close;
+	}
+	else {
+		mes "[Monkey]";
+		mes "kkkickkksk!";
+		close;
+	}
+}
+
+// Water Lily Quest :: brazil_tre.sc
+//============================================================
+brasilis,203,286,3	script	Botanist Karmen#bra	4_F_HUWOMAN,{
+	if (brazil_regia == 0) {
+		mes "[Karmen]";
+		mes "O clima de Brasilis é especial.";
+		mes "Este clima oferece casos especiais nas aulas de botânica, diferentes de qualquer outra região do mundo.";
+		next;
+		mes "[Karmen]";
+		mes "As plantas aqui têm estruturas robustas e são claras e coloridas.";
+		mes "Aqui as plantas são realmente enormes e podemos sentir sua presença.";
+		next;
+		mes "[Karmen]";
+		mes "Uma delas, a Vitória-régia, é uma planta muito linda e única.";
+		mes "Esta flor é bastante sensível, então não floresce em qualquer lugar.";
+		next;
+		if(select("Interessante.:Encerrar conversa.") == 2) {
+			mes "[Karmen]";
+			mes "Acho que você não se interessa por botânica.";
+			close;
+		}
+		mes "[Karmen]";
+		mes "Ela não aparece facilmente e é uma flor misteriosa até mesmo para os nativos, então o povo de Brasilis acredita que uma pessoa terá muita sorte se encontrá-la.";
+		next;
+		mes "[Karmen]";
+		mes "Como botânico, tenho circulado por aqui para encontrar a flor da sorte, mas, como eu esperava, ela ainda não se mostrou.";
+		next;
+		mes "[Karmen]";
+		mes "Acredito que, com perseverança suficiente, esta flor me mostrará seu belo brilho.";
+		next;
+		mes "[Karmen]";
+		mes "Ah, se você estiver mais interessado na história da Vitória-régia, procure alguém chamada Marta.";
+		mes "Ela é sábia e conhece muitas histórias aqui em Brasilis.";
+		brazil_regia = 1;
+		setquest 2201;
+		close;
+	}
+	else if (brazil_regia == 1) {
+		mes "[Karmen]";
+		mes "Ah, se você estiver mais interessado na história da Vitória-régia, procure alguém chamada Marta.";
+		mes "Ela é sábia e conhece muitas histórias aqui em Brasilis.";
+		close;
+	}
+	else if (brazil_regia == 9) {
+		mes "- Você mostra uma flor de lótus para Karmen e conta a história até o momento. -";
+		next;
+		mes "[Karmen]";
+		mes "Uau!! Você teve uma experiência muito boa.";
+		mes "Então~~~ a vitória-régia vive nas profundezas de Brasilis, certo?";
+		mes "Tentarei encontrá-la novamente sozinho, não vou desistir!!";
+		next;
+		mes "[Karmen]";
+		mes "Sou muito grato por ter te conhecido.";
+		mes "A vitória-régia deve ser realmente uma flor da sorte. hahaha";
+		brazil_regia = 10;
+		completequest 2207;
+		if (VIP_SCRIPT && vip_status(VIP_STATUS_ACTIVE))
+			getexp 75000, checkre(0)?15000:0;
+		else
+			getexp 50000, checkre(0)?10000:0;
+		close;
+	}
+	else {
+		mes "[Karmen]";
+		mes "Este clima oferece casos especiais nas aulas de botânica, diferentes de qualquer outra região do mundo.";
+		next;
+		mes "[Karmen]";
+		mes "As plantas aqui têm estruturas robustas e são claras e coloridas.";
+		mes "Aqui as plantas são realmente enormes e podemos sentir sua presença.";
+		next;
+		mes "[Karmen]";
+		mes "É o sonho de um botânico.";
+		close;
+	}
+}
+
+bra_in01,142,27,5	script	Marta#bra	4_F_BRZ_INDOLD,{
+	if (brazil_regia == 1) {
+		mes "[Brasilis Boy]";
+		mes "Vovó! Aquela pessoa tem um cheiro estranho.";
+		next;
+		mes "[Marta]";
+		mes "Esta pessoa não é daqui.";
+		mes "Diga olá ao nosso convidado.";
+		next;
+		mes "[Brasilis Boy]";
+		mes "Oooie~ oi!!";
+		mes "Eu sou o Kaka!!";
+		mes "Qual é o seu nome?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Eu sou"+strcharinfo(0)+".";
+		next;
+		mes "[Brasilis Boy]";
+		mes "O forasteiro tem um nome estranho!";
+		mes "Tudo bem! Se continuarmos conversando, seremos amigos! Anime-se!";
+		next;
+		mes "[Marta]";
+		mes "Hehe...";
+		mes "Então, por que você veio aqui, estranho~?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Ouvi dizer que você sabe muitas histórias, é verdade?";
+		next;
+		mes "[Kaka]";
+		mes "Uau! Como você sabe que minha vovó conhece muitas histórias, incrível~?";
+		mes "A vovó é muito sábia e gentil, então, ouvi muita coisa.";
+		next;
+		mes "[Marta]";
+		mes "Hehe. O Kaka sempre ouve muitas histórias toda noite, ele gosta muito das minhas histórias.";
+		mes "O Kaka sempre me deixa feliz porque ele faz muitas perguntas curiosas. Isso é pura felicidade.";
+		next;
+		mes "[Marta]";
+		mes "Certo, Kaka, por que você não convida nosso visitante de hoje para nossa pequena reunião?";
+		next;
+		mes "[Kaka]";
+		mes "Certo, vovó~!!";
+		next;
+		mes "[Marta]";
+		mes "Ei~ você tem alguma história especial que queira ouvir?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Sobre a misteriosa vitória-régia?";
+		next;
+		mes "[Marta]";
+		mes "Vitória-régia....";
+		mes "Isso foi há muito, muito tempo.";
+		next;
+		mes "[Marta]";
+		mes "Antes de Brasilis ser estabelecida.";
+		mes "Uma tribo que vivia com a cachoeira gigante e a selva como amigas, passava todo o seu tempo com a natureza.";
+		next;
+		mes "[Marta]";
+		mes "Um dos chefes da tribo tinha uma filha bonita chamada 'Naia'.";
+		next;
+		mes "[Marta]";
+		mes "Naia gostava de ouvir histórias como o Kaka, então, sua mãe lhe contava histórias toda noite sobre a natureza e os deuses.";
+		next;
+		mes "[Kaka]";
+		mes "Uau, ela é exatamente como eu!";
+		mes "Talvez ela fosse bonita... hehe.";
+		next;
+		mes "[Marta]";
+		mes "De acordo com a mãe dela...";
+		mes "Se a lua no céu ama alguma mulher na terra, ele a transforma em uma estrela para que eles possam ficar juntos para sempre.";
+		next;
+		mes "[Marta]";
+		mes "Depois que Naia ouviu essa história, ela foi até seu pai perguntar se era verdade ou não.";
+		next;
+		mes "[Kaka]";
+		mes "Então, o que ele disse?";
+		next;
+		mes "[Marta]";
+		mes "^3131FF'Minha querida Naia, a lua é um dos homens mais corajosos. Mas ele não pode mais ter uma noiva. Então você não pode se tornar uma estrela... Sinto muito~.^000000";
+		next;
+		mes "[Kaka]";
+		mes "Naia queria ser a noiva daquele homem?";
+		next;
+		mes "[Marta]";
+		mes "Sim, Kaka, imagine a lua, tão bonita e misteriosa, é simplesmente o ideal para as garotas.";
+		next;
+		mes "[Kaka]";
+		mes "Mas a lua não conhece mais nenhum humano como sua esposa? O que aconteceu com a Naia?";
+		next;
+		mes "[Marta]";
+		mes "Naia era realmente uma garota legal.";
+		next;
+		mes "[Marta]";
+		mes "Embora seus pais tentassem impedi-la, ela ainda ia à floresta encontrar a lua todas as noites.";
+		mes "Infelizmente, mesmo com todo o seu esforço, a lua não demonstrou nenhuma reação para ela.";
+		next;
+		mes "[Marta]";
+		mes "Um dia, ela também foi ao topo da montanha para ficar mais perto dele. Ela decidiu descansar um pouco perto do lago.";
+		next;
+		mes "[Marta]";
+		mes "Foi quando... Naia viu.";
+		mes "Era a lua, brilhando lindamente sobre o lago agitado suavemente.";
+		next;
+		mes "[Kaka]";
+		mes "Eu sei, é só o reflexo da lua na água. Certo?!";
+		next;
+		mes "[Marta]";
+		mes "Sim, mas para ela, a imagem a fez cair no lago sem hesitar e ela se afogou.";
+		next;
+		mes "[Kaka]";
+		mes "Oh, não.";
+		next;
+		mes "[Marta]";
+		mes "A lua também estava observando-a do céu.";
+		mes "Ele se sentiu triste e teve pena dela. Então, ele decidiu transformá-la em uma flor bonita para agradecer por seu amor.";
+		next;
+		mes "[Marta]";
+		mes "Essa é a história da flor misteriosa que as pessoas chamam de Brasilis Water Flower.";
+		mes "Essa flor de Naia aparece como um branco claro durante o dia, mas à noite torna-se vermelha devido à sua conexão amorosa com a lua.";
+		next;
+		mes "[Kaka]";
+		mes "Que triste, mas bonito!";
+		next;
+		mes "[Marta]";
+		mes "E quanto a você, estranho?";
+		mes "Você gostou desta história?";
+		mes "Se quiser ouvir outra história, é só vir até mim.";
+		mes "Se não se importar de brincar um pouco com meu neto. hoohoo.";
+		brazil_regia = 2;
+		close;
+	}
+	else if (brazil_regia > 1) {
+		mes "[Kaka]";
+		mes "Minha vovó está um pouco cansada de fazer algumas tarefas da tribo!";
+		mes "Você poderia vir em outro dia?";
+		close;
+	}
+	else {
+		mes "[Marta]";
+		mes "Você não é daqui.";
+		mes "Posso sentir um cheiro estranho de terra.";
+		next;
+		mes "[Marta]";
+		mes "Mas seus olhos brilham com força.";
+		mes "De fato, você exala espírito e vontade por todo o seu corpo.";
+		next;
+		mes "[Marta]";
+		mes "Se você se dedicar, será uma grande pessoa algum dia.";
+		close;
+	}
+}
+bra_in01,145,27,3	duplicate(Marta#bra)	Brasilis Boy#bra	472
+
+brasilis,270,145,5	script	Brasilis Girl#bra	4_F_BRZ_INDIAN,5,5,{
+	if (!checkweight(1201,1)) {
+		mes "- espere um segundo!! -";
+		mes "- você tem itens demais -";
+		mes "- então não pode pegar mais itens. -";
+		mes "- deixe seu corpo mais leve -";
+		mes "- e tente novamente. -";
+		close;
+	}
+	if (brazil_regia == 2) {
+		mes "[Distant Sound]";
+		mes "Jasira!!!";
+		mes "Onde você vai de novo?!!";
+		mes "volte~, por favor!!";
+		next;
+		mes "[Brasilis Girl]";
+		mes "Mãe, eu tenho que sair!!";
+		next;
+		mes "[Distant Sound]";
+		mes "De jeito nenhum~!! Você não deveria!!";
+		next;
+		mes "[Brasilis Girl]";
+		mes "Poxa... hoje também falhou.";
+		next;
+		mes "[Brasilis Girl]";
+		mes "......";
+		mes "O que houve? Por que está olhando para mim?";
+		mes "Eu não quero ser uma showgirl!! Saia daqui!!";
+		next;
+		if(select("Nada, desculpe.:O que há de errado?") == 1) {
+			mes "[Brasilis Girl]";
+			mes "Eu estou tão triste!!!";
+			close;
+		}
+		mes "[Brasilis Girl]";
+		mes "Não é da sua conta.";
+		mes "Você é só um estranho!";
+		next;
+		if(select("Quanta grosseria!:Só estou tentando ajudar.") == 1) {
+			mes "[Brasilis Girl]";
+			mes "Que diferença faz para você se eu sou grosseira??!!";
+			close;
+		}
+		mes "["+strcharinfo(0)+"]";
+		mes "Eu sei que estou apenas de passagem, mas talvez eu possa te ajudar. O que acha?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Esse tipo de encontro pode ser mais do que apenas uma coincidência.";
+		next;
+		mes "[Brasilis Girl]";
+		mes "......................";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Hmm, pode me dizer o seu nome?";
+		next;
+		mes "[Brasilis Girl]";
+		mes "Ja...";
+		mes "Jasira.";
+		mes "Meu nome é Jasira.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Nome bonito~.";
+		mes "Jasira, o que está acontecendo?";
+		next;
+		mes "[Jasira]";
+		mes ".............";
+		next;
+		mes "[Jasira]";
+		mes "Eu preciso encontrar o 'Jasi', mas não posso sair...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Quem é Jasi?";
+		mes "Seu... namorado?";
+		next;
+		emotion ET_HUK;
+		mes "[Jasira]";
+		mes "N...a...m...o...namorado??!!";
+		mes "De jeito nenhum~";
+		next;
+		mes "[Jasira]";
+		mes "Se ele fosse meu namorado, seria maravilhoso... mas...";
+		next;
+		mes "[Jasira]";
+		mes "Jasi é......";
+		mes "a grande lua.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "A lua?";
+		mes "Talvez... você está falando da lua da história?";
+		next;
+		mes "[Jasira]";
+		mes "Sim!";
+		mes "O querido Jasi vem da lua no céu!";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Por que você pensa assim?";
+		next;
+		mes "[Jasira]";
+		mes "Porque o Jasi é realmente lindo e, o mais importante, ele cuida da flor de lótus em Brasilis.";
+		next;
+		emotion ET_HUK, playerattached();
+		mes "["+strcharinfo(0)+"]";
+		mes "A flor de lótus de Brasilis??!!";
+		mes "Não é uma flor única?";
+		next;
+		mes "[Jasira]";
+		mes "Isso. É uma flor realmente misteriosa e difícil de encontrar.";
+		mes "Mas ao redor do Jasi, existem muitas flores de lótus.";
+		mes "É por isso que acredito que o Jasi seja a lua.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Onde está o Jasi?";
+		next;
+		mes "[Jasira]";
+		mes "Ele está nas profundezas da selva.";
+		mes "Como você pode ver, sou tão fraca que tenho ficado em casa. Mas, uma vez, eu era forte o suficiente para deixar esta vila.";
+		next;
+		mes "[Jasira]";
+		mes "Eu apenas vaguei pela selva, caí em algum lugar e foi lá que o vi.";
+		mes "Ele foi tão gentil. Ele me ajudou a sarar e me guiou de volta para casa.";
+		mes "Aquele foi um momento realmente, muito maravilhoso.";
+		next;
+		mes "[Jasira]";
+		mes "Desde que voltei para casa, meus pais me deixaram de castigo.";
+		mes "Eu entendo por que eles se preocupam, mas sinto muita falta do Jasi!";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Por que você não vai encontrá-lo depois de recuperar suas forças?";
+		next;
+		mes "[Jasira]";
+		mes ".................";
+		mes "Eu quero vê-lo agora mesmo...";
+		next;
+		if(select("Ajudar Jasira.:Ignorá-la.") == 2) {
+			mes "["+strcharinfo(0)+"]";
+			mes "Sinto muito, não posso ajudar. Anime-se!";
+			next;
+			mes "[Jasira]";
+			mes "Chorando........";
+			close;
+		}
+		mes "["+strcharinfo(0)+"]";
+		mes "Jasira, eu vim aqui para encontrar a flor de lótus de Brasilis.";
+		mes "Você não acha que o destino nos uniu?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Se você me disser como encontrar o Jasi, eu posso te ajudar.";
+		next;
+		mes "[Jasira]";
+		mes "Sério? Mas eu não sei exatamente como chegar lá. Eu estava apenas andando por aí quando o conheci.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Você não consegue se lembrar de nada?";
+		mes "Se você sabe de alguma coisa, precisa me contar.";
+		next;
+		mes "[Jasira]";
+		mes "Vejamos... Eu estava vagando perto de uma cachoeira, caí na água e fui sugada para algum lugar.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Ótimo, isso é melhor que nada! Vou procurar um lugar parecido.";
+		next;
+		mes "[Jasira]";
+		mes "Eu te dei as informações, então você pode me fazer um favor?";
+		mes "É bem simples...";
+		next;
+		mes "[Jasira]";
+		mes "Eu gostaria de dar uma fruta deliciosa.";
+		mes "O lugar onde Jas parecia aconchegante, mas não vi nenhuma comida por perto... Então, se ele vir uma fruta saborosa, ficará feliz!";
+		next;
+		mes "[Jasira]";
+		mes "Dê a ele 10 Bananas e diga que sinto muito a falta dele.";
+		mes "Desculpe por ter te ignorado antes. Por favor, só você pode me ajudar!";
+		brazil_regia = 3;
+		changequest 2201,2202;
+		close;
+	}
+	else if ((brazil_regia == 3) || (brazil_regia == 4)) {
+		mes "[Jasira]";
+		mes "Se você encontrar Jasi, dê a ele 10 Bananas.";
+		mes "Vejamos... Eu estava vagando perto de uma cachoeira, caí na água e fui sugada para algum lugar.";
+		next;
+		mes "[Jasira]";
+		mes "Se você não encontrar o caminho, suba até a cachoeira e pergunte às crianças no vilarejo de Brasilis.";
+		mes "Ouvi dizer que uma das crianças foi para um lugar estranho antes. Ele pode ter ido para o mesmo lugar que eu!";
+		close;
+	}
+	else if (brazil_regia == 5) {
+		mes "[Jasira]";
+		mes "Você encontrou o Jasi?";
+		mes "Você falou de mim para ele?";
+		mes "Não falou? Uh? Estúpido! Poxa vida~!";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Ei, garota~ você tem um temperamento explosivo.";
+		mes "Eu o vi e falei de você!";
+		next;
+		mes "[Jasira]";
+		mes "Falou mesmo?";
+		mes "O que ele disse?";
+		mes "Ele se lembra de mim?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Que você tem um coração muito bom~";
+		mes "Eu disse a ele que você tentará encontrá-lo quando sua condição melhorar.";
+		next;
+		mes "[Jasira]";
+		mes "Siiiiiim!!";
+		mes "Obrigada! Você é mais confiável do que eu pensei que seria.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "De qualquer forma, estou procurando uma fruta que é marrom e tem uma casca dura.";
+		mes "Ela tem suco dentro e pode ser usada como um copo para beber.";
+		next;
+		mes "[Jasira]";
+		mes "Duh! Você quer dizer um coco, certo?!";
+		mes "Eles estão por toda parte aqui em Brasilis.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Obrigada, Jasira!";
+		brazil_regia = 6;
+		changequest 2204,2205;
+		close;
+	}
+	else if ((brazil_regia == 6) || (brazil_regia == 7)) {
+		mes "[Jasira]";
+		mes "Eu deveria cuidar da minha força por conta própria!";
+		mes "Não posso ficar deitada na cama para sempre. Você não concorda?";
+		close;
+	}
+	else if (brazil_regia == 8) {
+		mes "[Jasira]";
+		mes "Uh? Por que você voltou?";
+		next;
+		mes "- Você conta a ela o que Jasi pediu para você dizer -";
+		next;
+		mes "[Jasira]";
+		mes "Oh... sério?";
+		mes "Ele disse isso?";
+		mes "Poxa! Poxa vida!!!";
+		mes "Kkkkkaaaaa - !!";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Graças a você, consegui uma flor.";
+		mes "Muito obrigada!!";
+		next;
+		mes "[Jasira]";
+		mes "Uau. É tão bonita.";
+		next;
+		mes "[Jasira]";
+		mes "Ah... posso ver por um segundo?";
+		next;
+		mes "[Jasira]";
+		mes "Surpresa~!!";
+		mes "Estive trabalhando neste chapéu enquanto você estava fora e agora ele está completo com a flor de lótus!";
+		next;
+		mes "[Jasira]";
+		mes "Eu sei, eu sei! Eu sou a melhor...";
+		delitem 7553,1; //Lotus_Flower - untradable
+		brazil_regia = 9;
+		changequest 2206,2207;
+		setarray .@card[0],4195,4177,4188; //Leaf_Cat_Card, Dryad_Card, Leib_Olmai_Card
+		getitem2 5302,1,1,0,0,.@card[rand(3)],0,0,0; //Lotus_Flower_Hat
+		close;
+	}
+	else if (brazil_regia > 8) {
+		mes "[Jasira]";
+		mes "Só preciso ficar um pouco mais forte!";
+		mes "Não posso ficar deitada na cama para sempre. Meu Jasi está me esperando~";
+		close;
+	}
+	else {
+		mes "[Distant Sound]";
+		mes "Jasira!!!";
+		mes "Onde você está indo de novo?!!";
+		mes "Volte~, por favor!!";
+		next;
+		mes "[Brasilis Girl]";
+		mes "Por favor, mãe~!";
+		mes "Por favor, me deixe ir!";
+		close;
+	}
+	end;
+
+OnTouch:
+	if (brazil_regia == 2)
+		emotion ET_FRET;
+	end;
+}
+
+bra_dun02,67,205,5	script	Recluse#bra	4_M_BRZ_JACI,3,3,{
+	if (brazil_regia == 3) {
+		mes "[Recluse]";
+		mes "Oh, eu não via outra pessoa há tanto tempo.";
+		next;
+		if(select("Continue indo.:Você é a lua?") == 1) {
+			mes "[Recluse]";
+			mes "Você não tem negócios específicos comigo.";
+			close;
+		}
+		mes "[Recluse]";
+		mes "Lua?";
+		mes "Meu nome é Jasi.";
+		mes "Minha família tem trabalhado para cuidar do lótus de geração em geração.";
+		next;
+		mes "[Jasi]";
+		mes "Basicamente, o lótus de Brasilis é tímido demais para aparecer na frente das pessoas, então eles só florescem em lugares raros. Acho que eles gostam daqui, por isso fico aqui há tanto tempo.";
+		next;
+		mes "[Jasi]";
+		mes "Minha família tem cuidado do lótus calmamente para evitar danos causados pelas mãos das pessoas ou por monstros.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Você se lembra de uma garota chamada Jasira?";
+		next;
+		mes "[Jasi]";
+		mes "Ja...si..........";
+		mes "Ah!! Uma garota apressada e agitada.";
+		mes "Poxa.. Eu tive problemas por causa daquela garota.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Problemas?";
+		next;
+		mes "[Jasi]";
+		mes "Um dia, uma jovem apareceu cheia de cicatrizes, então eu a ajudei. De repente, ela tentou colher o lótus e me pediu para aceitá-la como minha esposa ou transformá-la em um lótus, que maluca!";
+		next;
+		mes "[Jasi]";
+		mes "Consegui, com muito custo, acalmá-la e mandá-la para o vilarejo.";
+		mes "Minha vida é aquele lótus, então eu não queria que nada constrangedor acontecesse.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Este é um presente de Jasira para pedir desculpas por aquela época.";
+		mes "Ela está muito triste por não poder vir aqui sozinha devido a dificuldades pessoais.";
+		next;
+		if (countitem(513) < 10) {
+			mes "[Jasi]";
+			mes "O que você está dizendo?";
+			next;
+			mes "- Ah, é verdade, esqueci de trazer 10 Bananas -";
+			close;
+		}
+		mes "[Jasi]";
+		mes "Ah! Bananas! Nossa, faz muito tempo. Ela é bem atenciosa, não é?";
+		next;
+		mes "[Jasi]";
+		mes "Enfim, é só isso que você queria comigo?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Hum, honestamente, eu estava tentando encontrar uma vitória-régia e te encontrei por coincidência. Jasira me contou sua história triste e foi isso que me trouxe aqui.";
+		next;
+		mes "[Jasi]";
+		mes "Entendo.";
+		mes "Como você pode ver, há muitas vitórias-régias de Brasilis por aqui.";
+		mes "Se você garantir que não vai destruí-las, pode apreciá-las como desejar.";
+		brazil_regia = 4;
+		changequest 2202,2203;
+		close;
+	}
+	else if (brazil_regia == 4) {
+		mes "[Jasi]";
+		mes "Você gostou da vitória-régia?";
+		close;
+	}
+	else if (brazil_regia == 5) {
+		mes "[Jasi]";
+		mes "Esqueci o nome daquela fruta...";
+		close;
+	}
+	else if (brazil_regia == 6) {
+		if (countitem(11515) < 5) {
+			mes "[Jasi]";
+			mes "Esqueci o nome daquela fruta...";
+			close;
+		}
+		else {
+			mes "[Jasi]";
+			mes "Você encontrou a fruta?";
+			mes "Ah, certo, isto é...?";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Chama-se 'coco'.";
+			next;
+			mes "[Jasi]";
+			mes "Ahah! COCO!!";
+			mes "Agora eu me lembro, muito obrigado. Não consigo lembrar a última vez que comi essa fruta.";
+			next;
+			mes "[Jasi]";
+			mes "Acho que devo cumprir minha promessa.";
+			mes "Você pode pegar uma vitória-régia.";
+			next;
+			mes "[Jasi]";
+			mes "Espero que a vitória-régia de Brasilis me entenda.";
+			mes "É melhor você pegar a flor enquanto tem a chance~";
+			next;
+			mes "[Jasi]";
+			mes "Ah, você pode dizer algo para aquela garota, Jasira, por mim?";
+			mes "Diga a ela que não sou a lua da história, mas quero me tornar a lua para brilhar apenas para ela.";
+			delitem 11515,5; //Coconut
+			brazil_regia = 7;
+			changequest 2205,2206;
+			close;
+		}
+	}
+	else {
+		mes "[Jasi]";
+		mes "As flores que desabrocham da vitória-régia hoje estão maravilhosas.";
+		close;
+	}
+	end;
+
+OnTouchNPC:
+	unitwarp 0,"this",67,215;
+	end;
+}
+
+bra_dun02,71,200,3	script	Water lily#bra	HIDDEN_NPC,{
+	if (brazil_regia == 4) {
+		mes "Uma vitória-régia incomum está florescendo aqui. Você não consegue parar de olhar, sabendo que poucas pessoas viram esta flor desabrochar.";
+		next;
+		if(select("Pegue a flor.:Continue olhando.") == 2) {
+			mes "- Você não consegue evitar olhar para sua beleza. -";
+			close;
+		}
+		mes "[Jasi]";
+		mes "Uh! O que você está fazendo??!!";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Tem uma pessoa que realmente precisa desta flor, posso levar apenas uma delas?";
+		next;
+		mes "[Jasi]";
+		mes "Como eu disse antes, sou o guardião desta vitória-régia.";
+		mes "Não posso simplesmente ficar aqui parado e ver você arrancar sequer uma flor dela.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Ei, cara~ Eu trouxe estas frutas deliciosas para você... experimente! São bananas muito bem maduras e frescas.";
+		next;
+		if (countitem(513) < 10) {
+			mes "[Jasi]";
+			mes "O que você está dizendo?";
+			next;
+			mes "- Ah, é verdade, esqueci de trazer 10 Bananas -";
+			close;
+		}
+		mes "[Jasi]";
+		mes "Hmm... Faz tanto tempo que não como esta fruta.";
+		next;
+		mes "[Jasi]";
+		mes "Vou experimentar apenas uma. Só isso.";
+		next;
+		mes "- mastigando -";
+		mes "- resmungando -";
+		specialeffect EF_POTION7,AREA,"Recluse#bra";
+		next;
+		mes "[Jasi]";
+		mes "Uh, este sabor... é!";
+		mes "Lembro da minha mãe assando isso em um pão saboroso!";
+		next;
+		mes "[Jasi]";
+		mes "Isso me faz sentir saudades da minha infância.";
+		next;
+		emotion ET_HUK, getnpcid(0, "Recluse#bra");
+		mes "[Jasi]";
+		mes "Hoho!!!!";
+		mes "Estou aqui há tanto tempo quanto consigo me lembrar...";
+		mes "Não tenho tempo nem para fazer coisas simples como comer uma fruta deliciosa.";
+		next;
+		mes "[Jasi]";
+		mes "Foi uma banana muito deliciosa.";
+		mes "Mas regras são regras!";
+		mes "Devo cumprir meu dever.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Por favor! Eu só preciso de uma flor~ O que posso fazer para te convencer?";
+		next;
+		mes "[Jasi]";
+		mes "Regras são regras, o que você quer de mim?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Aquela banana não te fez lembrar da sua infância? O que posso conseguir para você?";
+		next;
+		mes "[Jasi]";
+		mes "Agora que você mencionou, tem uma fruta da qual sinto muita falta.";
+		mes "Era a minha favorita quando eu era jovem, mas não me lembro como se chamava.";
+		next;
+		mes "[Jasi]";
+		mes "É marrom e tem uma casca dura ao redor. Tem suco dentro e você pode usar como copo quando terminar de comer a fruta.";
+		mes "Você sabe o que é?";
+		next;
+		mes "[Jasi]";
+		mes "Se você trouxer 5 dessas coisas, reconsiderarei sua sugestão.";
+		delitem 513,10; //Banana
+		brazil_regia = 5;
+		changequest 2203,2204;
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Ok, então tenho que trazer 5 frutas com casca dura.";
+		mes "Hmm, o que será?";
+		close;
+	}
+	else if (brazil_regia == 5) {
+		mes "[Jasi]";
+		mes "Era a minha favorita quando eu era jovem, mas não me lembro como se chamava.";
+		next;
+		mes "[Jasi]";
+		mes "É marrom e tem uma casca dura ao redor. Tem suco dentro e você pode usar como copo quando terminar de comer a fruta.";
+		mes "Você sabe o que é?";
+		close;
+	}
+	else if (brazil_regia == 7) {
+		if (!checkweight(1201,1)) {
+			mes "- espere um segundo!! -";
+			mes "- você tem itens demais -";
+			mes "- então não pode carregar mais nada. -";
+			mes "- deixe seu corpo mais leve -";
+			mes "- e tente novamente. -";
+			close;
+		}
+		mes "- Você pega um belo lírio-d'água cuidadosamente em suas mãos. -";
+		brazil_regia = 8;
+		getitem 7553,1; //Lotus_Flower
+		close;
+	}
+}
+
+// Dungeon Access Quest :: brazil_tre.sc
+//============================================================
+brasilis,185,246,5	script	Pedro#bra	1_M_SIZ,{
+	if (brazil_ghost == 0) {
+		OnTalk:
+		mes "[Pedro]";
+		mes "Uau, é realmente uma estátua incrível!";
+		next;
+		mes "[Mariana]";
+		mes "É, não é?";
+		mes "Esta estátua chama-se Monumento Verass.";
+		next;
+		mes "[Mariana]";
+		mes "Há muito tempo, existiu um aventureiro muito corajoso chamado Verass; graças à sua exploração dedicada, Brasilis pôde se desenvolver nesta grande cidade.";
+		next;
+		mes "[Pedro]";
+		mes "Incrível!!";
+		mes "Eu quero me tornar um homem de verdade como Verass.";
+		next;
+		mes "[Mariana]";
+		mes "Pedro, você pode se tornar o que quiser.";
+		next;
+		mes "[Pedro]";
+		mes "A Mariana é tão inteligente, não é? hehe.";
+		next;
+		mes "[Fabio]";
+		mes "Ooooh! Você gosta dela, não gosta!";
+		next;
+		mes "[Daniel]";
+		mes "Wooooaaaa Pedro e Mari sentados em uma árvore!";
+		next;
+		mes "[Fabio]";
+		mes "Woooo se beijando~!!!";
+		next;
+		mes "[Daniel]";
+		mes "Nya nya nya!";
+		next;
+		mes "[Fabio]";
+		mes "Hahahahaha.";
+		next;
+		mes "[Pedro]";
+		mes "Parem de agir como bebês!";
+		next;
+		mes "[Mariana]";
+		mes "Meninos~!";
+		next;
+		mes "[Daniel]";
+		mes "Tá, tá...";
+		mes "Ei pessoal, vocês ouviram que algo aconteceu alguns dias atrás?";
+		next;
+		mes "[Mariana]";
+		mes "Ah sim~ Ouvi dizer que algo realmente assustador aconteceu.";
+		next;
+		mes "[Fabio]";
+		mes "É, foi por isso que a Mariana ficou com medo de ir ao banheiro por 3 dias e tudo ficou fedorento. Eca~";
+		next;
+		mes "[Daniel]";
+		mes "Ha ha ha! Mari fedorenta!";
+		next;
+		mes "[Mariana]";
+		mes "Eu odeio vocês~!";
+		mes "Parem de espalhar boatos sobre mim. Eu não tenho medo do banheiro.";
+		mes "Pedro, você acha que eu fedo?";
+		next;
+		mes "[Pedro]";
+		mes "Uh? Uh?";
+		mes "N......não... de jeito nenhum.";
+		mes "Ei pessoal~ sejam legais com ela~";
+		next;
+		mes "[Fabio]";
+		mes "chuchuchuchuchuchu";
+		next;
+		mes "[Daniel]";
+		mes "chuchuchuchuchu";
+		next;
+		if(select("Passar reto.:Perguntar sobre a fofoca.") == 1) {
+			mes "[Fabio]";
+			mes "Mariana~ fede~ Nya nya~";
+			next;
+			mes "[Daniel]";
+			mes "Ah cara, você também fede~! Nya nya~";
+			close;
+		}
+		mes "[Fabio]";
+		mes "Você não ouviu?";
+		mes "A história de fantasma no museu de arte.";
+		next;
+		mes "[Daniel]";
+		mes "Ooohhhh! Assustador~~~!";
+		next;
+		select("Pode me contar mais?");
+		mes "[Fabio]";
+		mes "Uns dias atrás, nós fomos ao museu de arte para um piquenique da escola.";
+		mes "Você sabe, nada demais, apenas uma excursão comum.";
+		next;
+		mes "[Fabio]";
+		mes "Museus são chatos, então eu e alguns amigos fugimos do grupo~!";
+		next;
+		mes "[Fabio]";
+		mes "Foi aí que ouvimos um grito ecoando por todo o museu.";
+		next;
+		mes "[Daniel]";
+		mes "kkakkakkaaaah!!";
+		mes "kkieeeeeeh!";
+		mes "kehkeh..";
+		next;
+		mes "[Mariana]";
+		mes "Eu ouvi o grito também...";
+		mes "Vocês meninos estão sempre fazendo barulho onde não deveriam.";
+		next;
+		mes "[Pedro]";
+		mes "O que mais a gente deveria fazer? Se não formos nós, outra pessoa vai fazer.";
+		next;
+		emotion ET_FRET, getnpcid(0, "Mariana#bra");
+		mes "[Mariana]";
+		mes "Argh~ Meninos são tão frustrantes às vezes.";
+		next;
+		select("E então, o que aconteceu?");
+		mes "[Fabio]";
+		mes "O Daniel e eu achamos que algo estranho estava acontecendo, então corremos para onde pensávamos que os gritos estavam vindo.";
+		next;
+		mes "[Fabio]";
+		mes "Eles estavam vindo do banheiro.";
+		mes "Algumas crianças ficaram tão assustadas que começaram a gritar também e fecharam os olhos. Ficou bem feio.";
+		next;
+		mes "[Daniel]";
+		mes "Acho que você mijou ou cagou nas calças. Estava com um cheiro horrível.";
+		next;
+		mes "[Fabio]";
+		mes "Nem vem~ Sua mãe que fez xixi nas calças~ Nyah!";
+		next;
+		mes "[Daniel]";
+		mes "Nem vem~ Você~ que fez xixi nas calças~";
+		next;
+		mes "[Fabio]";
+		mes "Enfim, é isso, de qualquer forma, foi assim que o boato do fantasma no museu começou.";
+		next;
+		mes "[Daniel]";
+		mes "Mentira, não existe essa história de fantasma~";
+		next;
+		select("Então era um fantasma?");
+		mes "[Fabio]";
+		mes "Como eu vou saber?";
+		mes "Ninguém podia dizer que viu um e ninguém queria se meter em encrenca com os professores.";
+		next;
+		mes "[Pedro]";
+		mes "Ouvi dizer que se você disser palavras mágicas especiais, o fantasma aparece.";
+		next;
+		mes "[Daniel]";
+		mes "Para de se meter na nossa conversa, Pedro.";
+		next;
+		mes "[Fabio]";
+		mes "É, do que você está falando, Pedro?";
+		mes "Então você viu o fantasma?";
+		next;
+		mes "[Pedro]";
+		mes "N... não. Eu tenho medo de fantasmas.";
+		mes "Mas meus amigos disseram que viram um e eles não são mentirosos.";
+		next;
+		select("Alguém te contou as palavras mágicas?");
+		mes "[Pedro]";
+		mes "Ouvi em uma espécie de música.";
+		mes "as palavras mágicas especiais são...";
+		next;
+		mes "[Pedro]";
+		mes "'^3131FFMamãe, a porta não abre!^000000'";
+		mes "'^FF0000Gire a chave tantas vezes quanto as cores do arco-íris.^000000'";
+		mes "'^3131FFMamãe, a água está inundando!^000000'";
+		mes "'^FF0000Se a lua desaparecer 3 vezes, não se preocupe.^000000'";
+		mes "'^3131FFMamãe, a seca começou!^000000'";
+		mes "'^FF0000Não se preocupe, a cachoeira ajudará.^000000'";
+		mes "'^3131FFMamãe, onde estão meus amigos?^000000'";
+		mes "'^FF0000Seus 7 amigos estão dormindo. Agora é hora de acordá-los.^000000'";
+		mes "'^3131FFOnde você está, mamãe?^000000'";
+		next;
+		mes "[Mariana]";
+		mes "Hum, parece um enigma.";
+		next;
+		select("Quer me ajudar a encontrar esse fantasma?");
+		mes "[Pedro]";
+		mes "Se vira sozinho, colega~.";
+		next;
+		mes "[Mariana]";
+		mes "Eu não gosto de coisas assustadoras!";
+		next;
+		mes "[Fabio]";
+		mes "Pfft, não acredito que você vai acreditar nessa história.";
+		next;
+		mes "[Daniel]";
+		mes "Eu vou fazer o que o Fabio fizer, como sempre!";
+		next;
+		mes "[Fabio]";
+		mes "Talvez você esteja apenas com medo...";
+		brazil_ghost = 1;
+		setquest 2208;
+		close;
+	}
+	else if (brazil_ghost == 1) {
+		mes "[Pedro]";
+		mes "Quer ouvir as palavras mágicas novamente?";
+		next;
+		mes "[Pedro]";
+		mes "'^3131FFMamãe, a porta não abre!^000000'";
+		mes "'^FF0000Gire a chave tantas vezes quanto as cores do arco-íris.^000000'";
+		mes "'^3131FFMamãe, a água está inundando!^000000'";
+		mes "'^FF0000Se a lua desaparecer 3 vezes, não se preocupe.^000000'";
+		mes "'^3131FFMamãe, a seca começou!^000000'";
+		mes "'^FF0000Não se preocupe, a cachoeira ajudará.^000000'";
+		mes "'^3131FFMamãe, onde estão meus amigos?^000000'";
+		mes "'^FF0000Seus 7 amigos estão dormindo. Agora é hora de acordá-los.^000000'";
+		mes "'^3131FFOnde você está, mamãe?^000000'";
+		close;
+	}
+	else {
+		mes "[Pedro]";
+		mes "Será o que eu preciso fazer para ter uma estátua feita de mim?";
+		close;
+	}
+}
+
+brasilis,187,244,1	script	Mariana#bra	1_F_MARIA,{
+	if (brazil_ghost == 0) {
+		doevent "Pedro#bra::OnTalk";
+		end;
+	}
+	else if (brazil_ghost == 1) {
+		mes "[Mariana]";
+		mes "Vocês podem parar de falar sobre fantasmas?";
+		mes "Já estou toda arrepiada.";
+		close;
+	}
+	else {
+		mes "[Mariana]";
+		mes "Por que o Fabio e o Daniel sempre nos incomodam?";
+		close;
+	}
+}
+
+brasilis,181,250,5	script	Fabio#bra	4_M_KID1,{
+	if (brazil_ghost == 0) {
+		doevent "Pedro#bra::OnTalk";
+		end;
+	}
+	else if (brazil_ghost == 1) {
+		mes "[Fabio]";
+		mes "Você ainda está perdendo tempo com essa história de fantasma?";
+		close;
+	}
+	else {
+		mes "[Fabio]";
+		mes "Mariana, quer ver uma coisa legal?";
+		next;
+		mes "[Mariana]";
+		mes "kkkkkkkaaaaaacck!! Insetos!! Tire eles daqui!";
+		close;
+	}
+}
+
+brasilis,180,249,5	script	Daniel#bra	4_M_KID1,{
+	if (brazil_ghost == 0) {
+		doevent "Pedro#bra::OnTalk";
+		end;
+	}
+	else if (brazil_ghost == 1) {
+		mes "[Daniel]";
+		mes "Nyah nyah nyah~";
+		close;
+	}
+	else {
+		mes "[Daniel]";
+		mes "Keke Aqui~ encontrei mais insetos~";
+		close;
+	}
+}
+
+bra_in01,149,184,3	script	Door#bra	CLEAR_NPC,{
+	if (brazil_ghost > 0) {
+		mes "- Uma chave é inserida na porta trancada. -";
+		next;
+		switch(select("Girar a chave.:Ignorar.")) {
+		case 1:
+			mes "Você começa a dizer a primeira linha das palavras mágicas.";
+			input .@input$;
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes .@input$;
+			next;
+			.@braspell$ = "Mother the door won't open!";
+			.@chkspell = compare(.@braspell$,.@input$);
+			if (!.@chkspell) {
+				mes "Parece que você disse algo errado.";
+				close;
+			}
+			else {
+				if (brazil_ghost == 2) {
+					mes "[Sobbing Voice]";
+					mes "'^FF0000Gire a chave tantas vezes quanto as cores do arco-íris.^000000'";
+					next;
+					switch(select("Abrir a porta:Bater na porta.:Girar a chave.:Retirar a chave.")) {
+					case 1:
+						mes "A porta está trancada.";
+						mes "Então nada acontece.";
+						close;
+					case 2:
+						mes "Quantas vezes devo tentar bater?";
+						input .@input,0,999;
+						next;
+						mes "Você bateu na porta"+.@input+"vezes.";
+						next;
+						mes "Mas nada acontece.";
+						close;
+					case 3:
+						mes "Quantas vezes devo girar a chave?";
+						input .@input,0,999;
+						next;
+						if (.@input == 7) {
+							mes "Você gira a chave 7 vezes.";
+							next;
+							mes "Click! Click! Click!";
+							mes "Click! Click! Click!";
+							mes "Click...!";
+							next;
+							mes "[Distant Sound]";
+							mes "^FF0000kkkkhee- hihihihi!!!^000000";
+							mes "Você ouve o som da descarga.";
+							next;
+							specialeffect2 EF_VENOMDUST;
+							mes "Uma risada fraca pode ser ouvida na direção do vaso sanitário.";
+							brazil_ghost = 3;
+							changequest 2208,60351;
+							close;
+						}
+						else {
+							mes "Você virou a chave"+.@input+"vezes.";
+							next;
+							mes "Mas nada aconteceu.";
+							close;
+						}
+					case 4:
+						mes "Quantas vezes devo inserir a chave na porta?";
+						input .@input,0,999;
+						next;
+						mes "Você inseriu a chave"+.@input+"vezes.";
+						next;
+						mes "Mas nada aconteceu.";
+						close;
+					}
+				}
+				else {
+					mes "Mãe, a porta não abre!";
+					close;
+				}
+			}
+		case 2:
+			mes "Você não faz nada.";
+			close;
+		}
+	}
+	else {
+		mes "- Uma chave está inserida na porta trancada. -";
+		close;
+	}
+}
+
+bra_in01,144,187,3	script	Toilet#bra	CLEAR_NPC,{
+	if (brazil_ghost > 0) {
+		mes "- Parece um vaso sanitário comum -";
+		next;
+		if (brazil_ghost > 6) {
+			switch(select("Dar descarga.:Não fazer nada.")) {
+			case 1:
+				mes "Após dar a descarga, você subitamente sente tontura e é levado para algum lugar.";
+				specialeffect2 EF_WATERFALL_SMALL_T2_90;
+				close2;
+				warp "bra_in01",206,102;
+				end;
+			case 2:
+				mes "A água no vaso sanitário parece nojenta.";
+				close;
+			}
+		}
+		switch(select("Usar o vaso sanitário:Ignorar.")) {
+		case 1:
+			mes "- Qual era mesmo a segunda linha daquele feitiço? -";
+			input .@input$;
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes .@input$;
+			next;
+			.@braspell$ = "Mother the water is flooding!";
+			.@chkspell = compare(.@braspell$,.@input$);
+			if (!.@chkspell) {
+				mes "Parece que você disse algo errado.";
+				close;
+			}
+			else {
+				if (brazil_ghost == 3) {
+					mes "[Sobbing Voice]";
+					mes "^FF0000Se a lua desaparecer 3 vezes... não se preocupe.....^000000";
+					next;
+					switch(select("Dar descarga.:Fechar a tampa.")) {
+					case 1:
+						mes "Quantas vezes devo dar a descarga?";
+						input .@input,0,999;
+						next;
+						if (.@input == 3) {
+							mes "Você dá a descarga 3 vezes.";
+							next;
+							mes "qwaaaaaaaaa!";
+							mes "kwaaaaaaaaaa!";
+							mes "kwaaaaaaaaaaaaaaaaaaa!";
+							next;
+							mes "[Distant Sound]";
+							mes "^FF0000kkkkhee- hihihihi!!!^000000";
+							mes "De repente, a torneira soa como se a água estivesse fluindo livremente dela.";
+							next;
+							specialeffect2 EF_VENOMDUST;
+							mes "Uma risada fraca pode ser ouvida na direção da torneira.";
+							brazil_ghost = 4;
+							changequest 60351,60352;
+							close;
+						}
+						else {
+							mes "Você dá a descarga"+.@input+"vezes.";
+							next;
+							mes "Mas nada acontece.";
+							close;
+						}
+					case 2:
+						mes "Você fecha a tampa do vaso sanitário.";
+						mes "Nada parece estar acontecendo.";
+						close;
+					}
+				}
+				else {
+					mes "Nada acontece.";
+					close;
+				}
+			}
+		case 2:
+			mes "Você não faz nada.";
+			close;
+		}
+	}
+	else {
+		mes "- Parece um vaso sanitário comum -";
+		close;
+	}
+}
+
+bra_in01,134,189,3	script	Faucet#bra	CLEAR_NPC,{
+	if (brazil_ghost > 0) {
+		mes "- Parece uma torneira comum -";
+		next;
+		switch(select("Examinar.:Ignorar.")) {
+		case 1:
+			mes "- Qual era mesmo a próxima linha daquele feitiço? -";
+			input .@input$;
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes .@input$;
+			next;
+			.@braspell$ = "Mother the drought has started!";
+			.@chkspell = compare(.@braspell$,.@input$);
+			if (!.@chkspell) {
+				mes "Parece que você disse algo errado.";
+				close;
+			}
+			else {
+				if (brazil_ghost == 4) {
+					mes "[Sobbing Voice]";
+					mes "^FF0000Não se preocupe... a cachoeira vai ajudar....^000000";
+					next;
+					switch(select("Bater na torneira.:Abrir a água.")) {
+					case 1:
+						mes "Quantas vezes você vai bater na torneira?";
+						input .@input,0,999;
+						next;
+						mes "Você gira a torneira"+.@input+"vezes.";
+						next;
+						mes "Mas nada acontece.";
+						close;
+					case 2:
+						mes "Quantas vezes devo abrir a torneira?";
+						input .@input,0,999;
+						next;
+						if (.@input == 1) {
+							mes "Você abre a torneira uma vez.";
+							next;
+							mes "swwwaaaaaaa-";
+							next;
+							mes "[Distant Sound]";
+							mes "^FF0000kkkkhee- hihihihi!!!^000000";
+							mes "Você vê o tapete se mover.";
+							next;
+							specialeffect2 EF_VENOMDUST;
+							mes "Risadas fracas podem ser ouvidas na direção do tapete.";
+							brazil_ghost = 5;
+							changequest 60352,60353;
+							close;
+						}
+						else {
+							mes "Você gira a torneira"+.@input+"vezes.";
+							next;
+							mes "Mas nada acontece.";
+							close;
+						}
+					}
+				}
+				else {
+					mes "Nada acontece.";
+					close;
+				}
+			}
+		case 2:
+			mes "Você não faz nada.";
+			close;
+		}
+	}
+	else {
+		mes "- Parece ser uma torneira comum -";
+		close;
+	}
+}
+
+bra_in01,138,184,3	script	Carpet#bra	CLEAR_NPC,{
+	if (brazil_ghost > 0) {
+		mes "- Um tapete com um padrão complexo -";
+		next;
+		switch(select("Examinar.:Ignorar.")) {
+		case 1:
+			mes "- Qual era a próxima linha daquele feitiço mesmo? -";
+			input .@input$;
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes .@input$;
+			next;
+			.@braspell$ = "Mother where are my friends?";
+			.@chkspell = compare(.@braspell$,.@input$);
+			if (!.@chkspell) {
+				mes "Parece que você disse algo errado.";
+				close;
+			}
+			else {
+				if (brazil_ghost == 5) {
+					mes "[Sobbing Voice]";
+					mes "^FF0000seus 7 amigos....estão...dormindo... agora é...'hora ....de acordá-los........^000000";
+					next;
+					switch(select("Pular no tapete.:Deitar no tapete.:Sacudir o tapete.")) {
+					case 1:
+						mes "Quantas vezes devo pular?";
+						input .@input,0,999;
+						next;
+						mes "Você pula no tapete"+.@input+"vezes.";
+						next;
+						mes "Mas nada acontece.";
+						close;
+					case 2:
+						mes "Quantas vezes devo deitar no tapete?";
+						input .@input,0,999;
+						next;
+						mes "Você deita no tapete"+.@input+"vezes.";
+						next;
+						mes "Mas nada acontece.";
+						close;
+					case 3:
+						mes "Quantas vezes devo sacudir o tapete?";
+						input .@input,0,999;
+						next;
+						if (.@input == 7) {
+							mes "Você sacode o tapete 7 vezes.";
+							next;
+							mes "- voe~ voe~ voe~ voe~ voe~ voe~ voe~ -";
+							next;
+							mes "[Distant Sound]";
+							mes "^FF0000kkkkhee- hihihihi!!!^000000";
+							next;
+							specialeffect2 EF_VENOMDUST;
+							mes "Risadas fracas podem ser ouvidas na direção do espelho.";
+							brazil_ghost = 6;
+							changequest 60353,60354;
+							close;
+						}
+						else {
+							mes "Você sacode o tapete"+.@input+"vezes.";
+							next;
+							mes "Mas nada acontece.";
+							close;
+						}
+					}
+				}
+				else {
+					mes "Nada acontece.";
+					close;
+				}
+			}
+		case 2:
+			mes "Você não faz nada.";
+			close;
+		}
+	}
+	else {
+		mes "- Um tapete com um padrão complexo -";
+		close;
+	}
+}
+
+bra_in01,151,180,3	script	Mirror#bra	CLEAR_NPC,{
+	if (brazil_ghost > 0) {
+		mes "- Você pode ver um espelho limpo, sem marcas ou poeira -";
+		next;
+		switch(select("Examinar.:Ignorar.")) {
+		case 1:
+			mes "- Qual era a próxima linha daquele feitiço mesmo? -";
+			input .@input$;
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes .@input$;
+			next;
+			.@braspell$ = "Where are you mom?";
+			.@chkspell = compare(.@braspell$,.@input$);
+			if (!.@chkspell) {
+				mes "Parece que você disse algo errado.";
+				close;
+			}
+			else {
+				if (brazil_ghost == 6) {
+					mes "[Distant Sound]";
+					mes "^FF0000kihe! hit! hit! hit! hit!^000000";
+					next;
+					mes "[Distant Sound]";
+					mes "^FF0000kihe! hit! hit! hit! hit!^000000";
+					mes "^FF0000kihe! hit! hit! hit! hit!^000000";
+					next;
+					mes "[Distant Sound]";
+					mes "Atrás de você...";
+					enablenpc "Ghost#bra";
+					next;
+					emotion ET_HUK, playerattached();
+					mes "["+strcharinfo(0)+"]";
+					mes "As histórias sobre o fantasma são verdadeiras~!";
+					next;
+					mes "[Ghost]";
+					mes "^FF0000meu bebê....^000000";
+					next;
+					mes "[Ghost]";
+					mes "^FF0000Eu não consigo ver.... meu olho....^000000";
+					mes "^FF0000O que está acontecendo....?^000000";
+					next;
+					mes "- Você respira fundo, olha para o fantasma e percebe que ele usa um tapa-olho -";
+					next;
+					mes "[Ghost]";
+					mes "^FF0000Meus olhos estão tão apertados... você pode tirar isso?^000000";
+					next;
+					mes "Você caminha cuidadosamente em direção ao fantasma.";
+					next;
+					mes "O rosto dele estava coberto de poeira e ele fazia contorções estranhas com a face.";
+					next;
+					mes "[Ghost]";
+					mes "^FF0000Vamos, ajude a mamãe.....^000000";
+					next;
+					switch(select("Tirar a bandagem do olho.:Sair correndo~.")) {
+					case 1:
+						while(1) {
+							.@cpudice = rand(1,6);
+							.@pcdice = rand(1,6);
+							if (.@cpudice != .@pcdice) {
+								emotion (ET_OTL+.@cpudice), getnpcid(0, "Ghost#bra");
+								emotion (ET_OTL+.@pcdice), playerattached();
+								break;
+							}
+						}
+						if (.@cpudice > .@pcdice) {
+							specialeffect2 EF_DEVIL;
+							mes "[Ghost]";
+							mes "^FF0000Vá embora!^000000";
+							brazil_ghost = 1;
+							changequest 60354,2208;
+							percentheal -50,-50;
+							close2;
+							disablenpc "Ghost#bra";
+							warp "bra_in01",12,183;
+							end;
+						}
+						else {
+							emotion ET_STARE, playerattached();
+							mes "[Ghost]";
+							mes "^FF0000Ahh!^000000";
+							mes "O fantasma desapareceu dentro do banheiro.";
+							brazil_ghost = 7;
+							changequest 60354,60355;
+							close2;
+							disablenpc "Ghost#bra";
+							warp "bra_in01",206,100;
+							end;
+						}
+					case 2:
+						mes "Você foge do fantasma.";
+						close2;
+						brazil_ghost = 1;
+						changequest 60354,2208;
+						warp "bra_in01",12,183;
+						disablenpc "Ghost#bra";
+						end;
+					}
+					close;
+				}
+				else {
+					mes "Nada acontece.";
+					close;
+				}
+			}
+		case 2:
+			mes "Você não faz nada.";
+			close;
+		}
+	}
+	else {
+		mes "- Você consegue ver um espelho limpo, sem marcas ou poeira -";
+		close;
+	}
+}
+
+bra_in01,136,180,5	script	Ghost#bra	1867,{
+	end;
+
+OnInit:
+	disablenpc "Ghost#bra";
+	end;
+}
+
+bra_in01,7,181,5	script	Curator#bra	4_M_BRZ_MAN2,{
+	if (BaseLevel < 40) {
+		mes "[Curator]";
+		mes "Sinto muito, mas esta área está em obras agora.";
+		close;
+	}
+	if ((brazil_ghost > 0) && (brazil_ghost < 7)) {
+		if (countitem(11515) > 0) {
+			mes "[Curator]";
+			mes "O que posso fazer por você?";
+			next;
+			select("Eu preciso usar o banheiro.");
+			mes "[Curator]";
+			mes "Desculpe, estamos reformando aqui dentro agora, então está fechado.";
+			mes "Por favor, use o outro.";
+			next;
+			switch(select("Mas eu esqueci algo lá dentro.:Desistir.")) {
+			case 1:
+				mes "[Curator]";
+				mes "Que paaaaaaia.";
+				mes "Mas meu gerente me ordenou a impedir qualquer um de entrar neste banheiro, então devo seguir as ordens dele.";
+				next;
+				select("Está um dia tão quente!");
+				mes "[Curator]";
+				mes "É sempre quente em Brasilis, mas hoje está ridiculamente quente.";
+				mes "Talvez eu precise beber uma água de coco para me refrescar.";
+				next;
+				mes "Você entrega um coco para o Curador.";
+				next;
+				mes "[Curator]";
+				mes "Ah, sério? Posso ficar com ele?";
+				mes "Muito obrigado!";
+				next;
+				mes "[Curator]";
+				mes "Gentileza gera gentileza, né?";
+				mes "Ok, vou deixar você passar desta vez.";
+				next;
+				mes "O curador olha ao redor calmamente e então abre a porta.";
+				delitem 11515,1; //Coconut
+				brazil_ghost = 2;
+				close2;
+				warp "bra_in01",138,176;
+				end;
+			case 2:
+				mes "Você desiste de tentar entrar.";
+				close;
+			}
+		}
+		else {
+			mes "[Curator]";
+			mes "O que posso fazer por você?";
+			next;
+			select("Eu preciso usar o banheiro.");
+			mes "[Curator]";
+			mes "Desculpe, estamos reformando aqui dentro agora, então está fechado.";
+			mes "Por favor, use o outro.";
+			next;
+			switch(select("Mas eu esqueci algo lá dentro.:Desistir.")) {
+			case 1:
+				mes "[Curator]";
+				mes "Que paaaaaaia.";
+				mes "Mas meu gerente me ordenou a impedir qualquer um de entrar neste banheiro, então devo seguir as ordens dele.";
+				next;
+				select("Está um dia tão quente!");
+				mes "[Curator]";
+				mes "É sempre quente em Brasilis, mas hoje está ridiculamente quente.";
+				mes "Talvez eu precise beber uma água de coco para me refrescar.";
+				close;
+			case 2:
+				mes "Você desiste de tentar entrar.";
+				close;
+			}
+		}
+	}
+	else if (brazil_ghost > 6) {
+		mes "[Curator]";
+		mes "Ei, obrigado pelo Coco mais cedo, ele realmente me ajudou a me refrescar.";
+		close;
+	}
+	else {
+		mes "[Curator]";
+		mes "É só comigo? Ou está mais quente do que nunca hoje!";
+		close;
+	}
+}
+
+bra_in01,12,185,0	script	inbathroom#bra	WARPNPC,1,1,{
+OnTouch_:
+	if (brazil_ghost > 6)
+		warp "bra_in01",138,176;
+	else {
+		mes "A entrada foi bloqueada.";
+		close;
+	}
+	end;
+}
+
+bra_in01,138,174,0	warp	outbathroom#bra	1,1,bra_in01,12,183
+bra_in01,206,98,0	warp	tobath#bra	1,1,bra_in01,138,176
+
+bra_in01,206,188,1	script	Open Manhole#todunbra	CLEAR_NPC,{
+	if (brazil_ghost == 7) {
+		enablenpc "Ghost#bra_end";
+		mes "[Ghost]";
+		mes "Sou um fantasma que morreu enquanto vagava pela selva há muitos anos.";
+		next;
+		mes "[Ghost]";
+		mes "Encontrei um encanamento na selva e segui a voz de um homem até este exato local.";
+		next;
+		mes "[Ghost]";
+		mes "Foi também onde machuquei um dos meus olhos enquanto andava na escuridão.";
+		next;
+		mes "[Ghost]";
+		mes "Vaguei por esses esgotos por dias até encontrar o fim desta linha conectada ao vaso sanitário no museu. Gritei para sempre implorando por ajuda, mas ninguém respondeu aos meus chamados.";
+		next;
+		mes "[Ghost]";
+		mes "Você finalmente respondeu ao meu chamado, mas já é tarde demais. Obrigado por pelo menos verificar. Ninguém mais se incomodou até hoje.";
+		next;
+		mes "[Ghost]";
+		mes "Há muitas criaturas perigosas no final deste esgoto.";
+		mes "Você parece corajoso, no entanto. Aposto que você não se preocuparia com os monstros de lá, de qualquer forma.";
+		next;
+		mes "[Ghost]";
+		mes "Acho que agora posso finalmente descansar em paz.";
+		mes "Obrigado, amigo.";
+		brazil_ghost = 8;
+		//completequest 2208;
+		completequest 60355;
+		if (VIP_SCRIPT && vip_status(VIP_STATUS_ACTIVE))
+			getexp 135000,0;
+		else
+			getexp 90000,0;
+		disablenpc "Ghost#bra_end";
+		close;
+	}
+	warp "bra_dun01",87,47;
+	end;
+}
+
+
+bra_dun01,87,43,1	script	Pipe#bra	CLEAR_NPC,{
+	warp "bra_in01",206,185;
+	end;
+}
+
+bra_fild01,323,136,1	script	Pipe#brafild	CLEAR_NPC,{
+	if (brazil_ghost > 6) {
+		mes "Você vê um cano enferrujado. Parece estar ligado a algum lugar abaixo da selva.";
+		next;
+		switch(select("Examinar:Ignorar.")) {
+		case 1:
+			mes "Você nada através de uma abertura no cano e é levado por uma súbita corrente de água.";
+			close2;
+			warp "bra_in01",206,182;
+			end;
+		case 2:
+			mes "Pode ser perigoso, é melhor não agir por impulso.";
+			close;
+		}
+	}
+	else {
+		mes "Você vê um cano enferrujado. Parece estar ligado a algum lugar abaixo da selva.";
+		close;
+	}
+}
+
+bra_in01,206,190,3	script	Ghost#bra_end	1867,{
+	end;
+
+OnInit:
+	disablenpc "Ghost#bra_end";
+	end;
+}
+
+// Iara :: iara.sc
+//============================================================
+brasilis,315,334,5	script	Shaman#nk	4_F_BRZ_INDOLD,{
+	.@iara_re = checkquest(4135,PLAYTIME);
+	if ((.@iara_re == 0) || (.@iara_re == 1)) {
+		mes "[Anori]";
+		mes "Ainda estou me preparando.";
+		mes "Não preciso da sua ajuda neste momento.";
+		mes "Por favor, volte mais tarde...";
+		close;
+	}
+	else {
+		if (checkquest(4135) > 1) erasequest 4135;
+		.@iara_q = checkquest(4133);
+		if ((.@iara_q == 0) || (.@iara_q == 1)) {
+			mes "[Anori]";
+			mes "Para impedir Iara de";
+			mes "seduzir as tribos";
+			mes "precisamos de uma poção purificadora...";
+			next;
+			mes "[Anori]";
+			mes "Você trouxe os materiais";
+			mes "para fazer a poção purificadora?";
+			next;
+			if ((countitem(950) > 19) && (countitem(7172) > 9) && (countitem(1054) > 2)) {
+				mes "[Anori]";
+				mes "Hum... parece estar tudo bem.";
+				mes "Vou fazer uma poção para você que";
+				mes "enfraquecerá o poder de Iara.";
+				next;
+				mes "[Anori]";
+				mes "Vamos ver, triture isto...";
+				mes "e misture com aquilo...";
+				mes "depois adicione um pouco de magia...";
+				next;
+				setquest 4135;
+				erasequest 4133;
+				setquest 4134;
+				completequest 4134;
+				delitem 950,20; //Heart_Of_Mermaid
+				delitem 7172,10; //Leopard_Talon
+				delitem 1054,3; //Lip_Of_Ancient_Fish
+				getitem 11517,2; //Puri_Potion
+				mes "[Anori]";
+				mes "Aqui, está pronta.";
+				mes "Tome isto.";
+				mes "Isso fará com que Iara pare de";
+				mes "treinar na caverna";
+				mes "por um tempo.";
+				next;
+				mes "[Anori]";
+				mes "Por favor, bloqueie a Iara que está ameaçando a segurança da tribo.";
+				close;
+			}
+			else {
+				mes "[Anori]";
+				mes "Você ainda não trouxe materiais suficientes.";
+				mes "Não podemos fazer a poção de purificação apenas com isso.";
+				close;
+			}
+		}
+		else {
+			if (BaseLevel < 40) {
+				mes "[Anori]";
+				mes "Ah... precisamos de um aventureiro forte.";
+				mes "A tribo está enfrentando uma grande ameaça.";
+				close;
+			}
+			.@re_q = checkquest(4134);
+			if (.@re_q == 2) {
+				mes "[Anori]";
+				mes "você é...";
+				mes "o aventureiro que veio pela";
+				mes "poção de purificação...";
+				next;
+				mes "[Anori]";
+				mes "Talvez por causa da poção de purificação...";
+				mes "Depois disso, a Iara parou de seduzir os membros da tribo, mas o efeito não durou muito.";
+				next;
+				mes "[Anori]";
+				mes "Você poderia conseguir os mesmos";
+				mes "materiais de antes...";
+				mes "Preciso do seu poder.";
+				next;
+				switch(select("Não.:Ok, eu farei isso.")) {
+				case 1:
+					mes "[Anori]";
+					mes "Isso, ah...";
+					mes "Não há outra maneira.";
+					close;
+				case 2:
+					mes "[Anori]";
+					mes "Você é verdadeiramente corajoso!";
+					mes "Eu, em nome da tribo,";
+					mes "ofereço-lhe meus agradecimentos.";
+					next;
+					mes "[Anori]";
+					mes "Os materiais são os mesmos de antes.";
+					mes "Se você conseguir^ff0000 20 Corações de Sereia,";
+					mes "10 Garras de Leopardo e";
+					mes "3 Lábios Antigos^000000,";
+					mes "farei para você uma poção que purifica espíritos malignos";
+					mes "usando uma fórmula secreta passada para a tribo.";
+					next;
+					mes "[Anori]";
+					mes "O destino da tribo depende de você.";
+					mes "por favor, consiga os materiais rapidamente.";
+					mes "Estarei me preparando para fazer";
+					mes "a poção de purificação aqui mesmo.";
+					setquest 4133;
+					close;
+				}
+			}
+			else {
+				mes "[Anori]";
+				mes "Tem algumas pessoas que não vi antes por aqui.";
+				mes "É um bom sinal...";
+				next;
+				mes "[Anori]";
+				mes "Ei, você...";
+				mes "Você poderia ouvir minhas histórias por um momento?";
+				mes "Há uma emergência em nossa tribo.";
+				next;
+				if(select("Não.:Ok.") == 1) {
+					mes "[Anori]";
+					mes "Você é uma pessoa sem coração...";
+					mes "Você não parece ser do tipo prestativo.";
+					mes "Apenas continue seguindo seu caminho.";
+					close;
+				}
+				mes "[Anori]";
+				mes "Obrigado, conheci uma pessoa gentil.";
+				mes "É um segredo da nossa tribo que";
+				mes "você não pode contar a ninguém.";
+				next;
+				mes "[Anori]";
+				mes "Ultimamente, jovens da";
+				mes "tribo estão desaparecendo.";
+				mes "Toda a nossa tribo está sendo ameaçada.";
+				next;
+				mes "[Anori]";
+				mes "Provavelmente é por causa de uma bruxa chamada Iara.";
+				mes "Ela é uma ninfa da água que seduz os corações dos jovens da tribo em uma caverna atrás da cachoeira.";
+				next;
+				mes "[Anori]";
+				mes "Como posso parar esses jovens da tribo?";
+				mes "Mas descobri uma maneira de fazer uma poção purificadora para reverter os efeitos dos feitiços de Iara.";
+				next;
+				mes "[Anori]";
+				mes "Esta poção foi passada por muitas gerações em nossa tribo.";
+				mes "Esta poção de purificação possui o poder de limpar espíritos malignos.";
+				next;
+				mes "[Anori]";
+				mes "Se você conseguir os materiais,";
+				mes "farei para você";
+				mes "a poção de purificação.";
+				mes "Você poderia fazer isso por mim?";
+				next;
+				switch(select("Não.:Sim, eu posso.")) {
+				case 1:
+					mes "[Anori]";
+					mes "Hum...";
+					mes "Bem, então.";
+					mes "Se mudar de ideia, pode vir falar comigo novamente.";
+					next;
+					mes "[Anori]";
+					mes "Você não deveria contar a ninguém";
+					mes "o que ouviu agora.";
+					mes "É um pouco constrangedor...";
+					close;
+				case 2:
+					mes "[Anori]";
+					mes "Oh! Você é o salvador";
+					mes "da nossa tribo, de fato.";
+					mes "Em nome da tribo, ofereço-lhe meus agradecimentos.";
+					next;
+					mes "[Anori]";
+					mes "Bem, o que precisamos é disto.";
+					mes "É tudo o que você consegue encontrar por perto.";
+					mes "Anote bem.";
+					next;
+					mes "[Anori]";
+					mes "^ff0000 20 Corações de Sereia";
+					mes "10 Garras de Leopardo";
+					mes "3 Lábios Antigos^000000";
+					mes "são os únicos itens necessários como materiais.";
+					next;
+					mes "[Anori]";
+					mes "Quando você os conseguir, farei para você uma poção que purifica espíritos malignos, usando uma fórmula secreta transmitida para a tribo.";
+					setquest 4133;
+					next;
+					mes "[Anori]";
+					mes "O destino da tribo depende de você.";
+					mes "Espero que se apresse.";
+					mes "Mesmo neste momento, os homens da vila estão sendo seduzidos e escapando...";
+					close;
+				}
+			}
+		}
+	}
+}
+
+bra_dun02,157,74,5	script	Iara#nk	4_F_BRZ_WOMAN,2,2,{
+	if (countitem(11517) > 0) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "Devo usar uma Poção de Purificação?";
+		next;
+		switch(select("Sim.:Não.")) {
+		case 1:
+			specialeffect EF_MAPPILLAR;
+			mes "[Iara]";
+			mes "Ah... esta luz é...";
+			mes "É como se estivesse purificando pensamentos malignos";
+			mes "das profundezas do meu coração.";
+			next;
+			mes "[Iara]";
+			mes "Finalmente posso esquecer a maldição que lancei sobre mim mesma quando me afoguei na água.";
+			next;
+			mes "[Iara]";
+			mes "Você acha que posso renascer como uma gentil ninfa das águas?";
+			next;
+			specialeffect EF_GHOST;
+			mes "[Iara]";
+			mes "Ah... Obrigada por me ajudar a recuperar a consciência por um momento.";
+			mes "Mas... acho que a maldição está comigo há muito tempo.";
+			mes "Afaste-se de mim rapidamente.";
+			delitem 11517,1; //Puri_Potion
+			if (checkre(0)) {
+				percentheal 100,100;
+				sc_start SC_INCFLEE,3600000,20;
+				sc_start SC_INCCRI,3600000,10;
+			}
+			else
+				sc_start SC_INCCRI,3600000,7;
+			consumeitem 12043; //Str_Dish03
+			consumeitem 12063; //Dex_Dish03
+			consumeitem 12058; //Agi_Dish03
+			consumeitem 12053; //Vit_Dish03
+			consumeitem 12048; //Int_Dish03
+			consumeitem 12068; //Luk_Dish03
+			next;
+			mes "[Iara]";
+			mes "Ahhh~...";
+			specialeffect EF_DEVIL;
+			next;
+			mes "[Iara]";
+			mes "A maldição é forte demais para eu conter.";
+			mes "Vá embora enquanto está a salvo.";
+			close;
+		case 2:
+			mes "[" + strcharinfo(0) + "]";
+			mes "(Acho que devo ignorá-la.)";
+			close;
+		}
+	}
+	else {
+		mes "[Iara]";
+		mes "Aaaaaaaaaaaaaaaaaaaaaah.";
+		mes "Eeeeeeeeeeeeeeeeeeeh.";
+		mes "Oooooooooooooooooh.";
+		if (rand(1,2) == 1)
+			sc_start SC_CURSE,60000,0;
+		else
+			sc_start SC_CONFUSION,60000,0;
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "Ugh! Que voz estranha é essa?";
+		close;
+	}
+	end;
+
+OnTouch:
+	if (countitem(11517) < 1) {
+		mes "[Iara]";
+		mes "Aaaaaaaaaaaaaaaaaaaaaah.";
+		mes "Eeeeeeeeeeeeeeeeeeeh.";
+		mes "Oooooooooooooooooh.";
+		if (rand(1,2) == 1)
+			sc_start SC_CURSE,60000,0;
+		else
+			sc_start SC_CONFUSION,60000,0;
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "Ugh! Que voz estranha é essa?";
+		close;
+	}
+	end;
+}
+
+bra_fild01,188,301,5	script	Native Warrior#nk	4_M_BRZ_INDIAN,{
+	mes "[Native Warrior]";
+	mes "Ah... o rosto que eu nunca esqueceria, nem nos meus sonhos.";
+	next;
+	mes "[Native Warrior]";
+	mes "Quando será que ela sairá da cachoeira novamente...?";
+	next;
+	if ((checkquest(4133) >= 0) || (checkquest(4134) >= 0)) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "(Qu...quem é esse cara?)";
+	}
+	else {
+		mes "[" + strcharinfo(0) + "]";
+		mes "(Esse cara nunca";
+		mes "vai se curar da maldição da Iara...)";
+	}
+	close;
+}

@@ -1,0 +1,1598 @@
+//===== rAthena Script =======================================
+//= Gunslinger quests
+//===== By: ==================================================
+//= Playtester
+//===== Current Version: =====================================
+//= 1.7
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Gunslinger guns and bullet quests
+//===== Additional Comments: =================================
+//= 1.0 Only Garrison Gun done yet [Playtester]
+//= 1.1 Added Garrison[2] [Playtester]
+//= 1.2 Added Drifter, Destroyer and Inferno [Playtester]
+//= 1.3 Added official Gatling quests [Playtester]
+//= 1.4 Updated Destroyer Quest - Credits to Sinoco for first
+//= official version. [SinSloth]
+//= 1.5 Updated Inferno Quest to official version [SinSloth]
+//= 1.6 Updated Garrison Quest - Credits to Lazarus^ for
+//= making the first official version. [SinSloth]
+//= 1.6a Removed .GATs [Lupus]
+//= 1.6b Changed item names to item IDs on some scripts. [Samuray22]
+//= 1.6c Corrected a bad delitem. (bugreport:763) [Samuray22]
+//= 1.7 Removed all 'menu' and 'goto'. [Euphy]
+//============================================================
+
+que_ng,182,85,3	script	Garrison	109,{
+
+	if(BaseJob != Job_Gunslinger)
+	{
+		mes "[Garrison]";
+		mes "Você não é um Justiceiro.";
+		mes "Você está me distraindo do meu trabalho. Siga em frente.";
+		close;
+	}
+	else if(BaseLevel < 55)
+	{
+		mes "[Garrison]";
+		mes "Meu nome é Garrison. Sou mestre na fabricação de armas.";
+		mes "A arma que fabrico também se chama Garrison. Dei esse nome porque acho que a Garrison é tão legal e perfeita quanto eu mesmo.";
+		next;
+		mes "[Garrison]";
+		mes "Por que você não encomenda uma Garrison comigo?";
+		next;
+		callsub SubGarrison;
+	}
+	switch(gun_gs)
+	{
+		case 0:
+			if(countitem(13104) < 1)
+			{
+				mes "[Garrison]";
+				mes "Meu nome é Garrison. Sou mestre na fabricação de armas.";
+				mes "A arma que fabrico também se chama Garrison. Dei esse nome porque acho que a Garrison é tão legal e perfeita quanto eu mesmo.";
+				next;
+				mes "[Garrison]";
+				mes "Você veio aqui para encomendar uma Garrison comigo?";
+				next;
+				callsub SubGarrison;
+			}
+			mes "[Garrison]";
+			mes "Hmm~ O que está acontecendo?";
+			mes "Você está aqui porque precisa de uma arma?";
+			next;
+			switch( select( "Preciso de uma Garrison.","Na verdade, não.","Cancelar") )
+			{
+				case 1:
+					mes "[Garrison]";
+					mes "Oh~ Bem-vindo.";
+					mes "Todos precisam de mim~!";
+					mes "Isso só prova que a minha arma, a Garrison, é a melhor das melhores.";
+					mes "Então, você vai me pedir para fazer uma agora?";
+					next;
+					callsub SubGarrison;
+
+				case 2:
+					mes "[Garrison]";
+					mes "Hmm~ Você parece estar vagando por aí sem uma missão.";
+					mes "Se tiver tempo, poderia me fazer um favor?";
+					next;
+					mes "["+strcharinfo(0)+"]";
+					mes "O que seria?";
+					next;
+					mes "[Garrison]";
+					mes "Mmm~ Bem, recebi uma carta recentemente afirmando que há muitos defeitos em lotes de uma arma que criei chamada Six Shooter.";
+					next;
+					mes "[Garrison]";
+					mes "Sou perfeccionista, mas devido à minha idade avançada, minha visão está ficando turva e acho que posso ter vendido Six Shooters defeituosas.";
+					next;
+					mes "[Garrison]";
+					mes "Então, o que estou tentando dizer é que espero que alguém encontre peças sobressalentes para que eu possa substituir as peças defeituosas nas Six Shooters.";
+					next;
+					mes "[Garrison]";
+					mes "Se você me ajudar, adicionarei um slot nessa Garrison que você está segurando agora mesmo.";
+					mes "O que me diz?";
+					next;
+					mes "[Garrison]";
+					mes "Só para você saber, se eu colocar um slot na sua Garrison, quaisquer pontos de refino ou cartas equipadas desaparecerão. Decida com cuidado.";
+					next;
+					switch( select( "Não gosto disso.","Ok, vou tentar.") )
+					{
+						case 1:
+							mes "[Garrison]";
+							mes "Hmm, entendo.";
+							mes "Compreendo.";
+							mes "Acho que vou procurar outra pessoa.";
+							close;
+
+						case 2:
+							mes "[Garrison]";
+							mes "Oh, você faria isso?";
+							mes "Sou muito grato.";
+							mes "Estes são os materiais que preciso para fazer as peças sobressalentes...";
+							next;
+							mes "[Garrison]";
+							mes "10 Aços, 1 Elunium, 10 Emveretarcons, 30 Carvões e 10 Parafusos Enferrujados.";
+							mes "Preciso desta quantidade exata. Não se esqueça.";
+							set gun_gs,1;
+							close;
+					}
+
+				case 3:
+					mes "[Garrison]";
+					mes "Hmm... Venha me ver mais tarde.";
+					close;
+			}
+
+		case 1:
+			if((countitem(999) < 10) || (countitem(7317) < 10) || (countitem(1011) < 10) || (countitem(1003) < 30) || (countitem(985) < 1))
+			{
+				mes "[Garrison]";
+				mes "10 Aços, 1 Elunium, 10 Emveretarcons, 30 Carvões e 10 Parafusos Enferrujados.";
+				mes "Não se esqueça -- a quantidade tem que ser exata.";
+				close;
+			}
+			mes "[Garrison]";
+			mes "Oh~ Você voltou com o que eu precisava~";
+			mes "Sou muito grato.";
+			mes "Oh.. tem outro favor que preciso que seja feito. Err...";
+			next;
+			mes "[Garrison]";
+			mes "Preciso entregar as peças sobressalentes assim que as fizer para outra pessoa, mas tenho muito trabalho para fazer por aqui.";
+			next;
+			mes "[Garrison]";
+			mes "Desculpe pedir, mas eu esperava que você pudesse entregar o que farei com esses materiais para a próxima pessoa.";
+			next;
+			mes "[Garrison]";
+			mes "Enquanto você estiver na entrega, farei os preparativos para colocar um slot na sua Garrison, como prometido.";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "-Hmm, eu não quero fazer isso, mas farei mesmo assim.-";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Ok.";
+			next;
+			mes "[Garrison]";
+			mes "Oh, muito obrigado.";
+			mes "Então entregue isso para uma pessoa chamada Ravey. Ele mora nas favelas de Lighthalzen.";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Você recebe os itens de entrega de Garrison.";
+			mes "Vamos entregá-los a uma pessoa chamada Ravey, que mora nas favelas de Lighthalzen.";
+			delitem 999,10;
+			delitem 1011,10;
+			delitem 7317,10;
+			delitem 985,1;
+			delitem 1003,30;
+			set gun_gs,2;
+			close;
+
+		case 2:
+			mes "["+strcharinfo(0)+"]";
+			mes "Você recebe os itens de entrega de Garrison.";
+			mes "Vamos entregá-los a uma pessoa chamada Ravey, que mora nas favelas de Lighthalzen.";
+			close;
+
+		case 3:
+			mes "[Garrison]";
+			mes "Oh~ Como foi a sua viagem?";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Gyah~";
+			mes "Eu quase morri!!!";
+			mes "Aquele homem tentou me atacar quando me viu. Escapei da morte por pouco!";
+			next;
+			mes "[Garrison]";
+			mes "Ahh~ Oh não.";
+			mes "Eu não tinha ideia de que a pessoa que enviou a carta estava na verdade planejando me assassinar. Ele provavelmente foi enviado por uma de nossas guildas inimigas...";
+			next;
+			mes "[Garrison]";
+			mes "Parece que enviei você sem querer em uma missão muito perigosa.";
+			next;
+			mes "[Garrison]";
+			mes "Sinto muito.";
+			mes "Você talvez saiba, mas há pessoas más tramando para atacar o Professor e a guilda Justiceiro por toda parte.";
+			next;
+			mes "[Garrison]";
+			mes "Considere isso parte do seu treinamento como um Justiceiro.";
+			next;
+			mes "[Garrison]";
+			mes "Sinto muito pelo que aconteceu.";
+			mes "Mas, como prometido, vou colocar um slot na sua Garrison...";
+			next;
+			if(countitem(13104) < 1)
+			{
+				mes "[Garrison]";
+				mes "Huh? Suspiro.";
+				mes "Você vendeu sua arma enquanto estava fora?";
+				mes "Eu disse que colocaria um slot na sua arma, mas nunca disse que colocaria um slot em uma arma que não está aqui.";
+				mes "Vá buscar sua Garrison e depois volte aqui.";
+				set gun_gs,4;
+				close;
+			}
+			mes "[Garrison]";
+			mes "Vamos ver~";
+			mes "*tonk* *tonk* *thump* *whump*";
+			mes "Aqui está sua modificada";
+			mes "Garrison.";
+			mes "Por favor, use-a bem.";
+			delitem 13104,1;
+			getitem 13105,1;
+			set gun_gs, 5;
+			close;
+		case 4:
+			if(countitem(13104) < 1)
+			{
+				mes "[Garrison]";
+				mes "Vá buscar sua Garrison e depois volte aqui.";
+				close;
+			}
+			mes "[Garrison]";
+			mes "Ah, aqui está.";
+			mes "Aqui está sua";
+			mes "Garrison modificada.";
+			mes "Use-a bem.";
+			delitem 13104, 1;
+			getitem 13105, 1;
+			set gun_gs,5;
+			close;
+		case 5:
+			mes "[Garrison]";
+			mes "Hmm~ Você voltou~";
+			mes "Qual o problema?";
+			mes "Você voltou porque precisa de uma arma?";
+			mes "O que você precisa?";
+			next;
+			switch( select( "Garrison","Adicionar slot em uma Garrison","Cancelar"))
+			{
+				case 1:
+					callsub SubGarrison;
+				case 2:
+					callsub SubGarrison_;
+				case 3:
+					mes "[Garrison]";
+					mes "A gente se vê por aí~";
+					close;
+			}
+	}
+
+SubGarrison:
+	mes "[Garrison]";
+	mes "Para criar uma Garrison, eu preciso de...";
+	mes "50 Aços, 3 Eluniums,";
+	mes "1 Oridecon, 50 Carvões,";
+	mes "20 Parafusos Enferrujados, e";
+	mes "uma taxa de 30.000 Zeny.";
+	mes "Bem, você quer uma?.";
+	next;
+	switch( select( "Talvez mais tarde.","Sim, faça para mim imediatamente.","Cancelar") )
+	{
+		case 1:
+			mes "[Garrison]";
+			mes "Hmmm~ Me empolguei à toa~";
+			mes "Pense sobre isso. Venha me ver se decidir.";
+			close;
+
+		case 2:
+			if((countitem(999) < 50) || (countitem(7317) < 20) || (countitem(984) < 1) || (countitem(1003) < 50) ||(countitem(985) < 3) )
+			{
+				mes "[Garrison]";
+				mes "Você não trouxe materiais suficientes";
+				mes "Para criar uma Garrison, eu preciso de...";
+				mes "50 Aços, 3 Eluniums,";
+				mes "1 Oridecon, 50 Carvões,";
+				mes "50 Parafusos Enferrujados,";
+				mes "e uma taxa de 30.000 Zeny";
+				mes "Não se esqueça.";
+				close;
+			}
+			else if(Zeny < 30000)
+			{
+				mes "[Garrison]";
+				mes "Você precisa de mais Zeny~!";
+				mes "Mais Zeny!!";
+				close;
+			}
+			else if(checkweight(13104,1) == 0)
+			{
+				mes "[Garrison]";
+				mes "Não há espaço no seu inventário";
+				mes "para a minha criação.";
+				mes "Libere algum espaço";
+				mes "no seu inventário e então";
+				mes "venha me ver.";
+				close;
+			}
+			mes "[Garrison]";
+			mes "Hmm, parece ser a quantidade correta de materiais e Zeny.";
+			mes "Aqui está uma Garrison~";
+			mes "Se precisar de outra, venha me ver~";
+			delitem 984,1; //Oridecon
+			delitem 985,3; //Elunium
+			delitem 999,50; //Steel
+			delitem 1003,50; //Coal
+			delitem 7317,20; //Rusty Screw
+			set Zeny,Zeny-30000;
+			getitem 13104,1; //Garrison
+			close;
+
+		case 3:
+			mes "[Garrison]";
+			mes "A gente se vê por aí~";
+			close;
+	}
+
+SubGarrison_:
+	mes "[Garrison]";
+	mes "Para adicionar um slot a uma Garrison, eu preciso de";
+	mes "10 Aços, 1 Elunium,";
+	mes "10 Emveretarcons, 30 Carvões,";
+	mes "10 Parafusos Enferrujados, e";
+	mes "1 Garrison.";
+	mes "Bem, você quer uma?.";
+	next;
+	switch( select( "Talvez mais tarde.","Sim, faça para mim imediatamente.","Cancelar" ))
+	{
+		case 1:
+			mes "[Garrison]";
+			mes "Você me fez perder tempo à toa~";
+			mes "Volte aqui quando tiver se decidido.";
+			close;
+
+		case 2:
+			if((countitem(999) < 10) || (countitem(7317) < 10) || (countitem(1011) < 10) || (countitem(1003) < 30) || (countitem(985) < 1) || (countitem(13104) < 1))
+			{
+				mes "[Garrison]";
+				mes "Você não trouxe materiais suficientes";
+				mes "Para adicionar um slot a uma Garrison, eu preciso de";
+				mes "10 Aços, 1 Elunium,";
+				mes "10 Emveretarcons, 30 Carvões,";
+				mes "10 Parafusos Enferrujados, e";
+				mes "1 Garrison.";
+				mes "Não se esqueça.";
+				close;
+			}
+			else if(checkweight(13105,1) != 1)
+			{
+				mes "[Garrison]";
+				mes "Não há espaço no seu inventário";
+				mes "para a minha criação.";
+				mes "Libere algum espaço";
+				mes "no seu inventário e então";
+				mes "venha me ver.";
+				close;
+			}
+			mes "[Garrison]";
+			mes "Hmm, parece ser a quantidade correta de materiais e Zeny.";
+			mes "Aqui está uma Garrison modificada com um slot.";
+			mes "Se precisar de outra, venha me ver~";
+			delitem 999, 10;
+			delitem 1011, 10;
+			delitem 7317, 10;
+			delitem 985, 1;
+			delitem 1003, 30;
+			delitem 13104, 1;
+			getitem 13105, 1;
+			close;
+		
+		case 3:
+			mes "[Garrison]";
+			mes "A gente se vê por aí~";
+			close;
+	}
+}
+
+lighthalzen,322,247,6	script	Ravey	86,{
+
+	if(gun_gs == 2)
+	{
+		mes "["+strcharinfo(0)+"]";
+		mes "Com licença. Olá.";
+		mes "Estou aqui para entregar peças de reposição para as Gunsli... defeituosas.";
+		next;
+		mes "[Ravey]";
+		mes "Você!!!";
+		mes "Huuut~!!";
+		mes "Morra!!!";
+		set gun_gs,3;
+		percentheal 100,0;
+		percentheal -90,0;
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "- O homem chamado Ravey ataca de repente, como se estivesse esperando pela palavra Justiceiro...-";
+		mes "Você quase morreu.-";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Você foge sem olhar para trás.";
+		mes "Vamos correr de volta para Garrison.-";
+		close;
+	}
+	if(gun_gs == 3)
+	{
+		mes "["+strcharinfo(0)+"]";
+		mes "- O homem chamado Ravey ataca de repente, como se estivesse esperando pela palavra Justiceiro...-";
+		mes "Você quase morreu.-";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Vamos correr de volta para Garrison.-";
+		close;
+	}
+	mes "[Ravey]";
+	mes "Ugh...";
+	mes "Err.. Err..";
+	mes "......";
+	close;
+}
+
+
+que_ng,187,163,3	script	Ingrid	744,{
+
+	if(BaseJob != Job_Gunslinger)
+	{
+		mes "[Ingrid]";
+		mes "Como vai!";
+		mes "Fui nomeada a nova Criador de Armas de Justiceiro. Meu nome é Ingrid.";
+		next;
+		mes "[Ingrid]";
+		mes "No entanto, você não parece ser um membro da Guilda dos Justiceiro, então não posso ajudar você com nada. Desculpe.";
+		close;
+	}
+	switch(gun_inf)
+	{
+		case 0:
+			mes "[Ingrid]";
+			mes "Como vai!";
+			mes "Fui nomeada a nova Criador";
+			mes "de Armas de Justiceiro. Meu nome é Ingrid.";
+			mes "Um prazer atendê-lo!";
+			next;
+			mes "[Ingrid]";
+			mes "Faz pouco tempo";
+			mes "que comecei a trabalhar,";
+			mes "mas farei o meu melhor para";
+			mes "ajudá-lo.";
+			next;
+			mes "[Ingrid]";
+			mes "Ahh ... sinto-me tão ansiosa.";
+			mes "No momento, estou fazendo o trabalho de criar uma arma chamada Inferno para os clientes.";
+			next;
+			mes "[Ingrid]";
+			mes "A Inferno é a arma mais avançada feita no laboratório da nossa Guilda.";
+			next;
+			mes "[Ingrid]";
+			mes "Ela possui poder e alcance incríveis, além de um design ergonômico para que possa ser empunhada facilmente e minimize significativamente o recuo ao disparar.";
+			mes "É uma arma digna de ser chamada de a arma suprema para qualquer Justiceiro.";
+			mes "huff huff...";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Você entende bastante sobre ela";
+			mes ".....";
+			next;
+			mes "[Ingrid]";
+			mes "Ah. É claro~";
+			mes "Eu sou a pessoa que projetou esta arma..";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Wooow~ Isso é incrível~";
+			next;
+			mes "[Ingrid]";
+			mes "Ah Ops...";
+			mes "Será que acabei me gabando?";
+			mes "Eu ainda não sou nada comparada à Professor Serena.";
+			next;
+			mes "[Ingrid]";
+			mes "Na verdade, eu queria me tornar uma Justiceiro também, mas por causa das minhas limitações físicas e falta de determinação, tive que desistir.";
+			next;
+			mes "[Ingrid]";
+			mes "Enquanto eu me inscrevia para me tornar uma Justiceiro, tive a sorte de ter a Professor Serena notando meus talentos e, com a ajuda dela, estou onde estou agora, ajudando na fabricação e venda de Armas de Justiceiro.";
+			next;
+			mes "[Ingrid]";
+			mes "Ainda me arrependo de não ter conseguido me tornar uma Justiceiro, mas pelo menos meu irmão, que fez o teste de Justiceiro comigo, passou e se tornou um.";
+			next;
+			mes "[Ingrid]";
+			mes "Fico feliz que, mesmo eu tendo caído, meu irmão conseguiu realizar nosso sonho.";
+			next;
+			mes "[Ingrid]";
+			mes "Haha~ Olha eu te contando todas essas coisas quando você nem perguntou.";
+			mes "Desculpe.";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Não, está tudo bem.";
+			mes "Você pode não ter se tornado um Justiceiro, mas acho que você se tornou uma ótima pessoa.";
+			next;
+			mes "[Ingrid]";
+			mes "Sério? Obrigado~";
+			mes "Vou fazer o meu melhor.";
+			next;
+			mes "[Ingrid]";
+			mes "Para produzir um Inferno,";
+			mes "preciso de 100 Chapas de Ferro Usadas, 10 Oridecons, 50 Parafusos Enferrujados, 100 Corações Incandescentes e 200.000 Zenys.";
+			mes "Você gostaria que eu o produzisse para você?";
+			next;
+			switch( select( "Vou pensar sobre isso.", "Sim, por favor." ) )
+			{
+				case 1:
+					mes "[Ingrid]";
+					mes "Ah~ Entendo.";
+					mes "Eu compreendo.";
+					mes "Ok, bem, pense a respeito.";
+					mes "Volte quando tiver se decidido.";
+					close;
+
+				case 2:
+					mes "[Ingrid]";
+					mes "Eu entendo.";
+					mes "Aqui estão os materiais novamente.";
+					next;
+					mes "[Inferno]";
+					mes "Para produzir um Inferno,";
+					mes "preciso de 100 Chapas de Ferro Usadas, 10 Oridecons, 50 Parafusos Enferrujados, 100 Corações Incandescentes e 200.000 Zenys.";
+					mes "Você deve me trazer a quantidade correta de materiais.";
+					mes "Por favor, não se esqueça disso.";
+					set gun_inf,1;
+					close;
+			}
+
+		case 1:
+			callsub SubInferno;
+
+		case 2:
+			mes "[Ingrid]";
+			mes "Olá~ Você voltou~";
+			mes "Você voltou porque precisa de um Inferno?";
+			next;
+			switch( select( "Não, voltei só porque...","Sim, faça um Inferno para mim." ) )
+			{
+				case 1:
+					mes "[Ingrid]";
+					mes "Ah~ Entendo.";
+					mes "Eu compreendo.";
+					mes "Ok, bem, pense a respeito.";
+					mes "Volte quando tiver se decidido.";
+					close;
+
+				case 2:
+					callsub SubInferno;
+			}
+	}
+
+SubInferno:
+	if ((countitem(7319) < 100) || (countitem(7317) < 50) || (countitem(984) < 10) || countitem(7097) < 100)
+	{
+		mes "[Ingrid]";
+		mes "Sim, os materiais necessários são 100 Chapas de Ferro Usadas, 10 Oridecons, 50 Parafusos Enferrujados, 100 Corações Incandescentes e 200.000 Zenys.";
+		mes "Você deve me trazer a quantidade correta de materiais.";
+		mes "Por favor, não se esqueça disso.";
+		close;
+	}
+	else if(Zeny < 200000)
+	{
+		mes "[Ingrid]";
+		mes "Você trouxe uma boa quantidade de material,";
+		mes "mas você trouxe Zenys suficientes?";
+		mes "O custo para criar um Inferno é de 200.000 Zenys.";
+		mes "Por favor, não se esqueça disso.";
+		close;
+	}
+	else if(checkweight(13162,1) != 1)
+	{
+		mes "[Ingrid]";
+		mes "Parece que você tem itens demais para carregar a minha criação, então não posso te entregar.";
+		mes "Por que você não volta aqui quando estiver pronto para recebê-la?";
+		close;
+	}
+	else
+	{
+		mes "[Ingrid]";
+		mes "Vejo que você tem a quantidade correta de materiais e Zenys.";
+		mes "Aqui está o Inferno que criei para você.";
+		mes "Use-o bem.";
+		set Zeny,Zeny-200000;
+		delitem 7319,100;
+		delitem 984,10;
+		delitem 7317,50;
+		delitem 7097,100;
+		getitem 13162,1;
+		if(gun_inf == 1) set gun_inf,2;
+		close;
+	}
+}
+
+que_ng,185,180,3	script	Vanessa	726,{
+
+	if(BaseJob != Job_Gunslinger)
+	{
+		mes "[Vanessa]";
+		mes "Há! Há!!";
+		mes "Ballitude! Comandante Sambo!";
+		mes "Luta Livre!, Muay Thai!";
+		mes "Pancrácio!, Lucha Libre!";
+		mes "Eu vou dominar todas as armas de combate corpo a corpo deste mundo!!";
+		next;
+		mes "[Vanessa]";
+		mes "Hmm?!";
+		mes "Quem é você? Você está interrompendo o meu treino!";
+		mes "Vá embora!";
+		close;
+	}
+	switch(gunst)
+	{
+		case 0:
+			mes "[Vanessa]";
+			mes "Há! Hyaa!!";
+			mes "Vale-Tudo! Comandante Sambo!";
+			mes "Luta Livre!, Muay Thai!";
+			mes "Pancrácio!, Lucha Libre!";
+			mes "Eu dominarei todos os estilos de luta";
+			mes "deste mundo!!";
+			next;
+			mes "[Vanessa]";
+			mes "Mm?";
+			mes "Você é um Justiceiro, huh?";
+			mes "Por que você está atrapalhando";
+			mes "meus exercícios e ficando";
+			mes "parado ao meu lado?";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Só estou observando o exercício,";
+			mes "parece bom...";
+			mes ".............";
+			next;
+			mes "[Vanessa]";
+			mes "Oh! Você gosta de artes marciais?";
+			mes "Venha aqui~ Vou te prender";
+			mes "em uma chave de braço~";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "N~ Não, obrigado~";
+			mes "está tudo bem~";
+			next;
+			mes "[Vanessa]";
+			mes "O que está tudo bem~";
+			mes "Venha aqui~!";
+			mes "-Bam! Bam!-";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Aah~ Ugh~ Não faça isso~";
+			mes "Aa.. Aaaahhhh~~!!";
+			mes "Argh~";
+			mes "-Som de algo quebrando-";
+			mes "Owww~~";
+			mes "*Soluços*~~";
+			next;
+			mes "[Vanessa]";
+			mes "Hmm... Será que fui forte demais?";
+			mes "Mm~";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Bem, obviamente!";
+			mes "Idiota! Idiota!!";
+			mes "*soluços*~";
+			next;
+			mes "[Vanessa]";
+			mes "Umm~ umm~";
+			mes "Desculpe~";
+			mes "Ok, ok,";
+			mes "não chore.";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "*soluço*~";
+			next;
+			mes "[Vanessa]";
+			mes "Ok~ ok..";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "*soluço*~";
+			next;
+			mes "[Vanessa]";
+			mes "Pare! Arrgh!";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "........";
+			next;
+			mes "[Vanessa]";
+			mes "Tudo bem, ok.";
+			mes "Sinto muito pelo que aconteceu.";
+			mes "Vou fazer uma arma para você";
+			mes "se você reunir alguns";
+			mes "materiais...";
+			next;
+			mes "[Vanessa]";
+			mes "Eu sou Vanessa Louise.";
+			mes "Originalmente uma candidata a Artista Marcial,";
+			mes "mas tomei um rumo errado";
+			mes "e estou presa fabricando armas.";
+			mes "Oh meu Deus~ oh meu~ minha vida miserável~";
+			next;
+			mes "[Vanessa]";
+			mes "Agora, vamos ao assunto.";
+			mes "A arma que posso criar";
+			mes "chama-se Destruidor.";
+			next;
+			mes "[Vanessa]";
+			mes "Eu a nomeei especialmente";
+			mes "por causa de uma técnica que usei na arena.";
+			mes "Hehe~";
+			mes "Tome isto~! Destruidor~";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "*soluço*~ Por favor~ Pare~";
+			next;
+			mes "[Vanessa]";
+			mes "Ah uh.. Desculpe...";
+			mes "Primeiro, o Destruidor precisa";
+			mes "de materiais antes que eu possa criá-lo.";
+			next;
+			mes "[Vanessa]";
+			mes "É necessária uma quantidade considerável de itens,";
+			mes "então pense com cuidado.";
+			next;
+			mes "[Vanessa]";
+			mes "O que acha? Esse tipo de";
+			mes "oportunidade não é comum.";
+			mes "Quer fazer um pedido?";
+			next;
+			switch( select( "Talvez na próxima.","Certo.") )
+			{
+				case 1:
+					mes "[Vanessa]";
+					mes "Mm~ É mesmo?~";
+					mes "Será uma oportunidade para você.";
+					mes "Você vai se arrepender~";
+					mes "Então nos vemos na próxima~";
+					mes "Tchau~ Tchau~";
+					close;
+           
+				case 2:
+					mes "[Vanessa]";
+					mes "Mm, Certo.";
+					mes "Para fazer um Destruidor,";
+					mes "Você precisa de 50 Chapas de Ferro Usadas";
+					mes "5 Oridecons, 70 Parafusos Enferrujados";
+					mes "e uma taxa de 100.000 zenys.";
+					mes "Você deve me trazer exatamente estes materiais. Entendido?";
+					set gunst,1;
+					close;
+			}
+
+		case 1:
+			callsub SubDestroyer;
+			
+		case 2:
+			mes "[Vanessa]";
+			mes "Oh~ Você voltou.?";
+			mes "Como você tem passado?";
+			mes "Há um novo item na loja.";
+			mes "Vá em frente e escolha.";
+			next;
+			switch(select( "Destruidor","Destruidor com Slot","Cancelar") )
+			{
+				case 1:
+					mes "[Vanessa]";
+					mes "Sim, isso é bom";
+					mes "Esse é um Destruidor normal.";
+					mes "São necessárias 50 Chapas de Ferro Usadas,";
+					mes "5 Oridecons, 70 Parafusos Enferrujados,";
+					mes "e 100.000 zenys para fazê-lo.";
+					mes "Você precisa me trazer a quantidade correta de materiais.";
+					mes "Você quer fazer isso?";
+					next;
+					switch( select( "Talvez na próxima.","Certo.") )
+					{
+               					case 1:
+							mes "[Vanessa]";
+							mes "O quê~ Qual é";
+							mes "O que há para pensar?";
+							mes "Ok, bem, pense sobre isso";
+							mes "e volte...";
+							close;
+							case 2:
+							callsub SubDestroyer;
+					}
+							
+				case 2:
+					mes "[Vanessa]";
+					mes "Oh~ O Destruidor com Slot~";
+					mes "Diferente do Destruidor normal,";
+					mes "Quero que você encontre um dos itens raros que estou colecionando.";
+					mes "Então eu darei ele para você.";
+					next;
+					mes "[Vanessa]";
+					mes "Estou procurando por um Dedo[2].";
+					mes "Também quero 5 Oridecons.";
+					mes "Você precisa me trazer a quantidade correta de materiais.";
+					mes "Você ainda quer um Destruidor com Slot?";
+					next;
+					switch( select( "Vou pensar sobre isso.","OK! Eu quero!") )
+					{
+               					case 1:
+							mes "[Vanessa]";
+							mes "O quê~ Qual é";
+							mes "O que há para pensar?";
+							mes "Ok, bem, pense sobre isso";
+							mes "e volte...";
+							close;
+			
+						case 2:
+							callsub SubDestroyer_;
+			
+					}
+           
+				case 3:
+					mes "[Vanessa]";
+					mes "Hmm~ Sim~";
+					mes "Não tenha pressa.";
+					mes "Talvez você queira lutar um pouco comigo?";
+					close;
+			}
+	}
+
+SubDestroyer:
+
+	if ((countitem(7319) < 50) || (countitem(7317) < 70) || (countitem(984) < 5))
+	{
+		mes "[Vanessa]";
+		mes "Sim, os materiais necessários são 50 Chapas de Ferro Usadas,";
+		mes "5 Oridecons, 70 Parafusos Enferrujados e 100.000 zenys.";
+		mes "Lembre-se de que você tem que trazer a quantidade correta.";
+		close;
+	}
+	else if(Zeny < 100000)
+	{
+		mes "[Vanessa]";
+		mes "Você trouxe bastante material,";
+		mes "Mas a taxa é de 100.000.";
+		mes "Tenha isso em mente.";
+		close;
+	}
+	else if(checkweight(13160,1) != 1)
+	{
+		mes "[Vanessa]";
+		mes "Parece que você não conseguiria carregar minha criação, mesmo que eu a fizesse.";
+		mes "Vá e esvazie um pouco seu inventário.";
+		close;
+	}
+	else
+	{
+		mes "[Vanessa]";
+		mes "Certo~ Muito bem~";
+		mes "Tudo verificado~";
+		mes "Você tem os materiais perfeitos e os zenys~";
+		mes "Aqui está o Destruidor que fiz antecipadamente para você.";
+		mes "Use-o bem.";
+		set Zeny,Zeny-100000;
+		delitem 7319,50;
+		delitem 984,5;
+		delitem 7317,70;
+		getitem 13160,1;
+		if(gunst == 1) set gunst,2;
+		next;
+		mes "[Vanessa]";
+		mes "Se você precisar de outro mais tarde,";
+		mes "Venha me encontrar a qualquer momento~";
+		mes "Da próxima vez, vou usar um tipo diferente de técnica de mãos vazias.";
+		close;
+	}
+
+SubDestroyer_:
+
+	if ((countitem(1812) < 1) || (countitem(984) < 5))
+	{
+		mes "[Vanessa]";
+		mes "Sim, os materiais necessários são 1 Dedo[2]";
+		mes "e 5 Oridecons.";
+		mes "Lembre-se de que os materiais precisam ser exatos.";
+		close;
+	}
+	else if(checkweight(13161,1) != 1)
+	{
+		mes "[Vanessa]";
+		mes "Não há espaço em seu inventário.";
+		mes "Mesmo que eu fizesse um para você,";
+		mes "Você não conseguiria carregá-lo";
+		mes "Volte depois de ter esvaziado seu inventário.";
+		close;
+	}
+	else
+	{
+		mes "[Vanessa]";
+		mes "Certo~ Muito bem~";
+		mes "Tudo verificado~";
+		mes "Você tem os materiais perfeitos e os zenys~";
+		mes "Aqui está o Destruidor com Slot que fiz antecipadamente para você.";
+		mes "Use-o bem.";
+		delitem 1812,1;
+		delitem 984,5;
+		getitem 13161,1;
+		next;
+		mes "[Vanessa]";
+		mes "Se você precisar de outro mais tarde,";
+		mes "Venha me encontrar a qualquer momento~";
+		mes "Da próxima vez, vou usar um tipo diferente de técnica de mãos vazias.";
+		close;
+	}
+}
+
+que_ng,149,178,4	script	Lab Director	744,{
+
+	if(gun_na == 1){
+		if(countitem(1043) > 999 && countitem(932) > 999){
+			delitem 1043,1000;
+			delitem 932,1000;
+			set gun_na,2;
+			mes "[N. A]";
+			mes "Ahh, está tudo aqui! Ahh, e eu";
+			mes "estava preocupado que ninguém";
+			mes "fosse capaz de manusear meu ^ff0000Açougueiro^000000";
+			mes "quando eu terminasse de criá-lo!";
+			next;
+			mes "[N. A]";
+			mes "Muito bem, vou entregar o ^ff0000Açougueiro^000000 para você.";
+			mes "No entanto, não trabalhamos de";
+			mes "graça, então precisamos cobrar";
+			mes "por ele. Além disso, você precisa obter";
+			mes "permissão para usar o Açougueiro com a";
+			mes "Lady Celena.";
+			next;
+			mes "[N. A]";
+			mes "Assim que você obtiver a permissão, eu";
+			mes "entregarei o Açougueiro a você, após pagar";
+			mes "a taxa de 100000 zenys.";
+			close;
+		}else{
+			mes "[N. A]";
+			mes "Você já encontrou ^ff00001000 Garra de Orc^000000 e ^ff00001000 Osso de Esqueleto^000000?";
+			mes "Se você acha que é muito difícil,";
+			mes "você pode optar por desistir.";
+			next;
+			if(select("Eu não vou desistir!:Eu desisto...") == 1){
+				mes "[N. A]";
+				mes "Muito bem, eu confio em você.";
+				mes "Boa sorte.";
+				close;
+			}else{
+				mes "[N. A]";
+				mes "Você vai desistir, huh?";
+				mes "Bem, admito que o";
+				mes "teste é bem difícil, mas";
+				mes "você não pode manusear esta arma";
+				mes "se não conseguir passar no teste.";
+				mes "Você pode voltar mais tarde para";
+				mes "enfrentar o desafio novamente.";
+				set gun_na,0;
+				close;
+			}
+		}
+	}
+	else if(gun_na == 2){
+		mes "[N. A]";
+		mes "Eu já obtive a permissão da";
+		mes "Lady Celena para deixar você usar o";
+		mes "Açougueiro. Você pode usá-lo assim";
+		mes "que me pagar 100000 zenys.";
+		mes "Você quer pagar agora?";
+		next;
+		if(select("Não.:Sim.") == 1){
+			mes "[N. A]";
+			mes "Muito bem. Aguardo seu retorno";
+			mes "com o dinheiro.";
+			close;
+		}else{
+			if(Zeny < 100000){
+				mes "[N. A]";
+				mes "Huh, acho que você não tem";
+				mes "dinheiro suficiente com você.";
+				mes "Volte com o dinheiro,";
+				mes "certo?";
+				close;
+			}
+			if(checkweight(13158,1) == 0){
+				mes "[N. A]";
+				mes "Você está com excesso de peso.";
+				mes "Mesmo que eu lhe dê a";
+				mes "arma, você não poderá carregá-la.";
+				mes "Por favor, limpe seu inventário.";
+				close;
+			}
+			set Zeny,Zeny-100000;
+			set gun_na,0;
+			getitem 13158,1;
+			mes "[N. A]";
+			mes "Um, dois, três, quatro, cinco,";
+			mes "seis... 99997, 99998, 99999...";
+			mes "100000. *ding~!* Muito bem!";
+			mes "A taxa está paga. Você pode";
+			mes "levar o ^ff0000Açougueiro^000000 agora!";
+			next;
+			mes "[N. A]";
+			mes "O Sr. F. Harrison de Lighthalzen";
+			mes "está bem interessado no seu novo";
+			mes "brinquedo. Mostre para ele algum";
+			mes "dia. Ele ficará feliz.";
+			next;
+			mes "[N. A]";
+			mes "Faça bom uso dele!";
+			mes "Até mais!";
+			close;
+		}
+	}
+	else if(gun_na == 10){
+		if (countitem(999) > 69 && countitem(985) > 4 && countitem(984) > 2 && countitem(1003) > 69 && countitem(7317) > 49 && Zeny >= 50000){
+			delitem 999,70;
+			delitem 985,5;
+			delitem 984,3;
+			delitem 1003,70;
+			delitem 7317,50;
+			set Zeny,Zeny-50000;
+			set gun_na,11;
+			mes "[N. A]";
+			mes "Aha, você me conseguiu todos os";
+			mes "materiais. Aqui, deixe-me colocar";
+			mes "a mão na massa agora mesmo! Vai";
+			mes "levar um tempo, então espere...";
+			close;
+		}else{
+			mes "[N. A]";
+			mes "Eh? Você ainda não trouxe os";
+			mes "materiais?";
+			next;
+			mes "[N. A]";
+			mes "Para fazer um Andarilho, precisarei";
+			mes "de 70 Aços, 5 Eluniums,";
+			mes "3 Oridecons, 70 Carvões, 50 Parafusos";
+			mes "Enferrujados e também uma taxa de";
+			mes "50000 zenys.";
+			mes "Volte quando estiver com tudo";
+			mes "pronto.";
+			next;
+			mes "[N. A]";
+			mes "Se você não a quer mais,";
+			mes "você pode cancelar o pedido.";
+			next;
+			if(select("Não cancelar.:Cancelar.") == 1){
+				mes "[N. A]";
+				mes "Bem, por favor, volte com os";
+				mes "materiais. Estarei esperando.";
+				close;
+			}else{
+				mes "[N. A]";
+				mes "Tudo bem, o pedido para fazer";
+				mes "um Drifter para você foi cancelado.";
+				mes "Desejo-lhe boa sorte";
+				mes "em seu futuro.";
+				set gun_na,0;
+				close;
+			}
+		}
+	}
+	else if(gun_na == 11){
+		if(checkweight(13157,1) == 0){
+			mes "[N. A]";
+			mes "Você está sobrecarregado.";
+			mes "Mesmo que eu fizesse a arma";
+			mes "para você, não conseguiria carregá-la.";
+			mes "Por favor, limpe seu inventário.";
+			close;
+		}
+		set gun_na,0;
+		getitem 13157,1;
+		mes "[N. A]";
+		mes "Ahh, aqui está o Drifter";
+		mes "terminado para você.";
+		next;
+		mes "[N. A]";
+		mes "Por favor, aprenda a usar bem";
+		mes "as Gatlings. A destruição maluca";
+		mes "definitivamente será mentalmente";
+		mes "útil para você.";
+		close;
+	}
+	else if(gun_na == 101){
+		mes "[N. A]";
+		mes "Ah, olá?";
+		mes "Eu sou o Coordenador do";
+		mes "Einbroch Desenvolvimento de Armas.";
+		mes "Meu nome é 'Diretor de Laboratório'.";
+		mes "Você precisa de algo?";
+		next;
+		select("Eu preciso de uma Haste de Metal Especial.");
+		mes "[N. A]";
+		mes "Huh...? Ei, você não era aquele cara";
+		mes "que saiu daqui com uma";
+		mes "Butcher algum tempo atrás? Como foi a";
+		mes "Butcher?";
+		next;
+		mes "[N. A]";
+		mes "...... O QUÊ!? VOCÊ A QUEBROU!?";
+		mes "Achei que você seria capaz de";
+		mes "usá-la bem... Você me decepciona!!!";
+		next;
+		mes "[N. A]";
+		mes "Você traiu a confiança que depositei em você!";
+		mes "Seu traidor! Traidor!! TRAIDOR!!!!";
+		next;
+		select("Explique tudo.");
+		mes "[N. A]";
+		mes "...... Ufa.";
+		mes "Então foi o Sr. F. Harrison que";
+		mes "quebrou, hein? Sinto muito, eu não deveria";
+		mes "ter suspeitado de você.";
+		next;
+		mes "[N. A]";
+		mes "A Lady Celena tem a haste de metal";
+		mes "especial que você quer, mas a doutora";
+		mes "não está aqui agora, e ninguém mais";
+		mes "sabe onde ela está...";
+		next;
+		mes "[N. A]";
+		mes "Tenho outras pesquisas agora,";
+		mes "então não posso perder meu tempo procurando";
+		mes "por isso... Grr... Preciso das";
+		mes "Esferas Elementais para continuar";
+		mes "com minha pesquisa...";
+		next;
+		select("Faça uma oferta a ele.");
+		mes "[N. A]";
+		mes "Uma oferta? Como o quê?";
+		next;
+		select("Nós encontramos coisas um para o outro.");
+		mes "[N. A]";
+		mes "Hmm... Isso soa bem.";
+		mes "Bem, de acordo com a oferta,";
+		mes "eu procurarei a haste para você,";
+		mes "enquanto você encontra para mim essas";
+		mes "Esferas Elementais.";
+		next;
+		mes "[N. A]";
+		mes "30 Esferas de Veneno, 30 Esferas de Fogo,";
+		mes "30 Esferas de Trovão, 30 Esferas de";
+		mes "Cegueira ou 30 Esferas de Gelo.";
+		mes "Encontre 30 de cada elemento para mim.";
+		set gun_na,102;
+		close;
+	}
+	else if(gun_na == 102){
+		mes "[N. A]";
+		mes "30 Esferas de Veneno, 30 Esferas de Fogo,";
+		mes "30 Esferas de Trovão, 30 Esferas de";
+		mes "Cegueira ou 30 Esferas de Gelo.";
+		mes "Encontre 30 de cada elemento para mim.";
+		mes "Você as encontrou?";
+		next;
+		switch(select("Não.:Encontrei 30 Esferas de Veneno.:Encontrei 30 Esferas de Fogo.:Encontrei 30 Esferas de Trovão.:Encontrei 30 Esferas de Cegueira.:Encontrei 30 Esferas de Gelo.")){
+		case 1:
+			mes "[N. A]";
+			mes "Apenas me traga qualquer tipo";
+			mes "que você conseguir encontrar.";
+			close;
+		case 2:
+			if(countitem(13205) >= 30){
+				delitem 13205,30;
+				set gun_na,103;
+			}
+			break;
+		case 3:
+			if(countitem(13203) >= 30){
+				delitem 13203,30;
+				set gun_na,103;
+			}
+			break;
+		case 4:
+			if(countitem(13204) >= 30){
+				delitem 13204,30;
+				set gun_na,103;
+			}
+			break;
+		case 5:
+			if(countitem(13206) >= 30){
+				delitem 13206,30;
+				set gun_na,103;
+			}
+			break;
+		case 6:
+			if(countitem(13207) >= 30){
+				delitem 13207,30;
+				set gun_na,103;
+			}
+			break;
+		}
+		if (gun_na != 103) {
+			mes "[N. A]";
+			mes "Eh? O quê? Sou o único";
+			mes "que não consegue vê-las?";
+			mes "Traga-me mais!";
+			close;
+		}
+		mes "[N. A]";
+		mes "Uau, você encontrou todas para mim!";
+		mes "Tive que virar o laboratório da";
+		mes "Lady Celena de cabeça para baixo para achar essa haste também.";
+		mes "Vamos trocar então!";
+		next;
+		mes "-Você entregou as Esferas";
+		mes "Elementais ao Coordenador de Pesquisa e recebeu";
+		mes "a Haste de Metal em troca.-";
+		next;
+		mes "[N. A]";
+		mes "O Sr. F. Harrison é muito bom.";
+		mes "Tenho certeza de que ele pode consertar";
+		mes "sua Butcher para você.";
+		mes "Bem, até mais!";
+		close;
+	}
+	else if(gun_na == 103 || gun_na == 104){
+		mes "[N. A]";
+		mes "O Sr. F. Harrison é muito bom.";
+		mes "Tenho certeza de que ele pode consertar";
+		mes "sua Butcher para você.";
+		mes "Bem, até mais!";
+		close;
+	}
+	mes "[N. A]";
+	mes "Ah, olá?";
+	mes "Eu sou o Coordenador do";
+	mes "Einbroch Desenvolvimento de Armas.";
+	mes "Meu nome é 'Diretor de Laboratório'.";
+	mes "Você precisa de algo?";
+	next;
+	if (BaseJob != Job_Gunslinger){
+		select("Fale com ele.");
+		mes "[N. A]";
+		mes "Se vir Justiceiros por aí,";
+		mes "por favor, diga a eles que tenho";
+		mes "as últimas notícias sobre armas.";
+		mes "Se necessário, por favor, envie-os";
+		mes "para cá. Heheheheh...";
+		close;
+	}
+	if (BaseLevel < 55) {
+		select("Conversar.");
+		mes "[N. A]";
+		mes "... Destruição... Loucura...";
+		mes "Hmm... Velocidade de ataque acima de 180...";
+		next;
+		mes "[N. A]";
+		mes "Ah, desculpe, estou desenvolvendo algumas";
+		mes "novas armas. Por favor, não me";
+		mes "perturbe.";
+		close;
+	}
+	switch(select(((BaseLevel > 67)?"Perguntar sobre 'Butcher'.":"")+":Perguntar sobre a 'Drifter'.:Cancelar")) {
+	case 1:
+		mes "[N. A]";
+		mes "Ah, você ouviu as notícias";
+		mes "logo após o final";
+		mes "do desenvolvimento, hein?";
+		next;
+		mes "[N. A]";
+		mes "^ff0000Butcher^000000 é o desenvolvimento mais recente";
+		mes "nosso, do Einbroch Laboratório de Armas de Fogo.";
+		mes "É o mais novo tipo de Gatling";
+		mes "que desenvolvemos. Embora a";
+		mes "^ff0000Drifter^000000 seja uma boa arma";
+		mes "também, a ^ff0000Butcher^000000 definitivamente tem";
+		mes "um poder de fogo muito maior!";
+		next;
+		mes "[N. A]";
+		mes "Devido ao seu forte poder de fogo,";
+		mes "a Butcher também foi apelidada";
+		mes "de 'Assassina'.";
+		next;
+		mes "[N. A]";
+		mes "No entanto, até mesmo Justiceiros podem";
+		mes "ter problemas para controlar uma";
+		mes "arma tão poderosa.";
+		next;
+		mes "[N. A]";
+		mes "Você acha que consegue lidar com isso?";
+		next;
+		if(select("Não tenho certeza...:Claro que consigo!!") == 1){
+			mes "[N. A]";
+			mes "A ^ff0000Butcher^000000 é uma arma que você";
+			mes "não consegue manejar sem uma";
+			mes "vontade forte. Verei você novamente";
+			mes "quando tiver confiança suficiente";
+			mes "para manejar este monstro.";
+			close;
+		}else{
+			mes "[N. A]";
+			mes "Aha, quanta autoconfiança você";
+			mes "tem! No entanto, vejo pessoas com";
+			mes "tanta autoconfiança em toda parte.";
+			mes "Você precisará provar isso...";
+			mes "Mas como... Hmmm...";
+			next;
+			mes "[N. A]";
+			mes "Hmmm......";
+			next;
+			mes "[N. A]";
+			mes "Aha! Já sei!";
+			next;
+			mes "[N. A]";
+			mes "Aqui, traga-me ^ff00001000 Garras de Orc^000000 e ^ff00001000 Ossos de Esqueleto^000000.";
+			mes "Se você puder me trazer esses itens,";
+			mes "deixarei que você use a Butcher.";
+			next;
+			mes "[N. A]";
+			mes "Fácil, não é? Vá e prove";
+			mes "sua habilidade então! Heheheh...";
+			set gun_na,1;
+			close;
+		}
+	case 2:
+		mes "[N. A]";
+		mes "Ah, você está aqui para aprender";
+		mes "sobre a ^ff0000Drifter^000000, é?";
+		next;
+		mes "[N. A]";
+		mes "A ^ff0000Drifter^000000 é uma das muitas";
+		mes "armas de altíssima classe desenvolvidas";
+		mes "pela Lady Celena. É uma Gatling";
+		mes "automática que possui uma taxa de";
+		mes "disparo muito alta, a mais alta";
+		mes "entre todas as armas de Justiceiro.";
+		next;
+		mes "[N. A]";
+		mes "É claro, você precisará da Perícia";
+		mes "para permitir que você controle Gatlings,";
+		mes "mas quem controla Gatlings bem";
+		mes "receberá total auxílio da";
+		mes "^ff0000Drifter^000000.";
+		next;
+		mes "[N. A]";
+		mes "Você quer tentar usar a ^ff0000Drifter^000000?";
+		next;
+		if(select("Hum, não.:Sim!") == 1){
+			mes "[N. A]";
+			mes "Se você quiser experimentar";
+			mes "algum dia, volte aqui.";
+			close;
+		}else{
+			set gun_na,10;
+			mes "[N. A]";
+			mes "Como é muito difícil encontrar";
+			mes "os materiais para construir";
+			mes "a ^ff0000Drifter^000000, nós só as fazemos";
+			mes "sob pedido, e exigimos que aqueles";
+			mes "que querem usar a ^ff0000Drifter^000000 tragam";
+			mes "os materiais para nós.";
+			next;
+			mes "[N. A]";
+			mes "Vou lhe dizer os materiais";
+			mes "necessários, basta trazê-los e";
+			mes "nós a construiremos para você.";
+			next;
+			mes "[N. A]";
+			mes "Para fazer uma Drifter, precisamos";
+			mes "de 70 Aços, 5 Eluniums, 3";
+			mes "Oridecons, 70 Carvões, 50 Parafusos";
+			mes "Enferrujados e uma taxa de";
+			mes "50.000 zenys.";
+			mes "Volte depois de ter encontrado";
+			mes "todos eles.";
+			close;
+		}
+	case 3:
+		mes "[N. A]";
+		mes "Tenho notícias sobre as últimas";
+		mes "armas, mas... acho que você está";
+		mes "ocupado demais para ouvi-las.";
+		mes "Talvez na próxima vez, suponho.";
+		close;
+	}
+}
+
+lighthalzen,205,284,6	script	F. Harrison	85,{
+
+	if (gun_na == 100){
+		if(checkweight(13102,1) == 0){
+			mes "[F. Harrison]";
+			mes "Você está com excesso de peso.";
+			mes "Mesmo se eu lhe desse a";
+			mes "arma, você não poderia carregá-la.";
+			mes "Por favor, limpe seu inventário.";
+			close;
+		}
+		mes "[F. Harrison]";
+		mes "Hmm... Oh?";
+		mes "Ahh...... Eh?";
+		next;
+		mes "[F. Harrison]";
+		mes "Heheh... Hmm... Huh...?";
+		next;
+		select("Posso pegar minha Butcher de volta agora?");
+		mes "[F. Harrison]";
+		mes "Uh? Oh, umm... Heheh...";
+		next;
+		mes "[F. Harrison]";
+		mes "A-aquilo, hein? Eh... Heheh...";
+		next;
+		mes "[F. Harrison]";
+		mes "Ahahahah! Eu, uh...";
+		next;
+		mes "[F. Harrison]";
+		mes "Aquela coisa! BOOM!";
+		next;
+		mes "[F. Harrison]";
+		mes "Bam bam! Eu ia dispará-la!";
+		mes "Sim!";
+		next;
+		mes "[F. Harrison]";
+		mes "Mas ela resistiu! Então eu dei um 'BAM!' com";
+		mes "minha mão! MUAHAHAHAH!!";
+		next;
+		mes "[F. Harrison]";
+		mes "E ela quebrou...... *soluço*";
+		next;
+		mes "[F. Harrison]";
+		mes "Eu me chamo 'Dr. Tudo' e";
+		mes "eu queria consertá-la sozinho, mas";
+		mes "não parece que tenho os materiais";
+		mes "para consertá-la... E os materiais são";
+		mes "tão raros também... *soluço*";
+		next;
+		mes "[F. Harrison]";
+		mes "Umm... Sinto muito por tê-la";
+		mes "quebrado, mas... Você poderia pegar";
+		mes "os materiais que preciso para consertá-la?";
+		mes "Traga-me esses itens e eu posso";
+		mes "consertá-la, além disso, vou modificá-la";
+		mes "para você! Prometo!!";
+		next;
+		mes "Então, por favor, traga-me os materiais...";
+		mes "*soluço, soluço, soluço*";
+		next;
+		mes "[F. Harrison]";
+		mes "Os materiais que preciso são";
+		mes "10 Aços, 2 Eluniums,";
+		mes "1 Oridecon, 20 Carvões...";
+		mes "E uma Haste de Metal Especial";
+		mes "usada na Butcher...";
+		mes "Acho que apenas Lady Celena pode";
+		mes "fazer essas hastes......";
+		next;
+		mes "[F. Harrison]";
+		mes "Mas primeiro, você precisará falar";
+		mes "com a assistente da Lady Celena, a 'Diretora do Laboratório',";
+		mes "e pedir a ajuda dela.";
+		mes "Aquela garota é um pouco histérica, mas";
+		mes "ela será uma ótima ajuda se você falar";
+		mes "com ela gentilmente...";
+		next;
+		mes "[F. Harrison]";
+		mes "Sinto muito mesmo... Aqui, vou";
+		mes "lhe emprestar minha arma preciosa,";
+		mes "'Crimson Bolt'. Mas certifique-se";
+		mes "de trazer todos esses materiais";
+		mes "para mim assim que encontrar todos!";
+		mes "Prometa-me!!!";
+		set gun_na,101;
+		getitem 13102,1;
+		close;
+	}
+	else if(gun_na == 101 || gun_na == 102){
+		mes "[F. Harrison]";
+		mes "Os materiais que preciso são";
+		mes "10 Aços, 2 Eluniums,";
+		mes "1 Oridecon, 20 Carvões...";
+		mes "E uma Haste de Metal Especial";
+		mes "usada na Butcher...";
+		mes "Fale com a 'Diretora do Laboratório' para obter";
+		mes "assistência dela quanto à Haste.";
+		close;
+	}
+	else if(gun_na == 103){
+		if(countitem(999) >= 10 && countitem(985) >= 2 && countitem(984) >= 1 && countitem(1003) >= 20){
+			if(countitem(13102) > 0){
+				delitem 999,10;
+				delitem 985,2;
+				delitem 984,1;
+				delitem 1003,20;
+				delitem 13102,1;
+				set gun_na,104;
+				mes "[F. Harrison]";
+				mes "Aha! Você conseguiu todos os materiais";
+				mes "para mim! Vou começar o conserto";
+				mes "imediatamente, por favor, aguarde...";
+				close;
+			}
+			else{
+				mes "[F. Harrison]";
+				mes "Aha! Você conseguiu todos os materiais";
+				mes "para mim!";
+				mes "... Mas cadê minha preciosa";
+				mes "'Crimson Bolt'!? Eu não vou consertar";
+				mes "sua Butcher se você não a trouxer";
+				mes "de volta para mim!!";
+				close;
+			}
+		}
+		else{
+			mes "[F. Harrison]";
+			mes "Os materiais que preciso são";
+			mes "10 Aços, 2 Eluniums,";
+			mes "1 Oridecon, 20 Carvões...";
+			mes "E uma Haste de Metal Especial";
+			mes "usada na Butcher...";
+			mes "Que bom que você já encontrou a";
+			mes "Haste de Metal Especial.";
+			close;
+		}
+	}
+	else if(gun_na == 104){
+		if(checkweight(13159,1) == 0){
+			mes "-Você já está com excesso de peso.-";
+			mes "-Volte depois de descartar alguns";
+			mes "itens primeiro.-";
+			close;
+		}
+		set gun_na,0;
+		getitem 13159,1;
+		mes "[F. Harrison]";
+		mes "Ufa... Finalmente está consertado, graças";
+		mes "ao seu esforço. Sinto muito";
+		mes "por ter quebrado, e obrigado";
+		mes "pelo seu trabalho. Sinto-me culpado";
+		mes "por apenas consertar, então adicionei";
+		mes "um pouco mais de poder a ele. Espero";
+		mes "que funcione bem para você.";
+		mes "Bem, aproveite.";
+		close;
+	}
+	else if(gun_na == 0){
+		if(BaseJob != Job_Gunslinger) {
+			mes "[F. Harrison]";
+			mes "Cara, estou tão entediado...";
+			mes "Será que tem alguma coisa";
+			mes "interessante por aí...";
+			next;
+			mes "[F. Harrison]";
+			mes "Ah, bem... Vou apenas brincar com meu";
+			mes "lindo 'Crimson Bolt'.";
+			close;
+		}
+		if(BaseLevel > 67 && countitem(13158) > 0){
+			mes "[F. Harrison]";
+			mes "Cara, estou tão entediado...";
+			mes "Será que tem alguma coisa";
+			mes "interessante por aí...";
+			next;
+			mes "[F. Harrison]";
+			mes "Hã? Você é um Justiceiro?";
+			mes "Eu nunca vi essa arma";
+			mes "na sua mão antes...";
+			next;
+			mes "[F. Harrison]";
+			mes "Posso dar uma olhada? Por favor?";
+			mes "Qual é, deixa eu dar uma olhada!";
+			mes "Estou morrendo de tédio aqui!";
+			mes "Por favoooooooor~?";
+			next;
+			if(select("De jeito nenhum.:Aqui...") == 1){
+				mes "[F. Harrison]";
+				mes "Hah! Você acha que é o único";
+				mes "que tem uma arma legal!? Bem,";
+				mes "eu tenho meu lindo Crimson Bolt!";
+				mes "Humpf!!";
+				close;
+			}
+			mes "[F. Harrison]";
+			mes "Heheh... Este é o mais novo";
+			mes "desenvolvimento do Laboratório de Armas de Einbroch,";
+			mes "o chamado incontrolável";
+			mes "'Destroyer Butcher', é?";
+			mes "Interessante... BEM interessante...";
+			next;
+			mes "[F. Harrison]";
+			mes "Ei, deixa eu testar um";
+			mes "pouco, tudo bem? Não se preocupe, eu";
+			mes "sei como manusear armas,";
+			mes "eu não vou quebrá-la!";
+			mes "É isso! Vamos lá~";
+			delitem 13158,1;
+			set gun_na,100;
+			close;
+		}
+	}
+}

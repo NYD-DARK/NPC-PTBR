@@ -1,0 +1,168 @@
+//===== rAthena Script =======================================
+//= Abyss Cave Warper
+//===== By: ==================================================
+//= erKURITA
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Warper to Abyss Cave. and warper out
+//===== Additional Comments: =================================
+//= 1.0 Added by Nexon [Nexon]
+//= 1.1 Removed Duplicates [Silent]
+//= 1.2 Fixed tab - missing pillar's appeared [Lupus]
+//= 1.3 Updated Abyss Lake entrance based on official [SinSloth]
+//= 1.3a Removed .GATs [Lupus]
+//= 1.4 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//============================================================
+
+hu_fild05,168,304,0	script	Column#abyss1	111,{
+
+	mes "^3355FFExistem 3 ranhuras de";
+	mes "formato estranho na";
+	mes "superfície desta";
+	mes "coluna. Parece que";
+	mes "certas partes do corpo";
+	mes "de dragão se encaixariam";
+	mes "perfeitamente nelas.^000000";
+	if((countitem(1035)) && (countitem(1036)) && (countitem(1037)))
+	{
+		next;
+		switch( select( "Inserir Partes do Corpo de Dragão","Comer Partes do Corpo de Dragão" ) )
+		{
+			case 1:
+				mes "^3355FFVocê coloca com cuidado";
+				mes "uma Presa de Dragão em uma";
+				mes "das ranhuras e então ouve";
+				mes "um estrondo poderoso";
+				mes "vindo de dentro da coluna.^000000";
+				specialeffect EF_WINDHIT;
+				next;
+				mes "^3355FFVocê insere lentamente";
+				mes "uma Escama de Dragão em outra";
+				mes "das ranhuras da coluna,";
+				mes "provocando outro pequeno";
+				mes "tremor na coluna.^000000";
+				specialeffect EF_WINDHIT;
+				next;
+				mes "^3355FFVocê insere com cautela";
+				mes "uma Cauda de Dragão na";
+				mes "ranhura final. Luzes brilham";
+				mes "a partir das rachaduras na";
+				mes "superfície da coluna...^000000";
+				specialeffect EF_WINDHIT;
+				next;
+				mes "^3355FFO chão sob";
+				mes "seus pés começa a";
+				mes "tremer violentamente.^000000";
+				specialeffect EF_BOWLINGBASH;
+				donpcevent "AbyssWarp::OnWarp";
+				specialeffect2 EF_PORTAL;
+				delitem 1035,1;
+				delitem 1036,1;
+				delitem 1037,1;
+				close2;
+				warp "hu_fild05",184,204;
+				end;
+
+			case 2:
+				mes "^3355FFVocê coloca cuidadosamente uma";
+				mes "Presa de Dragão, uma Escama de";
+				mes "Dragão e uma Cauda de Dragão na";
+				mes "boca e começa a mastigar";
+				mes "lentamente. Nada acontece";
+				mes "e o gosto desses itens";
+				mes "é surpreendentemente pútrido.^000000";
+				next;
+				emotion ET_HUNGRY, playerattached();
+				delitem 1035,1;
+				delitem 1036,1;
+				delitem 1037,1;
+				percentheal -10,0;
+				close;
+		}
+	}
+	close;
+}
+
+hu_fild05,171,211,0	script	Column#abyss2	111,1,1,{
+
+	mes "^3355FFEsta coluna parece";
+	mes "muito similar àquela";
+	mes "que você viu no";
+	mes "lago. Existe";
+	mes "uma ranhura azul";
+	mes "conspícua em sua superfície.^000000";
+	next;
+	switch( select( "Tocar na Ranhura","Remover Item da Ranhura" ) )
+	{
+		case 1:
+			mes "^3355FF*Clanc Clanc*^000000";
+			next;
+			mes "^3355FFA luz que emana da";
+			mes "ranhura se distorce e";
+			mes "a coluna começa a tremer.";
+			mes "Você ouve um estrondo fraco";
+			mes "vindo de dentro da coluna.^000000";
+			specialeffect EF_WINDHIT;
+			next;
+			mes "*Ggghhhhhzzzz!*";
+			mes "*BAM!*";
+			next;
+			mes "^3355FFA luz que brilha na";
+			mes "ranhura da coluna aumenta";
+			mes "de intensidade enquanto você";
+			mes "sente o chão sob seus pés";
+			mes "começar a afundar lentamente...^000000";
+			next;
+			specialeffect EF_BOWLINGBASH;
+			specialeffect2 EF_PORTAL;
+			close2;
+			warp "hu_fild05",169,305;
+			end;
+
+		case 2:
+			mes "^3355FF*Psssiiii!*";
+			mes "Você acidentalmente";
+			mes "quebrou o item.^000000";
+			specialeffect EF_WINDHIT;
+			next;
+			mes "^3355FF*Gggggggghhhhhhhhzzzzzzjjjjhh!*^000000";
+			next;
+			mes "^3355FFA luz que emana da";
+			mes "ranhura se distorce e";
+			mes "a coluna começa a tremer.";
+			mes "Os tremores no chão";
+			mes "tornam difícil ficar";
+			mes "de pé, mas de repente você";
+			mes "é teleportado para outro lugar...^000000";
+			next;
+			specialeffect EF_BOWLINGBASH;
+			specialeffect2 EF_PORTAL;
+			close2;
+			warp "hu_fild05",157,284;
+			end;
+	}
+}
+
+hu_fild05,196,210,1	script	AbyssWarp	45,2,2,{
+
+OnInit:
+	disablenpc "AbyssWarp";
+	end;
+
+OnTouch_:
+	warp "abyss_01",260,268;
+	end;
+
+OnWarp:
+	initnpctimer;
+	enablenpc "AbyssWarp";
+	end;
+
+OnTimer30000:
+	stopnpctimer;
+	disablenpc "AbyssWarp";
+	end;
+}

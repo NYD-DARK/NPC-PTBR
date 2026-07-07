@@ -1,0 +1,487 @@
+//===== rAthena Script =======================================
+//= Swordsman Skills Quests
+//===== By: ==================================================
+//= kobra_k88
+//===== Current Version: =====================================
+//= 1.9
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Quests for skills: Fatal Blow, Mobile HP Recovery,
+//  Auto-Berserk
+//===== Additional Comments: =================================
+//= 1.6 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//= 1.7 Updated to latest available official file. [Masao]
+//= 1.8 Fixed JobLevel requirements. [Euphy]
+//= 1.9 Moved Izlude NPC to pre-re/re paths. [Euphy]
+//=     Updated "Knight De Thomas" NPC to latest version.
+//============================================================
+
+-	script	::KnightDeThomas	98,4,4,{
+	if ((BaseClass == Job_Swordman) && (JobLevel >= 35 || (BaseJob == Job_Knight || BaseJob == Job_Crusader))) {
+		if (getskilllv("SM_MOVINGRECOVERY") == 1) {
+			mes "[De Thomas]";
+			mes "Oh, é você?";
+			mes "Quanto tempo!";
+			mes "Você parece mais saudável do que antes.";
+			mes "Hahahaha!";
+			mes "Cuide-se! Até a próxima!";
+			close;
+		} else if (countitem(713) >= 200 && countitem(1058) >= 1) {
+			mes "[De Thomas]";
+			mes "Bem-vindo de volta...";
+			mes "Está pronto para aprender a habilidade Vigor?";
+			next;
+			switch (select("Sim.:Não, ainda não estou pronto.")) {
+			case 1:
+				mes "[De Thomas]";
+				mes "Vejamos...";
+				next;
+				mes "[De Thomas]";
+				mes "Ok! Agora vou te ensinar...";
+				mes "...A habilidade Vigor!";
+				next;
+				delitem 713,200; //Empty_Bottle
+				delitem 1058,1; //Wing_Of_Moth
+				skill "SM_MOVINGRECOVERY",1,SKILL_PERM;
+				mes "[De Thomas]";
+				mes "Aí está!";
+				mes "Tente você mesmo.";
+				mes "Mas não exagere.";
+				next;
+				mes "[De Thomas]";
+				mes "Ah, é, eu não vou precisar da sua";
+				mes "armadura, então pode ficar com ela.";
+				mes "Boa sorte!";
+				close;
+			case 2:
+				mes "[De Thomas]";
+				mes "É mesmo?";
+				mes "Então volte quando estiver preparado.";
+				close;
+			}
+		} else {
+			mes "[De Thomas]";
+			mes "Hmmm... Ele é um Espadachim...";
+			mes "Você sabe que eu sou De Thomas Carlos, certo?";
+			mes "Cavaleiro da 3ª Cavalaria de Prontera.";
+			mes "De Thomas Carlos!";
+			next;
+			mes "[De Thomas]";
+
+			// bug: official script always states that job level is too low
+			//mes "Wait a second, your Job level isn't above ^00880035^000000!";
+			//mes "Come back when it is.";
+
+			// custom: old dialog
+			mes "Você não tem todos os itens que pedi.";
+			next;
+			mes "[De Thomas]";
+			mes "Lembre-se, preciso de ^008800200 garrafas vazias^000000, sua armadura e uma ^008800Asa de Borboleta^000000. Volte quando tiver tudo.";
+			close;
+		}
+	} else {
+		mes "[De Thomas]";
+		mes "Meu nome é De Thomas Carlos.";
+		mes "Cavaleiro da 3ª Cavalaria de Prontera.";
+		mes "Tenho um certo dever nestes dias.";
+		mes "Ehem! Preciso dizer mais?";
+		close;
+	}
+	end;
+
+OnTouch:
+	if ((BaseClass == Job_Swordman) && (JobLevel >= 35 || (BaseJob == Job_Knight || BaseJob == Job_Crusader))) {
+		mes "[De Thomas]";
+		mes "Ah, não! Você deve ter se machucado! Você está bem?";
+		mes "Você deve ter lutado muito para ter ferimentos tão sérios...";
+		mes "Ser um Espadachim exige muita responsabilidade e sacrifício.";
+		next;
+		mes "[De Thomas]";
+		if (Sex == SEX_MALE)
+			mes "Para esses espadachins e cavaleiros, existe uma habilidade maravilhosa.";
+		else
+			mes "Para essas espadachins e cavaleiras, existe uma habilidade maravilhosa, jovem dama.";
+		mes "Apresento a você - Recuperação de HP em Movimento!";
+		mes "A habilidade Vigor é esplêndida,";
+		mes "pois permite que você recupere forças (HP)";
+		mes "enquanto se move!";
+		next;
+		mes "[De Thomas]";
+		mes "Ela está em desenvolvimento,";
+		mes "então pode não recuperar tanto assim,";
+		mes "mas ajudará um pouco.";
+		mes "O que acha? Você gostaria de aprender essa habilidade?";
+		next;
+		switch (select("Que habilidade legal! Eu quero aprender!:Não, obrigado(a).")) {
+		case 1:
+			mes "[De Thomas]";
+			mes "Muito bem. Vou te dizer o que você precisa para aprender esta habilidade.";
+			mes "Primeiro, seu nível de classe deve ser superior a ^00880035^000000.";
+			mes "Você também precisará de ^008800200 garrafas vazias^000000.";
+			mes "Por quê? Porque é a prova de que você lutou ferozmente para ter usado tantas poções.";
+			next;
+			mes "[De Thomas]";
+			mes "Além disso, a armadura que você usou na batalha.";
+			mes "Esta também é a prova de um lutador experiente.";
+			mes "Sobre a armadura... a sua é perfeita!";
+			mes "Traga sua armadura!";
+			mes "Por último, mas não menos importante... traga-me uma ^008800Asa de Borboleta^000000.";
+			next;
+			select("Eh? Você precisa disso também?");
+			mes "[De Thomas]";
+			mes "Não exatamente... Eu não PRECISO disso de verdade.";
+			mes "É só que minha sobrinha ganhou uma tarefa de caçar insetos nas férias de verão.";
+			mes "É claro! Seria muito mais fácil para mim conseguir eu mesmo,";
+			mes "mas preciso trabalhar aqui o tempo todo, então não tenho tempo para sair e buscar.";
+			next;
+			mes "[De Thomas]";
+			mes "Você não acha uma pena eu ter que ficar no mesmo lugar todos os dias, sem poder sair?";
+			mes "Por favor, encontre uma para mim... *fungada*";
+			mes "Se você não fizer...";
+			close;
+		case 2:
+			mes "[De Thomas]";
+			mes "...";
+			close;
+		}
+	}
+	end;
+}
+
+prt_in,75,88,5	script	Leon Von Frich	85,3,3,{
+	if ((BaseClass == Job_Swordman) && (JobLevel >= 25 || (BaseJob == Job_Knight || BaseJob == Job_Crusader))) {
+		if (getskilllv("SM_FATALBLOW") == 1) {
+			mes "[Leon]";
+			mes "Eh?";
+			mes "Eu estava me perguntando quem era!";
+			mes "Por que é você de novo!";
+			mes "Bom te ver novamente! Como você está?";
+			mes "Tenha cuidado! Hahaha!";
+			close;
+		}
+		else if ((countitem(1752) > 9) && (countitem(1751) > 9) && (countitem(532) > 0) && (countitem(962) > 29) && (countitem(526) > 4)) {
+			mes "[Leon]";
+			mes "Ooh! Você está mais do que pronto";
+			mes "para aprender Golpe Fulminante!";
+			mes "Então, o que me diz? Gostaria de aprender?";
+			next;
+			switch (select("Sim!:Não, eu não quero.:Mas o que é Golpe Fulminante?")) {
+			case 1:
+				mes "[Leon]";
+				mes "Ok, vamos começar!";
+				next;
+				delitem 1752,10; //Fire_Arrow
+				delitem 1751,10; //Silver_Arrow
+				delitem 532,1; //Banana_Juice
+				delitem 962,30; //Tentacle
+				delitem 526,5; //Royal_Jelly
+				skill "SM_FATALBLOW",1,SKILL_PERM;
+				mes "[Leon]";
+				mes "Sucesso!";
+				mes "Vá usar sua nova habilidade em todo o seu potencial.";
+				mes "Hahahahahahahaha!";
+				close;
+			case 2:
+				mes "[Leon]";
+				mes "Eu não gosto de você!!!";
+				close;
+			case 3:
+				mes "[Leon]";
+				mes "Desenvolvi esta habilidade recentemente.";
+				mes "Quando você usa Impacto Explosivo, dependendo";
+				mes "do seu nível, você pode atordoar";
+				mes "seu oponente.";
+				mes "Você aprendeu Impacto Explosivo, não foi?";
+				next;
+				mes "[Leon]";
+				mes "O que acha? Atordoar é";
+				mes "uma técnica muito útil. Você não acha essa habilidade atraente?";
+				mes "Quando achar que sim, é só voltar aqui!";
+				close;
+			}
+		}
+		mes "[Leon]";
+		mes "Ooh! Um Espadachim jovem e forte!";
+		next;
+		mes "[Leon]";
+		mes "Uau, vendo seu braço, você deve gostar de usar Impacto Explosivo, não é?";
+		next;
+		select("Eh, eu... só...");
+		mes "[Leon]";
+		if (Sex == SEX_FEMALE) {
+			mes "Não precisa ficar surpreso.";
+			mes "Se você usa uma espada, é claro que deve ter um bom braço!";
+		}
+		else {
+			mes "Não há nada de que se envergonhar.";
+			mes "Mesmo sendo mulher, você precisa de um braço forte para usar uma espada!";
+		}
+		mes "Em tempos de jovens inúteis e preguiçosos,";
+		mes "fico feliz em conhecer alguém forte como você.";
+		next;
+		mes "[Leon]";
+		mes "Sim, eu gostaria de dar um presente para um Espadachim incrível como você.";
+		next;
+		switch (select("Que presente?:Tudo bem.")) {
+		case 1:
+			mes "[Leon]";
+			mes "Haha, nada especial, apenas uma habilidade para atacar o ponto vital!";
+			next;
+		case 2:
+			mes "[Leon]";
+			mes "...Haha nada especial, apenas uma habilidade que visa o ponto vital!";
+			next;
+		}
+		mes "[Leon]";
+		mes "É uma habilidade que desenvolvi recentemente.";
+		mes "Quando você usa Impacto Explosivo, dependendo de";
+		mes "seu nível, seu oponente pode";
+		mes "ficar atordoado.";
+		mes "Você aprendeu Impacto Explosivo, não foi?";
+		next;
+		mes "[Leon]";
+		mes "Quando eu era um Espadachim como você,";
+		mes "eu gostava de usar Impacto Explosivo. Toda vez, eu pensava";
+		mes "- talvez o ataque fosse mais poderoso";
+		mes "se eu usasse atordoamento ao mesmo tempo.";
+		next;
+		mes "[Leon]";
+		mes "Afastei-me do campo de batalha para fazer pesquisas";
+		mes "e finalmente, desenvolvi esta maravilhosa nova habilidade!";
+		mes "Você gostaria de aprender esta habilidade?";
+		next;
+		switch (select("Sim.:Não.:Você tem algum conselho sobre como comer sushi?")) {
+		case 1:
+			mes "[Leon]";
+			mes "Ok. Vou te dizer os requisitos.";
+			mes "Primeiro, você precisa ter Golpe Fulminante nível 5.";
+			mes "Você também precisará preparar 10 Flechas de Fogo, 10 Flechas de Prata, 1 garrafa de Suco de Banana, 30 Tentáculos e 5 garrafas de Geleia Real.";
+			mes "Eles são... como se fossem ingredientes.";
+			next;
+			mes "[Leon]";
+			mes "Venha até mim novamente quando tiver todos os materiais.";
+			mes "Conversaremos então.";
+			close;
+		case 2:
+			mes "[Leon]";
+			mes "Hahahahahahahahahaha!";
+			mes "... ";
+			mes " ... ";
+			mes " ...";
+			mes "Estou sem palavras!?";
+			close;
+		case 3:
+			mes "[Sushi King Leon]";
+			mes "A melhor maneira de comer sushi é";
+			mes "com as mãos.";
+			mes "Isso é o básico.";
+			mes "E mergulhe o peixe, não o arroz,";
+			mes "no molho de soja.";
+			next;
+			mes "[Sushi King Leon]";
+			mes "Dessa forma, você obtém um sabor mais rico.";
+			mes "Além disso, sempre coma o tipo que estiver na estação.";
+			mes "Comer na ordem de peixe branco e depois";
+			mes "peixe azul fará com que fique mais saboroso!";
+			mes "Mmm! Eu gosto de sushi~~!";
+			close;
+		}
+	}
+	mes "[Leon]";
+	mes "Oh, não! Eu não tenho nada para lhe oferecer!";
+	mes "Eu não posso dizer coisas legais e divertidas para ninguém";
+	mes "além de espadachins!";
+	mes "Vejo você em um mundo melhor!";
+	close;
+
+OnTouch_:
+	mes "[Leon]";
+	mes "Hahahahahahaha!";
+	mes "Hahahahahahaha!";
+	close;
+}
+
+prt_in,94,57,3	script	Juan	85,4,4,{
+	if (BaseClass == Job_Swordman) {
+		if (getskilllv("SM_AUTOBERSERK") == 1) {
+			mes "[Juan]";
+			mes "Mmm? Quanto tempo não nos vemos!";
+			mes "Como você está?";
+			mes "Você ficou mais forte do que antes.";
+			mes "Muitos esperam grandes coisas de você.";
+			mes "Você consegue.";
+			close;
+		}
+		else if (JobLevel < 10 && (BaseJob != Job_Knight && BaseJob != Job_Crusader)) {
+			mes "[?]";
+			mes "O que é você?";
+			mes "Eh, ainda um iniciante.";
+			mes "Estou ocupado, então vá treinar um pouco mais";
+			mes "antes de voltar.";
+			close;
+		}
+		else if (JobLevel < 30 && (BaseJob != Job_Knight && BaseJob != Job_Crusader)) {
+			mes "[Juan]";
+			mes "Oh, prazer em conhecê-lo.";
+			mes "Pode seguir seu caminho. (smiley~)";
+			close;
+		}
+		else if ((countitem(924) > 34) && (countitem(958) > 9) && (countitem(957) > 9) && (countitem(518) > 9)) {
+			mes "[Juan]";
+			mes "Ooh. Jovem Espadachim!";
+			mes "Você está pronto para aprender a";
+			mes "mais nova habilidade, Provocar Auto?!";
+			next;
+			switch (select("Hoho, eu gostaria de aprendê-la agora.:O que é isso?")) {
+			case 1:
+				mes "[Juan]";
+				mes "Ok. Então...";
+				next;
+				delitem 924,35; //Powder_Of_Butterfly
+				delitem 958,10; //Horrendous_Mouth
+				delitem 957,10; //Decayed_Nail
+				delitem 518,10; //Honey
+				skill "SM_AUTOBERSERK",1,SKILL_PERM;
+				mes "[Juan]";
+				mes "Você acabou de se tornar um Espadachim";
+				mes "que pode usar Provocar Auto.";
+				mes "Você pode seguir em frente";
+				mes "e alcançar grandes feitos!";
+				next;
+				mes "[Juan]";
+				mes "Boa sorte!";
+				next;
+				mes "[Juan]";
+				mes "....................................ah, sim.";
+				mes "Esqueci de dizer algo.";
+				mes "Há algumas coisas que você deve ter em mente.";
+				next;
+				mes "[Juan]";
+				mes "Assim que você recuperar a saúde,";
+				mes "esta habilidade irá diminuir.";
+				mes "Além disso, não há realmente um limite de tempo,";
+				mes "mas ela ainda pode desaparecer quando";
+				mes "for atacado com uma habilidade que possa";
+				mes "anular Provocar.";
+				next;
+				mes "[Juan]";
+				mes "Se você não se lembrar dessas características,";
+				mes "pode ter alguns problemas no campo de batalha";
+				mes "quando a habilidade desaparecer de repente.";
+				next;
+				mes "[Juan]";
+				mes "Então... tchau de verdade~";
+				close;
+			case 2:
+				mes "[Juan]";
+				mes "Provocar Auto?";
+				mes "É uma habilidade crucial no campo de batalha.";
+				mes "Quando sua saúde estiver no vermelho,";
+				mes "seu potencial oculto provoca a si mesmo";
+				mes "para ajudá-lo na batalha.";
+				next;
+				mes "[Juan]";
+				mes "É perfeita para aqueles que";
+				mes "lutam no campo de batalha como fogo!";
+				mes "Com sua habilidade, você pode aprender";
+				mes "esta técnica agora mesmo.";
+				mes "Então, eu lhe direi os materiais necessários.";
+				next;
+				mes "[Juan]";
+				mes "Você precisa de 35 Pó de Borboleta.";
+				mes "A energia das magníficas";
+				mes "asas de uma borboleta";
+				mes "ajudará você a reunir suas forças!";
+				mes "E 10 Bocas Horrendas.";
+				mes "10 Unhas Apodrecidas.";
+				mes "e, por último, mas não menos importante...";
+				mes "10 Mel!";
+				next;
+				mes "[Juan]";
+				mes "Você anotou tudo?";
+				mes "Como sempre, por favor, volte";
+				mes "quando estiver pronto.";
+				mes "Espero vê-lo novamente.";
+				close;
+			}
+		}
+		mes "[Juan]";
+		mes "Oh não, você tem mais ferimentos";
+		mes "desde a última vez que te vi.";
+		mes "Você foi para a batalha assim?";
+		mes "Parece que você está se esforçando demais.";
+		next;
+		mes "[Juan]";
+		mes "Embora você possa ter muita força,";
+		mes "você não pode fazer muito quando atinge seus limites, então";
+		mes "não superestime seus poderes.";
+		mes "É claro que você sempre poderia usar a";
+		mes "habilidade que desenvolvemos para superar esses limites.";
+		next;
+		switch (select("Eh! Do que você está falando?:Haha, não pode existir tal coisa.:Keuuuuuuuh!")) {
+		case 1:
+			mes "[Juan]";
+			mes "A habilidade se chama Frenesi.";
+			mes "Ela é considerada a flor do campo de batalha.";
+			mes "Quando sua saúde está no vermelho,";
+			mes "seu potencial oculto provoca a si mesmo";
+			mes "para ajudá-lo na batalha.";
+			next;
+			mes "[Juan]";
+			mes "É perfeita para aqueles que";
+			mes "lutam no campo de batalha como fogo!";
+			mes "Com sua habilidade, você pode aprender";
+			mes "esta técnica agora mesmo.";
+			mes "Então, eu lhe direi os materiais necessários.";
+			next;
+			mes "[Juan]";
+			mes "Você precisa de 35 Pó de Borboleta.";
+			mes "A energia das magníficas";
+			mes "asas de uma borboleta";
+			mes "ajudará você a reunir suas forças!";
+			mes "E 10 Bocas Horrendas.";
+			mes "10 Unhas Apodrecidas.";
+			mes "e, por último, mas não menos importante...";
+			mes "10 Méis!";
+			next;
+			mes "[Juan]";
+			mes "Você anotou tudo?";
+			mes "Como sempre, por favor, volte";
+			mes "quando estiver pronto.";
+			mes "Espero vê-lo novamente.";
+			close;
+		case 2:
+			mes "[Juan]";
+			mes "Bleh, você foi enganado a vida toda.";
+			mes "Eu não sei. Não fale comigo.";
+			close;
+		case 3:
+			mes "[Juan]";
+			mes "Keuuuuuuuuuuuuuh!";
+			mes "Ooowwwwwuuuuuuuuuuuuuhhh!";
+			mes "Keuaaaaaaaaaaah!";
+			close;
+		}
+	}
+	mes "[Juan]";
+	mes "Você está aproveitando sua viagem?";
+	mes "Espero que você tenha bons dias pela frente.";
+	mes "Ah, eu sou apenas um gentil Cavaleiro Juan.";
+	mes "Não se preocupe muito comigo. Hahaha...";
+	close;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= Fully working
+//= 1.0a Now using functions found in "Global_Functions.txt"
+//=     for class checks.
+//= 1.1 Added missing delitem [Lupus]
+//= 1.2 Added Baby Class Support [Lupus]
+//= 1.3 Removed callfunc Is_####_Class in favor of baseClass [Silentdragon]
+//= 1.4 Updated the NPC to allow subclasses of swordsman to learn the skills, [MasterOfMuppets]
+//= 1.5 Fixed exploits [Lupus]
+//= 1.5a Fixed some typos [IVBela]
+//============================================================
