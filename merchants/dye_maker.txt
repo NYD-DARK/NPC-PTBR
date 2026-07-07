@@ -1,0 +1,202 @@
+//===== rAthena Script ======================================= 
+//= Dye Maker
+//===== By: ================================================== 
+//= rAthena Dev Team
+//===== Current Version: ===================================== 
+//= 1.4
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Quests to create the eight colored Dyestuffs.
+//===== Additional Comments: ================================= 
+//= 1.0 Fully working [kobra_k88]
+//= 1.1 Spell Checked [Nexon] 
+//= 1.2 Rescripted to Aegis 10.3 standard. [L0ne_W0lf]
+//= 1.2b Fixed typos in variable names [ultramage]
+//= 1.3 Made the checks more dynamic [ultramage]
+//= 1.3b Fixed incorrect checking loop structure [ultramage]
+//= 1.4 Added a checkweight. [L0ne_W0lf]
+//============================================================ 
+
+morocc_in,146,99,3	script	Java Dullihan	58,{
+	if ((MaxWeight-Weight) < 200 || checkweight(1201,1) == 0) {
+		mes "- Espere um momento! -";
+		mes "- Atualmente você está carregando -";
+		mes "- itens demais com você. -";
+		mes "- Por favor, volte mais tarde -";
+		mes "- depois de colocar alguns itens no armazém da Kafra. -";
+		close;
+	}
+	mes "[Dye Maker Java Dullihan]";
+	mes "Uau...";
+	mes "Que dia agradável. Dias como este são perfeitos para fazer corantes.";
+	next;
+	switch(select("Conversar:Fazer Corantes:Cancelar")) {
+	case 1:
+		mes "[Dye Maker Java Dullihan]";
+		mes "Bem, eu não tenho muito o que dizer para você. Mas, se você quiser que eu conte sobre minha vida, eu posso fazer isso. É um pouco longa e entediante, mas você gostaria de ouvir?";
+		next;
+		if (select("Ouvir:Don't Ouvir") == 1) {
+			mes "[Dye Maker Java Dullihan]";
+			mes "Desde que me entendo por gente, meu pai faz corantes. Ele costumava passar incontáveis horas fazendo corantes de cores diferentes. Mesmo quando minha mãe faleceu, ele nunca parou.";
+			next;
+			mes "[Dye Maker Java Dullihan]";
+			mes "Em um momento da minha vida, eu me tornei rebelde e fugi de casa. Eu não queria ficar preso aos negócios da família e queria tentar outras coisas.";
+			next;
+			mes "[Dye Maker Java Dullihan]";
+			mes "Enfim...";
+			mes "Eventualmente, acabei voltando para casa para dar continuidade à tradição da família, fazendo corantes há 15 anos já. Acho que estava realmente no meu sangue.";
+			next;
+			mes "[Dye Maker Java Dullihan]";
+			mes "Algo que percebi ultimamente é que agora consigo entender meu pai. Por que meu pai dedicou tudo à fabricação de corantes...";
+			next;
+			mes "[Dye Maker Java Dullihan]";
+			mes "No meio de todo aquele trabalho tedioso e árduo, ele provavelmente sentia a magia daquelas cores passando tantos sonhos para outras pessoas.";
+			next;
+			mes "[Dye Maker Java Dullihan]";
+			mes "Provavelmente foi por causa desses sonhos que ele se esforçou tanto para fazer corantes para seus clientes...";
+			next;
+			mes "[Dye Maker Java Dullihan]";
+			mes "Heh... Como eu sei disso? Bem, é assim que eu me sinto agora. Desde alguns anos atrás, tenho conseguido ouvir o que as cores dizem...";
+			next;
+			mes "[Dye Maker Java Dullian]";
+			mes "Apenas espere. Um dia, terei sucesso em fazer a cor que meu pai queria, mas nunca teve a chance de fazer.";
+			close;
+		}
+		mes "[Dye Maker Java Dullihan]";
+		mes "Ahahahaha...";
+		mes "Bem, acho que ninguém quereria ouvir a história de um mero fabricante de corantes de qualquer maneira. Hahaha....";
+		close;
+
+	case 2:
+		mes "[Dye Maker Java Dullihan]";
+		mes "Ótimo! Se você quer, eu farei para você. Prometo que farei a cor que você deseja. Mas qual cor de corante você gostaria de fazer? A taxa é diferente dependendo da cor.";
+		next;
+		mes "[Dye Maker Java Dullihan]";
+		mes "Por que, você pergunta? Apenas lembre-se de que existem cores que são fáceis de fazer, e aquelas que exigem mais esforço e trabalho. Por favor, não pense que a taxa é muito cara.";
+		next;
+		mes "[Dye Maker Java Dullihan]";
+		mes "A cor do corante é especial, feita com todo meu coração e alma.";
+		next;
+		switch(select("Corante Escarlate:Corante Limão:Corante Azul Cobalto:Corante Verde Escuro:Corante Laranja:Corante Violeta:Corante Branco:Corante Preto:Cancelar")) {
+		case 1: callsub S_MakeDye,1,1; break;
+		case 2: callsub S_MakeDye,2,1; break;
+		case 3: callsub S_MakeDye,3,2; break;
+		case 4: callsub S_MakeDye,4,3; break;
+		case 5: callsub S_MakeDye,5,4; break;
+		case 6: callsub S_MakeDye,6,4; break;
+		case 7: callsub S_MakeDye,7,4; break;
+		case 8: callsub S_MakeDye,8,4; break;
+		case 9:
+			mes "[Dye Maker Java Dullihan]";
+			mes "Eeeeehhhh!! O que é isso? Você mudou de ideia agora!? Que decepção...";
+			close;
+		}
+
+	case 3:
+		mes "[Dye Maker Java Dullihan]";
+		mes "Não estou me gabando nem nada. Mas tenho as habilidades para fazer corantes. Se você precisar de corantes, por favor, venha até mim. Eu farei para você por um preço razoável.";
+		close;
+	}
+
+S_MakeDye:
+	mes "[Dye Maker Java Dullihan]";
+	switch(getarg(0)) {
+	case 1:
+		mes "Mmm... Preciso de 30 Ervas Vermelhas, 1 Agente de Reação e 1 Garrafa Vazia para fazer Corante Vermelho. A taxa é de apenas 3000 zenys para fazê-lo.";
+		setarray .@item[0], 507, 973, 713;
+		setarray .@count[0], 30,   1,   1;
+		set .@cost,3000;
+		set .@dyestuff,975;
+		break;
+	case 2:
+		mes "Mmm... Preciso de 30 Ervas Amarelas, 1 Agente de Reação e 1 Garrafa Vazia para fazer Corante Limão. A taxa é de apenas 3000 zenys para fazê-lo.";
+		setarray .@item[0], 508, 973, 713;
+		setarray .@count[0], 30,   1,   1;
+		set .@cost,3000;
+		set .@dyestuff,976;
+		break;
+	case 3:
+		mes "Mmm... Preciso de 20 Ervas Azuis, 1 Agente de Reação e 1 Garrafa Vazia para fazer Corante Azul Cobalto. É difícil usar a Erva Azul, então a taxa será de 3500 zenys.";
+		setarray .@item[0], 510, 973, 713;
+		setarray .@count[0], 20,   1,   1;
+		set .@cost,3500;
+		set .@dyestuff,978;
+		break;
+	case 4:
+		mes "Mmm... Preciso de 5 Ervas Azuis, 20 Ervas Verdes, 20 Ervas Amarelas, 1 Agente de Reação, 1 Mistura e 1 Garrafa Vazia para fazer Corante Verde Escuro. Não confunda os materiais. A taxa é de apenas 5000 zenys.";
+		setarray .@item[0], 510, 511, 508, 974, 973, 713;
+		setarray .@count[0],  5,  20,  20,   1,   1,   1;
+		set .@cost,5000;
+		set .@dyestuff,979;
+		break;
+	case 5:
+		mes "Mmm... Preciso de 20 Ervas Vermelhas, 20 Ervas Amarelas, 1 Agente de Reação, 1 Mistura e 1 Garrafa Vazia para fazer Corante Laranja. A taxa será de 5000 zenys.";
+		setarray .@item[0], 507, 508, 974, 973, 713;
+		setarray .@count[0], 20,  20,   1,   1,   1;
+		set .@cost,5000;
+		set .@dyestuff,980;
+		break;
+	case 6:
+		mes "Mmm... Preciso de 10 Ervas Azuis, 30 Ervas Vermelhas, 1 Agente de Reação, 1 Mistura e 1 Garrafa Vazia para fazer Corante Violeta. A taxa será de 5000 zenys.";
+		setarray .@item[0], 510, 507, 974, 973, 713;
+		setarray .@count[0], 10,  30,   1,   1,   1;
+		set .@cost,5000;
+		set .@dyestuff,981;
+		break;
+	case 7:
+		mes "Mmm... Preciso de 30 Ervas Brancas, 1 Agente de Reação e 1 Garrafa Vazia para fazer Corante Branco. A taxa será de 3000 zenys.";
+		setarray .@item[0], 509, 973, 713;
+		setarray .@count[0], 30,   1,   1; 
+		set .@cost,3000;
+		set .@dyestuff,982;
+		break;
+	case 8:
+		mes "Mmm... Preciso de 30 unidades de Ervas Vermelhas, Amarelas e Verdes cada, 5 Ervas Azuis, 1 Agente de Reação, 1 Mistura e 1 Garrafa Vazia. O processo leva mais tempo e exige mais esforço do que os outros, então será 7000 zenys.";
+		setarray .@item[0], 507, 508, 511, 510, 974, 973, 713;
+		setarray .@count[0], 30,  30,  30,   5,   1,   1,   1;
+		set .@cost,7000;
+		set .@dyestuff,983;
+		break;
+	}
+	next;
+	mes "[Dye Maker Java Dullihan]";
+	switch(getarg(1)) {
+	case 1: mes "Ah! Acho que você tem tudo pronto. Você gostaria de iniciar o processo?"; break;
+	case 2: mes "Ok! Acredito que você tenha tudo pronto. Você gostaria de iniciar o processo?"; break;
+	case 3: mes "Ok! Acredito que você tenha tudo pronto. Vamos começar o processo?"; break;
+	case 4: mes "Ok! Acredito que você tenha tudo preparado. Você gostaria de iniciar o processo?"; break;
+	}
+	next;
+	if (select("Fazer Corantes:Cancelar") == 1) {
+		set .@size, getarraysize(.@item);
+		// check requirements
+		for( set .@i,0 ; .@i < .@size ; set .@i,.@i+1 )
+			if( countitem(.@item[.@i]) < .@count[.@i] )
+				break;
+		if( .@i < .@size || Zeny < .@cost ) {
+			mes "[Dye Maker Java Dullihan]";
+			mes "Hmmm. Não é o suficiente...";
+			mes "Acho que não conseguirei fazer a cor que você quer com esses materiais. Por que você não vai buscar mais alguns materiais...?";
+			close;
+		}
+		// delete items
+		for (set .@i, 0; .@i < .@size ; set .@i, .@i+1)
+			delitem .@item[.@i], .@count[.@i];
+		set Zeny, Zeny-.@cost;
+		// get dyestuff
+		getitem .@dyestuff,1;
+		
+		mes "[Dye Maker Java Dullihan]";
+		mes "Hmm... Ficou muito bom. Uma cor bem rica. É claro que me esforçarei mais para fazer uma cor ainda mais encantadora...";
+		next;
+		mes "[Dye Maker Java Dullihan]";
+		mes "Bem, então. Passe aqui sempre que precisar de mais corantes.";
+		close;
+	}
+	mes "[Dye Maker Java Dullihan]";
+	mes "Eeeeehhhh!! O que é isso?";
+	mes "Você mudou de ideia agora!? Que decepção...";
+	return;
+}

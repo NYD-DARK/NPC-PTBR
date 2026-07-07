@@ -1,0 +1,160 @@
+//===== rAthena Script ======================================= 
+//= Elemental Stone Trader
+//===== By: ================================================== 
+//= rAthena Team & MasterOfMuppets
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Trade impure types of elemental stones for pure ones.
+//===== Additional Comments: ================================= 
+//= 1.0 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//= 1.1 Optimized. [Euphy]
+//============================================================ 
+
+ama_in02,61,27,7	script	Alchemist#ama	749,{
+	mes "[Laspuchin Gregory]";
+	mes "Qui-qui-qui-queheheh.";
+	mes "Isso é incrível!";
+	mes "Os resultados são extraordinários!!";
+	next;
+	mes "[Laspuchin Gregory]";
+	mes "Usar minhas habilidades nesta terra";
+	mes "distante foi inesperado...";
+	mes "Keheheh... O lorde do palácio";
+	mes "foi bem prestativo.";
+	next;
+	mes "[Laspuchin Gregory]";
+	mes "Ops, é melhor eu tomar cuidado...";
+	mes "Se a guilda descobrir minha";
+	mes "localização, aquele idiota do Myster vai";
+	mes "ficar bravo comigo. Kehehehkeh...";
+	next;
+	mes "[Laspuchin Gregory]";
+	mes "O quê? Quer dizer alguma coisa?";
+	mes "Se você está aqui a turismo,";
+	mes "aproveite seu dia de folga e volte para sua terra natal.";
+	mes "Keekeekee... Ou então,";
+	mes "eu vou deixar você provar a minha garrafa de ácido...!";
+	next;
+	if (select("Por favor, com licença.:Você precisa de ajuda?") == 1) {
+		mes "[Laspuchin Gregory]";
+		mes "Keheheh... Você ouviu";
+		mes "o que eu disse? Seria";
+		mes "melhor esquecer...";
+		mes "Keekeekeekeekee...";
+		close;
+	}
+	mes "[Laspuchin Gregory]";
+	mes "Ajuda, é?...";
+	mes "Agora que parei para pensar...";
+	mes "Eu preciso de alguns itens agora...";
+	mes "Keeheeheekeehee...";
+	next;
+	mes "[Laspuchin Gregory]";
+	mes "O Sir Laspuchin precisa de algumas";
+	mes "pedras de encantamento para um experimento.";
+	mes "Eu as usarei de forma eficiente...";
+	mes "Você as tem agora?";
+	next;
+	if (select("Não:Eu consegui algumas") == 1) {
+		mes "[Laspuchin Gregory]";
+		mes "Então, encontre 8 pedras do mesmo tipo.";
+		mes "Se você trouxer 8 pedras de encantamento";
+		mes "de um mesmo tipo, eu as trocarei";
+		mes "por uma melhor...";
+		next;
+		mes "[Laspuchin Gregory]";
+		mes "Então, encontre 8 pedras do mesmo tipo.";
+		mes "Não as gemas redondas, mas";
+		mes "pedras de encantamento.";
+		mes "Se você trouxer as pedras erradas,";
+		mes "eu vou jogar uma garrafa de fogo em você!";
+		next;
+		mes "[Laspuchin Gregory]";
+		mes "Traga-me pedras, escravo~!!";
+		mes "E cumpra sua promessa! Kehehehkehkeh...";
+		close;
+	}
+	mes "[Laspuchin Gregory]";
+	mes "Uh-huh, o que você trouxe?";
+	next;
+	setarray .@Items[1],995,997,994,996;
+	set .@i, .@Items[select("Gelo Místico:Grande Natureza:Coração Flamejante:Vento Bruto")];
+	mes "[Laspuchin Gregory]";
+	if (countitem(.@i) > 7) {
+		mes "Eu pegarei 8 delas e";
+		mes "lhe darei uma pedra de encantamento.";
+		mes "O que acha?";
+		mes "Keheheh.....";
+		next;
+		mes "[Laspuchin Gregory]";
+		mes "HeeHee, o que você quer? Escolha uma!";
+		next;
+		set .@menu$, "";
+		for(set .@j,1; .@j<5; set .@j,.@j+1) {
+			if (.@Items[.@j] != .@i) set .@menu$, .@menu$+getitemname(.@Items[.@j]);
+			set .@menu$, .@menu$+":";
+		}
+		set .@menu$, .@menu$+"Cancelar a troca";
+		set .@j, select(.@menu$);
+		mes "[Laspuchin Gregory]";
+		if (.@j == 5) {
+			mes "Ah, tudo bem.";
+			mes "Não conte a ninguém sobre a minha localização...";
+			mes "Keheheh... afinal, você prometeu~";
+			close;
+		}
+		else if (.@j == 4) {
+			if (countitem(.@i) > 11) {
+				delitem .@i,12;
+				getitem 996,1;
+				mes "Kehhehheh, sabe de uma coisa?";
+				mes "Eu não tenho muitas dessas,";
+				mes "então vou pegar ^0000FF12^000000 das suas, está bem?";
+				mes "Claro, não tem problema.";
+				mes "É uma honra ajudar Laspuchin!";
+				close;
+			}
+			mes "Keheheh, sabe de uma coisa.";
+			mes "Eu não tenho muitas destas, então";
+			mes "não posso simplesmente pegar 8 das suas.";
+			mes "Se quiser trocá-las por Vento Bruto,";
+			mes "traga-me mais 4 pedras. 8 + 4 = 12...";
+			mes "Requer ^0000FF12^000000 pedras.";
+			next;
+			mes "[Laspuchin Gregory]";
+			mes "Traga-me pedras, escravo~!!";
+			mes "E cumpra sua promessa! Kehheheheheh...";
+			close;
+		}
+		else {
+			delitem .@i,8;
+			getitem .@Items[.@j],1;
+			mes "Keheheh! Você escolheu uma boa!";
+			mes "Use-a bem...";
+			mes "Traga-me outras pedras se você as tiver!";
+			close;
+		}
+	} else if (countitem(.@i)) {
+		mes "Você não pode ajudar Laspuchin com apenas algumas";
+		mes "pedras de encantamento... Eu disse 8!";
+		mes "Traga-me exatamente 8 pedras!";
+		mes "Keheheh.....";
+		next;
+		mes "[Laspuchin Gregory]";
+		mes "Traga-me pedras, escravo~!!";
+		mes "E cumpra sua promessa! Keheheheheh...";
+		close;
+	}
+	mes "Keheheh~ Verifique seus bolsos";
+	mes "antes de me dizer";
+	mes "o quão tolo você é.....";
+	next;
+	mes "[Laspuchin Gregory]";
+	mes "Traga-me pedras! Você disse que iria me ajudar!";
+	mes "Cumpra suas promessas! Kehehehkehkeh...";
+	close;
+}

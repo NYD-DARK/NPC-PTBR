@@ -1,0 +1,89 @@
+//===== rAthena Script =======================================
+//= Coin Merchants
+//===== By: ==================================================
+//= rAthena Dev Team
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Coin redemption NPCs.
+//===== Additional Comments: =================================
+//= 1.0 First version 
+//= 1.1 Fixed checkweight. [Gepard]
+//= 1.2 Optimized and merged into one file. [Euphy]
+//============================================================
+
+// Manuk & Splendide
+//============================================================
+-	script	::merchant_13_2	-1,{
+	set .@n$, "["+strnpcinfo(1)+"]";
+	mes .@n$;
+	if (isequipped(2782) && ep13_2_rhea == 100) {
+		if (!checkweight(1201,1)) {
+			mes "Parece que você está carregando coisas demais.";
+			mes "Por que não coloca alguns itens no armazém e volta mais tarde?";
+			close;
+		}
+		mes "Olá.";
+		mes "O que você está procurando?";
+		next;
+		if (strnpcinfo(1) == "Merchant of Manuk") {
+			setarray .@Items[2],12342,12343,12348;
+			set .@Book,11019; //Manuk_Selling_Item
+			set .@Coin,6080; //Manuk_Coin
+			set .@i, select("Ver descrição do item:Oportunidade de Manuk:Coragem de Manuk:Fé de Manuk:Cancelar");
+		}
+		else {
+			setarray .@Items[2],12344,12345,12349;
+			set .@Book,11018; //Splendide_Selling_Item
+			set .@Coin,6081; //Splendide_Coin
+			set .@i, select("Ver descrição do item:Comprar Geleia de Fruta de Pinguicula:Comprar Geleia de Mel de Luciola:Comprar Lágrimas de Cornus:Não fazer nada");
+		}
+		mes .@n$;
+		if (.@i == 1) {
+			mes "Aqui estão as descrições dos itens.";
+			close2;
+			readbook .@Book,1;
+			end;
+		}
+		else if (.@i < 5) {
+			mes "Posso te vender 3"+getitemname(.@Items[.@i])+"por ^3131FF1 moeda^000000.";
+			next;
+			switch(select("Comprar:Não comprar")) {
+			case 1:
+				if (countitem(.@Coin)) {
+					mes .@n$;
+					mes "Obrigado por vir.";
+					delitem .@Coin,1; 
+					getitem .@Items[.@i],3;
+					close;
+				}
+				else {
+					mes .@n$;
+					mes "Você não tem moedas suficientes.";
+					close;
+				}
+			case 2:
+				mes .@n$;
+				break;
+			}
+		}
+		mes "Volte se mudar de ideia.";
+		close;
+	}
+	else {
+		if (strnpcinfo(1) == "Merchant of Manuk") {
+			mes "Rtt od d";
+			mes "Qwo hd is d irr";
+		}
+		else {
+			mes "BurWehAla";
+			mes "tasnarAndu Ie Ru";
+		}
+		close;
+	}
+}
+man_in01,286,16,1	duplicate(merchant_13_2)	Merchant of Manuk	454
+spl_in01,110,326,5	duplicate(merchant_13_2)	Merchant of Splendide	439

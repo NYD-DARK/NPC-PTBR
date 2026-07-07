@@ -1,0 +1,1022 @@
+//===== rAthena Script =======================================
+//= Izlude Arena Room
+//===== By: ==================================================
+//= SinSloth
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Izlude Battle Arena Main Room
+//===== Additional Comments: =================================
+//= 1.0 First version.
+//= 1.1 Fixed a small reward typo (was giving potato.) [L0ne_W0lf]
+//= 1.2 Label standardization, disabled GM NPCs. [Euphy]
+//= 1.2a Added Renewal level checksk. [Euphy]
+//= 1.3 Script updates. [Euphy]
+//= 1.4 Added GM management function. [Euphy]
+//============================================================
+
+arena_room,94,93,5	script	Vendigos	97,{
+	mes "[Vendigos]";
+	mes "Bem-vindo ao mundo da Arena, a batalha contra o limite de tempo.";
+	mes "Meu nome é Vendigos, estou aqui para ajudá-lo.";
+	next;
+	mes "[Vendigos]";
+	mes "Se você tiver alguma dúvida, sinta-se à vontade para me perguntar.";
+	next;
+	while(1) {
+		switch(select("Como desafiar:Sobre Pontos de Arena:Meus Pontos de Arena Atuais:Cancelar")) {
+		case 1:
+			mes "[Vendigos]";
+			mes "Existem dois modos diferentes de arena, como o ^3131FFModo Jogador^000000 e o ^3131FFModo Grupo^000000.";
+			next;
+			mes "[Vendigos]";
+			mes "O ^3131FFModo Jogador^000000 consiste em 4 estágios diferentes baseados no nível do personagem, de 50 a 80.";
+			mes "Para um grupo com 5 membros, eles podem participar do ^3131FFModo Grupo^000000.";
+			next;
+			mes "[Vendigos]";
+			mes "Para ^3131FFcada Estágio do Modo Jogador^000000, personagens que tenham 20 níveis a mais do que o requisito de nível de cada estágio não podem entrar. Isso é para evitar que personagens de nível alto ocupem um estágio de nível baixo.";
+			next;
+			mes "[Vendigos]";
+			mes "Existem NPCs para os Estágios do Modo Jogador na direção das 12 horas no sentido anti-horário.";
+			mes "Enquanto estiver esperando em uma sala de bate-papo, você será automaticamente guiado para uma sala de arena por ordem de espera.";
+			break;
+		case 2:
+			mes "[Vendigos]";
+			mes "Deixe-me explicar sobre o ^3131FFPonto de Arena^000000.";
+			mes "É um ponto de recompensa para jogadores que ^3131FFcompletaram com sucesso um estágio de arena^000000, um jogador pode possuir no máximo 30.000 pontos.";
+			next;
+			mes "[Vendigos]";
+			mes "Mesmo que você não complete um estágio devido ao tempo esgotado ou outros erros, você receberá uma pequena quantidade de pontos de arena.";
+			next;
+			mes "[Vendigos]";
+			mes "Em relação ao uso dos Pontos de Arena,";
+			mes "oferecemos vários serviços, como serviços de fotografia de lembrança através de um NPC chamado Givu.";
+			break;
+		case 3:
+			mes "[Vendigos]";
+			mes "Deixe-me verificar"+strcharinfo(0)+"os pontos de arena atuais de.";
+			next;
+			mes "[Vendigos]";
+			mes ""+strcharinfo(0)+"tem um total de ^3131FF"+arena_point+"^000000 pontos.";
+			next;
+			mes "[Vendigos]";
+			mes "Se você deseja saber como usar os pontos de arena, consulte o 2º menu ^3131FF'Sobre Pontos de Arena'^000000.";
+			break;
+		case 4:
+			mes "[Vendigos]";
+			mes "Certo então,";
+			mes "tenha";
+			mes "um bom divertimento.";
+			close;
+		}
+		next;
+		mes "[Vendigos]";
+		mes "Há algo mais";
+		mes "em que eu possa ajudá-lo?";
+		next;
+	}
+	close;
+
+OnLineRec_50:
+	mapannounce "arena_room",""+$arena_50topn$+"renovou o recorde no nível 50 da Arena de Batalha por Tempo. Parabéns!",0;
+	end;
+
+OnLineRec_60:
+	mapannounce "arena_room",""+$arena_60topn$+"renovou o recorde no nível 60 da Arena de Batalha por Tempo. Parabéns!",0;
+	end;
+
+OnLineRec_70:
+	mapannounce "arena_room",""+$arena_70topn$+"renovou o recorde no nível 70 da Arena de Batalha por Tempo. Parabéns!",0;
+	end;
+OnLineRec_80:
+	mapannounce "arena_room",""+$arena_80topn$+"renovou o recorde no nível 80 da Arena de Batalha por Tempo. Parabéns!",0;
+	end;
+
+OnLineRec_pt:
+	mapannounce "arena_room","Grupo"+$arena_pttopn$+" has renewed the top record in the Arena Time Force Battle. Congratulations!",0;
+	end;
+
+//OnLineRec_vs:
+//	mapannounce "arena_room","Party "+$040611_arn_vstopn$+" has renewed the top record in the Arena Time Force Battle. Congratulations!",0;
+//	end;
+}
+
+arena_room,105,82,5	script	Arena Record Staff	57,{
+	mes "[Owen Kheuv]";
+	mes "Olá, meu nome é Owen Kheuv";
+	mes "e sou responsável por todos os recordes dos estágios da arena.";
+	next;
+	mes "[Owen Kheuv]";
+	mes "Você gostaria de verificar os recordes dos melhores jogadores em cada estágio?";
+	mes "Se sim, por favor escolha um menu abaixo.";
+	next;
+	switch(select("Estágio Nv 50:Estágio Nv 60:Estágio Nv 70:Estágio Nv 80:Estágio de Grupo")) {
+	case 1:
+		mes "[Owen Kheuv]";
+		mes "Atualmente, o melhor jogador do estágio Nv 50 da arena é ^3131FF"+$arena_50topn$+"^000000, o melhor recorde é ^3131FF"+$top_50min+"^000000 minutos ^3131FF"+$top_50sec+"^000000 segundos.";
+		close;
+	case 2:
+		mes "[Owen Kheuv]";
+		mes "Atualmente, o melhor jogador do estágio Nv 60 da arena é ^3131FF"+$arena_60topn$+"^000000, o melhor recorde é ^3131FF"+$top_60min+"^000000 minutos ^3131FF"+$top_60sec+"^000000 segundos.";
+		close;
+	case 3:
+		mes "[Owen Kheuv]";
+		mes "Atualmente, o melhor jogador do estágio Nv 70 da arena é ^3131FF"+$arena_70topn$+"^000000, o melhor recorde é ^3131FF"+$top_70min+"^000000 minutos ^3131FF"+$top_70sec+"^000000 segundos.";
+		close;
+	case 4:
+		mes "[Owen Kheuv]";
+		mes "Atualmente, o melhor jogador do estágio Nv 80 da arena é ^3131FF"+$arena_80topn$+"^000000, o melhor recorde é ^3131FF"+$top_80min+"^000000 minutos ^3131FF"+$top_80sec+"^000000 segundos.";
+		close;
+	case 5:
+		mes "[Owen Kheuv]";
+		mes "Atualmente, o melhor grupo é ^3131FF"+$arena_pttopn$+"^000000, o melhor recorde é ^3131FF"+$top_ptmin+"^000000 minutos ^3131FF"+$top_ptsec+"^000000 segundos.";
+		close;
+	}
+}
+
+arena_room,68,135,3	script	Helper Pat	726,{
+	mes "[Pat]";
+	mes "Bem-vindo, bem-vindo.";
+	mes "Eu sou um ajudante do estágio de arena Nv 50.";
+	next;
+	mes "[Pat]";
+	mes "Este ^3131FFestágio de arena Nv 50^000000";
+	mes "é acessível a personagens do ^FF0000nível 50^000000 ao ^FF0000nível 69^000000.";
+	next;
+	mes "[Pat]";
+	mes "Esta limitação de nível é para evitar que personagens de nível alto abusem dos estágios de arena de nível baixo. Espero que entenda.";
+	mes "Também cobramos uma taxa de entrada de 1.000 zenys.";
+	next;
+	mes "[Pat]";
+	mes "Deixe-me apresentar as regras de jogo da arena.";
+	next;
+	mes "[Pat]";
+	mes "^3131FFEspere em uma sala de bate-papo até a sua vez chegar.^000000";
+	mes "Quando chegar a sua vez, você será automaticamente levado para um mapa de arena.";
+	next;
+	mes "[Pat]";
+	mes "Assim que você entrar, um cronômetro para verificar seu tempo de jogo será ativado.";
+	mes "Por favor, siga as orientações de ^3131FFHeel e Toe^000000.";
+	next;
+	mes "[Pat]";
+	mes "Você tem ^3131FF5 minutos^000000 de tempo de batalha.";
+	next;
+	mes "[Pat]";
+	mes "Depois de limpar todas as salas, incluindo a sala do chefe, você será levado de volta a uma ^3131FFsala de espera final^000000.";
+	mes "Você só tem permissão para ficar na sala de espera por ^3131FF1 minuto^000000, por favor, apresse-se para receber os pontos de arena e sair.";
+	next;
+	mes "[Pat]";
+	mes "Se você ficar mais de 1 minuto dentro da sala de espera final, você será forçado a sair e não receberá nenhum ponto de arena. Por favor, lembre-se disso.";
+	next;
+	mes "[Pat]";
+	mes "Espero que você se divirta.";
+	close;
+}
+
+arena_room,41,93,5	script	Helper Ben	750,{
+	mes "[Ben]";
+	mes "Bem-vindo, bem-vindo.";
+	mes "Eu sou um ajudante do estágio de arena Nv 60.";
+	next;
+	mes "[Ben]";
+	mes "Este ^3131FFestágio de arena Nv 60^000000";
+	mes "é acessível a personagens do ^FF0000nível 60^000000 ao ^FF0000nível 79^000000.";
+	next;
+	mes "[Ben]";
+	mes "Essa limitação de nível existe para evitar que personagens de nível alto abusem dos estágios de arena de nível baixo. Espero que entenda.";
+	mes "Também cobramos uma taxa de entrada de 1.000 zenys.";
+	next;
+	mes "[Ben]";
+	mes "Deixe-me apresentar as regras de jogo da arena.";
+	next;
+	mes "[Ben]";
+	mes "^3131FFAguarde em uma sala de bate-papo até chegar sua vez.^000000";
+	mes "Quando for sua vez, você será automaticamente teletransportado para o mapa da arena.";
+	next;
+	mes "[Ben]";
+	mes "Assim que entrar, um cronômetro para verificar seu tempo de jogo será ativado.";
+	mes "Por favor, siga as orientações de ^3131FFMinilover^000000.";
+	next;
+	mes "[Ben]";
+	mes "Você tem um tempo de batalha de ^3131FF6 minutos^000000.";
+	next;
+	mes "[Ben]";
+	mes "Após limpar todas as salas, incluindo a sala do chefe, você será teletransportado novamente para uma ^3131FFsala de espera final^000000.";
+	mes "Você só tem permissão para ficar na sala de espera por ^3131FF1 minuto^000000, por favor, apresse-se para receber os pontos da arena e sair.";
+	next;
+	mes "[Ben]";
+	mes "Se você permanecer mais de 1 minuto dentro da sala de espera final, será forçado a sair e não receberá nenhum ponto da arena. Lembre-se disso.";
+	next;
+	mes "[Ben]";
+	mes "Espero que se divirta.";
+	close;
+}
+
+arena_room,53,49,5	script	Helper Vicious	730,{
+	mes "[Vicious]";
+	mes "E aí.";
+	mes "Meu nome é Vicious, sou um ajudante do estágio da arena de Nv 70.";
+	mes "(...Eu não faço ideia de como fui me meter nesse trabalho horrível... murmura murmura... resmunga resmunga..)";
+	next;
+	mes "[Vicious]";
+	mes "Este ^3131FFestágio da arena de Nv 70^000000";
+	mes "é acessível para personagens de ^FF0000nível 70^000000 a ^FF0000nível 89^000000.";
+	next;
+	mes "[Vicious]";
+	mes "Essa limitação de nível existe para evitar que personagens de nível alto abusem dos estágios de arena de nível baixo. Espero que entenda.";
+	mes "Também cobramos uma taxa de entrada de 1.000 zenys.";
+	next;
+	mes "[Vicious]";
+	mes "Deixe-me apresentar as regras de jogo da arena.";
+	next;
+	mes "[Vicious]";
+	mes "^3131FFAguarde em uma sala de bate-papo até chegar sua vez.^000000";
+	mes "Quando for sua vez, você será automaticamente teletransportado para o mapa da arena.";
+	next;
+	mes "[Vicious]";
+	mes "Assim que entrar, um cronômetro para verificar seu tempo de jogo será ativado.";
+	mes "Por favor, siga as orientações de ^3131FFCadilac^000000.";
+	next;
+	mes "[Vicious]";
+	mes "Você tem um tempo de batalha de ^3131FF7 minutos^000000.";
+	next;
+	mes "[Vicious]";
+	mes "Após limpar todas as salas, incluindo a sala do chefe, você será teletransportado novamente para uma ^3131FFsala de espera final^000000.";
+	mes "Você só tem permissão para ficar na sala de espera por ^3131FF1 minuto^000000, por favor, apresse-se para receber os pontos da arena e sair.";
+	next;
+	mes "[Vicious]";
+	mes "Se você permanecer mais de 1 minuto dentro da sala de espera final, será forçado a sair e não receberá nenhum ponto da arena. Lembre-se disso.";
+	next;
+	mes "[Vicious]";
+	mes "Ok, cuide-se.";
+	close;
+}
+
+arena_room,147,49,3	script	Helper Epin	727,{
+	mes "[Epin]";
+	mes "Bom dia,";
+	mes "Sou uma ajudante do estágio da arena de Nv 80 e meu nome é Epin.";
+	mes "Gosto de ler e tenho 19 anos... huh...? Você não quer saber sobre mim...?";
+	next;
+	emotion ET_CRY;
+	mes "[Epin]";
+	mes "Ok...";
+	next;
+	mes "[Epin]";
+	mes "Este ^3131FFestágio de arena de Nv 80^000000";
+	mes "é acessível a personagens do ^FF0000nível 80^000000 ao ^FF0000nível"+(checkre(0)?"160":"99")+"^000000.";
+	next;
+	mes "[Epin]";
+	mes "Essa limitação de nível existe para evitar que personagens de nível alto abusem dos estágios de arena de nível baixo. Espero que entenda.";
+	mes "Também cobramos uma taxa de entrada de 1.000 zenys.";
+	next;
+	mes "[Epin]";
+	mes "Deixe-me apresentar as regras de jogo da arena.";
+	next;
+	mes "[Epin]";
+	mes "^3131FFAguarde em uma sala de bate-papo até chegar sua vez.^000000";
+	mes "Quando for sua vez, você será automaticamente teletransportado para o mapa da arena.";
+	next;
+	mes "[Epin]";
+	mes "Assim que entrar, um cronômetro para verificar seu tempo de jogo será ativado.";
+	mes "Por favor, siga as orientações de ^3131FFActus^000000.";
+	next;
+	mes "[Epin]";
+	mes "Você tem um tempo de batalha de ^3131FF8 minutos^000000.";
+	next;
+	mes "[Epin]";
+	mes "Após limpar todas as salas, incluindo a sala do chefe, você será teletransportado novamente para uma ^3131FFsala de espera final^000000.";
+	mes "Você só tem permissão para ficar na sala de espera por ^3131FF1 minuto^000000, por favor, apresse-se para receber os pontos da arena e sair.";
+	next;
+	mes "[Epin]";
+	mes "Se você permanecer mais de 1 minuto dentro da sala de espera final, será forçado a sair e não receberá nenhum ponto da arena. Lembre-se disso.";
+	next;
+	mes "[Epin]";
+	mes "Espero que se divirta.";
+	close;
+}
+
+arena_room,158,93,5	script	Helper Lunic	828,{
+	mes "[Lunic]";
+	mes "Bem-vindo ao estágio da arena de grupo.";
+	mes "Espero que escute com atenção minha introdução,";
+	mes "já que este estágio de arena de grupo é um pouco diferente dos estágios individuais.";
+	next;
+	mes "[Lunic]";
+	mes "^3131FFArena de Grupo do Palco^000000";
+	mes "está acessível para jogadores de ^FF0000nível 10^000000 até o ^FF0000nível"+(checkre(0)?"160":"99")+"^000000.";
+	next;
+	mes "[Lunic]";
+	mes "Além disso, a arena não começará até que todos os 5 membros do grupo entrem na sala. Cobramos uma taxa de entrada de 1.000 zenys.";
+	next;
+	mes "[Lunic]";
+	mes "Deixe-me apresentar as regras de jogo da arena.";
+	next;
+	mes "[Lunic]";
+	mes "^3131FFForme um grupo com seus amigos e aguarde em uma sala de bate-papo^000000.";
+	mes "Você deve formar um grupo antes. Se não o fizer, ainda poderá jogar, mas terá muitos inconvenientes.";
+	next;
+	mes "[Lunic]";
+	mes "Além disso, lembre-se de que os 5 jogadores teletransportados automaticamente para a sala da arena estarão na ordem de ^FF0000entrada na sala de bate-papo^000000, e não na ordem do ^FF0000grupo^000000. Lembre-se disso.";
+	next;
+	mes "[Lunic]";
+	mes "E por favor, forme um grupo com ^3131FF5 jogadores^000000 antes de entrar em uma sala de bate-papo.";
+	next;
+	mes "[Lunic]";
+	mes "Quando chegar sua vez, vocês serão teletransportados para um pequeno mapa onde um portal e um NPC de ajuda estão localizados.";
+	mes "Caso você entre com membros de um grupo diferente, use o portal para sair do mapa. Então, você retornará para a sala de espera.";
+	next;
+	mes "[Lunic]";
+	mes "Caso você entre com os membros do seu grupo, por favor, continue falando com o NPC de ajuda no pequeno mapa.";
+	mes "O NPC de ajuda só pode falar com ^FF00001 jogador^000000 por vez.";
+	next;
+	mes "[Lunic]";
+	mes "O NPC guiará você e os membros do seu grupo até a sala da arena propriamente dita.";
+	mes "No entanto, se alguém no grupo ^3131FFnão tiver dinheiro suficiente para pagar a taxa de entrada, será teletransportado para fora^000000.";
+	next;
+	mes "[Lunic]";
+	mes "Esteja ciente também de que você só pode permanecer dentro do mapa por ^FF00001 minuto^000000.";
+	next;
+	mes "[Lunic]";
+	mes "Assim que você entrar no mapa da arena, um cronômetro que calcula seu tempo de batalha será ativado.";
+	mes "Por favor, siga as orientações de ^3131FFSlipslowrun^000000.";
+	next;
+	mes "[Lunic]";
+	mes "Você terá ^3131FF10 minutos^000000 para concluir a fase, embora não seja tão fácil. É recomendável usar o tempo com sabedoria.";
+	next;
+	mes "[Lunic]";
+	mes "Após limpar todas as salas, incluindo a sala do chefe, você será teletransportado novamente para uma ^3131FFsala de espera final^000000.";
+	mes "Você só pode permanecer na sala de espera por ^3131FF1 minuto^000000, por favor, apresse-se para receber os pontos da arena e sair.";
+	next;
+	mes "[Lunic]";
+	mes "Se você ficar mais de 1 minuto dentro da sala de espera final, será forçado a sair e não receberá nenhum ponto da arena. Por favor, lembre-se disso.";
+	next;
+	mes "[Lunic]";
+	mes "Além disso, se um grupo estabelecer um novo recorde de tempo para limpar o mapa,";
+	mes "^3131FFo líder do grupo^000000 pode registrar ^3131FFo nome do grupo^000000.";
+	next;
+	mes "[Lunic]";
+	mes "Nesse caso, se um grupo tiver mais de um líder ou nenhum, é impossível registrar ^FF0000o recorde do melhor grupo^000000.";
+	mes "Portanto, é altamente recomendável formar um grupo antes de entrar no mapa da arena.";
+	next;
+	mes "[Lunic]";
+	mes "Obrigado por ouvir e";
+	mes "espero que você se divirta.";
+	close;
+}
+
+arena_room,158,82,1	script	Helper Lonik	828,{
+	emotion ET_BEST;
+	mes "[Lonik]";
+	mes "Tá-dá! Aqui estou eu!";
+	next;
+	mes "[Lonik]";
+	mes "Você está curioso para saber se há alguém lá dentro ou não, não está?";
+	next;
+	mes "[Lonik]";
+	mes "Minha resposta é...";
+	mes ".............";
+	if (getmapusers("force_1-2")) {
+		emotion ET_O;
+		mes "Sim!";
+		mes "Tem alguém lá dentro.";
+		next;
+		mes "[Lonik]";
+		mes "É melhor você esperar mais um pouco!";
+	} else {
+		emotion ET_X;
+		mes "Não!";
+		mes "Vá em frente, boa sorte!";
+	}
+	close;
+}
+
+sec_in02,72,180,3	script	Arena Manager#arena	802,{
+	set .@i, callfunc("F_GM_NPC",1357,0);
+	if (.@i == -1) {
+		mes "[Arena Manager]";
+		mes "O comando foi cancelado.";
+		close;
+	} else if (.@i == 0) {
+		mes "A senha está incorreta.";
+		close;
+	} else {
+		mes "[Arena Manager]";
+		mes "Selecione uma opção.";
+		next;
+		switch(select("Reiniciar arena:Reorganizar o Tempo do Ranking")) {
+		case 1:
+			switch(select("Nv 50:Nv 60:Nv 70:Nv 80:Modo de Grupo")) {
+			case 1:
+				set .@arena,50;
+				break;
+			case 2:
+				set .@arena,60;
+				break;
+			case 3:
+				set .@arena,70;
+				break;
+			case 4:
+				set .@arena,80;
+				break;
+			case 5:
+				mes "[Arena Manager]";
+				mes "== Cuidado ==";
+				mes "Você escolheu reiniciar a fase da arena de grupo.";
+				mes "Deseja prosseguir?";
+				next;
+				switch(select("Sim:Não")) {
+				case 1:
+					donpcevent "Ponox::OnStart";
+					mes "[Arena Manager]";
+					mes "A fase da arena foi reativada com sucesso.";
+					close;
+
+				case 2:
+					mes "[Arena Manager]";
+					mes "O comando foi cancelado.";
+					close;
+				}
+			}
+			mes "[Arena Manager]";
+			mes "== Cuidado ==";
+			mes "Você escolheu reiniciar a fase da arena de Nv"+.@arena+".";
+			mes "Deseja prosseguir?";
+			next;
+			switch(select("Sim:Não")) {
+			case 1:
+				donpcevent "Lv"+.@arena+" Waiting Room::OnStart";
+				mes "[Arena Manager]";
+				mes "A fase da arena foi reativada com sucesso.";
+				close;
+			case 2:
+				mes "[Arena Manager]";
+				mes "O comando foi cancelado.";
+				close;
+			}
+		case 2:
+			mes "[Arena Manager]";
+			mes "== Cuidado ==";
+			mes "^CE0000Você escolheu reorganizar o tempo do ranking. Certifique-se de que esta é uma boa decisão, a menos que algo sério tenha acontecido!^000000";
+			next;
+			mes "[Arena Manager]";
+			mes "Tem certeza de que deseja reorganizar o tempo do ranking?";
+			next;
+			switch(select("Não:Sim")) {
+			case 1:
+				mes "[Arena Manager]";
+				mes "Ufa~ :)";
+				close;
+			case 2:
+				switch(select("Nv 50:Nv 60:Nv 70:Nv 80:Modo de Grupo")) {
+				case 1:
+					set .@min$,"$top50min";
+					set .@sec$,"$top50sec";
+					set .@mode$,"Lv 50";
+					break;
+				case 2:
+					set .@min$,"$top60min";
+					set .@sec$,"$top60sec";
+					set .@mode$,"Lv 60";
+					break;
+				case 3:
+					set .@min$,"$top70min";
+					set .@sec$,"$top70sec";
+					set .@mode$,"Lv 70";
+					break;
+				case 4:
+					set .@min$,"$top80min";
+					set .@sec$,"$top80sec";
+					set .@mode$,"Lv 80";
+					break;
+				case 5:
+					set .@min$,"$top_ptmin";
+					set .@sec$,"$top_ptsec";
+					set .@mode$,"party";
+					break;
+				}
+				mes "[Arena Manager]";
+				// Doesn't work with Athena's implementation.
+				//mes "Please enter 0 to cancel.";
+				//mes "If not, please enter a value for minutes first and then seconds.";
+				mes "Por favor, insira primeiro um valor para os minutos e depois para os segundos.";
+				next;
+				input .@arenamin;
+				setd .@min$,.@arenamin;
+				input .@arenasec;
+				setd .@sec$,.@arenasec;
+				mes "[Arena Manager]";
+				mes "O tempo de jogo do ranker atual"+.@mode$+"foi reorganizado para ^FF0000"+getd(.@min$)+"^000000 minutos e ^FF0000"+getd(.@sec$)+"^000000 segundos.";
+				close;
+			}
+		}
+	}
+}
+
+sec_in02,79,171,3	script	Reward Manager#arena	802,{
+	set .@i, callfunc("F_GM_NPC",1357,0);
+	if (.@i == -1) {
+		mes "[Reward Manager]";
+		mes "O comando foi cancelado.";
+		close;
+	} else if (.@i == 0) {
+		mes "[Reward Manager]";
+		mes "A senha está incorreta.";
+		close;
+	} else {
+		mes "[Reward Manager]";
+		mes "Você escolheu ocultar o NPC teletransportador.";
+		next;
+		switch(select("Cancelar:Sim:Ativar")) {
+		case 1:
+			mes "[Reward Manager]";
+			mes "Você cancelou o comando.";
+			close;
+		case 2:
+			mes "[Reward Manager]";
+			mes "O NPC foi ocultado.";
+			disablenpc "Teleporter#arena";
+			close;
+		case 3:
+			mes "[Reward Manager]";
+			mes "O NPC foi ativado.";
+			enablenpc "Teleporter#arena";
+			close;
+		}
+	}
+}
+
+arena_room,105,93,5	script	Teleporter#arena	55,{
+	mes "[Teleporter]";
+	mes "Eu posso te levar para a arena de recompensas!";
+	mes "Você gostaria de ir para lá?";
+	next;
+	switch(select("Sim:Não.")) {
+	case 1:
+		mes "[Teleporter]";
+		mes "Deixe-me guiá-lo.";
+		close2;
+		warp "prt_are_in",60,14;
+		end;
+	case 2:
+		mes "[Teleporter]";
+		mes "Sem problemas, sinta-se à vontade para voltar a qualquer momento.";
+		close;
+	}
+}
+
+prt_are_in,98,14,3	script	Givu#arena	728,{
+	if (checkweight(526,5) == 0) {
+		mes "- Espere um momento! -";
+		mes "- Atualmente você está carregando -";
+		mes "- muitos itens com você. -";
+		mes "- Por favor, reduza seu peso -";
+		mes "- e tente novamente. -";
+		close;
+	}
+	mes "[Givu]";
+	mes "Olá. Bem-vindo ao mundo da Arena.";
+	mes "Meu nome é Givu, sou responsável pelo programa de troca de pontos da arena.";
+	next;
+	mes "[Givu]";
+	mes "Você pode trocar seus pontos da arena por vários itens.";
+	mes "Por favor, escolha um menu abaixo.";
+	next;
+	switch(select("Trocar por itens consumíveis:Trocar por pontos de EXP:Tirar uma Foto de Lembrança:Verificar Pontos Atuais da Arena")) {
+	case 1:
+		mes "[Givu]";
+		mes "Qual item consumível você deseja trocar?";
+		next;
+		switch(select("Mel:Geleia Real:Fruta de Mastela:Poção Branca Compacta:Analgésico:Semente de Yggdrasil:Fruto de Yggdrasil:Caixa Azul Antiga:Caixa Roxa Antiga:Álbum de Cartas Antigo")) {
+			case 1: callfunc "Func_Are_Rew",518,5,20;
+			case 2: callfunc "Func_Are_Rew",526,5,30;
+			case 3: callfunc "Func_Are_Rew",522,5,30;
+			case 4: callfunc "Func_Are_Rew",547,8,30;
+			case 5: callfunc "Func_Are_Rew",605,3,20;
+			case 6: callfunc "Func_Are_Rew",608,1,20;
+			case 7: callfunc "Func_Are_Rew",607,1,40;
+			case 8: callfunc "Func_Are_Rew",603,1,100;
+			case 9: callfunc "Func_Are_Rew",617,1,300;
+			case 10: callfunc "Func_Are_Rew",616,1,1000;
+		}
+	case 2:
+		mes "[Givu]";
+		mes "Você gostaria de trocar seus pontos da arena por pontos de experiência?";
+		mes "Requer 40 pontos da arena.";
+		next;
+		switch(select("Cancelar:Sim")) {
+		case 1:
+			mes "[Givu]";
+			mes "Você cancelou sua solicitação.";
+			close;
+		case 2:
+			if (arena_point < 40) {
+				mes "[Givu]";
+				mes "Você não tem pontos da arena suficientes.";
+				mes "Por favor, verifique a quantidade total de pontos da arena que você possui.";
+				close;
+			}
+			set arena_point, arena_point-40;
+			if (checkre(3)) {
+				if (BaseLevel < 70) getexp 300,0;
+				else if (BaseLevel < 80) getexp 900,0;
+				else if (BaseLevel < 90) getexp 1000,0;
+				else getexp 3000,0;
+			} else {
+				if (BaseLevel < 70) getexp 3000,0;
+				else if (BaseLevel < 80) getexp 9000,0;
+				else if (BaseLevel < 90) getexp 10000,0;
+				else getexp 30000,0;
+			}
+			mes "[Givu]";
+			mes "Você ganhou pontos de experiência. Obrigado.";
+			close;
+		}
+	case 3:
+		mes "[Givu]";
+		mes "Você escolheu o serviço de foto de lembrança.";
+		next;
+		switch(select("Sobre os Serviços de Foto de Lembrança:Tirar uma foto")) {
+		case 1:
+			mes "[Givu]";
+			mes "Você vê as escadas à minha direita?";
+			next;
+			mes "[Givu]";
+			mes "Nas escadas, você pode tirar uma captura de tela com um NPC ou um monstro.";
+			next;
+			mes "[Givu]";
+			mes "Quando você escolhe um NPC ou um monstro, ele mostrará alguns ícones de emoção ^FF0000por 1 minuto^000000.";
+			next;
+			mes "[Givu]";
+			mes "Não perca a chance de tirar uma foto com seu NPC favorito!";
+			close;
+		case 2:
+			if ($@arena_picture) {
+				mes "[Givu]";
+				mes "Um serviço de foto de lembrança está em andamento. Por favor, aguarde.";
+				close;
+			}
+			mes "[Givu]";
+			mes "Por favor, escolha um NPC abaixo.";
+			mes "O NPC aparecerá por 1 minuto e este serviço requer 10 pontos da arena.";
+			next;
+			switch(select("Baphomet:Lorde das Trevas:Doppelganger:Eddga:Drácula:Samurai:Cavaleiro Cavaleiro da Tempestade:Phreeoni:Garota:Valquíria")) {
+				case 1: set $@arena_picture_id,1039; break;
+				case 2: set $@arena_picture_id,1272; break;
+				case 3: set $@arena_picture_id,1046; break;
+				case 4: set $@arena_picture_id,1115; break;
+				case 5: set $@arena_picture_id,1389; break;
+				case 6: set $@arena_picture_id,1492; break;
+				case 7: set $@arena_picture_id,1251; break;
+				case 8: set $@arena_picture_id,1159; break;
+				case 9: set $@arena_picture_id,6969; break;
+				case 10: set $@arena_picture_id,7777; break;
+			}
+			if (arena_point < 10) {
+				mes "[Givu]";
+				mes "Você não tem pontos da arena suficientes.";
+				mes "Por favor, verifique a quantidade total de pontos da arena que você possui.";
+				close;
+			}
+			mes "[Givu]";
+			if ($@arena_picture_id == 6969)
+				mes "Você gostaria de tirar uma foto com garotas bonitas?";
+			else if ($@arena_picture_id == 7777)
+				mes "Você gostaria de tirar uma foto com uma Valquíria?";
+			else
+				mes "Você gostaria de tirar uma foto com um"+getmonsterinfo($@arena_picture_id, MOB_NAME)+"?";
+			next;
+			switch(select("Sim:Não")) {
+			case 1:
+				set arena_point, arena_point-10;
+				set $@arena_picture,1;
+				enablenpc "#arena_"+$@arena_picture_id+"";
+				movenpc "#arena_"+$@arena_picture_id+"",96,28;
+				if ($@arena_picture_id == 6969) {
+					enablenpc "#arena_ss_2";
+					enablenpc "#arena_ss_3";
+					enablenpc "#arena_ss_4";
+				}
+				donpcevent "npctime#arena::OnStart";
+				mes "[Givu]";
+				mes "Obrigado.";
+				close;
+			case 2:
+				mes "[Givu]";
+				mes "Você gostaria de pensar um pouco mais?";
+				close;
+			}
+		}
+	case 4:
+		mes "[Givu]";
+		mes "Deixe-me verificar"+strcharinfo(0)+"'s pontos atuais da arena.";
+		next;
+		mes "[Givu]";
+		mes ""+strcharinfo(0)+"tem um total de ^3131FF"+arena_point+"^000000 pontos.";
+		close;
+	}
+}
+
+prt_are_in,1,1,5	script	#arena_1039	1039,{
+	end;
+
+OnInit:
+	disablenpc "#arena_6969";
+	disablenpc "#arena_ss_2";
+	disablenpc "#arena_ss_3";
+	disablenpc "#arena_ss_4";
+	disablenpc "#arena_1272";
+	disablenpc "#arena_1046";
+	disablenpc "#arena_1115";
+	disablenpc "#arena_1389";
+	disablenpc "#arena_1492";
+	disablenpc "#arena_1251";
+	disablenpc "#arena_1159";
+	disablenpc "#arena_7777";
+	disablenpc "#arena_1039";
+	end;
+
+OnHeart:
+	emotion ET_THROB;
+	end;
+OnSci:
+	emotion ET_SCISSOR;
+	end;
+OnBest:
+	emotion ET_BEST;
+	end;
+OnOmg:
+	emotion ET_HUK;
+	end;
+OnKik:
+	emotion ET_KIK;
+	end;
+OnKis:
+	emotion ET_CHUP;
+	end;
+}
+prt_are_in,1,1,5	duplicate(#arena_1039)	#arena_6969	714
+prt_are_in,94,26,5	duplicate(#arena_1039)	#arena_ss_2	714
+prt_are_in,100,28,3	duplicate(#arena_1039)	#arena_ss_3	714
+prt_are_in,102,26,3	duplicate(#arena_1039)	#arena_ss_4	714
+prt_are_in,1,1,5	duplicate(#arena_1039)	#arena_1272	1272
+prt_are_in,1,1,5	duplicate(#arena_1039)	#arena_1046	1046
+prt_are_in,1,1,5	duplicate(#arena_1039)	#arena_1115	1115
+prt_are_in,1,1,5	duplicate(#arena_1039)	#arena_1389	1389
+prt_are_in,1,1,5	duplicate(#arena_1039)	#arena_1492	1492
+prt_are_in,1,1,5	duplicate(#arena_1039)	#arena_1251	1251
+prt_are_in,1,1,5	duplicate(#arena_1039)	#arena_1159	1159
+prt_are_in,1,1,5	duplicate(#arena_1039)	#arena_7777	811
+
+-	script	npctime#arena	-1,{
+OnStop:
+	stopnpctimer;
+	end;
+
+OnStart:
+	initnpctimer;
+	end;
+
+OnTimer2000:
+	mapannounce "prt_are_in","Givu : Você deve sincronizar o tempo com os ícones de emoção surgindo~",1,0xFFCE00;
+	end;
+
+OnTimer5000:
+	mapannounce "prt_are_in","Emoticon : /lv",1,0xFFCE00;
+	end;
+
+OnTimer7000:
+	mapannounce "prt_are_in","3",1,0xFFCE00;
+	end;
+
+OnTimer8000:
+	mapannounce "prt_are_in","2",1,0xFFCE00;
+	end;
+
+OnTimer9000:
+	mapannounce "prt_are_in","1",1,0xFFCE00;
+	end;
+
+OnTimer10000:
+	mapannounce "prt_are_in"," ",1,0xFFCE00;
+	donpcevent "#arena_"+$@arena_picture_id+"::OnHeart";
+	if ($@arena_picture_id == 6969) {
+		donpcevent "#arena_ss_2::OnHeart";
+		donpcevent "#arena_ss_3::OnHeart";
+		donpcevent "#arena_ss_4::OnHeart";
+	}
+	end;
+
+OnTimer15000:
+	mapannounce "prt_are_in","Emoticon : /pedrapapeltesoura",1,0xFFCE00;
+	end;
+
+OnTimer17000:
+	mapannounce "prt_are_in","3",1,0xFFCE00;
+	end;
+
+OnTimer18000:
+	mapannounce "prt_are_in","2",1,0xFFCE00;
+	end;
+
+OnTimer19000:
+	mapannounce "prt_are_in","1",1,0xFFCE00;
+	end;
+
+OnTimer20000:
+	mapannounce "prt_are_in"," ",1,0xFFCE00;
+	donpcevent "#arena_"+$@arena_picture_id+"::OnSci";
+	if ($@arena_picture_id == 6969) {
+		donpcevent "#arena_ss_2::OnSci";
+		donpcevent "#arena_ss_3::OnSci";
+		donpcevent "#arena_ss_4::OnSci";
+	}
+	end;
+
+OnTimer25000:
+	mapannounce "prt_are_in","Emoticon :  o1",1,0xFFCE00;
+	end;
+
+OnTimer27000:
+	mapannounce "prt_are_in","3",1,0xFFCE00;
+	end;
+
+OnTimer28000:
+	mapannounce "prt_are_in","2",1,0xFFCE00;
+	end;
+
+OnTimer29000:
+	mapannounce "prt_are_in","1",1,0xFFCE00;
+	end;
+
+OnTimer30000:
+	mapannounce "prt_are_in"," ",1,0xFFCE00;
+	donpcevent "#arena_"+$@arena_picture_id+"::OnBest";
+	if ($@arena_picture_id == 6969) {
+		donpcevent "#arena_ss_2::OnBest";
+		donpcevent "#arena_ss_3::OnBest";
+		donpcevent "#arena_ss_4::OnBest";
+	}
+	end;
+
+OnTimer35000:
+	mapannounce "prt_are_in","Emoticon : /huk",1,0xFFCE00;
+	end;
+
+OnTimer37000:
+	mapannounce "prt_are_in","3",1,0xFFCE00;
+	end;
+
+OnTimer38000:
+	mapannounce "prt_are_in","2",1,0xFFCE00;
+	end;
+
+OnTimer39000:
+	mapannounce "prt_are_in","1",1,0xFFCE00;
+	end;
+
+OnTimer40000:
+	mapannounce "prt_are_in"," ",1,0xFFCE00;
+	donpcevent "#arena_"+$@arena_picture_id+"::OnOmg";
+	if ($@arena_picture_id == 6969) {
+		donpcevent "#arena_ss_2::OnOmg";
+		donpcevent "#arena_ss_3::OnOmg";
+		donpcevent "#arena_ss_4::OnOmg";
+	}
+	end;
+
+OnTimer45000:
+	mapannounce "prt_are_in","Emoticon : /gg",1,0xFFCE00;
+	end;
+
+OnTimer47000:
+	mapannounce "prt_are_in","3",1,0xFFCE00;
+	end;
+
+OnTimer48000:
+	mapannounce "prt_are_in","2",1,0xFFCE00;
+	end;
+
+OnTimer49000:
+	mapannounce "prt_are_in","1",1,0xFFCE00;
+	end;
+
+OnTimer50000:
+	mapannounce "prt_are_in"," ",1,0xFFCE00;
+	donpcevent "#arena_"+$@arena_picture_id+"::OnKik";
+	if ($@arena_picture_id == 6969) {
+		donpcevent "#arena_ss_2::OnKik";
+		donpcevent "#arena_ss_3::OnKik";
+		donpcevent "#arena_ss_4::OnKik";
+	}
+	end;
+
+OnTimer55000:
+	mapannounce "prt_are_in","Emoticon : /kis",1,0xFFCE00;
+	end;
+
+OnTimer57000:
+	mapannounce "prt_are_in","3",1,0xFFCE00;
+	end;
+
+OnTimer58000:
+	mapannounce "prt_are_in","2",1,0xFFCE00;
+	end;
+
+OnTimer59000:
+	mapannounce "prt_are_in","1",1,0xFFCE00;
+	end;
+
+OnTimer60000:
+	mapannounce "prt_are_in"," ",1,0xFFCE00;
+	donpcevent "#arena_"+$@arena_picture_id+"::OnKis";
+	if ($@arena_picture_id == 6969) {
+		donpcevent "#arena_ss_2::OnKis";
+		donpcevent "#arena_ss_3::OnKis";
+		donpcevent "#arena_ss_4::OnKis";
+	}
+	end;
+
+OnTimer62000:
+	mapannounce "prt_are_in","O tempo acabou. Obrigado por usar meus serviços.",1,0xFFCE00;
+	movenpc "#arena_"+$@arena_picture_id+"",1,1;
+	donpcevent "#arena_1039::OnInit";
+	set $@arena_picture,0;
+	stopnpctimer;
+	end;
+}
+
+sec_in02,72,171,3	script	Picture Manager#arena	802,{
+	set .@i, callfunc("F_GM_NPC",1357,0);
+	if (.@i == -1) {
+		mes "[Picture Manager]";
+		mes "O comando foi cancelado.";
+		close;
+	} else if (.@i == 0) {
+		mes "[Picture Manager]";
+		mes "A senha está incorreta.";
+		close;
+	} else {
+		mes "[Picture Manager]";
+		mes "Você gostaria de redefinir a variável de Recompensa de Imagem para 0?";
+		next;
+		switch(select("Cancelar:Sim")) {
+		case 1:
+			mes "[Picture Manager]";
+			mes "Você cancelou sua solicitação.";
+			close;
+		case 2:
+			mes "[Picture Manager]";
+			mes "Recompensa de imagem redefinida.";
+			set $@arena_picture,0;
+			close;
+		}
+	}
+}
+
+sec_in02,76,176,5	script	Live Broadcast#arena	802,{
+	callfunc "F_GM_NPC";
+	mes "[Live Broadcast]";
+	mes "Atualmente existem"+getmapusers("force_1-1")+"pessoas no mapa de Nv 50.";
+	mes "Atualmente existem"+getmapusers("force_2-1")+"pessoas no mapa de Nv 60.";
+	mes "Atualmente existem"+getmapusers("force_3-1")+"pessoas no mapa de Nv 70.";
+	mes "Atualmente existem"+getmapusers("force_4-1")+"pessoas no mapa de Nv 80.";
+	mes "Atualmente existem"+getmapusers("force_1-2")+"pessoas no mapa de grupo.";
+	mes "Atualmente existem"+getmapusers("arena_room")+"pessoas na sala de espera.";
+	close;
+}
+
+function	script	Func_Are_Rew	{
+	.@item_id = getarg(0);
+	.@amount = getarg(1);
+	.@arena_point = getarg(2);
+
+	mes "[Givu]";
+	mes "Você gostaria de trocar seus pontos de arena por"+ getitemname(.@item_id) +"?";
+	mes "Você pode trocar ^3131FF"+ .@arena_point +"pontos de arena por"+ .@amount +" "+ getitemname(.@item_id) +"^000000.";
+	mes "Se desejar cancelar, digite 0. Caso contrário, por favor, insira quantas ^3131FFvezes^000000 de pontos de arena você deseja gastar.";
+	next;
+	input .@reward;
+	if (.@reward <= 0) {
+		mes "[Givu]";
+		mes "Você cancelou sua solicitação.";
+		close;
+	} else if (.@reward > 1500) {
+		mes "[Givu]";
+		mes "Você excedeu a capacidade máxima.";
+		close;
+	}
+	if (arena_point < (.@reward * .@arena_point)) {
+		mes "[Givu]";
+		mes "Você não tem pontos de arena suficientes.";
+		mes "Por favor, verifique a quantidade total de pontos de arena que você possui.";
+		close;
+	}
+	arena_point = arena_point - (.@reward * .@arena_point);
+	getitem .@item_id,.@reward * .@amount;
+	mes "[Givu]";
+	mes "Obrigado, volte sempre.";
+	close;
+}

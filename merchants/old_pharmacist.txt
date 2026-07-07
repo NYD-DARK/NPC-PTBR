@@ -1,0 +1,253 @@
+//===== rAthena Script =======================================
+//= Old Pharmacist
+//===== By: ==================================================
+//= DZeroX
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Trade in items for potions.
+//= Breakdown of arguments used:
+//= arg(0): Herb required.
+//= arg(1): Zeny cost.
+//= arg(2): Potion given.
+//===== Additional Comments: =================================
+//= 1.0 Fully working. [DZeroX]
+//= 1.0a Minor fixes [Lupus]
+//= 1.1 Added changed the dialogs and name to fit the
+//=     the official information. [DZeroX]
+//= 1.1a Removed .GATs [Lupus]
+//= 1.1b Fixed a bug in Orange Potion creating. Copy&Pasting = bad. [L0ne_W0lf]
+//= 1.2 Added checkweight, and input min/max values. [L0ne_W0lf]
+//= 1.3 Fixed minor condition check bug. (bugreport:597) [L0ne_W0lf]
+//= 1.4 Updated to match AEGIS script. [Kisuka]
+//============================================================
+
+alberta_in,16,28,4	script	Pharmacist	61,{
+	if (checkweight(1201,1) == 0) {
+		mes "- Espere um momento! -";
+		mes "- Atualmente você está carregando -";
+		mes "- itens demais com você. -";
+		mes "- Por favor, volte mais tarde -";
+		mes "- depois de colocar alguns itens no armazém da kafra. -";
+		close;
+	}
+	mes "[Old Pharmacist]";
+	mes "Ummm...";
+	mes "O que o traz aqui...?";
+	next;
+	switch(select("Fazer Poção:Conversar.:Informações sobre Mistura:Cancelar")) {
+	case 1:
+		if (MaxWeight - Weight < 5000) {
+			mes "[Old Pharmacist]";
+			mes "Por que você está carregando tudo isso!";
+			mes "Não seja ganancioso, carregue apenas o que você precisa!";
+			next;
+			mes "[Old Pharmacist]";
+			mes "Você está muito pesado para receber poções de mim...";
+			mes "Vá guardar alguns itens no seu armazém primeiro!";
+			close;
+		} else {
+			mes "[Old Pharmacist]";
+			mes "Você está com tudo pronto, certo? Qual delas você gostaria?";
+			next;
+			switch(select("Poção Vermelha.:Poção Laranja.:Poção Amarela.:Poção Branca.:Poção Azul.:Poção Verde.:Na verdade, não quero nada.")) {
+			case 1:
+				callsub L_Making,507,3,501;
+			case 2:
+				mes "[Old Pharmacist]";
+				if (countitem(507) < countitem(713)) {
+					set .@max,countitem(507);
+				}
+				else if (countitem(508) < countitem(713)) {
+					set .@max,countitem(508);
+				}
+				else {
+					set .@max,countitem(713);
+				}
+				if ((countitem(507) < 1) || (countitem(508) < 1) || (countitem(713) == 0)) {
+					mes "Seu moleque! O que você esperava?! Vir aqui sem nada. Tsc!";
+					mes "Caia fora!";
+					close;
+				}
+				if (Zeny < 3) {
+					mes "Seu moleque! O que você esperava?! Vir aqui sem nada. Tsc!";
+					mes "Caia fora!";
+					close;
+				}
+				mes "Quantas?";
+				next;
+				switch(select("Fazer tantas quanto eu puder.:Quero escolher uma quantidade.:Na verdade, não quero nada.")) {
+				case 1:
+					if ((countitem(507) < .@max) || (countitem(508) < .@max) || (countitem(713) < .@max) || (Zeny < .@max*3)) {
+						mes "[Old Pharmacist]";
+						mes "Seu moleque! Você nem sequer tem todos os materiais e quer que eu faça poções para você?!";
+						close;
+					}
+					set Zeny,Zeny-(.@max*5);
+					delitem 507,.@max; //Red_Herb
+					delitem 508,.@max; //Yellow_Herb
+					delitem 713,.@max; //Empty_Bottle
+					getitem 502,.@max; //Orange_Potion
+					break;
+				case 2:
+					mes "[Old Pharmacist]";
+					mes "Então escolha um número abaixo de 100. Se não quiser nenhuma, apenas digite '0'. Com os materiais que você tem, você pode fazer cerca de"+.@max+"poções.";
+					next;
+					input .@amount,0,101;
+					if (.@amount == 0) {
+						mes "[Old Pharmacist]";
+						mes "Decida-se logo, quer?!";
+						close;
+					}
+					if (.@amount > 100) {
+						mes "[Old Pharmacist]";
+						mes "Você é surdo? Eu disse menos de 100!";
+						close;
+					}
+					if ((countitem(507) < .@amount) || (countitem(508) < .@amount) || (countitem(713) < .@amount) || (Zeny < .@amount*3)) {
+						mes "[Old Pharmacist]";
+						mes "Seu moleque! Você nem sequer tem todos os materiais e quer que eu faça poções para você?!";
+						close;
+					}
+					next;
+					set Zeny,Zeny-(.@amount*5);
+					delitem 507,.@amount; //Red_Herb
+					delitem 508,.@amount; //Yellow_Herb
+					delitem 713,.@amount; //Empty_Bottle
+					getitem 502,.@amount; //Orange_Potion
+					break;
+				case 3:
+					mes "[Old Pharmacist]";
+					mes "O quê?!";
+					mes "Grrr...";
+					mes "Ble!";
+					mes "Caia fora!";
+					close;
+				}
+				mes "[Old Pharmacist]";
+				mes "Aqui está. Está tudo pronto, pode levar. Mas lembre-se! Abusar de remédios não é bom.";
+				close;
+			case 3:
+				callsub L_Making,508,10,503;
+			case 4:
+				callsub L_Making,509,20,504;
+			case 5:
+				callsub L_Making,510,30,505;
+			case 6:
+				callsub L_Making,511,3,506;
+			case 7:
+				mes "[Old Pharmacist]";
+				mes "O quê?!";
+				mes "Grrr...";
+				mes "Ble!";
+				mes "Caia fora!";
+				close;
+			}
+		}
+	case 2:
+		mes "[Old Pharmacist]";
+		mes "Com medicamentos, você pode aumentar a capacidade de regeneração de uma pessoa. Mas, eles só são bons até certo ponto. *Suspiro* Começo a pensar nos dias em que eu era jovem. Devo estar ficando velho.";
+		next;
+		mes "[Old Pharmacist]";
+		mes "De qualquer forma, uma poção é meramente uma poção. Nada mais, nada menos.";
+		close;
+	case 3:
+		mes "[Old Pharmacist]";
+		mes "Hrrrmm...";
+		mes "Vocês, jovens, podem ser bem irritantes. Mas, já que perguntou, eu explicarei.";
+		next;
+		mes "[Old Pharmacist]";
+		mes "Ervas funcionam bem sozinhas, mas se você usar minhas técnicas e habilidades especiais para fazer poções com elas, o efeito é muito, muito maior.";
+		next;
+		mes "[Old Pharmacist]";
+		mes "Se você pedir com entusiasmo e educação, eu farei para você. Mas, não de graça... Não se preocupe, no entanto, eu cobro apenas uma pequena taxa, então não é tão caro.";
+		next;
+		mes "[Old Pharmacist]";
+		mes "Poção Vermelha - ^0098E52 Ervas Vermelhas, 1 Garrafa Vazia, taxa de 2 zenys.^000000";
+		mes "Poção Laranja - ^0098E51 Erva Vermelha, 1 Erva Amarela, 1 Garrafa Vazia, taxa de 5 zenys.^000000";
+		mes "Poção Amarela - ^0098E52 Ervas Amarelas, 1 Garrafa Vazia, 10 zenys.^000000";
+		next;
+		mes "[Old Pharmacist]";
+		mes "Poção Branca - ^0098E52 Ervas Brancas, 1 Garrafa Vazia, taxa de 20 zenys.^000000";
+		mes "Poção Azul - ^0098E52 Ervas Azuis, 1 Garrafa Vazia, taxa de 30 zenys.^000000";
+		mes "Poção Verde - ^0098E52 Ervas Verdes, 1 Garrafa Vazia, taxa de 3 zenys.^000000";
+		close;
+	case 4:
+		mes "[Old Pharmacist]";
+		mes "Que pessoa entediante. Se você tem algo a dizer, por que não diz logo?!";
+		close;
+	}
+	
+L_Making:
+	.@item_req = getarg(0);
+	.@req_amount = getarg(1);
+
+	mes "[Old Pharmacist]";
+	if ((countitem(.@item_req)/2) < countitem(713)) {
+		.@max = countitem(.@item_req) /2;
+	} else {
+		.@max = countitem(713);
+	}
+	if (countitem(.@item_req) < 2 || countitem(713) == 0) {
+		mes "Seu moleque! O que você esperava?! Vir aqui sem nada. Tsc!";
+		mes "Caia fora!";
+		close;
+	}
+	if (Zeny < 3) {
+		mes "Seu moleque! O que você esperava?! Vir aqui sem nada. Tsc!";
+		mes "Caia fora!";
+		close;
+	}
+	mes "Quantas?";
+	next;
+	switch(select("Fazer tantas quanto eu puder.:Quero escolher uma quantidade.:Na verdade, não quero nada.")) {
+	case 1:
+		if ((countitem(.@item_req) < .@max*2) || countitem(713) < .@max || (Zeny < .@max*.@req_amount)) {
+			mes "[Old Pharmacist]";
+			mes "Seu moleque! Você nem sequer tem todos os materiais e quer que eu faça poções para você?!";
+			close;
+		}
+		Zeny = Zeny - (.@max*.@req_amount);
+		delitem .@item_req,.@max*2;
+		delitem 713,.@max; //Empty_Bottle
+		getitem getarg(2),.@max; 
+		break;
+	case 2:
+		mes "[Old Pharmacist]";
+		mes "Então escolha um número abaixo de 100. Se não quiser nenhuma, apenas digite '0'. Com os materiais que você tem, você pode fazer cerca de"+.@max+"poções.";
+		next;
+		input .@amount;
+		if (.@amount == 0) {
+			mes "[Old Pharmacist]";
+			mes "Decida-se logo, quer?!";
+			close;
+		}
+		if (.@amount > 100) {
+			mes "[Old Pharmacist]";
+			mes "Você é surdo? Eu disse menos de 100!";
+			close;
+		}
+		if ((countitem(.@item_req) < .@amount*2) || countitem(713) < .@amount || (Zeny < .@amount*.@req_amount)) {
+			mes "[Old Pharmacist]";
+			mes "Seu moleque! Você nem sequer tem todos os materiais e quer que eu faça poções para você?!";
+			close;
+		}
+		Zeny = Zeny - (.@max*.@req_amount);
+		delitem .@item_req,.@amount*2;
+		delitem 713,.@amount; //Empty_Bottle
+		getitem getarg(2),.@amount; 
+		break;
+	case 3:
+		mes "[Old Pharmacist]";
+		mes "O quê?!";
+		mes "Grrr...";
+		mes "Ble!";
+		mes "Caia fora!";
+		close;
+	}
+	mes "[Old Pharmacist]";
+	mes "Aqui está. Está tudo pronto, pode levar. Mas lembre-se! Abusar de remédios não é bom.";
+	close;
+}

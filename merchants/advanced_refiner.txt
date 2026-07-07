@@ -1,0 +1,213 @@
+//===== rAthena Script =======================================
+//= Advanced Refiner
+//===== Description: =========================================
+//= [Official Conversion]
+//= Refiner that uses Enriched ores to increase upgrade success.
+//= - Dialog is only partly official to iRO.
+//= - Uses the iRO position for this NPC.
+//===== Changelog: ===========================================
+//= 1.0 First Version. [L0ne_W0lf]
+//= 1.1 Fixed a weird carriage return. o_o [L0ne_W0lf]
+//= 1.2 Optimizing refine method [Zephyrus]
+//= 1.3 Typo fixes [Yommy]
+//= 1.4 Removed unnecessary dialogs [Zephyrus]
+//= 1.4a Added 'disable_items' command. [Euphy]
+//= 1.4b Fixed coordinates. [Euphy]
+//= 1.5 Some official script updates. [Euphy]
+//= 1.6 Added VIP features. [Euphy]
+//= 1.7 Removed re-roll behavior. [Secret]
+//============================================================
+
+payon,157,146,6	script	Suhnbi#cash	85,{
+	disable_items;
+	mes "[Suhnbi]";
+	mes "Eu sou o Armeiro";
+	mes "Eu posso refinar todos os tipos de armas,";
+	mes "armaduras e equipamentos, então me diga";
+	mes "o que você deseja refinar.";
+	next;
+
+	setarray .@indices[1], EQI_HEAD_TOP, EQI_ARMOR, EQI_HAND_L, EQI_HAND_R, EQI_GARMENT, EQI_SHOES, EQI_ACC_L, EQI_ACC_R, EQI_HEAD_MID, EQI_HEAD_LOW;
+	for(set .@i,1; .@i<=10; set .@i,.@i+1) {
+		if (getequipisequiped(.@indices[.@i])) {
+			set .@menu$, .@menu$ + F_getpositionname(.@indices[.@i]) + "-[" + getequipname(.@indices[.@i]) + "]";
+			set .@equipped,1;
+		}
+		set .@menu$, .@menu$ + ":";
+	}
+	if (.@equipped == 0) {
+		mes "[Suhnbi]";
+		mes "Acho que não posso refinar nenhum dos seus itens...";
+		close;
+	}
+	set .@part, .@indices[ select(.@menu$) ];
+
+	if (!getequipisequiped(.@part)) //custom check
+		close;
+	if (!getequipisenableref(.@part)) {
+		mes "[Suhnbi]";
+		mes "Procure outro Ferreiro. Você não pode refinar isso.";
+		close;
+	}
+	if (getequiprefinerycnt(.@part) >= 10) {
+		mes "[Suhnbi]";
+		mes "Hmm... alguém já aperfeiçoou isso. Não acho que posso trabalhar mais nisso.";
+		close;
+	}
+
+	.@refineitemid = getequipid(.@part); // save id of the item
+	.@refinerycnt = getequiprefinerycnt(.@part); //save refinery count
+	.@price = getequiprefinecost(.@part, REFINE_COST_ENRICHED, REFINE_ZENY_COST);
+	.@material = getequiprefinecost(.@part, REFINE_COST_ENRICHED, REFINE_MATERIAL_ID);
+	.@itemtype = getiteminfo( .@refineitemid, ITEMINFO_TYPE );
+
+	// Make sure you have the necessary items and Zeny to refine your items
+	// Determines chance of failure and verifies that you want to continue.
+	callsub S_RefineValidate,.@itemtype,.@material,.@price,.@part,.@refineitemid,.@refinerycnt;
+
+	mes "[Suhnbi]";
+	mes "Clang! Clang! Clang!";
+	if (getequippercentrefinery(.@part, true) > rand(100)) {
+		successrefitem .@part;
+		next;
+		emotion ET_BEST;
+		mes "[Suhnbi]";
+		mes "Pronto! Está feito.";
+		mes "Faz tempo que não faço algo tão bom quanto esta"+((.@itemtype == IT_WEAPON)?"arma":"armadura")+". Você deve estar feliz, pois ela ficou mais forte!";
+		close;
+	}
+	failedrefitem .@part;
+	next;
+	emotion (!rand(5))?ET_MONEY:ET_HUK;
+	mes "[Suhnbi]";
+	mes "Uuuuuuuuuummmmmph!!!";
+	next;
+	mes "[Suhnbi]";
+	mes "...";
+	mes ".....";
+	mes ".......Huhuhuhuhu~";
+	mes "........Foi sua escolha e minha habilidade, sem arrependimentos.";
+	close;
+
+S_RefineValidate:
+	.@itemtype = getarg(0);
+	.@item_req = getarg(1);
+	.@price = getarg(2);
+	.@part = getarg(3);
+	setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+
+	if( .@itemtype == IT_ARMOR ){
+		.@equip_lv = getequiparmorlv( .@part );
+
+		// If the VIP system is enabled, the prices for non-VIP players are considerably higher.
+		if (VIP_SCRIPT && !vip_status(VIP_STATUS_ACTIVE)) {
+			switch(.@equip_lv) {
+				case 1:
+					set .@price, .@price * 10;
+					break;
+				default:
+					// TODO:
+					close;
+			}
+		}
+	}else if( .@itemtype == IT_WEAPON ){
+		.@equip_lv = getequipweaponlv( .@part );
+
+		// If the VIP system is enabled, the prices for non-VIP players are considerably higher.
+		if (VIP_SCRIPT && !vip_status(VIP_STATUS_ACTIVE)) {
+			switch( .@equip_lv ){
+				case 1:
+					set .@price, .@price * 40;
+					break;
+				case 2:
+					set .@price, .@price * 50;
+					break;
+				case 3:
+					set .@price, .@price * 2;
+					break;
+				case 4:
+					set .@price, .@price * 2;
+					break;
+				default:
+					// TODO:
+					close;
+			}
+		}
+	}else{
+		// TODO:
+		close;
+	}
+
+	mes "[Suhnbi]";
+	if (.@itemtype == IT_WEAPON)
+		mes "Você quer refinar uma"+ .@equip_lv +"arma de nível?";
+	mes "Para refinar isso, você precisará de um ^ff9999"+ getitemname(.@item_req) +"^000000 e"+ .@price +"zeny.";
+	mes "Gostaria de continuar?";
+	next;
+	if(select("Sim:Não") == 1) {
+		if (getequippercentrefinery(.@part) < 100) {
+			if (.@itemtype == IT_WEAPON) {
+				mes "[Suhnbi]";
+				mes "Uau!!";
+				mes "Esta arma provavelmente";
+				mes "parece ter sido refinada...";
+				mes "muitas vezes...";
+				mes "Ela pode quebrar se";
+				mes "você refiná-la novamente.";
+				next;
+				mes "E se ela quebrar,";
+				mes "você não poderá usá-la nunca mais!";
+				mes "Todas as cartas nela e as propriedades ^ff0000serão perdidas^000000!";
+				mes "^ff0000Além disso, o equipamento será destruído!^000000";
+				mes "Tem certeza de que ainda quer continuar?";
+				next;
+				if(select("Sim:Não") == 2) {
+					mes "[Suhnbi]";
+					mes "Bom.";
+					mes "Porque se a arma quebrar por um refino imprudente, eu também fico de mau humor.";
+					close;
+				}
+			} else {
+				mes "[Suhnbi]";
+				mes "Hehe. Hehe. Ora, você tem coragem de tentar refinar isso.";
+				mes "Você sabe que é bem arriscado, não sabe?";
+				next;
+				mes "Se o seu equipamento de defesa quebrar, você nunca mais poderá usá-lo.";
+				mes "Até mesmo suas cartas e modificações ^ff0000desaparecerão completamente^000000.";
+				//mes "Everything will disappear. As in... GONE!";
+				mes "Você realmente deseja continuar?";
+				next;
+				if(select("Sim:Não") == 2) {
+					mes "[Suhnbi]";
+					mes "Que bobagem. Você desperdiça meu tempo precioso.";
+					mes "Cai fora, moleque.";
+					close;
+				}
+			}
+		}
+		if (countitem(.@item_req) > 0 && Zeny > .@price) {
+			delitem .@item_req,1;
+			set Zeny, Zeny - .@price;
+
+			// anti-hack
+			if (callfunc("F_IsEquipIDHack", .@part, getarg(4)) ||
+				callfunc("F_IsEquipRefineHack", .@part, getarg(5)) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3])) {
+				mes "[Suhnbi]";
+				emotion ET_FRET;
+				mes "Espere um segundo...";
+				mes "Você acha que eu sou estúpido?!";
+				mes "Você trocou o item enquanto eu não estava olhando! Caia fora daqui!";
+				close;
+			}
+
+			return;
+		}
+		mes "[Suhnbi]";
+		mes "É só isso que você tem?";
+		mes "Sinto muito, mas não posso fazer nada sem todos os materiais. Além disso, eu mereço um pagamento pelo meu trabalho, não é?";
+		close;
+	}
+	mes "[Suhnbi]";
+	mes "Não posso fazer nada se você não está feliz com isso...";
+	close;
+}
