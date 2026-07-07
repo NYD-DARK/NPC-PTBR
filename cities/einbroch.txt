@@ -1,0 +1,903 @@
+//===== rAthena Script =======================================
+//= Einbroch Town
+//===== By: ==================================================
+//= Everybody mentioned in the comments
+//===== Current Version: =====================================
+//= 1.7
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Einbroch Town Script
+//===== Additional Comments: =================================
+//= 0.2 Added some NPCs [MasterOfMuppets]
+//= 0.3 Added a few npcs by reddozen [MasterOfMuppets]
+//= 0.4 Added a crappy quest, have fun guys... [MasterOfMuppets]
+//= 0.4a Added exp bonus for the factory quest, borrowed from a Korean fansite.
+//= 0.4b Added missing close [Komurka]
+//= 0.5 Added Temporal Locations of Gunslinger Job Change map.
+//=     Info provided by RockmanEXE [erKURITA]
+//= 0.6 Implemented a crap quest [MasterOfMuppets]
+//= 0.7 Implemented an inn NPC [MasterOfMuppets]
+//= 0.8 Implemented the Shinokas quest, thanks to [MasterOfMuppets]
+//=      Dj-Yhn for scripting it.
+//= 0.9 Removed Duplicates [Silent]
+//= 1.0 Implemented the Lover's quest. [MasterOfMuppets]
+//= 1.1 Split quests into quests/cities_einbroch.txt [Evera]
+//= 1.2 Split more quests into above file [Evera]
+//= 1.3 Added (finally) the Garrison quest npc [erKURITA]
+//= 1.4 Implemented the polution script. [MasterOfMuppets]
+//= 1.5 Updated Hotel Employee to work with Airship Ticket Quest [Samuray22]
+//= 1.6 Optimized several NPCs [DZeroX]
+//= 1.7 Replaced outdated variable with getarg. [L0ne_W0lf]
+//= 1.8 Fixed Occurances of PcName. [L0ne_W0lf]
+//============================================================
+
+einbroch,218,198,5	script	Mark#ein	855,{
+	.@npc_name$ = strnpcinfo(1);
+	mes "["+ .@npc_name$ +"]";
+	mes "Bom dia~";
+	mes "Eu sou"+ .@npc_name$ +", seu";
+	mes "guia para explorar";
+	mes "a Torre de Einbroch.";
+	next;
+	mes "["+ .@npc_name$ +"]";
+	mes "A Torre de Einbroch oferece";
+	mes "a melhor vista da nossa cidade";
+	mes "e é um ótimo lugar para";
+	mes "encontrar amigos ou marcar";
+	mes "um encontro. A entrada da";
+	mes "Torre de Einbroch custa 10 zenys.";
+	next;
+	mes "["+ .@npc_name$ +"]";
+	mes "Neste momento, estamos oferecendo";
+	mes "uma promoção especial chamada";
+	mes "Conjunto Combo de Maçã por apenas";
+	mes "20 zenys. Este conjunto inclui";
+	mes "a entrada da Torre de Einbroch";
+	mes "e uma Maçã para lanchar.";
+	next;
+	switch(select("Apenas entrada da Torre:Conjunto Combo de Maçã:Cancelar")) {
+	case 1:
+		if (Zeny < 10) {
+			mes "["+ .@npc_name$ +"]";
+			mes "Sinto muito, mas você";
+			mes "não tem zenys";
+			mes "suficientes. A entrada da";
+			mes "Torre de Einbroch";
+			mes "custa 10 zenys.";
+			close;
+		}
+		else {
+			mes "["+ .@npc_name$ +"]";
+			mes "Obrigado por";
+			mes "utilizar nossos serviços.";
+			mes "Deixe-me guiá-lo até";
+			mes "a torre imediatamente.";
+			set Zeny, Zeny-10;
+			close2;
+			warp "einbroch",181,196;
+			end;
+		}
+	case 2:
+		if (Zeny < 20) {
+			mes "["+ .@npc_name$ +"]";
+			mes "Sinto muito, mas você não";
+			mes "tem zenys suficientes. O";
+			mes "Conjunto Combo de Maçã custa 20 zenys.";
+			close;
+		}
+		else {
+			mes "["+ .@npc_name$ +"]";
+			mes "Antes de guiá-lo até";
+			mes "a torre, deixe-me verificar";
+			mes "seu status para garantir";
+			mes "sua segurança antes de lhe";
+			mes "entregar o Conjunto Combo de Maçã.";
+			next;
+			if (checkweight(512,1)) {
+				mes "["+ .@npc_name$ +"]";
+				mes "Obrigado por";
+				mes "utilizar nossos serviços.";
+				mes "Deixe-me guiá-lo até";
+				mes "a torre imediatamente.";
+				set Zeny, Zeny-20;
+				getitem 512,1; //Apple
+				close2;
+				warp "einbroch",174,204;
+				end;
+			}
+			else {
+				mes "["+ .@npc_name$ +"]";
+				mes "Sinto muito, mas você está carregando";
+				mes "itens demais com você. Por favor, guarde alguns de seus pertences no Armazém da Kafra antes de comprar";
+				mes "o Conjunto Combo de Maçã.";
+				close;
+			}
+		}
+	case 3:
+		mes "["+ .@npc_name$ +"]";
+		mes "Entendo.";
+		mes "Sinta-se à vontade";
+		mes "para voltar a";
+		mes "qualquer momento. Obrigado.";
+		close;
+	}
+}
+
+einbroch,175,196,5	script	Morei#ein	854,{
+	mes "[Morei]";
+	mes "Saudações,";
+	mes "eu sou Morei,";
+	mes "Guia Assistente";
+	mes "da Torre de Einbroch.";
+	next;
+	mes "[Morei]";
+	mes "Se você deseja retornar";
+	mes "ao andar térreo,";
+	mes "por favor, me avise.";
+	mes "Você gostaria de voltar";
+	mes "ao nível do solo?";
+	next;
+	switch(select("Sim.:Não.")) {
+	case 1:
+		mes "[Morei]";
+		mes "Entendo.";
+		mes "Deixe-me levá-lo";
+		mes "até o andar térreo.";
+		mes "Obrigado por usar";
+		mes "nossos serviços.";
+		close2;
+		switch(rand(1,3)) {
+		case 1:
+			warp "einbroch",170,229;
+			end;
+		case 2:
+			warp "einbroch",216,188;
+			end;
+		case 3:
+			warp "einbroch",178,167;
+			end;
+		}
+	case 2:
+		mes "[Morei]";
+		mes "Entendo.";
+		mes "Espero que você";
+		mes "aproveite seu tempo";
+		mes "na Torre de Einbroch.";
+		close;
+	}
+}
+
+einbroch,173,229,5	duplicate(Mark#ein)	Oberu#ein	855
+einbroch,176,172,5	duplicate(Mark#ein)	Khemko#ein	855
+
+einbroch,232,272,3	script	Train Station Staff#ein1::EinbrochTrain	852,{
+	mes "[Staff]";
+	mes "Bem-vindo à";
+	mes "Estação de Trem.";
+	mes "Trens para Einbech";
+	mes "estão sempre operando,";
+	mes "então, se você perder um,";
+	mes "não tem problema.";
+	next;
+	mes "[Staff]";
+	mes "A tarifa para embarcar no";
+	mes "trem que faz a linha Einbroch";
+	mes "para Einbech é de 200 zenys.";
+	mes "Gostaria de comprar uma passagem?";
+	next;
+	switch(select("Sim.:Não.:Sobre o Meio Ambiente...")) {
+	case 1:
+		if (Zeny > 199) {
+			mes "[Staff]";
+			mes "Muito";
+			mes "obrigado.";
+			mes "Tenha uma boa viagem.";
+			mes "^333333*Ahem*^000000 Todos a bordo!";
+			close2;
+			set Zeny, Zeny-200;
+			warp "einbech",43,215;
+			end;
+		}
+		else {
+			mes "[Staff]";
+			mes "Sinto muito, mas isso";
+			mes "não é o suficiente em zenys";
+			mes "para pagar a tarifa do trem.";
+			close;
+		}
+	case 2:
+		mes "[Staff]";
+		mes "Muito bem, então.";
+		mes "Por favor, aproveite sua";
+		mes "estadia em Einbroch.";
+		close;
+	case 3:
+		mes "[Staff]";
+		mes "Einbroch é famosa pela";
+		mes "sua poluição do ar, sem dúvida";
+		mes "causada pelas instalações";
+		mes "industriais localizadas aqui.";
+		mes "É realmente horrível...";
+		next;
+		mes "[Staff]";
+		mes "Às vezes, a poluição do ar";
+		mes "fica tão ruim que se torna";
+		mes "difícil respirar. Se você ouvir";
+		mes "o Alerta de Smog de Einbroch, você";
+		mes "deve procurar abrigo imediatamente!";
+		close;
+	}
+}
+
+einbroch,252,301,3	duplicate(EinbrochTrain)	Train Station Staff#ein2	852
+
+einbroch,259,326,3	script	Leslie#ein_1	846,{
+	mes "[Leslie]";
+	mes "^666666*Tosse tosse!*^000000";
+	mes "Céus!";
+	next;
+	mes "[Leslie]";
+	mes "Uma velha como eu";
+	mes "não consegue respirar este ar! Como";
+	mes "as pessoas conseguem viver com";
+	mes "toda essa poluição? Claro, o ar em Einbech";
+	mes "não é puro, mas o ar aqui em Einbroch é muito pior! ^333333*Tosse~!*^000000";
+	next;
+	mes "[Leslie]";
+	mes "Eu odeio vir aqui";
+	mes "às vezes! O ar está";
+	mes "totalmente poluído e esta";
+	mes "cidade está cheia de gente";
+	mes "metida! Mas eles vendem coisas";
+	mes "aqui que não consigo comprar em casa...";
+	close;
+}
+
+einbroch,236,191,3	script	Tan#ein	855,{
+	mes "[Tan]";
+	mes "Todas as fábricas";
+	mes "aqui em Einbroch estão";
+	mes "causando um grave problema";
+	mes "de poluição do ar.";
+	next;
+	mes "[Tan]";
+	mes "Eu sou um engenheiro de Dirigível e";
+	mes "todo dia, o dia inteiro, eu lido";
+	mes "com manchas de óleo e todo tipo";
+	mes "de poluentes. Estou surpreso";
+	mes "por ainda não ter ficado doente...";
+	next;
+	mes "[Tan]";
+	mes "Ainda assim, tento ser cuidadoso";
+	mes "sempre que posso. Sempre que vou";
+	mes "para a névoa vermelha da cidade,";
+	mes "eu sempre uso minha Máscara contra Gripe.";
+	mes "Se você for ficar aqui por um tempo,";
+	mes "deveria carregar uma com você.";
+	close;
+}
+
+einbroch,228,121,5	script	Little Toby#ein-1	855,{
+	mes "[Little Toby]";
+	mes "Com licença...";
+	mes "Mas estou perdido!";
+	mes "Não consigo encontrar";
+	mes "minha mãe ou meu pai!";
+	next;
+	mes "[Little Toby]";
+	mes "E-eu estou no Aeroporto?!";
+	mes "Meus pais deveriam";
+	mes "vir me buscar, mas ainda";
+	mes "não os encontrei! Nós acabamos";
+	mes "de nos mudar, então não sei";
+	mes "onde fica nada!";
+	next;
+	mes "[Little Toby]";
+	mes "E-espere!";
+	mes "Aonde você está";
+	mes "indo?! Não me deixe,";
+	mes "estou sozinho...!";
+	close;
+}
+
+einbroch,40,116,1	script	Airship Engineer#ein-1	855,{
+	mes "[Airship Engineer]";
+	mes "E-ei! Não";
+	mes "toque na minha preciosa";
+	mes "Burielle! Acabei de terminar";
+	mes "a revisão dela e agora ela está";
+	mes "dormindo! A-apenas se afaste!";
+	next;
+	switch(select("Quem é Burielle?:Desculpe por isso.")) {
+	case 1:
+		mes "[Airship Engineer]";
+		mes "Burielle é o modelo mais lindo";
+		mes "entre todas as Dirigível feitas";
+		mes "nos últimos dez anos!";
+		mes "Ela pode estar no solo agora, mas";
+		mes "com minhas mãos habilidosas, ela";
+		mes "conquistará os céus novamente!";
+		next;
+		switch(select("Ah~:Uh huh...")) {
+		case 1:
+			mes "["+strcharinfo(0)+"]";
+			mes "Ah~";
+			mes "Entendo, então você está";
+			mes "trabalhando na restauração";
+			mes "deste magnífico exemplar";
+			mes "de uma Dirigível. Boa sorte~";
+			next;
+			mes "[Airship Engineer]";
+			mes "Sim. Eu agradeceria";
+			mes "se você apenas fosse cuidadoso.";
+			mes "Coloquei muito amor";
+			mes "consertando a Burielle...";
+			close;
+		case 2:
+			mes "["+strcharinfo(0)+"]";
+			mes "Entendo...";
+			mes "Certo. Por um segundo";
+			mes "lá, pensei que você estivesse";
+			mes "falando de uma pessoa, mas";
+			mes "depois também presumi que você";
+			mes "não fosse, você sabe, um maluco.";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Ah, você disse,";
+			mes "''modelo mais bonito?''";
+			mes "Todas as aeronaves parecem";
+			mes "iguais para mim, esta não";
+			mes "tem nada de especial. Você";
+			mes "pirou de vez, garoto.";
+			next;
+			emotion ET_FRET;
+			mes "[Airship Engineer]";
+			mes "Q-que...?!";
+			close;
+		}
+	case 2:
+		mes "[Airship Engineer]";
+		mes "Bem, pelo menos você sabe";
+		mes "o que fez de errado. Agora";
+		mes "pare de perturbá-la e suma!";
+		close;
+	}
+}
+
+einbroch,294,312,3	script	Centzu#ein	854,{
+	mes "[Centzu]";
+	mes "Moro aqui há";
+	mes "muito tempo e vejo";
+	mes "que esta cidade enorme continua";
+	mes "crescendo cada dia mais.";
+	next;
+	mes "[Centzu]";
+	mes "Como Einbroch ficou tão";
+	mes "enorme tão rapidamente? Ainda não";
+	mes "consigo acreditar que houve";
+	mes "tanto desenvolvimento. Bem, suponho";
+	mes "que não seja problema meu. Nada";
+	mes "que eu faça fará diferença...";
+	next;
+	mes "[Centzu]";
+	mes "Mesmo que tal";
+	mes "industrialização rápida";
+	mes "não possa ser boa para o";
+	mes "meio ambiente ou para as pessoas,";
+	mes "vou apenas sentar, assistir ao que";
+	mes "acontece e aproveitar a vida...";
+	close;
+}
+
+einbroch,232,255,5	script	Khowropher#ein	847,{
+	mes "[Khowropher]";
+	mes "^666666*Tosse tosse*^000000";
+	mes "Caramba! O ar aqui";
+	mes "é tão pesado e imundo!";
+	mes "E é pior para nós, idosos,";
+	mes "com problemas";
+	mes "respiratórios! ^333333*Cof, cof!*^000000";
+	next;
+	mes "[Khowropher]";
+	mes "Não me importo se continuarem";
+	mes "construindo mais e mais";
+	mes "fábricas e casas nesta";
+	mes "cidade. Ainda assim, gostaria de passar";
+	mes "o resto da minha vida em algum lugar";
+	mes "silencioso e com ar limpo...";
+	next;
+	mes "[Khowropher]";
+	mes "Por outro lado, Einbroch é minha";
+	mes "cidade natal e não posso simplesmente";
+	mes "pegar e ir embora. Suponho que seja meu";
+	mes "destino sofrer com esse ar imundo até o dia em que eu morrer. ^666666*Suspiro...*^000000";
+	close;
+}
+
+einbroch,143,109,5	script	Khetine#ein	855,{
+	mes "[Khetine]";
+	mes "Ultimamente, tem se";
+	mes "falado sobre aquele";
+	mes "prédio vazio no centro, que foi";
+	mes "convertido em algum";
+	mes "tipo de instalação misteriosa.";
+	next;
+	mes "[Khetine]";
+	mes "Tudo parece bem";
+	mes "suspeito, mas acho que não é";
+	mes "realmente meu trabalho saber";
+	mes "sobre isso. Quero dizer, se";
+	mes "não me afeta, por que";
+	mes "deveria me preocupar?";
+	close;
+}
+
+einbroch,229,149,3	script	Sleik#ein	854,{
+	mes "[Sleik]";
+	mes "Surpreendentemente, temos";
+	mes "uma Estação de Trem que todos";
+	mes "têm chamado de vitória para";
+	mes "a ciência. Quer dizer, não deveríamos";
+	mes "ficar mais impressionados com a Dirigível?";
+	next;
+	mes "[Sleik]";
+	mes "Agora, se você quiser saber";
+	mes "para onde o trem realmente vai,";
+	mes "eu não seria capaz de lhe dizer.";
+	mes "Afinal, nunca andei nele. Mas";
+	mes "ainda assim, acho que ter nossa própria";
+	mes "Estação de Trem é algo bom.";
+	close;
+}
+
+airport,174,41,6	script	Young Man#air	99,{
+	mes "[Runnan]";
+	mes "...E é por isso que";
+	mes "viajo pelo";
+	mes "mundo. Meus chefes têm";
+	mes "um olhar aguçado para as mercadorias";
+	mes "mais exóticas, então eu as";
+	mes "adquiro e faço as entregas.";
+	next;
+	mes "[Runnan]";
+	mes "Teve até uma época";
+	mes "em que me pediram para coletar";
+	mes "Gelatina, embora esse item seja";
+	mes "bem comum hoje em dia.";
+	mes "Agora que penso nisso, por que";
+	mes "eles precisavam de tanta coisa?";
+	close;
+}
+
+airport,176,41,4	script	Old Man#air	88,{
+	mes "[Zhen Lan]";
+	mes "Agora, ouvi dizer que os";
+	mes "monstros por aqui";
+	mes "carregam algum minério";
+	mes "que brilha com uma luz";
+	mes "sublimemente bela. Legal, né?";
+	next;
+	mes "[Zhen Lan]";
+	mes "Esses minérios são um ótimo";
+	mes "material para usar na confecção";
+	mes "de vasos de flores. Meu amigo, que";
+	mes "por acaso é um fabricante de bonecos,";
+	mes "me contou isso. Ele faz bonecos usando vários tipos de materiais.";
+	next;
+	mes "[Zhen Lan]";
+	mes "Ele os molda com";
+	mes "Couro Animal, recheia";
+	mes "com Penas de Pássaro, e";
+	mes "usa Cyfar ou Zargon para fazer";
+	mes "os olhos. Ele até usa uma Gelatina na base para equilibrar o boneco.";
+	next;
+	mes "[Zhen Lan]";
+	mes "Acho que isso mostra";
+	mes "que coisas que parecem inúteis";
+	mes "podem ser úteis de alguma";
+	mes "forma. Então não se preocupe em ter muita tralha. Cedo ou tarde, pode ser útil para alguém.";
+	close;
+}
+
+ein_in01,113,211,3	script	Teinz#ein	851,{
+	mes "[Teinz]";
+	mes "Se você me pagar,";
+	mes "serei seu escravo! Não há";
+	mes "nada que eu não faça! Qualquer";
+	mes "coisa vale. Inferno, eu fico pelado se você me pagar o suficiente.";
+	next;
+	mes "[Teinz]";
+	mes "Se me pagar o que";
+	mes "mereço, trabalharei duro em";
+	mes "qualquer tarefa que você me der.";
+	mes "Claro, a mineração é difícil, mas";
+	mes "contanto que o zeny esteja";
+	mes "entrando, estou feliz. Heh heh heh~";
+	close;
+}
+
+ein_in01,48,220,5	script	Lowe#ein	851,{
+	mes "[Lowe]";
+	mes "...";
+	mes "......";
+	next;
+	mes "[Lowe]";
+	mes "...";
+	mes "......";
+	mes ".........";
+	next;
+	mes "[Lowe]";
+	mes "Ei. Por que você está";
+	mes "me olhando";
+	mes "desse jeito? Não é permitido";
+	mes "conversar fiado no trabalho.";
+	mes "Se Canphotii te pegar,";
+	mes "você será punido...";
+	next;
+	mes "[Lowe]";
+	mes "Oh, espere...";
+	mes "Você não trabalha aqui.";
+	mes "Peço desculpas, esse tipo";
+	mes "de reação é um hábito antigo";
+	mes "meu, aventureiro.";
+	close;
+}
+
+ein_in01,87,237,5	script	Dinje#ein	850,{
+	mes "[Dinje]";
+	mes "Você sabe por que uma mulher";
+	mes "como eu tem que trabalhar nesta";
+	mes "fábrica? Vou te contar o porquê...";
+	next;
+	mes "[Dinje]";
+	mes "Meu marido preguiçoso, Gesin,";
+	mes "está apenas deitado ali no";
+	mes "chão! Então eu tenho que trabalhar";
+	mes "para nos sustentar!";
+	next;
+	mes "[Dinje]";
+	mes "Não podemos descansar nem";
+	mes "por um segundo se quisermos economizar";
+	mes "dinheiro suficiente para nos tornarmos";
+	mes "ricos e poderosos um";
+	mes "dia. Você não entende?";
+	next;
+	mes "[Dinje]";
+	mes "Bem, meu marido obviamente";
+	mes "não entende! Como ele pode não saber";
+	mes "como o mundo real funciona?!";
+	mes "Ei, chute a bunda dele para mim se";
+	mes "ele não acordar logo!";
+	close;
+}
+
+ein_in01,84,218,3	script	Tsuen#ein	851,{
+	mes "[Tsuen]";
+	mes "Já houve um tempo";
+	mes "em que sonhei em";
+	mes "ser um aventureiro,";
+	mes "assim como você. Mas isso";
+	mes "foi há muito tempo...";
+	next;
+	mes "[Tsuen]";
+	mes "Agora, não sou nada além de";
+	mes "um gerente de fábrica. Ainda assim,";
+	mes "mesmo que meu trabalho não seja tão";
+	mes "incrível, estou bastante satisfeito.";
+	mes "Tenho certeza de que as pessoas gostam dos";
+	mes "produtos que supervisiono e tudo mais...";
+	next;
+	mes "[Tsuen]";
+	mes "Talvez minha vida devesse";
+	mes "ser assim, mesmo que não";
+	mes "tenha planejado dessa forma. Mas chegará";
+	mes "o dia em que eu vou partir e";
+	mes "viajar pelo mundo";
+	mes "assim que tiver minha chance!";
+	next;
+	mes "[Tsuen]";
+	mes "Espero que chegue o dia";
+	mes "em que eu possa encontrar";
+	mes "você lá fora, naquele vasto mundo,";
+	mes "e cumprimentá-lo como";
+	mes "um colega aventureiro.";
+	close;
+}
+
+ein_in01,103,239,1	script	Gesin#ein	849,{
+	mes "[Gesin]";
+	mes "Argh!";
+	mes "Isso está me matando!";
+	mes "Por que eu deveria ser rico?";
+	mes "O que há de errado em viver";
+	mes "dentro das nossas possibilidades?";
+	next;
+	mes "[Gesin]";
+	mes "Não tenho problema nenhum";
+	mes "com meu estilo de vida";
+	mes "atual, mas a patroa";
+	mes "discorda.";
+	mes "Por que ela é tão obcecada";
+	mes "com riqueza e poder?";
+	next;
+	mes "[Gesin]";
+	mes "Bem, de qualquer forma, eu gostaria";
+	mes "de ajudá-la, mas não consigo";
+	mes "me levantar! Estou exausto e";
+	mes "meu corpo está sobrecarregado.";
+	mes "Não tenho força nenhuma.";
+	next;
+	mes "[Gesin]";
+	mes "Isso é horrível~";
+	mes "Eu deveria estar descansando";
+	mes "em vez de me preocupar";
+	mes "em ganhar dinheiro...";
+	close;
+}
+
+ein_in01,33,275,1	script	Pevtatin#ein	848,{
+	mes "[Pevtatin]";
+	mes "Meu Deus!";
+	mes "Estou tão estressado!";
+	mes "Não paro um segundo";
+	mes "desde que me mudei para cá!";
+	next;
+	mes "[Pevtatin]";
+	mes "O trabalho é duro e";
+	mes "o chefe já me odeia!";
+	mes "Não me mudei para cá";
+	mes "por causa disso! Ainda assim, o pagamento é";
+	mes "decente, então acho que devo";
+	mes "aguentar só mais um pouco.";
+	next;
+	mes "[Pevtatin]";
+	mes "Lá vai...!";
+	mes "Heave-ho!";
+	mes "Heave-ho~!";
+	close;
+}
+
+ein_in01,36,204,3	script	Rombell#ein	851,{
+	mes "[Rombell]";
+	mes "É ótimo que a";
+	mes "fábrica esteja fazendo bons";
+	mes "negócios e obtendo";
+	mes "um grande lucro, mas ainda";
+	mes "tenho uma grande preocupação.";
+	next;
+	mes "[Rombell]";
+	mes "A quantidade de poluição";
+	mes "que este lugar está causando";
+	mes "é horrível! Temos estas";
+	mes "máquinas expelindo gás";
+	mes "tóxico o dia todo! O ar";
+	mes "não pode ser seguro por muito tempo...";
+	next;
+	mes "[Rombell]";
+	mes "Digo, o ar que estamos";
+	mes "respirando agora está";
+	mes "bem ruim e as coisas";
+	mes "só vão piorar. Como";
+	mes "podemos resolver esse";
+	mes "problema?";
+	close;
+}
+
+ein_in01,64,271,3	script	Vonstein#ein	855,{
+	mes "[Vonstein]";
+	mes "Ficar encarando esse";
+	mes "metal líquido fervente";
+	mes "me dá uma sensação boa";
+	mes "por dentro. É como se";
+	mes "essa coisa pudesse derreter qualquer coisa!";
+	next;
+	mes "[Vonstein]";
+	mes "Imagine cobrir uma";
+	mes "rua inteira de pessoas";
+	mes "com aquilo! Bwahah--";
+	mes "Oh, desculpe se estou falando";
+	mes "coisas sem sentido! Estou só brincando~";
+	close;
+}
+
+ein_in01,49,202,3	script	Dorf#ein	851,{
+	mes "[Dorf]";
+	mes "Máquinas são tão";
+	mes "convenientes. Olhe só";
+	mes "para esta geringonça fazendo";
+	mes "tarefas facilmente que seriam difíceis";
+	mes "de eu terminar sozinho.";
+	next;
+	mes "[Dorf]";
+	mes "Isso sim é o que";
+	mes "eu chamo de tecnologia!";
+	mes "Claro, exige esforço e";
+	mes "dinheiro para fazer um";
+	mes "desses, mas o que eu tenho a ver com isso?";
+	next;
+	mes "[Dorf]";
+	mes "Eu não tenho problemas,";
+	mes "desde que essa droga";
+	mes "de coisa continue funcionando";
+	mes "do jeito que eu quero!";
+	close;
+}
+
+ein_in01,68,209,5	script	Khashurantze#ein	852,{
+	mes "[Khashurantze]";
+	mes "Sinto muito, mas você precisa de";
+	mes "uma autorização especial para";
+	mes "entrar neste lugar. Terei que";
+	mes "pedir para você se retirar agora mesmo.";
+	close2;
+	warp "einbroch",179,63;
+	end;
+}
+
+ein_in01,85,261,3	script	Zherin#ein	851,{
+	mes "[Zherin]";
+	mes "Eu sou o responsável por este";
+	mes "alto-forno que";
+	mes "contém todo este";
+	mes "magma fervente.";
+	next;
+	mes "[Zherin]";
+	mes "Embora não exija";
+	mes "trabalho braçal, este";
+	mes "serviço é bem cansativo. Eu tenho";
+	mes "que prestar muita atenção o";
+	mes "tempo todo. É bem estressante.";
+	next;
+	mes "[Zherin]";
+	mes "Ainda assim, tenho orgulho do meu trabalho";
+	mes "já que tenho a responsabilidade";
+	mes "de garantir a segurança dos funcionários.";
+	mes "De qualquer forma, não chegue muito perto";
+	mes "da fornalha. Não será bom se";
+	mes "você se queimar por acidente!";
+	close;
+}
+
+ein_in01,43,252,3	script	Canphotii#ein	852,{
+	mes "[Canphotii]";
+	mes "Depressa, depressa!";
+	mes "Aumentem o passo!";
+	mes "Qualquer um que estiver trabalhando";
+	mes "devagar demais será punido!";
+	next;
+	mes "[Canphotii]";
+	mes "Você não consegue entender";
+	mes "isso?! Agora vá para o seu";
+	mes "posto e volte ao";
+	mes "trabalho! Espere, você é";
+	mes "um funcionário? Se não for,";
+	mes "pare de andar por aí!";
+	next;
+	mes "[Canphotii]";
+	mes "Você não deveria";
+	mes "ser capaz de entrar aqui!";
+	mes "Não acredito que deixaram você";
+	mes "entrar! Isso exige uma";
+	mes "medida disciplinar extrema!";
+	close;
+}
+
+einbroch,244,255,5	script	Bulletin Board#ein1	858,{
+	mes " ";
+	mes "Estação de Trem";
+	mes " ";
+	close;
+}
+
+einbroch,253,203,5	script	Bulletin Board#ein2	858,{
+	mes " ";
+	mes "Hotel";
+	mes " ";
+	close;
+}
+
+einbroch,68,206,5	script	Bulletin Board#ein3	858,{
+	mes " ";
+	mes "Aeroporto de Dirigível";
+	mes " ";
+	close;
+}
+
+einbroch,90,84,5	script	Bulletin Board#ein4	858,{
+	mes " ";
+	mes "Laboratório";
+	mes " ";
+	close;
+}
+
+einbroch,101,106,5	script	Bulletin Board#ein5	858,{
+	mes " ";
+	mes "Oficina de Reparos da Dirigível";
+	mes " ";
+	close;
+}
+
+einbroch,220,208,5	script	Bulletin Board#ein6	858,{
+	mes " ";
+	mes "Loja de Armas";
+	mes " ";
+	close;
+}
+
+einbroch,132,76,5	script	Bulletin Board#ein7	858,{
+	mes " ";
+	mes "Fábrica";
+	mes " ";
+	close;
+}
+
+einbroch,152,46,5	script	Bulletin Board#ein11	858,{
+	mes "Oeste - Laboratório, Oficina de Reparo da Dirigível";
+	mes "Sul - Portão Principal de Einbroch";
+	mes "Norte - Aeroporto";
+	mes "Nordeste - Estação de Trem, Hotel, Loja de Armas";
+	close;
+}
+
+einbroch,235,141,5	script	Bulletin Board#ein22	858,{
+	mes "Sudoeste - Oficina de Reparo da Dirigível, Laboratório";
+	mes "Noroeste - Aeroporto";
+	mes "Norte - Loja de Armas, Hotel, Estação de Trem";
+	close;
+}
+
+einbroch,162,256,5	script	Bulletin Board#ein33	858,{
+	mes "Leste - Estação de Trem";
+	mes "Sudeste - Hotel";
+	mes "Sul - Loja de Armas, Fábrica";
+	mes "Sudoeste - Aeroporto, Oficina de Reparos da Dirigível, Laboratório";
+	close;
+}
+
+einbroch,183,174,5	script	Bulletin Board#ein44	858,{
+	mes "Leste - Loja de Armas, Hotel";
+	mes "Sul - Fábrica";
+	mes "Sudoeste - Oficina de Reparo da Dirigível, Laboratório";
+	mes "Noroeste - Aeroporto";
+	close;
+}
+
+einbroch,104,202,5	script	Bulletin Board#ein55	858,{
+	mes "Nordeste - Estação de Trem";
+	mes "Leste - Loja de Armas, Hotel";
+	mes "Sul - Oficina de Reparo da Dirigível, Laboratório";
+	close;
+}
+
+ein_in01,31,217,3	script	Cendadt#ein	851,{
+	mes "[Cendadt]";
+	mes "Esta fábrica tem muitas";
+	mes "coisas que precisam de reparos,";
+	mes "urgentemente! Estou impressionado";
+	mes "que este lugar ainda esteja operando!";
+	next;
+	mes "[Cendadt]";
+	mes "Ainda bem para nós, ouvi dizer que";
+	mes "alguns aventureiros altruístas";
+	mes "têm doado materiais";
+	mes "para ajudar a impedir que esta fábrica";
+	mes "desmorone... Ou pior.";
+	mes "Mas isso é apenas um rumor.";
+	next;
+	mes "[Cendadt]";
+	mes "^666666*Suspiro*^000000";
+	mes "Mesmo que seja verdade,";
+	mes "não há nada que ninguém";
+	mes "aqui possa fazer. Ninguém tem";
+	mes "coragem de desafiar";
+	mes "o sistema, sabe?";
+	next;
+	mes "[Cendadt]";
+	mes "Eu...";
+	mes "É melhor eu voltar";
+	mes "ao trabalho";
+	mes "antes que eu";
+	mes "me meta em encrenca...";
+	close;
+}

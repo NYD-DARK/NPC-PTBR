@@ -1,0 +1,53 @@
+//===== rAthena Script ======================================= 
+//= Izlude Airport NPCs
+//===== By: ================================================== 
+//= rAthena Dev Team
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Izlude Airport NPCs
+//===== Additional Comments: ================================= 
+//= 1.0 First version.
+//============================================================ 
+
+-	script	::Airship_Staff_izlude	-1,{
+	mes "[Airship Staff]";
+	mes "Bem-vindo! Você gostaria";
+	mes "de embarcar na Dirigível que";
+	mes "parte no voo que para";
+	mes "em Juno e Rachel?";
+	next;
+	if (select("Embarcar na Dirigível para Juno/Rachel.:Cancelar.") == 1) {
+		mes "[Airship Staff]";
+		mes "A taxa de embarque é";
+		mes "de 1.200 zenys. No entanto, esta";
+		mes "cobrança é dispensada se você usar";
+		mes "um Bilhete Gratuito de Dirigível. Agora,";
+		mes "você ainda gostaria de embarcar?";
+		next;
+		if (select("Sim:Não") == 1) {
+			if (countitem(7311) > 0) {
+				delitem 7311,1; //Free_Flying_Ship_Ticket
+				warp "airplane_01",244,58;
+				end;
+			}
+			if (Zeny >= 1200) {
+				set Zeny, Zeny - 1200;
+				warp "airplane_01",244,58;
+				end;
+			}
+			mes "[Airship Staff]";
+			mes "Sinto muito, mas você não";
+			mes "tem 1.200 zenys para pagar";
+			mes "a taxa de embarque.";
+			close;
+		}
+	}
+	mes "[Airship Staff]";
+	mes "Obrigado e";
+	mes "volte sempre.";
+	mes "Tenha um bom dia~";
+	close;
+}

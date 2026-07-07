@@ -1,0 +1,311 @@
+//===== rAthena Script =======================================
+//= BattleGround System - KvM Item Dealer
+//===== Description: =========================================
+//= [Official Conversion]
+//= Kreiger Von Midgard Battleground Point redemption NPC
+//= * NOTE * 
+//= KvM Does NOT use items, but a character variable to
+//= keep track of points. This NPC when talked to will
+//= convert already-given tokens and convert them to points.
+//= under the player variable kvm_point.
+//===== Changelogs: ==========================================
+//= 1.0 First Version. [L0ne_W0lf]
+//============================================================
+
+bat_room,151,144,3	script	KVM Logistic Officer#a	734,{
+	if (countitem(6376)) {// KVM_Badge
+		set .@pointstoadd,countitem(6376);
+		delitem 6376,.@pointstoadd;
+		set kvm_point,kvm_point+.@pointstoadd;
+		mes "[Logistics]";
+		mes "São esses"+getitemname(6376)+"que estou vendo?";
+		mes "Nós não aceitamos mais essa moeda,";
+		mes "mas posso trocá-los para você,";
+		mes "Então você tem"+.@pointstoadd+" "+getitemname(6376)+"?";
+		mes "Certo, está tudo pronto, agora você tem ^580080"+ kvm_point +"^000000 Pontos de KVM.";
+		next;
+	}
+	if (checkweight(1201,1) == 0) {
+		mes "- Espere um minuto!! -";
+		mes "- Atualmente você está carregando -";
+		mes "- itens demais com você. -";
+		mes "- Por favor, tente novamente -";
+		mes "- depois de perder um pouco de peso. -";
+		close;
+	}
+	mes "[Logistics]";
+	mes "Olá?";
+	mes "Sou o responsável pela distribuição";
+	mes "de itens de recompensa por pontos KVM. Qualquer";
+	mes "seleção errada de itens não será";
+	mes "revertida. Por favor, tenha cuidado.";
+	mes "Selecione a próxima etapa, por favor.";
+	next;
+	set .@name$,strcharinfo(0);
+	switch(select("Ler o Catálogo KVM.:Comprar Itens KVM.:Confirmar Pontos KVM.:Explicação das Recompensas KVM.:Explicação dos Pontos KVM.")) {
+	case 1:
+		mes "[Logistics]";
+		mes "Aqui está o catálogo de itens KVM.";
+		mes "Cada arma requer 2.000 pontos";
+		mes "e cada armadura de 10 a 1.200";
+		mes "pontos. Portanto, tenha cuidado ao";
+		mes "selecionar uma recompensa.";
+		close2;
+		readbook 11017,1;
+		end;
+	case 2:
+		mes "[Logistics]";
+		mes "Quais itens você deseja ver? Para";
+		mes "a especificação detalhada dos";
+		mes "itens, por favor consulte o";
+		mes "^3131FFCatálogo^000000.";
+		next;
+		switch(select("Arma:Armadura/Acessório:Mass-Production Armadura/Acessório:Popularized Armadura/Acessório")) {
+		case 1:
+			mes "[Logistics]";
+			mes "Você selecionou a Categoria de Arma.";
+			mes "Por favor, selecione uma subcategoria.";
+			next;
+			switch(select("Adaga/Espada/Lança:Cajado/Maça/Machado/Shuriken:Arco/Katar/Instrumento/Chicote:Livro/Soqueira:Revólver/Rifle/Arma/Lança-Granadas")) {
+			case 1:
+				mes "[Logistics]";
+				mes "Você selecionou a categoria Adaga/Espada/Lança.";
+				mes "Por favor, selecione uma subcategoria.";
+				next;
+				switch(select("Adaga:Espada de uma mão:Espada de duas mãos:Lança de uma mão:Lança de duas mãos")) {
+				case 1: callsub PurchaseItem,13042,0,1; //Krieger_Adaga1 
+				case 2:
+					mes "[Logistics]";
+					mes "Você selecionou a categoria 'Espada de uma mão'.";
+					mes "Existem 3 Espadas de uma mão: Flamberge Gloriosa, Rapieira Gloriosa e Vingadora Sagrada Gloriosa.";
+					mes "Se desejar detalhes, por favor consulte o Catálogo KVM.";
+					mes "Por favor, selecione uma delas.";
+					next;
+					switch(select("Flamberge Gloriosa:Rapieira Gloriosa:Vingadora Sagrada Gloriosa")) {
+					case 1: callsub PurchaseItem,13416,0,0; //Krieger_Onehand_Sword1
+					case 2: callsub PurchaseItem,13417,0,0; //Krieger_Onehand_Sword2
+					case 3: callsub PurchaseItem,13418,0,0; //Krieger_Onehand_Sword3
+					}
+				case 3: callsub PurchaseItem,1187,0,1; //Krieger_Twohand_Sword1
+				case 4: callsub PurchaseItem,1426,0,1; //Krieger_Onehand_Spear1
+				case 5: callsub PurchaseItem,1486,0,1; //Krieger_Twohand_Spear1
+				}
+			case 2:
+				mes "[Logistics]";
+				mes "Você selecionou a categoria 'Cajado/Maça/Machado/Shuriken'.";
+				mes "Por favor, selecione uma subcategoria.";
+				next;
+				switch(select("Cajado:Maça:Machado de uma mão:Machado de duas mãos:Shuriken")) {
+				case 1:
+					mes "[Logistics]";
+					mes "Você selecionou a categoria 'Cajado'.";
+					mes "Existem 3 Cajados: o Cajado da Destruição Glorioso de duas mãos, a Varinha Arcana Gloriosa de uma mão e o Cajado da Cura Glorioso.";
+					mes "Se desejar detalhes, por favor consulte o Catálogo KVM.";
+					mes "Por favor, selecione um deles.";
+					next;
+					switch(select("Cajado da Destruição Glorioso:Varinha Arcana Gloriosa:Cajado da Cura Glorioso")) {
+					case 1: callsub PurchaseItem,2002,0,0; //Krieger_Twohand_Staff1
+					case 2: callsub PurchaseItem,1640,0,0; //Krieger_Onehand_Staff1
+					case 3: callsub PurchaseItem,1641,0,0; //Krieger_Onehand_Staff2
+					}
+				case 2: callsub PurchaseItem,1546,0,1; //Krieger_Onehand_Mace1
+				case 3: callsub PurchaseItem,1310,0,1; //Krieger_Onehand_Axe1
+				case 4: callsub PurchaseItem,1382,0,1; //Krieger_Twohand_Axe1
+				case 5: callsub PurchaseItem,13307,0,1; //Krieger_Huuma_Shuriken1
+				}
+			case 3:
+				mes "[Logistics]";
+				mes "Você selecionou a categoria Arco/Katar/Instrumento/Chicote.";
+				mes "Por favor, selecione uma subcategoria.";
+				next;
+				switch(select("Arco:Katar:Instrumento:Chicote")) {
+				case 1: callsub PurchaseItem,1743,0,1; //Krieger_Arco1
+				case 2:
+					mes "[Logistics]";
+					mes "Você selecionou a categoria 'Katar'.";
+					mes "Existem 2 Katars: Rugido Sangrento Glorioso e Jamadhar Gloriosa.";
+					mes "Se desejar detalhes, por favor consulte o Catálogo KVM.";
+					mes "Por favor, selecione uma delas.";
+					next;
+					switch(select("Rugido Sangrento Glorioso:Jamadhar Gloriosa")) {
+					case 1: callsub PurchaseItem,1281,0,0; //Krieger_Katar1
+					case 2: callsub PurchaseItem,1282,0,0; //Krieger_Katar2
+					}
+				case 3: callsub PurchaseItem,1927,0,1; //Krieger_Instrument1
+				case 4: callsub PurchaseItem,1981,0,1; //Krieger_Whip1
+				}
+			case 4:
+				mes "[Logistics]";
+				mes "Você selecionou a categoria Livro/Soqueira.";
+				mes "Por favor, selecione uma subcategoria.";
+				next;
+				switch(select("Livro:Soqueira")) {
+				case 1:
+					mes "[Logistics]";
+					mes "Você selecionou 'Livro'.";
+					mes "Existem 2 Livros: Tabuleta Gloriosa e Apocalipse Glorioso.";
+					mes "Se desejar detalhes, por favor consulte o Catálogo KVM.";
+					mes "Por favor, selecione um deles.";
+					next;
+					switch(select("Tabuleta Gloriosa:Apocalipse Glorioso")) {
+					case 1: callsub PurchaseItem,1576,0,0; //Krieger_Book1
+					case 2: callsub PurchaseItem,1577,0,0; //Krieger_Book2
+					}
+				case 2:
+					mes "[Logistics]";
+					mes "Você selecionou a categoria 'Soqueira'.";
+					mes "Existem 2 Soqueiras: Garra Gloriosa e Punho Glorioso.";
+					mes "Se desejar detalhes, por favor consulte o Catálogo KVM.";
+					mes "Por favor, selecione uma delas.";
+					next;
+					switch(select("Garra Gloriosa:Punho Glorioso")) {
+					case 1: callsub PurchaseItem,1826,0,0; //Krieger_Knuckle1
+					case 2: callsub PurchaseItem,1827,0,0; //Krieger_Knuckle2
+					}
+				}
+			case 5:
+				mes "[Logistics]";
+				mes "Você selecionou a categoria 'Revólver/Rifle/Arma/Lança-Granadas'.";
+				mes "Por favor, selecione uma subcategoria.";
+				next;
+				switch(select("Revólver:Rifle:Metralhadora Gatling:Escopeta:Lança-Granadas")) {
+				case 1: callsub PurchaseItem,13110,0,1; //Krieger_Pistol1
+				case 2: callsub PurchaseItem,13176,0,1; //Krieger_Rifle1
+				case 3: callsub PurchaseItem,13177,0,1; //Krieger_Gatling1
+				case 4: callsub PurchaseItem,13178,0,1; //Krieger_Escopeta1
+				case 5: callsub PurchaseItem,13179,0,1; //Krieger_Launcher1
+				}
+			}
+		case 2:
+			mes "[Logistics]";
+			mes "Você selecionou a categoria 'Armadura/Acessório'.";
+			mes "Por favor, selecione uma subcategoria.";
+			next;
+			switch(select("Armadura:Capa:Botas:Acessório")) {
+			case 1: callsub PurchaseItem,2394,1,2; //Krieger_Suit1
+			case 2: callsub PurchaseItem,2549,2,2; //Krieger_Muffler1
+			case 3: callsub PurchaseItem,2444,3,2; //Krieger_Botas1
+			case 4: callsub PurchaseItem,2772,4,2; //Krieger_Ring1
+			}
+		case 3:
+			mes "[Logistics]";
+			mes "Você selecionou a categoria 'Armadura/Acessório de Produção em Massa'.";
+			mes "Por favor, selecione uma subcategoria.";
+			next;
+			switch(select("Armadura de Produção em Massa:Botas de Produção em Massa:Acessório de Produção em Massa")) {
+			case 1: callsub PurchaseItem,2395,5,3; //Krieger_Suit2
+			case 2: callsub PurchaseItem,2445,6,3; //Krieger_Shoes2
+			case 3: callsub PurchaseItem,2773,7,3; //Krieger_Ring2
+			}
+		case 4:
+			mes "[Logistics]";
+			mes "Você selecionou a categoria 'Armadura/Acessório Popularizado'.";
+			mes "Por favor, selecione uma subcategoria.";
+			next;
+			switch(select("Armadura Popularizada:Botas Popularizadas:Acessório Popularizado")) {
+			case 1: callsub PurchaseItem,2396,8,4; //Krieger_Suit3
+			case 2: callsub PurchaseItem,2446,9,4; //Krieger_Shoes3
+			case 3: callsub PurchaseItem,2774,10,4; //Krieger_Ring3
+			}
+		}
+	case 3:
+		mes "[Logistics]";
+		mes ""+ .@name$ +", seus pontos atuais são ^580080"+ kvm_point +"^000000 Pontos KVM.";
+		close;
+	case 4:
+		mes "[Logistics]";
+		mes "Existem 3 categorias nas Recompensas KVM: Arma/Armadura/Acessório.";
+		next;
+		mes "[Logistics]";
+		mes "Recompensas de armas requerem 2.000 pontos KVM cada.";
+		mes "Existem 3 tipos de recompensas de armaduras e elas requerem 840/630/580 pontos KVM cada.";
+		mes "Recompensas de acessórios requerem 1.200 pontos KVM cada.";
+		next;
+		mes "[Logistics]";
+		mes "As armas Krieger são armas de Nível 4, elas podem ser aprimoradas e terão efeitos especiais: Massacre, Destruição e Bênção.";
+		next;
+		mes "[Logistics]";
+		mes "Quando você consegue usar todas as 3 armaduras, você pode ter um conjunto especial de opções.";
+		mes "Além disso, quando as recompensas de acessórios Krieger são usadas com medalhas, isso lhe trará recompensas de conjunto especiais.";
+		next;
+		mes "[Logistics]";
+		mes "Finalmente, há recompensas de Armaduras e Acessórios de Produção em Massa.";
+		mes "Jogadores com nível superior a 60 podem equipar Armaduras de Produção em Massa e também há um limite de nível para as Armaduras Popularizadas.";
+		close;
+	case 5:
+		mes "[Logistics]";
+		mes "Pontos de KVM são recompensados ao vencer, perder ou empatar no Kreiger Von Midgard (KVM).";
+		mes "Você pode obter recompensas especiais usando esses pontos.";
+		close;
+	}
+
+PurchaseItem:
+	// Pricing for Weapon, Suit1, Muffler1, Shoes1, Ring1m Suit2, Shoes2, Ring2, Suit3, Shoes3, Ring3
+	setarray .@prices[0],2000,840,630,580,1200,120,70,200,15,10,30;
+
+	.@item_id = getarg(0);
+	.@req_setting = getarg(1);
+	.@item_type = getarg(2);
+
+	mes "[Logistics]";
+
+	if (!.@item_type)
+		mes "Você selecionou ^ff0000"+ getitemname(.@item_id) +"^000000.";
+	else if (.@item_type == 1)
+		mes "Existe apenas uma"+ callfunc("F_GetWeaponType",.@item_id) +": "+ getitemname(.@item_id) +".";
+	else if (.@item_type == 2) {
+		mes "Você selecionou '"+ callfunc("F_GetArmorType",.@item_id) +"'.";
+		mes "A armadura para alguém com nível acima de 80 é: ^ff0000"+ getitemname(.@item_id) +"^000000.";
+	}
+	else if (.@item_type == 3) {
+		mes "Você selecionou 'Produção em Massa"+ callfunc("F_GetArmorType",.@item_id) +"'.";
+		mes "Existe apenas uma Produção em Massa"+ callfunc("F_GetArmorType",.@item_id) +": ^ff0000"+ getitemname(.@item_id) +"^000000.";
+	}
+	else if (.@item_type == 4) {
+		mes "Você selecionou 'Popularizada"+ callfunc("F_GetArmorType",.@item_id) +"'.";
+		mes "Existe apenas uma Popularizada"+ callfunc("F_GetArmorType",.@item_id) +": ^ff0000"+ getitemname(.@item_id) +"^000000.";
+	}
+
+	if (!.@req_setting)
+		mes "Requer ^0000ff2.000^000000 Pontos KVM, e"+ .@name$ +", seus pontos são: ^580080"+ kvm_point +"^000000.";
+	else if (.@req_setting == 4)
+		mes "Requer ^0000ff1.200^000000 Pontos KVM, e"+ .@name$ +", seus pontos são: ^580080"+ kvm_point +"^000000.";
+	else
+		mes "Requer ^0000ff"+ .@prices[.@req_setting] +"^000000 Pontos KVM, e"+ .@name$ +", seus pontos são: ^580080"+ kvm_point +"^000000.";
+
+	mes "Tem certeza de que deseja este item?";
+	next;
+	switch(select("Não, não vou comprar.:Sim, vou comprar.")) {
+	case 1:
+		mes "[Logistics]";
+		mes "Você selecionou 'Não vou comprar'.";
+		mes "Ao comprar um item, lembre-se de que não há reembolsos.";
+		break;
+	case 2:
+		if (kvm_point >= .@prices[.@req_setting]) {
+			kvm_point = kvm_point -.@prices[.@req_setting];
+			getitem .@item_id,1;
+			mes "[Logistics]";
+			mes "Você comprou um"+ getitemname(.@item_id) +".";
+			if (!.@req_setting)
+				mes "Seus Pontos de KVM foram reduzidos em ^0000ff"+ .@req_setting +"^000000 pontos, seus Pontos de KVM agora são ^580080"+kvm_point+"^000000.";
+			if (.@req_setting == 4)
+				mes "Seus Pontos de KVM foram reduzidos em ^0000ff1.200^000000 pontos, seus Pontos de KVM agora são ^580080"+kvm_point+"^000000.";
+			else
+				mes "Seus Pontos de KVM foram reduzidos em ^0000ff"+ .@prices[.@req_setting] +"^000000 pontos, seus Pontos de KVM agora são ^580080"+kvm_point+"^000000.";
+		}
+		else {
+			mes "[Logistics]";
+			if (!.@req_setting)
+				mes "Você precisa de ^0000ff2.000^000000 Pontos de KVM para comprar este item.";
+			else if (.@req_setting == 4)
+				mes "Você precisa de ^0000ff1.200^000000 Pontos de KVM para comprar este item.";
+			else
+				mes "Você precisa de ^0000ff"+ .@prices[.@req_setting] +"^000000 Pontos de KVM para comprar este item.";
+			mes "No entanto, seus Pontos de KVM agora são ^580080"+ kvm_point +"^000000.";
+			mes "O que não é suficiente para comprá-lo.";
+			mes "Quando tiver pontos suficientes, por favor, volte novamente.";
+		}
+	}
+	close;
+}

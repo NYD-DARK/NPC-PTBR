@@ -1,0 +1,249 @@
+//===== rAthena Script =======================================
+//= BattleGround System - KvM Entrance NPCs
+//===== Description: =========================================
+//= [Official Conversion]
+//= Kreiger Von Midgard Battleground Entrance NPCs
+//= Original NPCs scrapped from bg_common.
+//===== Changelogs: ==========================================
+//= 1.0 First Version. [L0ne_W0lf]
+//= 1.1 Corrected some typos, and shifted messages around.
+//=     Corrected iRO style quest log entries, however it's
+//=     advisable that you not use them, as they conflict.
+//= 1.2 Added battle_config checks to allow this script to use the new queue interface or the previous method. [Aleos]
+//============================================================
+
+// KvM Officer - Guillaume
+//============================================================
+bat_room,164,178,5	script	KVM Mercenary Officer#1	418,{
+	if (getbattleflag("feature.bgqueue"))
+		end;
+	/*
+	set .@kvm,checkquest(6026,PLAYTIME);
+	if ((.@kvm == 0) || (.@kvm == 1)) {
+		mes "[Croix Mercenary Officer]";
+		mes "Sei que você já se alistou com a Croix. Volte e junte-se à equipe deles. Nós não aceitamos traidores lutando por nós.";
+		close;
+	}
+	else if (.@kvm == 2) erasequest 6026;
+	*/
+	set .@permit,checkquest(6025,PLAYTIME);
+	if ((.@permit == 0) || (.@permit == 1)) {
+		mes "[Guillaume Mercenary Officer]";
+		mes "Parece que você participou recentemente de uma batalha KVM. Você deve esperar 5 minutos antes de se inscrever novamente.";
+		close;
+	}
+	else if (.@permit == 2) erasequest 6025;
+	mes "[Guillaume Mercenary Officer]";
+	mes "Mostre a eles o verdadeiro poder de Guillaume!";
+	next;
+	switch(select("Eu lutarei com você.:Encerrar conversa.")) {
+	case 1:
+		mes "[Guillaume Mercenary Officer]";
+		mes "Mostre a eles o quão fortes somos.";
+		mes "Hoje, todos ouvirão o grito de triunfo de Guillaume!";
+		close2;
+		//setquest 6025;
+		if (BaseLevel > 79)  warp "bat_room",169,223;
+		else if (BaseLevel < 60) warp "bat_room",197,223;
+		else warp "bat_room",225,223;
+		end;
+	case 2:
+		mes "[Guillaume Mercenary Officer]";
+		mes "Nós venceremos!";
+		close;
+	}
+}
+
+// Guillaume Knight - KvM
+//============================================================
+bat_room,167,178,5	script	Guillaume Knight#kvm	417,{
+	mes "[Guillaume Knight]";
+	mes "Olá.";
+	mes "O que você deseja saber?";
+	next;
+	switch(select("Inscrever-se para a KVM.:O que é KVM?:Como participo da KVM?:Quero saber meus Pontos Kreiger.")) {
+	case 1:
+		mes "[Guillaume Knight]";
+		if (getbattleflag("feature.bgqueue"))
+			mes "Se estiver pronto para a batalha, clique no ^0000FFbotão de batalha na interface^000000 para se inscrever na batalha KVM!";
+		else {
+			mes "As inscrições ainda não estão disponíveis.";
+			mes "Para se inscrever, você precisa ir até um Oficial Mercenário KVM.";
+		}
+		close;
+	case 2:
+		mes "[Guillaume Knight]";
+		mes "KVM é a abreviação de Kreiger Von Midgard.";
+		mes "Aventureiro, você está ciente de que o caminho para o novo mundo foi aberto?";
+		next;
+		mes "[Guillaume Knight]";
+		mes "Nós, a Administração de Guillaume, temos vários planos para avançar ao novo mundo.";
+		mes "E a KVM é um deles.";
+		next;
+		mes "[Guillaume Knight]";
+		mes "Significa que nós, um dos muitos países no continente de Midgard,";
+		mes "decidimos empregar muitos aventureiros para o avanço imediato ao novo mundo.";
+		next;
+		mes "[Guillaume Knight]";
+		mes "Portanto, para selecionar os melhores aventureiros, estamos realizando a KVM.";
+		mes "Esperamos respostas de muitos aventureiros.";
+		next;
+		mes "[Guillaume Knight]";
+		mes "E daremos recompensas pela participação deles!";
+		mes "Para mais informações sobre as recompensas, entre em contato com um Oficial de Logística KVM.";
+		close;
+	case 3:
+		mes "[Guillaume Knight]";
+		if (getbattleflag("feature.bgqueue")) {
+			mes "Basicamente, a KVM é uma batalha de 3 contra 3.";
+			mes "Inscreva-se clicando no ^0000FFbotão de batalha na interface^000000, como um grupo ou individualmente.";
+		} else {
+			mes "Basicamente, a KVM é uma batalha de 5 contra 5.";
+			mes "Primeiro, você se inscreve com um recepcionista KVM, em grupo ou individualmente.";
+		}
+		next;
+		mes "[Guillaume Knight]";
+		if (getbattleflag("feature.bgqueue"))
+			mes "Inscrições em grupo são para quando você pretende entrar na KVM com seu grupo ou membros da guilda,";
+		else
+			mes "Inscrições em grupo são para quando você pretende entrar na KVM com seus membros de grupo,";
+		mes "e uma inscrição pessoal é para quando você pretende entrar na KVM individualmente.";
+		next;
+		mes "[Guillaume Knight]";
+		if (getbattleflag("feature.bgqueue"))
+			mes "Observe que, ao cancelar, você ^0000FFnão poderá se inscrever novamente por 1 minuto^000000.";
+		else {
+			mes "Por favor, inscreva-se com um oficial KVM, e ele entrará em contato com você mais tarde quando estiver em Prontera.";
+			next;
+			mes "[Guillaume Knight]";
+			mes "Então você entra e segue as instruções no campo de batalha.";
+			next;
+			mes "[Guillaume Knight]";
+			mes "No entanto, esteja ciente de que, a menos que você esteja no escritório da KVM, ele não poderá entrar em contato com você.";
+		}
+		close;
+	case 4:
+		mes "[Guillaume Knight]";
+		mes "Seus Pontos Kreiger são:";
+		mes ""+kvm_point+".";
+		close;
+	}
+}
+
+// KvM Officer - Croix
+//============================================================
+bat_room,164,121,1	script	KVM Mercenary Officer#2	414,{
+	if (getbattleflag("feature.bgqueue"))
+		end;
+	/*
+	set .@kvm,checkquest(6025,PLAYTIME);
+	if ((.@kvm == 0) || (.@kvm == 1)) {
+		mes "[Croix Mercenary Officer]";
+		mes "Sei que você já se alistou com a Guillaume. Volte e junte-se à equipe deles. Nós não aceitamos traidores lutando por nós.";
+		close;
+	}
+	else if (.@kvm == 2) erasequest 6025;
+	*/
+	set .@permit,checkquest(6025,PLAYTIME);
+	if ((.@permit == 0) || (.@permit == 1)) {
+		mes "[Croix Mercenary Officer]";
+		mes "Parece que você participou recentemente de uma batalha KVM. Você deve esperar 5 minutos antes de se inscrever novamente.";
+		close;
+	}
+	else if (.@permit == 2) erasequest 6025;
+	mes "[Croix Mercenary Officer]";
+	mes "Mostre a eles o verdadeiro poder de Croix!";
+	next;
+	switch(select("Eu lutarei com você.:Encerrar conversa.")) {
+	case 1:
+		mes "[Croix Mercenary Officer]";
+		mes "Mostre a eles o quão fortes somos.";
+		mes "Hoje, todos ouvirão o grito de triunfo de Croix!";
+		close2;
+		//setquest 6026;
+		if (BaseLevel > 79) warp "bat_room",169,207;
+		else if (BaseLevel < 60) warp "bat_room",197,207;
+		else warp "bat_room",225,207;
+		end;
+	case 2:
+		mes "[Croix Mercenary Officer]";
+		mes "Nós venceremos!";
+		close;
+	}
+}
+
+// Croix Knight - KvM
+//============================================================
+bat_room,167,121,1	script	Croix Knight#kvm	413,{
+	mes "[Croix Knight]";
+	mes "Olá.";
+	mes "O que você deseja saber?";
+	next;
+	switch(select("Inscrever-se para a KVM.:O que é KVM?:Como participo da KVM?:Quero saber meus Pontos Kreiger.")) {
+	case 1:
+		mes "[Croix Knight]";
+		if (getbattleflag("feature.bgqueue"))
+			mes "Se estiver pronto para a batalha, clique no ^0000FFbotão de batalha na interface^000000 para se inscrever na batalha KVM!";
+		else {
+			mes "As inscrições ainda não estão disponíveis.";
+			mes "Para se inscrever, você precisa ir até um Oficial Mercenário KVM.";
+		}
+		close;
+	case 2:
+		mes "[Croix Knight]";
+		mes "KVM é a abreviação de Kreiger Von Midgard.";
+		mes "Aventureiro, você está ciente de que o caminho para o novo mundo foi aberto?";
+		next;
+		mes "[Croix Knight]";
+		mes "Nós, a Administração de Croix, temos vários planos para avançar ao novo mundo.";
+		mes "E a KVM é um deles.";
+		next;
+		mes "[Croix Knight]";
+		mes "Significa que nós, um dos muitos países no continente de Midgard,";
+		mes "decidimos empregar muitos aventureiros para o avanço imediato ao novo mundo.";
+		next;
+		mes "[Croix Knight]";
+		mes "Portanto, para selecionar os melhores aventureiros, estamos realizando a KVM.";
+		mes "Esperamos respostas de muitos aventureiros.";
+		next;
+		mes "[Croix Knight]";
+		mes "E daremos recompensas pela participação deles!";
+		mes "Para mais informações sobre as recompensas, entre em contato com um Oficial de Logística KVM.";
+		close;
+	case 3:
+		mes "[Croix Knight]";
+		if (getbattleflag("feature.bgqueue")) {
+			mes "Basicamente, a KVM é uma batalha de 3 contra 3.";
+			mes "Inscreva-se clicando no ^0000FFbotão de batalha na interface^000000, como um grupo ou individualmente.";
+		} else {
+			mes "Basicamente, a KVM é uma batalha de 5 contra 5.";
+			mes "Primeiro, você se inscreve com um recepcionista KVM, em grupo ou individualmente.";
+		}
+		next;
+		mes "[Croix Knight]";
+		if (getbattleflag("feature.bgqueue"))
+			mes "Inscrições em grupo são para quando você pretende entrar na KVM com seu grupo ou membros da guilda,";
+		else
+			mes "Inscrições em grupo são para quando você pretende entrar na KVM com seus membros de grupo,";
+		mes "e uma inscrição pessoal é para quando você pretende entrar na KVM individualmente.";
+		next;
+		mes "[Croix Knight]";
+		if (getbattleflag("feature.bgqueue"))
+			mes "Observe que, ao cancelar, você ^0000FFnão poderá se inscrever novamente por 1 minuto^000000.";
+		else {
+			mes "Por favor, inscreva-se com um oficial KVM, e ele entrará em contato com você mais tarde quando estiver em Prontera.";
+			next;
+			mes "[Croix Knight]";
+			mes "Então você entra e segue as instruções no campo de batalha.";
+			next;
+			mes "[Croix Knight]";
+			mes "No entanto, esteja ciente de que, a menos que você esteja no escritório da KVM, ele não poderá entrar em contato com você.";
+		}
+		close;
+	case 4:
+		mes "[Croix Knight]";
+		mes "Seus Pontos Kreiger são:";
+		mes ""+kvm_point+".";
+		close;
+	}
+}

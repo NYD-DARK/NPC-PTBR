@@ -1,0 +1,169 @@
+//===== rAthena Script =======================================
+//= Brasilis Town
+//===== Description: =========================================
+//= [Official Conversion]
+//= Brasilis Town Script
+//===== Changelog: ===========================================
+//= 1.0 First version. Transportation and Basic NPCs. [L0ne_W0lf]
+//= 1.1 Fixed Zeny not being removed for payment. [Kisuka]
+//= 1.2 Updated dialog, added Ice Cream Maker. [L0ne_W0lf]
+//= 1.3 Moved Alberta NPC to pre-re/re paths. [Euphy]
+//= 1.4 Added VIP features. [Euphy]
+//============================================================
+
+// Brasilis Transportation :: brasilis_trans
+//============================================================
+-	script	::Crewman_bra2	-1,{
+	mes "[Crewman]";
+	mes "Ei, você já ouviu falar de um lugar chamado Brasilis?";
+	mes "É uma cidade tropical que é quente como o deserto, mas também chuvosa. É um lugar muito misterioso.";
+	next;
+	mes "[Crewman]";
+	mes "Recentemente, encontramos uma nova rota marítima para chegar lá facilmente.";
+	if (VIP_SCRIPT) {
+		set .@cost, vip_status(VIP_STATUS_ACTIVE)?1000:10000;
+		mes "Custa apenas 10.000 zenys para uma viagem de ida e volta, e 1.000 para VIP! Então, você quer ir?"; //custom translation (VIP)
+	} else {
+		set .@cost,10000;
+		mes "Custa apenas 10.000 zenys para uma viagem de ida e volta! Então, você quer ir?";
+	}
+	next;
+	switch(select("Me leve para Brasilis!:Vou ficar por aqui.")) {
+	case 1:
+		if (Zeny < .@cost) {
+			mes "[Crewman]";
+			mes "Eu disse"+callfunc(",",.@cost)+"zeny.";
+			close;
+		}
+		else {
+			mes "[Crewman]";
+			mes "Legal~!! Vamos nessa~!";
+			set Zeny, Zeny-.@cost;
+			close2;
+			warp "brasilis",314,60;
+			end;
+		}
+	case 2:
+		mes "[Crewman]";
+		mes "Bem, se você se interessar algum dia, me avise e eu posso te levar lá.";
+		close;
+	}
+}
+
+brasilis,316,57,3	script	Crewman#bra1	100,{
+	mes "[Crewman]";
+	mes "Meu navio vai voltar para Alberta, você quer vir com a gente?";
+	next;
+	switch(select("Voltar para Alberta.:Ainda não~.")) {
+	case 1:
+		mes "[Crewman]";
+		mes "Eu sinto falta de casa.";
+		close2;
+		if (checkre(0))
+			warp "alberta",245,87;
+		else
+			warp "alberta",244,115;
+		end;
+	case 2:
+		mes "[Crewman]";
+		mes "Ok, como quiser. A gente se vê quando voltarmos, então.";
+		close;
+	}
+}
+
+// Generic Brasilis NPCs :: brazil_tre
+//============================================================
+brasilis,155,165,3	script	Signpost#bra1	858,{
+	mes ":: Museu de Arte ::";
+	close;
+}
+
+brasilis,191,239,3	script	Signpost#bra2	858,{
+	mes ":: Monumento Verass ::";
+	close;
+}
+
+brasilis,240,247,3	script	Signpost#bra3	858,{
+	mes ":: Mercado ::";
+	mes " ";
+	mes "- Para suas Poções e Armamentos -";
+	close;
+}
+
+brasilis,303,309,3	script	Signpost#bra4	858,{
+	mes ":: Cabo da Selva ::";
+	mes "- Não indicado para os fracos de coração -";
+	close;
+}
+
+brasilis,278,137,3	script	Signpost#bra5	858,{
+	mes ":: Hotel de Brasilis ::";
+	close;
+}
+
+brasilis,137,77,5	script	Ice-Cream Maker	85,{
+	mes "[Ice Cream Maker]";
+	mes "Venha~venha~";
+	mes "Sorvete é o lanche perfeito para um dia quente~";
+	mes "Custa apenas ^3355FF100 Zenys^000000~";
+	mes "Sorvete~";
+	mes "Pegue o seu Sorvete!";
+	next;
+	switch(select("Me dê um!:Sorvete?:Cancelar.")) {
+	case 1:
+		mes "[Ice Cream Maker]";
+		mes "Como tem muita gente querendo um sorvete refrescante, você só pode pedir 5 de cada vez.";
+		mes "Então, quantos você quer?";
+		next;
+		while(1) {
+			input .@input; //,1,5;
+			if (.@input == 0) {
+				mes "[Ice Cream Maker]";
+				mes "Nenhum?";
+				mes "Tudo bem, saia da frente, tenho clientes para atender.";
+				close;
+			}
+			else if ((.@input < 0) || (.@input > 5)) {
+				mes "[Ice Cream Maker]";
+				mes "Uau.";
+				mes "Você pediu demais.";
+				mes "Se comer mais de 5, pode acabar tendo que lutar com um monstro no estômago. Calma aí, amigão.";
+				next;
+			}
+			else
+				break;
+		}
+		set .@icecream_hap,.@input*100;
+		if (Zeny < .@icecream_hap) {
+			mes "[Ice Cream Maker]";
+			mes "Cara~! Você não tem dinheiro suficiente.";
+			mes "São apenas ^3355FF100 Zenys^000000~ Sério mesmo!";
+			close;
+		}
+		if (!checkweight(536,.@input)) {
+			mes "[Ice Cream Maker]";
+			mes "Você parece estar muito carregado.";
+			mes "Esvazie sua mochila antes de comprar isso.";
+			close;
+		}
+		set Zeny, Zeny-.@icecream_hap;
+		getitem 536,.@input; //Ice_Cream
+		close;
+	case 2:
+		mes "[Ice Cream Maker]";
+		mes "'Sorvete é...";
+		mes "Espere, você não sabe";
+		mes "o que é Sorvete?";
+		mes "Em que mundo você";
+		mes "estava vivendo?";
+		next;
+		mes "[Ice Cream Maker]";
+		mes "Nem vou começar a falar de como isso soa estranho.";
+		mes "De qualquer forma, pegue seu Sorvete aqui enquanto está geladinho.";
+		close;
+	case 3:
+		mes "[Ice Cream Maker]";
+		mes "Não perca a chance de comer o melhor Sorvete de todas as terras~!";
+		close;
+	}
+}

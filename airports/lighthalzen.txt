@@ -1,0 +1,85 @@
+//===== rAthena Script ======================================= 
+//= Lighthalzen Airport Staff
+//===== By: ================================================== 
+//= L0ne_W0lf, Muad_Dib
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Lighthalzen Airport Staff
+//===== Additional Comments: ================================= 
+//= 1.0 First version.
+//============================================================ 
+
+lhz_airport,143,43,5	script	Airport Staff#lhz_air1a::lhz_airport1	90,{
+	mes "[Airport Staff]";
+	mes "Bem-vindo ao";
+	mes "Aeroporto de Lighthalzen,";
+	mes "onde oferecemos voos";
+	mes "diretos para Einbroch, Juno e Hugel.";
+	next;
+	if (select("Embarcar na Dirigível.:Cancelar.") == 1) {
+		mes "[Airport Staff]";
+		mes "A taxa de embarque é";
+		mes "de 1.200 zenys, mas você pode";
+		mes "isentar a taxa se resgatar";
+		mes "um Bilhete para Dirigível.";
+		next;
+		if (select("Sim:Não") == 1) {
+			if (countitem(7311) > 0) {
+				delitem 7311,1; //Free_Flying_Ship_Ticket
+				warp "lhz_airport",148,51;
+				end;
+			}
+			if (Zeny >= 1200) {
+				set Zeny, Zeny - 1200;
+				warp "lhz_airport",148,51;
+				end;
+			}
+			mes "[Airship Staff]";
+			mes "Sinto muito, mas você não";
+			mes "tem 1.200 zenys para pagar";
+			mes "a taxa de embarque.";
+			close;
+		}
+	}
+	mes "[Airport Staff]";
+	mes "Obrigado e";
+	mes "volte sempre.";
+	mes "Tenha um bom dia~";
+	close;
+}
+
+lhz_airport,158,43,5	duplicate(lhz_airport1)	Airship Staff#lhz_air1b	90
+lhz_airport,126,43,5	duplicate(lhz_airport1)	Airship Staff#lhz_air1c	90
+
+lhz_airport,143,49,3	script	Arrival Staff#lhz_air2a::lhz_airport2	90,{
+	mes "[Arrival Staff]";
+	mes "Bem-vindo ao Aeroporto de Lighthalzen.";
+	mes "Por favor, deixe-me guiá-lo ao";
+	mes "terminal principal se você estiver chegando do seu voo. Caso contrário, por favor,";
+	mes "embarque na Dirigível de partida para chegar ao seu destino.";
+	next;
+	if (select("Sair para o terminal principal.:Cancelar.") == 1) {
+		mes "[Arrival Staff]";
+		mes "Assim que estiver no terminal principal, você precisará pagar a taxa novamente";
+		mes "para embarcar em uma Dirigível. Você deve";
+		mes "sair apenas se Lighthalzen for o seu destino pretendido. Devemos";
+		mes "prosseguir para o terminal principal?";
+		next;
+		if (select("Sim:Não") == 1) {
+			warp "lhz_airport",142,40;
+			end;
+		}
+	}
+	mes "[Arrival Staff]";
+	mes "Tudo bem, obrigado";
+	mes "pela preferência";
+	mes "e espero que tenha";
+	mes "um voo agradável~";
+	close;
+}
+
+lhz_airport,126,51,3	duplicate(lhz_airport2)	Arrival Staff#lhz_air2b	90
+lhz_airport,158,50,3	duplicate(lhz_airport2)	Arrival Staff#lhz_air2c	90
