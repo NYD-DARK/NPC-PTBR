@@ -1,0 +1,131 @@
+//===== rAthena Script ======================================= 
+//= Enchant Grade
+//===== Changelogs: ==========================================
+//= 1.0 First Version. [JohnnyPlayy]
+//= 1.1 Fixed small issues. [Lemongrass]
+//= 1.2 Added translation. [Asheraf]
+//= 1.3 Added paramarket NPC and warps. [Balfear]
+//= 1.4 Translated paramarket NPC. [Lemongrass]
+//============================================================
+
+grademk,34,184,4	script	Sratos#sratos	4_JP_GARM_H,{
+	mes "[Sratos]";
+	mes "Olá, querido cliente que entrou, vamos torcer por um milagre hoje.";
+	mes "Como posso te ajudar?";
+	next;
+	switch( select( "Aprimorar o nível do equipamento.", "Trocar itens de Etel", "O que é o Aprimoramento de Nível?" ) ){
+		case 1:
+			mes "[Sratos]";
+			mes "Nosso cliente. Você quer aprimorar o nível do equipamento.";
+			mes "Não é fácil mover o poder mágico das joias.";
+			next;
+			mes "[Sratos]";
+			mes "O poder mágico pode explodir no local.";
+			mes "Então a arma que herdará o poder mágico também explode!";
+			next;
+			switch( select( "Eu ainda quero fazer isso!", "Vou pensar a respeito." ) ){
+				case 1:
+					mes "[Sratos]";
+					mes "Desejo boa sorte aos nossos corajosos clientes!";
+					close2;
+					enchantgradeui();
+					end;
+				case 2:
+					mes "[Sratos]";
+					mes "Sempre que tiver a coragem de desafiar, por favor, volte.";
+					close;
+			}
+		case 2:
+			mes "[Sratos]";
+			mes "Estas são joias usadas para aprimorar níveis.";
+			mes "Pó de Etel, as joias que serão a base e, se você me der uma pequena taxa, eu trocarei por joias de Etel.";
+			close2;
+			callshop "EnchantGradeExchange";
+			end;
+
+		case 3:
+			mes "[Sratos]";
+			mes "Ocasionalmente, joias instáveis com muito poder mágico puro são encontradas.";
+			mes "Nós chamamos essas de gemas etéricas, certo?";
+			next;
+			mes "[Sratos]";
+			mes "Você pode transferir o poder mágico da gema etérica para outras armas, mas é claro que há algum risco.";
+			mes "É delicado, então se você não tiver cuidado, puf! Vai explodir.";
+			next;
+			mes "[Sratos]";
+			mes "De qualquer forma, se você usar esta gema etérica, você pode aprimorar a arma que está usando.";
+			mes "O desempenho melhora. Chamamos isso de aprimoramento de nível.";
+			next;
+			mes "[Sratos]";
+			mes "Você também, não ficaria feliz se as armas que ama crescessem um passo a mais?";
+			mes "Nós somos as pessoas que auxiliam nisso. É um pouco arriscado, no entanto. ahahaha.";
+			close;
+	}
+
+OnInit:
+	setunittitle(getnpcid(0), "<Grade Enhancer>");
+	end;
+}
+
+paramk,34,184,4	script	Suribell#suribell	4_F_FRUIT,{
+	mes "[Suribell]";
+	mes "Que a sorte esteja sempre com você!";
+	mes "Bem-vindo ao Centro de Aprimoramento de Nível do Paramarket~";
+	next;
+	switch( select( "Aprimorar o nível do equipamento.", "Trocar itens de Etel", "O que é o Aprimoramento de Nível?" )) {
+		case 1:
+			mes "[Suribell]";
+			mes "Você quer liberar o potencial do seu equipamento favorito?";
+			mes "Explosões também podem ocorrer no processo de lidar com poderes mágicos.";
+			next;
+			mes "[Suribell]";
+			mes "Ainda assim, se você está tentando aprimorar seu nível... !";
+			mes "Eu, Suribell, farei o meu melhor!";
+			next;
+			switch( select( "Eu ainda quero fazer isso!", "Vou pensar a respeito." ) ){
+				case 1:
+					mes "[Suribell]";
+					mes "Vamos dar as mãos e ter fé! Tente cerrar os dentes!";
+					close2;
+					enchantgradeui();
+					end;
+				case 2:
+					mes "[Suribell]";
+					mes "Ok! Vamos beber um copo de água gelada!";
+					close;
+			}
+		case 2:
+			mes "[Suribell]";
+			mes "Você precisa de gemas etéricas para aprimorar níveis!";
+			mes "Se você combinar Pó de Etel e joias para fazê-la, tudo bem! Uma joia de Etel para aventureiros está completa!";
+			mes "Você gostaria de combinar joias e Pó de Etel?";
+			close2;
+			callshop "EnchantGradeExchange";
+			end;
+		case 3:
+			mes "[Suribell]";
+			mes "Ocasionalmente, joias instáveis com muito poder mágico puro são encontradas.";
+			mes "Decidi chamar tais gemas de gemas etéricas.";
+			mes "Quem? Eu sou a Suribell!";
+			next;
+			mes "[Suribell]";
+			mes "O poder mágico das gemas etéricas às vezes desperta o potencial oculto do equipamento.";
+			mes "Chamamos de aprimoramento de nível porque ele sobe um grau!";
+			next;
+			mes "[Suribell]";
+			mes "O aventureiro pode ter um potencial que lhe é desconhecido.";
+			mes "Existe o risco de ser destruído se feito errado, mas tente com fé!";
+			close;
+	}
+
+OnInit:
+	setunittitle(getnpcid(0), "<Grade Enhancer>");
+	end;
+}
+
+// = Portals
+//============================================================
+prontera,50,293,0	warp	Grademk_Int	1,1,grademk,13,172
+grademk,9,172,0	warp	Grademk_Out	1,1,prontera,50,290
+paramk,8,171,0	warp	grade_in	1,1,paramk,141,64
+paramk,145,64,0	warp	grade_out	1,1,paramk,11,171

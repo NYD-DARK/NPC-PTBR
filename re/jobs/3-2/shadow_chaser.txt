@@ -1,0 +1,2511 @@
+//===== rAthena Script ======================================= 
+//= Shadow Chaser Job Quest
+//===== By: ================================================== 
+//= Muad_Dib
+//===== Current Version: ===================================== 
+//= 1.4
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job change Quest from Rogue / Stalker -> Shadow Chaser.
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [ultragunner, Oshinoke]
+//= 1.1 Standardized. [Euphy]
+//= 1.2 Updated dialogue. [Joseph]
+//= 1.3 Updated to official script. [Euphy]
+//= 1.4 Added VIP features. [Euphy]
+//============================================================
+
+morocc,156,70,3	script	Girl#sc00	93,3,3,{
+	mes "[Girl]";
+	if (BaseJob == Job_Rogue) {
+		if (job_sha == 0) {
+			if (BaseLevel < 99 || JobLevel < 50) {
+				mes "Você não está pronto.";
+				close;
+			}
+			mes "Ei? Espere!";
+			mes "Não está interessado em ouvir uma história engraçada?";
+			next;
+			select("Que história?");
+			mes "[Girl]";
+			mes "Você esteve na guilda recentemente?";
+			mes "Algumas coisas interessantes aconteceram ultimamente.";
+			mes "Talvez novos convidados...";
+			next;
+			mes "[Girl]";
+			mes "Ouvi dizer que tem a ver com algo chamado Renegado.";
+			mes "Você deveria ir conferir.";
+			next;
+			mes "[Girl]";
+			mes "Cada vez que eles nos visitam, estão em novas missões.";
+			mes "Quais missões será que eles estão fazendo?";
+			set job_sha,1;
+			close;
+		} else if (job_sha == 1) {
+			mes "Se você tem algum interesse... apenas vá!";
+			mes "Você sabe onde fica a guilda?";
+			next;
+			mes "[Girl]";
+			mes "É em uma fortaleza sob o farol de Pharos.";
+			mes "Suspiro...";
+			mes "Você precisa visitar lá!";
+			close;
+		} else {
+			mes "Uau, você parece ocupado.";
+			mes "Você ouviu dizer que há visitantes?";
+			mes "Eles estão em uma caça ao tesouro!";
+			next;
+			mes "[Girl]";
+			mes "Deve ser divertido.";
+			mes "Eu quero tentar!";
+			close;
+		}
+	}
+	mes "Eh?";
+	mes "Eu não tenho nada para você...";
+	close;
+OnTouch_:
+	if (BaseJob == Job_Rogue && BaseLevel > 98 && JobLevel > 49 && job_sha == 0) {
+		mes "[Girl]";
+		mes "Ei? Espere!";
+		mes "Não está interessado em ouvir uma história engraçada?";
+		close;
+	}
+	end;
+}
+
+in_rogue,376,100,5	script	Guild Member#sc01	828,{
+	if (BaseJob == Job_Rogue) {
+		if (job_sha < 2) {
+			set @job_sha,0;
+		OnDialogue:
+			mes "[Vin]";
+			mes "Ah? O que é isso?";
+			mes "Lotte, você sabe o que isso significa?";
+			next;
+			mes "[Lotte]";
+			mes "Hmm '3847147298' esta é a única coisa que usei em...";
+			mes "Então, por que usaram números para nomear as vilas?";
+			next;
+			mes "[Lotte]";
+			mes "Vin! Isso é uma porcaria!";
+			next;
+			mes "[Vin]";
+			mes "O quê?";
+			next;
+			if (BaseLevel > 98) {
+				mes "[Scary man]";
+				mes "Ei, você aí?";
+				next;
+				switch(select("Eu?:Desculpe, estou ocupado...")) {
+				case 1:
+					mes "[Scary man]";
+					mes "Sim! Você mesmo!";
+					mes "Deixe-me me apresentar a você.";
+					mes "Meu nome é Urupa.";
+					mes "Se estiver interessado, poderia vir aqui?";
+					if (@job_sha == 1) {
+						set job_sha,1;
+						set @job_sha,0;
+					}
+					close;
+				case 2:
+					mes "[Scary man]";
+					mes "O quê? Você vai apenas desistir assim?";
+					mes "Tão decepcionante...";
+					close;
+				}
+			}
+			mes "[Scary man]";
+			mes "Você deveria ser capaz de descobrir isso!";
+			mes "Mas você ainda é tão... fraco.";
+			close;
+		} else {
+			mes "[Vin]";
+			mes "Sim...";
+			mes "Cedo ou tarde, eu mesmo resolverei se eu tiver coragem de conseguir o mapa...!";
+			close;
+		}
+	} else if (Class == Job_Shadow_Chaser || Class == Job_Shadow_Chaser_T || Class == Job_Baby_Shadow_Chaser) {
+		mes "[Vin]";
+		mes "Huh! Isso é um Renegado!";
+		mes "Que inacreditável!";
+		mes "Mas parece familiar, não parece?";
+		next;
+		mes "[Vin]";
+		mes "Hmm......";
+		mes "..........";
+		mes "Oh, meu Deus! Não consigo me lembrar...!";
+		close;
+	}
+	mes "[Vin]";
+	mes "Ah? Quem está aí?";
+	mes "Estamos lotados de convidados hoje...";
+	close;
+}
+
+in_rogue,379,99,1	script	Guild Member#sc02	747,{
+	if (BaseJob == Job_Rogue) {
+		if (job_sha < 2) {
+			set @job_sha,1;
+			doevent "Guild Member#sc01::OnDialogue";
+			end;
+		}
+		mes "[Lotte]";
+		mes "O quê?";
+		mes "Droga...";
+		next;
+		mes "[Lotte]";
+		mes "Eu simplesmente odeio números!";
+		close;
+	} else if (Class == Job_Shadow_Chaser || Class == Job_Shadow_Chaser_T || Class == Job_Baby_Shadow_Chaser) {
+		mes "[Lotte]";
+		mes "Uau!";
+		mes "Você é a pessoa!";
+		mes "Simplesmente extraordinariamente inteligente e emocionalmente avançado...";
+		next;
+		mes "[Lotte]";
+		mes "Renegado!";
+		mes "Uau, quando eu poderia me tornar um.";
+		close;
+	}
+	mes "[Lotte]";
+	mes "Eu não preciso de nada.";
+	close;
+}
+
+in_rogue,379,101,3	script	Scary Man#sc03	810,{
+	if (job_sha == 0) {
+		if (BaseJob == Job_Rogue && BaseLevel > 98 && JobLevel > 49) {
+			mes "[Scary man]";
+			mes "Oh, você é tão talentoso?";
+			mes "Agora tenho uma pergunta interessante! Você quer resolvê-la?";
+			next;
+			mes "[Urupa]";
+			mes "Meu nome é Urupa.";
+			mes "Se você tiver algo interessante, apenas desafie.";
+			set job_sha,1;
+			close;
+		}
+		mes "[Scary man]";
+		mes "Qual é o seu negócio?";
+		mes "Não tenho nada a ver com você.";
+		mes "Não me importo com pessoas como você. Eu só lido com o extraordinário.";
+		close;
+	} else if (job_sha == 1) {
+		if (VIP_SCRIPT) {
+			callfunc "VIP_Third_Class";
+			set job_sha,2;
+			setquest 7160;
+			next;
+		}
+		mes "[Urupa]";
+		mes "Nós damos um enigma e ninguém conseguiu resolvê-lo ainda.";
+		mes "Você quer que ele seja resolvido?";
+		mes "Este é um código.";
+		mes "Olhe para ele.";
+		next;
+		mes "- A mensagem está -";
+		mes "- escrita em uma cifra. -";
+		mes "A missão parece ser quebrar o código...";
+		next;
+		mes "[Urupa]";
+		mes "Este é o código.";
+		mes "É apenas numerar uma cifra para fazer a mensagem ter sentido.";
+		mes "Por exemplo...";
+		next;
+		callsub L_Code,1;
+		mes "[Urupa]";
+		mes "Agora, aqui está o que precisa ser resolvido.";
+		mes "Decifre o código e vá para onde ele indica...";
+		next;
+		callsub L_Code,2;
+		next;
+		mes "[Urupa]";
+		mes "Então anote isso!";
+		mes "Eu esperava que você embarcasse nesta aventura!";
+		set job_sha,2;
+		setquest 7160;
+		close;
+	} else if (job_sha == 2) {
+		mes "[Urupa]";
+		mes "Você quer mais uma explicação?";
+		mes "Ou você só quer o código?";
+		next;
+		switch(select("Mais explicação.:Obter o código.")) {
+		case 1:
+			callsub L_Code,1;
+			mes "[Urupa]";
+			mes "Agora depende de você!";
+			mes "Então vá! Vá!";
+			close;
+		case 2:
+			mes "[Urupa]";
+			mes "Deixe-me mostrar o código novamente...";
+			next;
+			callsub L_Code,2;
+			close;
+		}
+	} else if (job_sha > 2 && job_sha < 31) {
+		mes "[Urupa]";
+		mes "Ok, você já resolveu?";
+		mes "Boa sorte!";
+		close;
+	} else if (job_sha == 31) {
+		mes "[Urupa]";
+		mes "Você acaba de se tornar um Renegado.";
+		mes "Os testes servem para reunir as pessoas certas...";
+		close;
+	}
+	mes "[Urupa]";
+	mes "Nada de especial?";
+	mes "Como você vê... estou bem aqui!";
+	close;
+L_Code:
+	if (getarg(0) == 1) {
+		mes "[Urupa]";
+		mes "3511543433";
+		mes "Isso significa payon.";
+		next;
+		mes "[Urupa]";
+		mes "Os números precisam ser pareados.";
+		mes "3511543433";
+		mes "35 11 54 34 33 se divide em 5 pares!";
+		next;
+		mes "[Urupa]";
+		mes "Então, os pares significam:";
+		mes "35 - P, 11 - A,";
+		mes "54 - Y, 34 - O, 33 - N.";
+		next;
+		mes "[Urupa]";
+		mes "Aqui estão os números todos em uma linha.";
+		mes "33, 34, 35!";
+		mes "N, O, P ?";
+		next;
+	} else {
+		mes "Aqui vamos nós!";
+		next;
+		mes "^4d4dff";
+		mes "43231114345243";
+		mes "11441531241542";
+		mes "2433";
+		mes "3542343344154211";
+		mes "^000000";
+		next;
+		mes "[Urupa]";
+		mes "Você conseguiria fazer isso?";
+		mes "Se você visitar lá, pode ficar surpreso...";
+	}
+	return;
+}
+
+s_atelier,65,123,5	script	Manager#sc04_prt	903,{
+	if (job_sha == 2) {
+		mes "[Manager]";
+		mes "Onde está o Max!?";
+		mes "Droga, tem tantos estranhos por perto.";
+		mes "Ei...";
+		next;
+		switch(select("Mostre o código decifrado!:...")) {
+		case 1:
+			mes "[Manager]";
+			mes "Uau, você decifrou?";
+			mes "Então, qual é a resposta certa?";
+			next;
+			input .@inputstr$;
+			if (.@inputstr$ == "shadows atelier in prontera" || .@inputstr$ == "SHADOWS ATELIER IN PRONTERA") {
+				mes "[Manager]";
+				mes "Bom.";
+				mes "Você acertou.";
+				mes "Então por que você veio aqui?";
+				next;
+				select("O código diz que aqui é o lugar...");
+				mes "[Manager]";
+				mes "Então você é a pessoa certa.";
+				mes "Você poderia esperar um segundo?";
+				set job_sha,3;
+				close;
+			}
+			mes "[Manager]";
+			mes "Lembre-se de colocar o código exatamente como ele deve ser decifrado.";
+			mes "Talvez você deva tentar novamente...";
+			close;
+		case 2:
+			mes "[Manager]";
+			mes "Apenas permitido para pessoas envolvidas....";
+			mes "Você poderia perguntar ao atendente da loja?";
+			close;
+		}
+	} else if (job_sha == 3) {
+		mes "[Manager]";
+		mes "Agora deixe-me me apresentar a você!";
+		mes "Eu sou Graham, o gerente desta galeria das sombras...";
+		next;
+		mes "[Graham]";
+		mes "Você pode já ter adivinhado.";
+		mes "Esta é uma instalação adicional para mercenários.";
+		mes "Adotamos coisas como arte e outros itens históricos.";
+		next;
+		mes "[Graham]";
+		mes "Essas coisas são ilegais.";
+		mes "Coisas assim que vocês trazem de lugares históricos...";
+		mes "Ok.";
+		next;
+		mes "[Graham]";
+		mes "Então precisamos saber coisas como...";
+		mes "códigos especiais e informações sobre onde os tesouros estão.";
+		next;
+		mes "[Graham]";
+		mes "Nós precisamos de vocês...";
+		mes "Então pedimos assistência da guilda dos Arruaceiro.";
+		next;
+		select("Algum outro lugar em que vocês trabalham?");
+		mes "[Graham]";
+		mes "Ah, sim...";
+		mes "Estamos em Prontera, Juno, Rachel e Lighthalzen.";
+		mes "Ok?";
+		next;
+		mes "[Graham]";
+		mes "De qualquer forma....";
+		mes "Todos nós queremos muito saber onde estão os tesouros.";
+		mes "Então, o código serve para invadir cada um desses lugares.";
+		next;
+		mes "[Graham]";
+		mes "Você parece ser a pessoa certa.";
+		mes "Então eu vou te dar o código.";
+		mes "Por favor, encontre o tesouro!";
+		next;
+		switch(select("Sem chance!:Vou tentar!")) {
+		case 1:
+			mes "[Graham]";
+			mes "Que diabos?";
+			mes "Se você não vai ajudar, então vou encontrar outra pessoa.";
+			set job_sha,4;
+			close;
+		case 2:
+			mes "[Graham]";
+			mes "Você é tão poderoso!";
+			mes "Então aqui...";
+			next;
+			callsub L_Code,0;
+			close;
+		}
+	} else if (job_sha == 4) {
+		mes "[Graham]";
+		mes "Você está interessado nisso agora?";
+		next;
+		switch(select("De jeito nenhum.:Hmm, eu aceito.")) {
+		case 1:
+			mes "[Graham]";
+			mes "Droga.";
+			close;
+		case 2:
+			mes "[Graham]";
+			mes "Você é muito exigente...";
+			mes "Aqui...";
+			next;
+			callsub L_Code,0;
+			close;
+		}
+	} else if (job_sha == 5) {
+		mes "[Graham]";
+		mes "Você encontrou algo?";
+		next;
+		switch(select("Preciso de uma explicação.:Qual é o código novamente?")) {
+		case 1:
+			mes "[Graham]";
+			mes "Você é tão poderoso!";
+			next;
+			callsub L_Code,1;
+			mes "[Graham]";
+			mes "Entendeu?";
+			close;
+		case 2:
+			mes "[Graham]";
+			mes "Eu te dei o código.";
+			mes "Que loucura...";
+			mes "Você não tem um lembrete disso?";
+			close;
+		}
+	} else if (job_sha == 6 || job_sha == 7) {
+		mes "[Graham]";
+		mes "Nada de especial...?";
+		mes "Você esteve em lugares...?";
+		mes "Definitivamente tem algo aí.";
+		next;
+		mes "Graham parece saber de algo.";
+		mes "É melhor eu ir lá novamente.";
+		close;
+	} else if (job_sha == 8) {
+		mes "[Graham]";
+		mes "E então, alguma melhoria?";
+		next;
+		select("Mostre a chave para ele.");
+		mes "[Graham]";
+		mes "Enganação!";
+		mes "Você está me enganando!";
+		next;
+		mes "[Graham]";
+		mes "É só isso?";
+		mes "Apenas uma chave.";
+		mes "Que enganação!";
+		mes "Exatamente como eu pensei, é um tipo de tesouro.";
+		next;
+		mes "[Graham]";
+		mes "Você acabou de me dar um susto.";
+		mes "Ok...";
+		mes "O código é mantido nas galerias.";
+		next;
+		mes "[Graham]";
+		mes "Ok, existem mais galerias além desta...";
+		mes "Juno e Rachel têm os códigos...";
+		next;
+		mes "[Graham]";
+		mes "Isso é exatamente o que eu estava supondo.";
+		mes "Os códigos mantidos por outras galerias não são tesouros, de forma alguma...";
+		next;
+		mes "[Graham]";
+		mes "Vá para Rachel...";
+		next;
+		mes "[Graham]";
+		mes "Encontre a galeria em Rachel...";
+		mes "Diga a eles que você acabou de vir de Graham e peça pelo código.";
+		next;
+		mes "[Graham]";
+		mes "Ok?";
+		mes "Então vá até lá!";
+		set job_sha,9;
+		changequest 7165,7166;
+		close;
+	} else if (job_sha == 9) {
+		mes "[Graham]";
+		mes "Existem quatro galerias...";
+		mes "Prontera, Rachel, Juno e Lighthalzen.";
+		next;
+		mes "[Graham]";
+		mes "Um dos códigos mantidos pelas galerias já foi decifrado.";
+		mes "É apenas uma chave....";
+		next;
+		mes "[Graham]";
+		mes "Mas aqui está o que eu estou supondo.";
+		mes "Os códigos estão ligados uns aos outros.";
+		mes "E o objetivo é diferente para cada um.";
+		next;
+		mes "[Graham]";
+		mes "Por exemplo...";
+		mes "Se um é apenas uma chave, então os outros são coisas que exigem a chave.";
+		next;
+		mes "[Graham]";
+		mes "A chave deve ser para abrir a caixa.";
+		mes "Você consegue adivinhar o que tem dentro?";
+		next;
+		select("Hum, um tesouro?");
+		mes "[Graham]";
+		mes "SIM.";
+		mes "É por isso que estamos aqui!";
+		next;
+		mes "[Graham]";
+		mes "As pessoas acham que estamos apenas negociando coisas...";
+		mes "Mas estamos aqui por coisas muito especiais.";
+		next;
+		mes "[Graham]";
+		mes "Vá até a ^4d4dffGaleria de Rachel^000000 e consiga o código...";
+		mes "Eles vão te apoiar se você explicar tudo.";
+		mes "Ok?";
+		close;
+	} else if (job_sha > 9 && job_sha < 30) {
+		mes "[Graham]";
+		mes "Que tal explicar tudo?";
+		mes "Estamos morrendo de vontade de saber sobre a chave.";
+		mes "Então você conseguiu apoio das outras galerias.";
+		close;
+	} else if (job_sha > 29) {
+		mes "[Graham]";
+		mes "Renegado!!";
+		mes "Ah!";
+		next;
+		mes "[Graham]";
+		mes "Não é uma enganação intencional...";
+		mes "Hahaha!!";
+		next;
+		mes "[Graham]";
+		mes "Não é interessante?";
+		mes "É mais do que apenas fazer exames.";
+		mes "Nós ficamos sabendo sobre você e descobrimos quem você é.";
+		next;
+		mes "[Graham]";
+		mes "Como foi minha atuação?";
+		mes "Funcionou?";
+		next;
+		mes "[Graham]";
+		mes "Se precisar de algo, apenas peça a eles o que você quiser.";
+		close;
+	}
+	mes "[Manager]";
+	mes "Permitido apenas para pessoas envolvidas...";
+	mes "Você poderia perguntar ao atendente da loja?";
+	close;
+L_Code:
+	mes "-nota.";
+	mes "^4d4dff 13 15 18 15 3 3 18 21 9 14^000000";
+	mes "chave : 0 -";
+	next;
+	select("Estes são apenas números...");
+	mes "[Graham]";
+	mes "A única diferença daquela da guilda de Arruaceiro é que você não precisa combiná-los em pares.";
+	next;
+	mes "[Graham]";
+	mes "Também aqui está a palavra-chave...";
+	mes "Este caso é a chave 0.";
+	next;
+	mes "[Graham]";
+	mes "Vamos ver. Por exemplo.";
+	mes "13 15 18 15 3 3 18 21 9 14 =";
+	mes "M O R O C C R U I N";
+	next;
+	mes "[Graham]";
+	mes "Olhe para isto... C = 3.";
+	mes "C é a terceira letra, certo?";
+	next;
+	mes "[Graham]";
+	mes "Você entendeu?";
+	mes "Mas isso não será dado com a palavra-chave 0. Quando eu te der a palavra-chave, você poderá descobrir por si mesmo.";
+	next;
+	if (getarg(0)) return;
+	mes "[Graham]";
+	mes "Agora vamos prosseguir para a missão.";
+	mes "Aqui está a cifra...";
+	next;
+	set .@key01, rand(3,5);
+	set .@a, 1 + .@key01;
+	set .@b, 2 + .@key01;
+	set .@d, 4 + .@key01;
+	set .@e, 5 + .@key01;
+	set .@f, 6 + .@key01;
+	set .@h, 8 + .@key01;
+	set .@i, 9 + .@key01;
+	set .@l, 12 + .@key01;
+	set .@n, 14 + .@key01;
+	set .@o, 15 + .@key01;
+	set .@r, 18 + .@key01;
+	set .@s, 19 + .@key01;
+	set .@t, 20 + .@key01;
+	set .@u, 21 + .@key01;
+	mes "^4d4dff" + .@b + " " + .@l + " " + .@u + " " + .@e + " ";
+	mes "" + .@f + " " + .@i + " " + .@r + " " + .@e + " ";
+	mes "" + .@i + " " + .@n + " ";
+	mes "" + .@t + " " + .@u + " " + .@r + " " + .@t + " " + .@l + " " + .@e + " ";
+	mes "" + .@i + " " + .@s + " " + .@l + " " + .@a + " " + .@n + " " + .@d + " ";
+	mes "" + .@t + " " + .@h + " " + .@i + " " + .@r + " " + .@d + " ";
+	mes "" + .@f + " " + .@l + " " + .@o + " " + .@o + " " + .@r + " ";
+	mes "chave :" + .@key01 + ".";
+	set job_sha,5;
+	erasequest 7160;
+	if (.@key01 == 3) setquest 7161;
+	else if (.@key01 == 4) setquest 7162;
+	else if (.@key01 == 5) setquest 7163;
+	next;
+	mes "[Graham]";
+	mes "Apenas pegue.";
+	mes "Eu tenho uma memória ruim.";
+	mes "Você tem todas as informações, então agora está por sua conta.";
+	next;
+	mes "[Graham]";
+	mes "Assim que conseguir algo, venha até aqui.";
+	next;
+	mes "- Você pega o bilhete de Graham.";
+	mes "Não se esqueça! -";
+	close;
+}
+
+s_atelier,168,65,5	script	Manager#sc08_ra	923,{
+	if (job_sha < 10) {
+		mes "[Manager]";
+		mes "Quem é você?";
+		mes "Este lugar não é para você.";
+		next;
+		if (job_sha < 9) {
+			mes "[Manager]";
+			mes "O que eles estão fazendo lá em cima?";
+			mes "Bleh...";
+			close;
+		}
+		switch(select("Me dê sua senha!:Fui enviado por Graham.")) {
+		case 1:
+			mes "[Manager]";
+			mes "Você precisa da minha senha?";
+			mes "Quanto você me pagaria?";
+			next;
+			mes "[Manager]";
+			mes "10 milhões de zeny?";
+			mes "Ok, eu aceito isso então!";
+			next;
+			mes "[Manager]";
+			mes "Sim, claro!";
+			mes "Quem diabos é você?";
+			mes "Como ousa pedir minha senha assim?";
+			close;
+		case 2:
+			mes "[Manager]";
+			mes "Graham?";
+			mes "Por quê?";
+			next;
+			if (countitem(6266) == 0) {
+				mes "Você não parece ter trazido ela aqui.";
+				next;
+				mes "[Manager]";
+				mes "Você é mudo?";
+				mes "Não sei por que Graham mandou você aqui.";
+				mes "Apenas vá embora se não tem nada para fazer aqui!";
+				close;
+			}
+			mes "[Manager]";
+			mes "Então esta chave foi enviada por ele.";
+			next;
+			select("Não, eu a encontrei como uma pista.");
+			mes "[Manager]";
+			mes "Ah?";
+			mes "Então isso não significa que um código poderia ser trocado por um tesouro...?";
+			next;
+			select("Talvez.");
+			mes "[Manager]";
+			mes "...........";
+			mes "Hmm...";
+			next;
+			mes "[Manager]";
+			mes "Hmm...";
+			next;
+			mes "- O gerente parece -";
+			mes "- estar pensando em -";
+			mes "- algo. Então ele -";
+			mes "- entrega um papel. -";
+			next;
+			mes "[Manager]";
+			mes "Não pode ser.";
+			mes "Aqui está a pista.";
+			mes "Tente encontrá-la.";
+			next;
+			mes "[Manager]";
+			mes "De qualquer forma, meu nome é Paul.";
+			mes "...........";
+			next;
+			mes "[Paul]";
+			mes "Naturalmente...";
+			mes "Eu já resolvi a pista.";
+			next;
+			mes "- Aqui está o papel que -";
+			mes "- Paul entregou. -";
+			next;
+			mes "R-E-N-N-N-D";
+			mes "L-N-N-W-W-N-D";
+			next;
+			mes "[Paul]";
+			mes "Não é tão simples?";
+			mes "O que você acha?";
+			mes "RENNND / LNNWWND significa uma coisa.";
+			next;
+			switch(select("Acho que entendi.:Não tenho ideia.")) {
+			case 1:
+				callsub L_Code,7166;
+				close;
+			case 2:
+				mes "[Paul]";
+				mes "O quê? Você não sabe?";
+				mes "Então é melhor pensar mais sobre isso.";
+				mes "É tão fácil.";
+				set job_sha,10;
+				changequest 7166,7167;
+				close;
+			}
+		}
+	} else if (job_sha == 10) {
+		mes "[Paul]";
+		mes "Então, você entendeu o que significa?";
+		next;
+		switch(select("Sim!:Não, não acho que entendi.")) {
+		case 1:
+			callsub L_Code,7167;
+			close;
+		case 2:
+			mes "[Paul]";
+			mes "É tão difícil assim?";
+			next;
+			select("Eu não consigo fazer isso...");
+			mes "[Paul]";
+			mes "Sem chance.";
+			mes "Posso te dar uma dica?";
+			mes "Bússola!";
+			close;
+		}
+	} else if (job_sha > 10 && job_sha < 14) {
+		mes "[Paul]";
+		mes "Eu já te dei todas as informações que você precisa.";
+		next;
+		mes "[Paul]";
+		mes "Eu te dei mais uma pista.";
+		mes "Não é o suficiente?";
+		next;
+		mes "[Paul]";
+		mes "Como você e Graham mencionaram.";
+		mes "Vá e descubra.";
+		next;
+		mes "[Paul]";
+		mes "Se encontrar coisas reais como tesouros,";
+		mes "volte aqui.";
+		close;
+	} else if (job_sha > 13 && job_sha < 17) {
+		mes "[Paul]";
+		mes "Você deve encontrar o lugar certo.";
+		mes "A palavra é RENNND";
+		mes "Refere-se à caverna Leste - Norte - Norte - Norte a partir desta Rachel.";
+		next;
+		mes "[Paul]";
+		mes "L-N-N-W-W-N-D também é a mesma coisa.";
+		mes "L é para Lighthalzen.";
+		mes "Lighthalzen - Norte - Norte - Oeste - Oeste.";
+		mes "Essa é a caverna de gelo.";
+		next;
+		mes "[Paul]";
+		mes "Alguma melhoria!?";
+		next;
+		select("Você precisa investigar mais?");
+		mes "[Paul]";
+		mes "Sério? Ok...";
+		mes "Não pode ser...";
+		mes "Esperaremos um bom resultado.";
+		close;
+	} else if (job_sha == 17) {
+		mes "[Paul]";
+		mes "Estou morrendo de ansiedade para esperar por você.";
+		mes "Então, o que você descobriu?";
+		next;
+		select("Eu encontrei a chave.:Hmm...");
+		mes "- Você entrega a 'Chave da Ilusão' que encontrou na caverna de gelo. -";
+		next;
+		mes "[Paul]";
+		mes "Ilusão! Haha!";
+		mes "Depois da decepção, vem a ilusão!";
+		mes "Então você está mentindo para mim?";
+		next;
+		mes "[Paul]";
+		mes "Eu consigo sentir como Graham sentiu...";
+		mes "Nós não ousamos pegar aquela chave minúscula...";
+		next;
+		mes "[Paul]";
+		mes "O rapaz em Lighthalzen é bem difícil de lidar...";
+		mes "Então é melhor pedirmos ajuda ao Haled...";
+		next;
+		mes "[Paul]";
+		mes "Ei...";
+		mes "Se você for para Juno...";
+		mes "Tem uma galeria...";
+		next;
+		mes "[Paul]";
+		mes "Então você poderia pedir a ele a senha?";
+		mes "Hmm...";
+		next;
+		mes "[Paul]";
+		mes "Sinto que o ruivo na galeria principal está zombando de mim...";
+		mes "Enfim...";
+		mes "Eu realmente gostaria de saber a senha e a identidade da chave...";
+		next;
+		mes "[Paul]";
+		mes "Se Haled não cooperar...";
+		mes "Diga a ele ^4d4dffEu sei o que você fez no verão passado!^000000";
+		mes "Você não deve estar errado...!?";
+		set job_sha,18;
+		changequest 7172,7173;
+		close;
+	} else if (job_sha == 18) {
+		mes "[Paul]";
+		mes "Você poderia pedir a ele para conseguir a chave...";
+		mes "Ele vai te ajudar se você disser algo a ele...";
+		next;
+		mes "[Paul]";
+		mes "Se Haled não cooperar...";
+		mes "Diga a ele ^4d4dffEu sei o que você fez no verão passado!^000000";
+		close;
+	} else if (job_sha > 18 && job_sha < 30) {
+		mes "[Paul]";
+		mes "Então você ainda está procurando pelo tesouro... certo?";
+		mes "Eu procuraria por ele...";
+		close;
+	} else if (job_sha == 30) {
+		mes "[Paul]";
+		mes "Agora eu quase adivinhei o que aconteceria depois...";
+		mes "Não pode ter acontecido!";
+		next;
+		mes "[Paul]";
+		mes "Você está chocado?";
+		mes "Não pense no pior.";
+		mes "Você pode encontrar alguém bom.";
+		mes "Hahaha...";
+		close;
+	}
+	mes "[Paul]";
+	mes "Você precisa de uma ferramenta de pintura?";
+	mes "Então você pode pedir isso ao assistente.";
+	mes "Nós sempre temos uma por precaução.";
+	close;
+L_Code:
+	mes "[Paul]";
+	mes "Sério? Então eu não preciso te dar a resposta.";
+	mes "Você poderia interpretar o significado de cada letra?";
+	next;
+	select("É meio que uma combinação de lugares.");
+	mes "[Paul]";
+	mes "Então?";
+	next;
+	select("E-N significa Leste - Norte");
+	mes "[Paul]";
+	mes "Ok, isso é bom o suficiente.";
+	mes "Então vá e descubra.";
+	next;
+	mes "[Paul]";
+	mes "Memorize isto.";
+	mes "Você pode precisar. Pode ser uma pista para você.";
+	next;
+	mes "[Paul]";
+	switch(rand(3)) {
+	case 0:
+		mes "[ S E E D ]";
+		mes "S E E D (Semente)?";
+		set job_sha,11;
+		changequest getarg(0),7168;
+		break;
+	case 1:
+		mes "[ F O O T ]";
+		mes "F O O T (Pé)?";
+		set job_sha,12;
+		changequest getarg(0),7169;
+		break;
+	case 2:
+		mes "[ C O L D ]";
+		mes "C O L D (Frio)?";
+		set job_sha,13;
+		changequest getarg(0),7170;
+		break;
+	}
+	mes "Eu não sei o que realmente significa, mas seria útil para você descobrir.";
+	close;
+}
+
+s_atelier,167,129,3	script	Manager#sc06_yuno	806,{
+	if (job_sha < 19) {
+		mes "[Manager]";
+		mes "O quê?";
+		mes "Se você veio aqui por dinheiro, você está enganado.";
+		mes "Isso não é uma casa de penhores.";
+		if (job_sha < 18) close;
+		next;
+		select("Você é... Haled?");
+		mes "[Haled]";
+		mes "Hmm? Eu sou o gerente deste local de trabalho em Juno. Qual é o problema?";
+		next;
+		mes "[Haled]";
+		mes "Hmm. Você foi enviado por Graham e Paul?";
+		mes "Achei que você tivesse vindo aqui apenas para pedir dinheiro com pedaços de fósseis.";
+		next;
+		mes "[Haled]";
+		mes "É um método clássico que estudiosos pobres usam.";
+		mes "Às vezes eu compro coisas boas, então algumas pessoas acham que isto é uma casa de penhores.";
+		next;
+		mes "[Haled]";
+		mes "Deixe-me ouvir sua história.";
+		next;
+		mes "- Você explica tudo até agora e mostra a chave da arrogância. -";
+		next;
+		mes "[Haled]";
+		mes "Então...";
+		mes "Eu entendo perfeitamente.";
+		mes "É a localização desta chave que";
+		mes "compartilhou as informações!";
+		next;
+		mes "[Haled]";
+		mes "Enfim. Duas são as chaves e o tesouro que tenho que abrir com esta chave, o que posso fazer?";
+		next;
+		mes "[Haled]";
+		mes "Nós vamos investigar o local de trabalho de Juno, então entregue-a para mim?";
+		next;
+		mes "- Haled não quer cooperar com você.";
+		mes "Lembre-se do que Paul disse. -";
+		next;
+		callsub L_Code;
+		mes "[Haled]";
+		mes "E daí?";
+		mes "Ele é uma pessoa de olhar selvagem.";
+		mes "Você acabou de falar comigo em um tom ameaçador?";
+		set job_sha,19;
+		close;
+	} else if (job_sha == 19) {
+		mes "[Haled]";
+		mes "O quê?";
+		mes "Você quer conversar comigo?";
+		mes "Que tal você simplesmente me entregar essa chave?";
+		next;
+		callsub L_Code;
+		mes "[Haled]";
+		mes "O que há de errado com você?";
+		mes "Você está bem?";
+		mes "Paul? O que você quer dizer?";
+		set job_sha,19;
+		close;
+	} else if (job_sha == 20) {
+		mes "[Haled]";
+		mes "Entendi.";
+		mes "Ok.";
+		mes "Você precisa saber onde fica o local com o código?";
+		next;
+		mes "[Haled]";
+		mes "Não tenho escolha.";
+		mes "Ouça este poema com atenção.";
+		next;
+		mes "[Haled]";
+		mes "^4d4dffO fim da raiz fina da água da vida.";
+		mes "É tudo feito de lágrimas e sinais de pessoas vivas.";
+		mes "Eles são nós, mas também não são.";
+		mes "Habitantes da noite esquecida";
+		mes "dançam a valsa do desespero^000000.";
+		next;
+		mes "[Haled]";
+		mes "Você sabe onde fica?";
+		mes "Você sabe onde é, certo?";
+		mes "É apenas a minha opinião, mas...";
+		mes "Não pode ser possível...";
+		next;
+		mes "[Haled]";
+		mes "De qualquer forma, se você quer fazer isso, vá em frente.";
+		mes "Se você sabe o que esse poema significa.";
+		next;
+		mes "[Haled]";
+		mes "Claro, se você encontrar algo, você tem que voltar.";
+		mes "Entendeu?";
+		mes "Vou anotar para que você não esqueça.";
+		set job_sha,21;
+		changequest 7173,7174;
+		close;
+	} else if (job_sha == 21) {
+		mes "[Haled]";
+		mes "Não ficarei surpreso com o que quer que você encontre.";
+		mes "Você tem que encontrar o lugar de que o poema fala.";
+		next;
+		mes "[Haled]";
+		mes "^4d4dffO fim da raiz fina da água da vida.";
+		mes "É tudo feito de lágrimas e sinais de pessoas vivas.";
+		mes "Eles são nós, mas também não são.";
+		mes "Habitantes da noite esquecida";
+		mes "dançam a valsa do desespero^000000.";
+		next;
+		mes "[Haled]";
+		mes "Claro, se você encontrar algo, você tem que voltar.";
+		mes "Entendeu?";
+		close;
+	} else if (job_sha > 21 && job_sha < 25) {
+		mes "[Haled]";
+		mes "Como vão as coisas?";
+		mes "Se você encontrar algo, você tem que voltar.";
+		mes "Não procure o Graham ou o Paul.";
+		close;
+	} else if (job_sha == 25) {
+		mes "[Haled]";
+		mes "Você encontrou alguma coisa?";
+		next;
+		select("Mostre a chave do prazer.");
+		if (countitem(6268)) {
+			mes "[Haled]";
+			mes "Ha..........akkk.";
+			mes "Outra chave?";
+			mes "É a única chave?!";
+			next;
+			mes "[Haled]";
+			mes "Então... eu tenho que pedir ajuda ao jovem de Lighthalzen?";
+			mes "...........";
+			mes "Ah...";
+			next;
+			mes "[Haled]";
+			mes "Não tenho escolha.";
+			mes "Vá para Lighthalzen com as três chaves.";
+			mes "Encontre o Vicente, que é o gerente da loja em Lighthalzen, e conte tudo a ele.";
+			next;
+			mes "[Haled]";
+			mes "Eu te disse que aquele velho é persistente e estraga tudo.";
+			next;
+			mes "[Haled]";
+			mes "Você precisa ter todos os fatos esclarecidos para enviar informações à guilda.";
+			mes "Primeiro, vocês precisam trabalhar juntos em harmonia.";
+			next;
+			mes "[Haled]";
+			mes "A coisa que você encontrar pode pertencer ao local de trabalho.";
+			mes "Pode ser compartilhada.";
+			next;
+			mes "[Haled]";
+			mes "Achei que fosse algo muito simples.";
+			mes "Não conseguimos compartilhar aquilo juntos.";
+			next;
+			mes "[Haled]";
+			mes "Todas as informações que obtive no local de trabalho são a chave.";
+			mes "Deve haver algo para usar com as três chaves.";
+			next;
+			mes "[Haled]";
+			mes "De qualquer forma, tem a ver com engano e prazer...";
+			mes "Será que está zombando de mim...";
+			next;
+			mes "[Haled]";
+			mes "Ok. Deixe-me terminar.";
+			mes "Vá até o Vicente em Lighthalzen.";
+			set job_sha,26;
+			changequest 7176,7177;
+			close;
+		}
+		mes "["+strcharinfo(0)+"]";
+		mes "Me desculpe.";
+		mes "Encontrei mais uma chave, mas não a trouxe.";
+		mes "Trarei logo.";
+		close;
+	} else if (job_sha == 26) {
+		mes "[Haled]";
+		mes "Local de trabalho das sombras em Lighthalzen.";
+		mes "O nome do gerente é Vicente.";
+		mes "Conte tudo a ele e obtenha a última informação.";
+		close;
+	} else if (job_sha > 26 && job_sha < 30) {
+		mes "[Haled]";
+		mes "Ei, você!";
+		mes "O Vicente foi útil para você?";
+		mes "Você tem algo importante...";
+		mes "Então você precisa descobrir o que é.";
+		next;
+		mes "[Haled]";
+		mes "Continue tentando.";
+		close;
+	} else if (job_sha == 30) {
+		mes "[Haled]";
+		mes "Ei, você!";
+		mes "O que está acontecendo?";
+		mes "O quê? Renegado?";
+		next;
+		mes "[Haled]";
+		mes "Eu sabia desse fato?";
+		mes "Claro. Eu ouvi um pouco antes.";
+		mes "Eu costumava fazer trabalhos como este.";
+		next;
+		mes "[Haled]";
+		mes "É uma honra para mim escolher alguém que pertence a nós.";
+		mes "Apenas aceite isso. Você vai ser um bom Renegado.";
+		close;
+	}
+	mes "[Haled]";
+	mes "Gostei da sua cara.";
+	mes "Não temos nada de especial.";
+	mes "Um assistente vende algumas tintas e ferramentas.";
+	close;
+L_Code:
+	mes "["+strcharinfo(0)+"]";
+	mes "O Paul disse...";
+	next;
+	input .@inputstr$;
+	mes "["+strcharinfo(0)+"]";
+	mes "O Paul disse...";
+	mes "'"+.@inputstr$+"' .";
+	next;
+	if (.@inputstr$ == "I know what you did last summer!") {
+		mes "[Haled]";
+		mes "Ekk... Ele...";
+		mes "Sabia de tudo...";
+		mes "Hmm...";
+		mes "Eu posso ajudar.";
+		mes "Eu vou cooperar.";
+		next;
+		mes "[Haled]";
+		mes "Preciso de um tempo para organizar meus pensamentos.";
+		mes "Espere um pouco por mim.";
+		set job_sha,20;
+		close;
+	}
+	return;
+}
+
+s_atelier,25,75,3	script	Manager#sc10_lgt	899,{
+	if (job_sha < 26) {
+		mes "[Manager]";
+		mes "Quem é você?";
+		mes "Desculpe, mas não negociamos artigos de arte antigos.";
+		mes "Se precisar de algo, pergunte ao assistente.";
+		close;
+	} else if (job_sha == 26) {
+		mes "[Vicente]";
+		mes "Bem-vindo.";
+		mes "Estava esperando por você.";
+		next;
+		select("Por mim?");
+		mes "[Vicente]";
+		mes "Eu me perguntava quando você viria nos visitar.";
+		mes "Esperei muito tempo por você.";
+		mes "Huhu...";
+		next;
+		mes "[Vicente]";
+		mes "Como foram Graham, Paul e Haled?";
+		mes "Eles não são pessoas fáceis de lidar, não é?";
+		next;
+		select("Você sabe de tudo?");
+		mes "[Vicente]";
+		mes "Claro.";
+		mes "Eles me ignoram porque acham que sou jovem demais.";
+		mes "Como se fossem todos perfeitos. HahahaHah...";
+		next;
+		mes "[Vicente]";
+		mes "Você trouxe todas as chaves?";
+		mes "Deveriam ser três.";
+		mes "Você veio aqui para descobrir como usá-las, suponho, certo?";
+		next;
+		select("Sim, você tem razão!");
+		mes "[Vicente]";
+		mes "Você não precisa ficar surpreso.";
+		mes "Eu não consigo descobrir quanto tempo levou para aqueles três homens investigarem antes.";
+		mes "Eu já terminei meu trabalho.";
+		next;
+		mes "[Vicente]";
+		mes "Quando fui ao local final, encontrei uma estátua de pedra.";
+		mes "Mas ela precisa de uma chave.";
+		next;
+		mes "[Vicente]";
+		mes "Até mesmo três.";
+		mes " ";
+		mes "(Vicente sorri)";
+		next;
+		mes "[Vicente]";
+		mes "A princípio, a informação que foi dada pela guilda significa apenas uma coisa.";
+		mes "Por causa do ditado de que eles respeitam o direito das nossas posses,";
+		mes "nós compartilhamos nossa informação.";
+		next;
+		mes "[Vicente]";
+		mes "Então tivemos que esperar por isso.";
+		mes "Achei que o último homem nunca me daria...";
+		next;
+		mes "[Vicente]";
+		mes "Eles pensaram que eu queria ficar com o tesouro para mim.";
+		mes "Então é por isso que eu estava apenas esperando por você.";
+		next;
+		mes "[Vicente]";
+		mes "Então vamos direto ao ponto!";
+		mes "Você conhece a Torre de Thanatos?";
+		next;
+		switch(select("Claro.:A torre da morte?")) {
+		case 1:
+			mes "[Vicente]";
+			mes "Você a conhece.";
+			mes "Então você pode entender facilmente.";
+			next;
+			break;
+		case 2:
+			mes "[Vicente]";
+			mes "Sim, aquela torre ao norte de Juno.";
+			mes "Há monstros enormes lá.";
+			next;
+			break;
+		}
+		mes "[Vicente]";
+		mes "Você me disse que foi ao local final com a informação?";
+		mes "Essa é a Torre de Thanatos.";
+		next;
+		mes "[Vicente]";
+		mes "Felizmente, o local é o 1º andar daquela torre.";
+		mes "Então vou dizer o que você tem que fazer.";
+		next;
+		mes "[Vicente]";
+		mes "No 1º andar da Torre de Thanatos, há membros da Corporação Rekenber.";
+		mes "Vá para o norte a partir da mesa deles...";
+		next;
+		mes "[Vicente]";
+		mes "E você poderá encontrar escadas e um local de onde sai uma luz.";
+		mes "Esse é o local da informação que eu tenho.";
+		next;
+		mes "[Vicente]";
+		mes "Agora você sabe o local para onde precisa ir com as três chaves.";
+		mes "Descubra o segredo da estátua de pedra.";
+		next;
+		mes "[Vicente]";
+		mes "Você não pode imaginar o tipo de coisas que pode encontrar.";
+		mes "Esse é o destino final de todas as chaves.";
+		set job_sha,27;
+		changequest 7177,7178;
+		next;
+		mes "[Vicente]";
+		mes "Boa sorte.";
+		close;
+	} else if (job_sha == 27) {
+		mes "[Vicente]";
+		mes "Escute com atenção.";
+		mes "O local que você precisa encontrar fica";
+		mes "ao norte do meio do 1º andar da Torre de Thanatos.";
+		mes "Você pode encontrar escadas e um local de onde sai uma luz.";
+		next;
+		mes "[Vicente]";
+		mes "Se encontrar alguma coisa, volte aqui.";
+		mes "Na verdade, eu quero pegar a chave de você, mas...";
+		next;
+		mes "[Vicente]";
+		mes "Eu apenas respeito a sua opinião.";
+		mes "Se encontrar algo, volte aqui. Entendido?";
+		close;
+	} else if (job_sha == 28) {
+		mes "[Vicente]";
+		mes "Você voltou?";
+		mes "Encontrou alguma coisa?";
+		next;
+		switch(select("Jogar o pincel.:Pegá-lo pelo colarinho.:Deixar cair o pincel.")) {
+		case 1:
+			mes "[Vicente]";
+			mes "Ei, o que você está fazendo?";
+			mes "Este pincel...";
+			mes "É este o tesouro escondido na Torre de Thanatos?";
+			next;
+			mes "Vicente parece surpreso depois de dar uma olhada.";
+			next;
+			break;
+		case 2:
+			mes "[Vicente]";
+			mes "O que há de errado com você?";
+			mes "Pode me dar mais detalhes?";
+			next;
+			mes "Vicente parece surpreso depois de dar uma olhada.";
+			next;
+			mes "[Vicente]";
+			mes "É este o tesouro escondido na Torre de Thanatos?";
+			next;
+			break;
+		case 3:
+			mes "[Vicente]";
+			mes "Qual é o problema?";
+			mes "Você está bem?";
+			next;
+			mes "Vicente olha para mim com uma expressão surpresa.";
+			next;
+			select("Apontar para o pincel.");
+			mes "[Vicente]";
+			mes "É este o tesouro escondido na Torre de Thanatos?";
+			next;
+			mes "Vicente parece surpreso depois de dar uma olhada.";
+			next;
+			break;
+		}
+		mes "[Vicente]";
+		mes "Haha!!";
+		mes "Ahahahaha!!!!!";
+		mes "Entendi agora!";
+		mes "Parabéns.";
+		next;
+		mes "[Vicente]";
+		mes "É um tesouro.";
+		mes "Você encontrou um grande tesouro!";
+		mes "Fale comigo um pouco, quer?";
+		next;
+		mes "[Vicente]";
+		mes "Existe alguém que esteve esperando por você.";
+		mes "Ele estava esperando alguém trazer este pincel de volta.";
+		mes "Vamos entrar.";
+		set job_sha,29;
+		erasequest 7179;
+		close;
+	} else if (job_sha == 29 || job_sha == 30) {
+		mes "[Vicente]";
+		mes "Vou ouvir a sua história.";
+		close;
+	}
+	mes "[Vicente]";
+	mes "Estou esperando pelo seu trabalho a partir de agora.";
+	mes "Você deve ser um bom Renegado.";
+	mes "Tenho certeza disso.";
+	close;
+}
+
+s_atelier,73,65,3	script	Vicente#sc12_lgt	899,{
+	mes "[Vicente]";
+	if (job_sha < 29) {
+		mes "Se você não tem nada de especial para fazer aqui, é melhor ir embora.";
+		mes "Proibido entrar.";
+		close;
+	} else if (job_sha == 29) {
+		mes "Por aqui.";
+		mes "Ele está esperando por você há um tempo.";
+		mes "Não eu, Dumk.";
+		close;
+	} else if (job_sha == 30) {
+		mes "Dumk quer ter você como um Renegado.";
+		mes "Grande notícia, não é?";
+		close;
+	} else if (job_sha == 31) {
+		mes "Estou esperando pelo seu trabalho a partir de agora.";
+		mes "Você deve ser um bom Renegado.";
+		mes "Tenho certeza disso.";
+		close;
+	}
+	mes "Não tenho nenhum motivo especial para visitar este lugar.";
+	mes "Um assistente vende ferramentas e tintas.";
+	close;
+}
+
+s_atelier,70,66,4	script	Dumk#sc13_lgh	481,{
+	if (Class == Job_Shadow_Chaser || Class == Job_Shadow_Chaser_T || Class == Job_Baby_Shadow_Chaser) {
+		mes "[Dumk]";
+		mes "O que é isso?";
+		mes "Você tem aproveitado suas novas habilidades?";
+		next;
+		mes "[Dumk]";
+		mes "Se você quer melhorar suas habilidades, precisa buscar novos usos para a tinta.";
+		next;
+		mes "[Dumk]";
+		mes "Não se esqueça.";
+		mes "Nós somos Caçadores de Sombras.";
+		mes "Huhu...";
+		mes "HuhuHuhu...";
+		close;
+	}
+	if (checkweight(1201,4) == 0) {
+		mes "- Você não pode continuar nesta missão porque está carregando peso demais. -";
+		close;
+	}
+	if (ismounting()) {
+		mes "[Dumk]";
+		mes "Quem é esse cara? Por que ele tem que sentar na minha frente tão alto?";
+		mes "Embora eu não saiba por que você está montado nisso, aqui é um ambiente fechado,";
+		mes "Não há perigo em depender de animais para escapar, então, por favor, desça!";
+		close;
+	}
+	if (BaseJob == Job_Rogue) {
+		if (job_sha < 29) {
+			mes "[Dumk]";
+			mes "Vicente. Proibido solicitar.";
+			next;
+			mes "[Vicente]";
+			mes "Um solicitador?";
+			mes "Não creio. Ele é nosso colega.";
+			next;
+			mes "[Dumk]";
+			mes "...Ah?";
+			close;
+		}
+		if (BaseLevel < 99 || JobLevel < 50 || SkillPoint != 0) {
+			mes "[Dumk]";
+			mes "Você ainda é um novato!";
+			mes "Esperava que pudesse aprender as artes das trevas com sua habilidade?";
+			mes "Você está enganado!";
+			next;
+			mes "[Vicente]";
+			mes "Haha...";
+			mes "Por favor, entenda. Dumk tem habilidades de comunicação muito ruins.";
+			mes "Ele nem fala com ninguém que não tenha um nível alto o suficiente.";
+			next;
+			mes "[Vicente]";
+			mes "E como alguém que não está pronto.";
+			mes "^4d4dffTalvez você não esteja pronto para ele^000000.";
+			next;
+			mes "[Dumk]";
+			mes "Você fala demais.";
+			mes "Heh.";
+			next;
+			mes "[Vicente]";
+			mes "- Ele está satisfeito. -";
+			mes "Ei.";
+			mes "Ele pode estar envergonhado.";
+			close;
+		}
+		if (job_sha == 29) {
+			mes "[Dumk]";
+			mes "É você? Foi você quem encontrou o pincel?";
+			next;
+			select("Mostre o pincel para ele.");
+			if (countitem(6269)) {
+				mes "[Dumk]";
+				mes "É isso.";
+				mes "Você encontrou sozinho?";
+				next;
+				switch(select("Sim.:Com meus amigos.")) {
+				case 1:
+					mes "[Dumk]";
+					mes "Hmm...";
+					mes "Você tem uma grande habilidade.";
+					mes "Decifrar os códigos deve ter sido difícil.";
+					mes "Mas não foi para você.";
+					next;
+					break;
+				case 2:
+					mes "[Dumk]";
+					mes "Hmm...";
+					mes "Essa é sua outra habilidade.";
+					mes "Pessoas que não têm amigos devem ser solitárias.";
+					next;
+					mes "[Dumk]";
+					mes "Para nós, os relacionamentos são muito importantes.";
+					mes "Quanto mais pessoas, mais ajuda você recebe.";
+					next;
+					break;
+				}
+				mes "[Dumk]";
+				mes "Está na hora de me apresentar.";
+				mes "Eu sou Dumk.";
+				next;
+				select("Você é...");
+				mes "[Vicente]";
+				mes "Frango! Que tal frango para esta ceia?";
+				next;
+				mes "[Dumk]";
+				mes "Por que frango?";
+				mes "Por que você está interrompendo?";
+				mes "Você quer ser demitido?";
+				next;
+				mes "[Vicente]";
+				mes "Desculpe...";
+				mes " ";
+				mes "(Ele se vira para você e diz que é tabu falar sobre frango.)";
+				next;
+				mes "[Dumk]";
+				mes "De qualquer forma, vamos ao que interessa.";
+				mes "Você.";
+				mes "Vai ceder à vontade do pincel?";
+				next;
+				select("Ceder a? O quê?");
+				mes "[Dumk]";
+				mes "Este pincel foi usado pelo mestre.";
+				mes "As pinturas dele possuem um poder misterioso.";
+				next;
+				mes "[Dumk]";
+				mes "Não posso te contar a origem do poder.";
+				mes "Um dia você descobrirá.";
+				mes "Ele sublima poder através do meio de suas pinturas.";
+				next;
+				select("Não entendi...?");
+				mes "[Dumk]";
+				mes "Caminhamos na escuridão sem o luar.";
+				mes "E descobrimos que nossos dias de brilho acabaram.";
+				next;
+				mes "[Dumk]";
+				mes "Seguimos para outras sombras";
+				mes "e podemos ser reais";
+				mes "Caçadores de Sombras!";
+				next;
+				select("Do que você está falando?");
+				mes "[Vicente]";
+				mes "Ele sugere que você se torne um Renegado.";
+				next;
+				mes "[Vicente]";
+				mes "Em nossa guilda, existe um grupo especial que possui habilidades únicas.";
+				mes "Eles são os Caçadores de Sombras.";
+				mes "Eles geralmente escondem sua figura e pensam que são diferentes dos outros.";
+				next;
+				mes "[Dumk]";
+				mes "Não seja tão sarcástico, Vicente!";
+				mes "Eu te disse.";
+				mes "Você está qualificado para ser um Renegado!";
+				next;
+				mes "[Dumk]";
+				mes "Dê esse pincel para mim.";
+				mes "Preciso dele novamente.";
+				mes "Estou com muita sede.";
+				mes "Espere um minuto.";
+				delitem 6269,1; //Master_Brush
+				set job_sha,30;
+				close;
+			}
+			mes "[Dumk]";
+			mes "Deixe-me ver...";
+			mes "Você trouxe o pincel?";
+			next;
+			mes "[Dumk]";
+			mes "O que você está fazendo?";
+			mes "Mostre-me o pincel?";
+			mes "Você não trouxe?";
+			mes "Você não é muito cuidadoso...";
+			close;
+		} else if (job_sha == 30) {
+			mes "[Dumk]";
+			mes "Então, você quer que eu continue falando sobre Renegados?";
+			next;
+			switch(select("O que é um Renegado?:Transforme-me em um Renegado.:Voltarei mais tarde.")) {
+			case 1:
+				mes "[Dumk]";
+				mes "A maioria dos feitiços é exclusiva para Arcanos e seus semelhantes.";
+				mes "Mas o Cavaleiro tem conseguido usar um tipo de magia com coisas chamadas Runas.";
+				next;
+				mes "[Dumk]";
+				mes "Então, tentamos encontrar um meio para feitiços que se adequem às nossas características.";
+				next;
+				mes "[Dumk]";
+				mes "Então, finalmente...";
+				mes "Encontramos tinta!";
+				next;
+				mes "[Dumk]";
+				mes "A tinta nos desperta muitos sentimentos.";
+				mes "Podemos nos sentir em paz e felizes, ou ela pode nos trazer sentimentos de tristeza e medo.";
+				next;
+				mes "[Dumk]";
+				mes "Usamos isso para controlar as diferentes emoções das pessoas e explorá-las quando estão mais vulneráveis.";
+				next;
+				mes "[Dumk]";
+				mes "Os efeitos em nossos inimigos são semelhantes aos de feitiços mágicos.";
+				next;
+				mes "[Dumk]";
+				mes "Por exemplo, esse poder pode ser usado para criar buracos negros e fazer seus inimigos desaparecerem.";
+				next;
+				mes "[Dumk]";
+				mes "Então, se você quer ter esse poder, precisa ter talento artístico.";
+				next;
+				mes "[Dumk]";
+				mes "Você precisa ser um criador de tendências quando se trata de moda!";
+				mes "A habilidade de entender a arte!";
+				mes "Você deve ter tudo isso.";
+				next;
+				select("Então, o que é o Pincel Mestre?");
+				mes "[Dumk]";
+				mes "Ah?";
+				mes "Aquele era um pincel que era mestre nas artes das trevas.";
+				mes "Agora estamos procurando alguém que possa ser um Renegado.";
+				next;
+				mes "[Dumk]";
+				mes "Isso é uma espécie de jogo.";
+				mes "Se houver alguém que queira se tornar um Renegado,";
+				mes "nós apenas iniciamos o processo para encontrar este pincel.";
+				next;
+				mes "[Dumk]";
+				mes "Nós colocamos os códigos para garantir que você possa pensar fora da caixa.";
+				mes "Você se divertiu?";
+				close;
+			case 2:
+				mes "[Dumk]";
+				mes "Você decidiu!";
+				mes "No seu caso, você pode dominar a arte da guerra psicológica usando tinta!";
+				mes "A arte criada é linda, mas perigosa.";
+				next;
+				mes "[Dumk]";
+				mes "Usamos tinta como meio para os feitiços.";
+				mes "Usamos isso para controlar as diferentes emoções das pessoas e explorá-las quando estão mais vulneráveis.";
+				next;
+				mes "[Dumk]";
+				mes "Por exemplo, esse poder pode ser usado para criar buracos negros e fazer seus inimigos desaparecerem.";
+				next;
+				mes "[Dumk]";
+				mes "Então, se você quer ter esse poder, precisa ter talento artístico.";
+				next;
+				mes "[Dumk]";
+				mes "Você precisa ser um criador de tendências quando se trata de moda!";
+				mes "A habilidade de entender a arte!";
+				mes "Você deve ter tudo isso.";
+				next;
+				mes "[Dumk]";
+				mes "Você cumpriu seus deveres diligentemente e encontrou o pincel.";
+				mes "Então você está qualificado para ser um Renegado.";
+				next;
+				mes "[Dumk]";
+				mes "Parabéns.";
+				mes "Bem-vindo à sua nova vida.";
+				jobchange roclass(eaclass()|EAJL_THIRD);
+				getitem 6121,1; //Makeover_Brush
+				getitem 6122,1; //Paint_Brush
+				set job_sha,32;
+				getitem 2795,1; //Green_Apple_Ring
+				getitem 5750,1; //Shadow_Handicraft
+				next;
+				mes "[Dumk]";
+				mes "É um uniforme elegante.";
+				mes "Ele usa estampas de leopardo e penas.";
+				mes "O mundo da moda ficará chocado.";
+				next;
+				mes "[Dumk]";
+				mes "Este pavão das sombras eu mesmo desenhei.";
+				mes "É muito difícil criar algo que absorva meu senso artístico.";
+				mes "E sobre esta parte...";
+				next;
+				mes "Dumk continua falando sobre moda, senso artístico, tinta e sentimentos.";
+				mes "Ele obviamente vive em seu próprio mundo.";
+				next;
+				select("Sobre este pincel...");
+				mes "[Vicente]";
+				mes "Ah, eu vou explicar.";
+				mes "Precisamos de ferramentas para pintar.";
+				next;
+				mes "[Vicente]";
+				mes "O pincel de maquiagem é usado para pintura facial.";
+				mes "Você pode obter tinta no local de trabalho.";
+				next;
+				mes "[Vicente]";
+				mes "O pincel de pintura é usado para pintar espaços grandes.";
+				mes "Você também pode obter tinta no local de trabalho.";
+				next;
+				mes "[Vicente]";
+				mes "Você não lembra a localização do local de trabalho?";
+				mes "Juno, Prontera, Rachel e Lighthalzen.";
+				next;
+				mes "[Vicente]";
+				mes "Se precisar de tinta, vá até um assistente.";
+				mes "^4d4dffSe você não tiver ferramentas, pode usar as tintas necessárias para a habilidade.^000000";
+				next;
+				mes "[Vicente]";
+				mes "Parabéns por se tornar um dos nossos.";
+				close;
+			case 3:
+				mes "[Dumk]";
+				mes "O quê?";
+				mes "Por que não?";
+				mes "Você não quer ser um Renegado?";
+				mes "Posso te ensinar muito sobre pintura.";
+				next;
+				mes "[Dumk]";
+				mes "Você realmente não entenderá até se tornar um.";
+				next;
+				mes "[Dumk]";
+				mes "Você não quer aprender a controlar um poder mais forte do que o que você conhece?";
+				mes "....";
+				next;
+				mes "Dumk parecia desapontado porque eu não respondi a ele.";
+				close;
+			}
+		}
+	}
+	mes "[Dumk]";
+	mes "..........";
+	mes "Heh.";
+	next;
+	mes "[Vicente]";
+	mes "Desculpe.";
+	mes "Ele não se interessa por outras pessoas.";
+	mes "Mas você não pode entrar neste espaço.";
+	mes "Você pode conseguir ferramentas na loja.";
+	close;
+}
+
+// Flames
+//============================================================
+tur_dun03,38,209,1	script	Blue Flame#sc_f01	802,{
+	if (job_sha == 5) {
+		mes "Uma chama azul está rugindo.";
+		mes "O código decifrado significa...";
+		next;
+		input .@inputstr$;
+		set .@dap01$, "blue fire in turtle island third floor";
+		set .@dap02$, "BLUE FIRE IN TURTLE ISLAND THIRD FLOOR";
+		if (.@inputstr$ != .@dap01$ && .@inputstr$ != .@dap02$) {
+			mes "["+strcharinfo(0)+"]";
+			mes "O que era?";
+			mes "Acho que preciso garantir que não usarei letras maiúsculas.";
+			close;
+		}
+		mes "["+strcharinfo(0)+"]";
+		mes "^4d4dff"+.@inputstr$+"^000000";
+		mes "Está claramente apontando para isto.";
+		next;
+		mes "Você apenas murmura a frase quando a chama começa a crescer.";
+		next;
+		mes "[Unknown voice]";
+		mes "Hm? Alguém está vindo?";
+		mes "Você é aquele que quer ter meu tesouro?";
+		mes "Mas a sua limitação acabou.";
+		next;
+		mes "A chama está falando.";
+		mes "A voz é como a de uma serpente.";
+		mes "No meio da chama azul, existem dois olhos de mármore.";
+		next;
+		select("Pegue-o.");
+		mes "[Unknown voice]";
+		mes "Você está com pressa.";
+		mes "Hahaha, humanos costumam fazer coisas assim.";
+		mes "Eles não conseguem ver a verdade.";
+		next;
+		mes "[Unknown voice]";
+		mes "E quanto a você?";
+		mes "Não espero que você faça mal a esta chama azul.";
+		mes "É a única com dois...";
+		next;
+		select("Quem é você?");
+		mes "[Shadow of Deception]";
+		mes "Eu? Eu sou uma ilusão.";
+		mes "Eu zombo de pessoas estúpidas.";
+		mes "Eu rio pelas costas delas.";
+		mes "HahaHaha...";
+		next;
+		mes "A Chama Azul está crescendo e rolando.";
+		mes "Eles parecem estar relacionados.";
+		set job_sha,6;
+		setquest 7164;
+		if (checkquest(7161) >= 0) erasequest 7161;
+		if (checkquest(7162) >= 0) erasequest 7162;
+		if (checkquest(7163) >= 0) erasequest 7163;
+		close;
+	} else if (job_sha == 6) {
+		if (checkquest(7164,HUNTING) == 2) {
+			mes "Parece que a chama azul está sob a limitação.";
+			mes "Você não consegue sentir aquele efeito giratório de um feitiço como antes.";
+			next;
+			select("Pegue os mármores.");
+			mes "Ao pegá-los, você sente que seu peso diminuiu.";
+			set job_sha,7;
+			erasequest 7164;
+			close2;
+			warp "job3_sha01",22,82;
+			end;
+		}
+		mes "A chama ainda está rolando com um feitiço forte.";
+		mes "Você tem que cortar a relação com ela.";
+		close;
+	} else if (job_sha == 7) {
+		mes "Parece que a chama azul está sob a limitação.";
+		mes "Você não consegue sentir aquele efeito giratório de um feitiço como antes.";
+		next;
+		select("Pegue os mármores.");
+		mes "Ao pegá-lo, você sente que seu peso diminuiu.";
+		close2;
+		warp "job3_sha01",22,82;
+		end;
+	}
+	mes "A chama está rolando.";
+	close;
+}
+
+ice_dun02,206,223,1	script	Red Flame#sc_f02	802,{
+	if (job_sha < 11) {
+		mes "Uma chama vermelha desconhecida está rugindo.";
+		close;
+	} else if (job_sha > 10 && job_sha < 14) {
+		mes "A chama vermelha está rugindo.";
+		mes "Ela se transformou em uma mulher de preto.";
+		next;
+		mes "[Woman in black]";
+		mes "Você consegue me ouvir?";
+		mes "Huhu.";
+		mes "Você consegue me ver?";
+		next;
+		mes "[Woman in black]";
+		mes "Você é o escolhido?";
+		mes "Você pode saber disso.";
+		mes "Existe uma alma que é igual a mim.";
+		next;
+		mes "[Woman in black]";
+		mes "Eu sou uma sombra.";
+		mes "Uma sombra errante.";
+		mes "Alma triste.";
+		mes "Uma sombra de ilusão sem verdade.";
+		next;
+		mes "[Shadow of Illusion]";
+		mes "O que você quer?";
+		mes "Você quer tesouro?";
+		mes "Então pegue-o.";
+		mes "Rasgue minha alma e";
+		mes "mostre a verdade.";
+		set job_sha, job_sha+3;
+		setquest 7171;
+		close;
+	} else if (job_sha == 14 || job_sha == 15 || job_sha == 16) {
+		if (checkquest(7171,HUNTING) == 2) {
+			mes "Você não consegue sentir a alma vindo da chama.";
+			mes "Quando você se aproxima, não consegue ver bem por causa da escuridão.";
+			close2;
+			warp "job3_sha01",22,33;
+			end;
+		}
+		mes "[Shadow of Illusion]";
+		mes "Huhu.";
+		mes "O que há de errado?";
+		mes "Você não conseguiu encontrar a metade da minha alma?";
+		mes "Huhu...";
+		next;
+		mes "[Shadow of Illusion]";
+		mes "Ah, apresse-se e dê-me descanso.";
+		mes "Eu quero morrer suavemente.";
+		mes "Eu quero desistir da vida falsa.";
+		next;
+		mes "[Shadow of Illusion]";
+		mes "Huhu...";
+		mes "Quando a sombra falsa se for, você poderá ver a verdade.";
+		mes "Por favor, rasgue o falso para ofuscar aqueles que são cegos...";
+		mes "Sem deixar vestígios...";
+		close;
+	}
+	mes "A chama está rolando.";
+	mes "Você não consegue ver bem por causa da luz de gelo.";
+	close;
+}
+
+niflheim,230,276,1	script	Red Flame#sc_f03	802,{
+	if (job_sha < 21) {
+		mes "Essa é uma chama misteriosa.";
+		mes "Parece uma maldição.";
+		mes "Afaste-se dela.";
+		close;
+	}
+	else if (job_sha == 21) {
+		mes "["+strcharinfo(0)+"]";
+		mes "O poema que Haled me contou apontava para Niflheim.";
+		mes "Existe uma chama que parece com a da ilha das tartarugas e da masmorra de gelo.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "O fim das raízes da árvore viva.";
+		mes "Lágrimas de todas as pessoas vivas.";
+		mes "Sinal de todas as pessoas mortas.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Eles são nós, mas também não são nós.";
+		next;
+		mes "[Someone's voice]";
+		mes "Eles são nós, mas também não são nós.";
+		next;
+		mes "[Someone's voice]";
+		mes "Residentes da noite esquecida...";
+		next;
+		select("Quem está tocando isso?");
+		mes "[Someone's voice]";
+		mes "Quem está tocando a valsa do desespero?";
+		mes ".....";
+		next;
+		mes "[Someone's voice]";
+		mes "Ha...";
+		mes "Você veio aqui para cavar o segredo da morte.";
+		mes "Você pode tocar a valsa da morte para mim?";
+		next;
+		mes "[Someone's voice]";
+		mes "Eu não quero estar sujeito a restrições";
+		mes "e estar com o sinal dos mortos.";
+		next;
+		mes "[Shadow of Pleasure]";
+		mes "Eu sou uma sombra.";
+		mes "Eu mostro o melhor do prazer neste mundo.";
+		mes "Ilusões das quais você não quer ser despertado do sonho.";
+		next;
+		mes "[Shadow of Pleasure]";
+		mes "A alma foi emaranhada por correntes frias";
+		mes "Eu não consigo ver o sonho";
+		mes "e a sombra perdeu o prazer que durará para sempre.";
+		next;
+		mes "[Shadow of Pleasure]";
+		mes "Por favor, ajude-me.";
+		mes "Dê-me as mãos para";
+		mes "escapar daqui!";
+		next;
+		mes "[Shadow of Pleasure]";
+		mes "Você pode me sufocar com as duas mãos?";
+		mes "O outro lado dos meus sentidos";
+		mes "clama por fôlego.";
+		next;
+		mes "[Shadow of Pleasure]";
+		mes "Essa é a prova de que eu vivo.";
+		mes "Essa é a prova de que eu cruzo a linha.";
+		mes "Com o início da vida";
+		mes "o último prazer.";
+		next;
+		mes "[Shadow of Pleasure]";
+		mes "Mostre-me a";
+		mes "doce morte.";
+		next;
+		mes "A chama está morrendo.";
+		mes "Você deve lidar com a sombra do prazer.";
+		set job_sha,22;
+		erasequest 7174;
+		setquest 7175;
+		close;
+	} else if (job_sha == 22) {
+		if (checkquest(7175,HUNTING) == 2) {
+			mes "Você não consegue sentir a alma a partir da chama.";
+			mes "Quando você se aproxima, não consegue ver bem por causa da escuridão.";
+			set job_sha,23;
+			erasequest 7175;
+			close2;
+			warp "job3_sha01",73,87;
+			end;
+		}
+		mes "Você pode sentir uma alma forte na chama.";
+		mes "Você deve lidar com a sombra do prazer.";
+		close;
+	} else if (job_sha == 23 || job_sha == 24) {
+		mes "Você não consegue sentir a alma a partir da chama.";
+		mes "Quando você se aproxima, não consegue ver bem por causa da escuridão.";
+		close2;
+		warp "job3_sha01",73,87;
+		end;
+	}
+	mes "Existe uma chama.";
+	mes "Você não consegue sentir nada vindo dela.";
+	close;
+}
+
+// Boxes
+//============================================================
+job3_sha01,22,78,0	script	????#keybox01	844,{
+	if (checkweight(1201,1) == 0) {
+		mes "- Você não pode continuar nesta missão porque está sobrecarregado. -";
+		close;
+	}
+	if (job_sha == 7) {
+		mes "É uma pequena caixa feita do casco rígido de uma tartaruga.";
+		mes "O meio dela...";
+		next;
+		select("Toque o meio.:Empurre o meio.");
+		mes "Quando você toca, algo sai!";
+		next;
+		setarray .@Codes1$[1],"EFDFJWF","FGEGKXG","GHFHLYH","HIGIMZI","IJHJNAJ","JKIKOBK","KLJLPCL","LMKMQDM";
+		setarray .@Codes2$[1],"IPOFTUZ","JQPGUVA","KRQHVWB","LSRIWXC","MTSJXYD","NUTKYZE","OVULZAF","PWVMABG";
+		set .@i, rand(1,8);
+		mes " ";
+		mes " ";
+		mes "ENGANO";
+		next;
+		mes " ";
+		mes " ";
+		mes " "+.@i;
+		next;
+		mes " "+.@Codes1$[.@i];
+		next;
+		mes "Ela mostra algumas letras e números.";
+		mes " ";
+		mes "Engano.";
+		mes "Então"+.@i+".";
+		mes "E"+.@Codes1$[.@i]+".";
+		next;
+		select("O que isso significa?");
+		mes "["+strcharinfo(0)+"]";
+		mes "É também um código.";
+		mes "Deve ser!";
+		mes "Ah, algo está aparecendo de novo...?";
+		next;
+		mes "- Você consegue ver algumas letras no casco da tartaruga. -";
+		next;
+		mes " ";
+		mes "HONESTIDADE";
+		mes " ";
+		mes "E também letras. Elas estão piscando como se esperassem que um código fosse inserido.";
+		next;
+		input .@inputstr$;
+		if (.@inputstr$ == .@Codes2$[.@i] || .@inputstr$ == strtolower(.@Codes2$[.@i])) {
+			mes "Quando você coloca a resposta correta lá dentro,";
+			mes "a caixa é aberta.";
+			mes "Há uma chave pequena e fabulosa.";
+			next;
+			mes "- Você recebe a Chave do Engano. -";
+			set job_sha,8;
+			getitem 6266,1; //Cheat_Key
+			setquest 7165;
+			close;
+		}
+		mes "- Você coloca a resposta -";
+		mes "- mas não funciona. -";
+		mes "- Você falhou. -";
+		close;
+	}
+	mes "Você não precisa ficar aqui.";
+	next;
+	if(select("Ir para fora.:Ficar aqui.") == 1)
+		warp "tur_dun03",40,201;
+	close;
+}
+
+job3_sha01,25,28,0	script	????#keybox02	844,{
+	if (checkweight(1201,1) == 0) {
+		mes "- Você não pode continuar nesta missão porque está sobrecarregado. -";
+		close;
+	}
+	setarray .@Words$[0],"SEED","FOOT","COLD";
+	setarray .@Numbers[0],24,25,20;
+	set .@i,job_sha-14;
+	if (job_sha > 13 && job_sha < 17) {
+		mes "Há muitas caixas.";
+		mes "com algum tipo de números.";
+		next;
+		mes "1 2 3 4 5";
+		mes "6 7 8 9 0";
+		mes " ";
+		mes " [ ][ ] ";
+		next;
+		mes "Quando você tocou naquele número, ele se moveu.";
+		mes "Você encontra o espaço vazio.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Acho que tenho que colocar o número no espaço vazio...";
+		mes "Tenho dois quadrados vazios para colocar dois números.";
+		mes "Para que será bom isso?";
+		next;
+		select("Acho que tem relação com a palavra dada por Paul.");
+		mes "["+strcharinfo(0)+"]";
+		mes "Eu consegui"+.@Words$[.@i]+".";
+		mes "Agora eu tenho que converter isso em um número...";
+		next;
+		switch(select("Insira a resposta.:Eu não consigo entender.")) {
+		case 1:
+			input .@input;
+			if (.@input == .@Numbers[.@i]) {
+				mes "Você coloca 2 e"+(.@Numbers[.@i]-20)+".";
+				mes "A caixa abre e você recebe uma chave.";
+				next;
+				mes "Você recebeu a Chave da Ilusão.";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "Não é um tesouro.";
+				mes "A Chave da Ilusão? Ela tem relação com a Sombra da Ilusão?";
+				mes "Eu consegui a Chave do Engano depois que lidei com o Engano...";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "De qualquer forma, Paul ficará desapontado.";
+				mes "Chave de novo...";
+				mes "Como posso escapar daqui...?";
+				set job_sha,17;
+				getitem 6267,1; //Virtual_Key
+				erasequest 7171;
+				changequest 7168+.@i,7172;
+				next;
+				mes "Quando empurro a caixa, ela mostra a porta para ir para fora.";
+				close2;
+				warp "ice_dun02",209,219;
+				end;
+			}
+			mes "Quando você insere o número, ele volta para o primeiro.";
+			close;
+		case 2:
+			mes "["+strcharinfo(0)+"]";
+			mes "Hmm.";
+			mes "Não consigo entender...";
+			mes "Será que é o mesmo código do local de trabalho em Prontera...?";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "De acordo com aquele método...";
+			mes "A significa 11 e B significa 12.";
+			close;
+		}
+	}
+	mes "É uma caixa misteriosa.";
+	mes "Quando empurro a caixa, ela mostra a porta para sair.";
+	close2;
+	warp "ice_dun02",209,219;
+	end;
+}
+
+job3_sha01,73,80,0	script	????#keybox03	844,{
+	if (checkweight(1201,1) == 0) {
+		mes "- Você não pode continuar nesta missão porque está sobrecarregado. -";
+		close;
+	}
+	if (job_sha == 23 || job_sha == 24) {
+		if (job_sha == 23) {
+			mes "Há uma caixa que parece uma casa.";
+			mes "Há um pequeno papel na chaminé.";
+			next;
+			mes "Diz o seguinte...";
+			mes "-----------------";
+			mes "20 21 18 14";
+			mes "1 14 4";
+			mes "19 8 1 11 5";
+			mes "-----------------";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Acho que é outro código.";
+		} else {
+			mes "["+strcharinfo(0)+"]";
+			mes "Deixe-me pensar de novo...";
+			mes "20 21 18 14";
+			mes "1 14 4";
+			mes "19 8 1 11 5";
+			mes "...";
+		}
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "É o mesmo que antes.";
+		mes "Não há código, então 1 deve ser A.";
+		mes "E a resposta é...";
+		next;
+		input .@inputstr$;
+		if (.@inputstr$ == "turn and shake" || .@inputstr$ == "TURN AND SHAKE") {
+			mes "["+strcharinfo(0)+"]";
+			mes "Girar... Girar... e";
+			mes "Sacudir? Sacudir?";
+			mes "Para quê?";
+			next;
+			while(1) {
+				switch(select("Girar o telhado.:Girar a casa.:Girar a maçaneta.")) {
+				case 1:
+					mes "Você gira o telhado.";
+					next;
+					switch(select("Sacudir o telhado.:Sacudir a casa.")) {
+					case 1:
+						mes "Mesmo que você sacuda o telhado,";
+						mes "nada acontece.";
+						next;
+						mes "["+strcharinfo(0)+"]";
+						mes "Não é isso.";
+						mes "Hmm...";
+						next;
+						break;
+					case 2:
+						mes "Você tentou sacudir a casa, mas";
+						mes "não aconteceu nada.";
+						next;
+						mes "["+strcharinfo(0)+"]";
+						mes "Está errado.";
+						mes "Coloque de volta";
+						mes "e tente novamente.";
+						next;
+						break;
+					}
+					break;
+				case 2:
+					mes "Você pega a casa inteira e a gira.";
+					next;
+					switch(select("Sacudir para cima e para baixo.:Sacudir de um lado para o outro.:Girar e girar e sacudir.:Virar de ponta-cabeça.")) {
+					case 1:
+					case 2:
+						mes "Nada acontece.";
+						mes "Você acha que tem algo dentro, mas não quer sair.";
+						next;
+						mes "["+strcharinfo(0)+"]";
+						mes "Não é isso.";
+						mes "Hmm...";
+						next;
+						break;
+					case 3:
+						mes "Você sacode lentamente.";
+						mes "Você consegue ouvir um ruído,";
+						mes "mas nada sai.";
+						next;
+						mes "["+strcharinfo(0)+"]";
+						mes "Não é isso.";
+						mes "Hmm...";
+						next;
+						break;
+					case 4:
+						mes "Virar de ponta-cabeça faz com que algo lá dentro se mova.";
+						next;
+						mes "Você sacode lentamente.";
+						mes "Você consegue ouvir algum barulho.";
+						mes "Algo está saindo.";
+						next;
+						mes "- Você obteve a Chave do Prazer. -";
+						next;
+						mes "["+strcharinfo(0)+"]";
+						mes "O quê? Uma chave de novo!";
+						mes "Haled ficará desapontado.";
+						mes "É melhor eu voltar.";
+						set job_sha,25;
+						setquest 7176;
+						getitem 6268,1; //Mirth_Key
+						close;
+					}
+					break;
+				case 3:
+					mes "Você tentou girar a pequena maçaneta";
+					mes "mas não funciona.";
+					next;
+					mes "["+strcharinfo(0)+"]";
+					mes "O que devo fazer agora?";
+					next;
+					break;
+				}
+			}
+		}
+		mes "["+strcharinfo(0)+"]";
+		mes "..."+.@inputstr$+"...?";
+		if (job_sha == 23) {
+			mes "O que isso significa?";
+			set job_sha,24;
+		} else
+			mes "De novo? Não entendo.";
+		close;
+	}
+	mes "Você não precisa ficar aqui.";
+	mes "Você coloca a caixa no chão e vê que há uma porta para sair.";
+	close2;
+	warp "niflheim",230,270;
+	end;
+}
+
+job3_sha01,71,27,0	script	????#keybox04	844,{
+	if (checkweight(1201,1) == 0) {
+		mes "- Você não pode continuar nesta missão porque está sobrecarregado. -";
+		close;
+	}
+	if (job_sha == 27) {
+		mes "Há uma estátua de pedra que parece";
+		mes "um pequeno caixão com um padrão fabuloso ao redor.";
+		next;
+		mes "Mas você não sente nenhum poder vindo dela.";
+		mes "Você encontra três buracos nela.";
+		next;
+		mes "Inscrito ao lado dos buracos está escrito";
+		mes "decepção, ilusão e prazer.";
+		next;
+		select("Coloque a chave nos buracos.");
+		if (countitem(6266) && countitem(6267) && countitem(6268)) {
+			mes "["+strcharinfo(0)+"]";
+			mes "Primeiro, Decepção...";
+			mes "depois Ilusão...";
+			mes "e Prazer...";
+			mes "Deixe-me ver.";
+			next;
+			mes "Quando você coloca as chaves";
+			mes "algo sai.";
+			next;
+			mes "- Você obteve um pincel com um padrão fabuloso. -";
+			delitem 6266,1; //Cheat_Key
+			delitem 6267,1; //Virtual_Key
+			delitem 6268,1; //Mirth_Key
+			set job_sha,28;
+			getitem 6269,1; //Master_Brush
+			changequest 7178,7179;
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "O quê???";
+			mes "Um pincel!!!!";
+			mes "Isso não é um tesouro!!!";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "Ahahhah!!!!";
+			mes "*fungada*";
+			mes "Não é um tesouro!";
+			next;
+			select("Agora eu fiquei irritado.");
+			mes "["+strcharinfo(0)+"]";
+			mes "*Suspiro*";
+			mes "Acho que devo levar isto ao ^4d4dffVicente^000000!";
+			close;
+		}
+		mes "["+strcharinfo(0)+"]";
+		mes "Eu não trouxe todas as chaves.";
+		mes "Como pude ser tão estúpido?";
+		close;
+	}
+	mes "É uma estátua de pedra vazia.";
+	close;
+}
+
+// Brush Shops
+//============================================================
+s_atelier,29,119,3	script	Max#sc05_prt	97,{
+	mes "[Max]";
+	mes "Bem-vindo~";
+	if (Class == Job_Shadow_Chaser || Class == Job_Shadow_Chaser_T || Class == Job_Baby_Shadow_Chaser) {
+		mes "Você é um membro da guilda Arruaceiro!";
+		mes "Com o que posso te ajudar?";
+		next;
+		set .@i, select("Preciso de um pincel de maquiagem.:Preciso de um pincel de pintura.:Nada.");
+		mes "[Max]";
+		if (.@i == 1) setarray .@i[1],6121,1,10,100000;
+		else if (.@i == 2) setarray .@i[1],6122,2,30,200000;
+		else {
+			mes "Se precisar de mais";
+			mes "apenas venha me visitar!";
+			close;
+		}
+		if (countitem(.@i[1])) {
+			mes "Você está brincando comigo?";
+			mes "Você já tem um?";
+			mes "Você não precisa de mais nada.";
+			next;
+			mes "[Max]";
+			mes "Visite mais tarde e use o que você já tem!";
+			close;
+		}
+		if (countitem(7150) >= .@i[2] && countitem(949) >= .@i[3] && Zeny >= .@i[4]) {
+			mes "Oh, você trouxe todas as coisas necessárias.";
+			mes "Espere um pouco.";
+			next;
+			mes "[Max]";
+			mes "Aqui está o que você precisa.";
+			next;
+			mes "[Max]";
+			mes "Pegue.";
+			mes "Boa sorte!";
+			delitem 7150,.@i[2]; //Bamboo_Cut
+			delitem 949,.@i[3]; //Feather
+			set Zeny, Zeny - .@i[4];
+			getitem .@i[1],1; //Makeover_Brush,Paint_Brush
+			close;
+		}
+		mes "Aqui está o que você precisa para conseguir um pincel de maquiagem.";
+		mes .@i[2]+"Corte de Bambu,";
+		mes .@i[3]+"Pena,";
+		mes "e"+.@i[0]+"00.000 zenys.";
+		close;
+	}
+	mes "Vendemos todo tipo de artigos de arte aqui~";
+	next;
+	switch(select("Tinta!?:Onde está o gerente?")) {
+	case 1:
+		mes "[Max]";
+		mes "Você está perguntando sobre tinta?";
+		mes "Você poderia apenas pedir a eles para pegar a tinta?~";
+		close;
+	case 2:
+		mes "[Max]";
+		mes "Ali está o nosso gerente.";
+		mes "Logo ali.";
+		mes "**aponta**";
+		mes "Você é cego?";
+		close;
+	}
+}
+
+s_atelier,136,70,3	script	Titika#sc09_ra	914,{
+	mes "[Titika]";
+	mes "Bem-vindo.";
+	if (Class == Job_Shadow_Chaser || Class == Job_Shadow_Chaser_T || Class == Job_Baby_Shadow_Chaser) {
+		mes "Você está em uma guilda.";
+		mes "Com o que posso te ajudar?";
+		next;
+		set .@i, select("Fazer um novo pincel de maquiagem.:Fazer um novo pincel de pintura.:Nada.");
+		mes "[Titika]";
+		if (.@i == 1) setarray .@i[1],6121,1,10,100000;
+		else if (.@i == 2) setarray .@i[1],6122,2,30,200000;
+		else {
+			mes "Volte a me visitar.";
+			close;
+		}
+		if (countitem(.@i[1])) {
+			mes "Você já tem um pincel de pintura?";
+			mes "Acho que é o suficiente...";
+			close;
+		}
+		if (countitem(7150) >= .@i[2] && countitem(949) >= .@i[3] && Zeny >= .@i[4]) {
+			mes "Você trouxe todos os materiais.";
+			mes "Vou trocá-los pelos itens que eu fiz.";
+			delitem 7150,.@i[2]; //Bamboo_Cut
+			delitem 949,.@i[3]; //Feather
+			set Zeny, Zeny - .@i[4];
+			getitem .@i[1],1; //Makeover_Brush,Paint_Brush
+			close;
+		}
+		mes "Para fazer um pincel de pintura,";
+		mes "você precisa de"+.@i[2]+"Corte de Bambu,";
+		mes .@i[3]+"Penas,";
+		mes "e"+.@i[0]+"00.000 zenys.";
+		close;
+	}
+	mes "Este é o local de trabalho do Renegado~";
+	next;
+	switch(select("Onde está a tinta?:Onde está o gerente?")) {
+	case 1:
+		mes "[Titika]";
+		mes "Você quer dizer tinta?";
+		mes "Fale com o assistente e pergunte sobre a ferramenta de pintura.";
+		close;
+	case 2:
+		mes "[Titika]";
+		mes "Meu gerente está dentro do local de trabalho.";
+		mes "Se você o visitar sem um motivo especial, ele irá ignorá-lo.";
+		close;
+	}
+}
+
+s_atelier,124,128,3	script	RimiGX#sc07_yuno	862,{
+	mes "[RimiGX]";
+	mes "Bem-vindo.";
+	if (Class == Job_Shadow_Chaser || Class == Job_Shadow_Chaser_T || Class == Job_Baby_Shadow_Chaser) {
+		mes "O que você está procurando?";
+		next;
+		set .@i, select("Fazer um novo pincel para maquiagem.:Fazer um novo pincel para pintura.:Nada.");
+		mes "[RimiGX]";
+		if (.@i == 1) setarray .@i[1],6121,1,10,100000;
+		else if (.@i == 2) setarray .@i[1],6122,2,30,200000;
+		else {
+			mes "Volte a me visitar.";
+			close;
+		}
+		if (countitem(.@i[1])) {
+			mes "Não posso oferecer itens extras.";
+			mes "Visite aqui quando perder seus itens.";
+			close;
+		}
+		if (countitem(7150) >= .@i[2] && countitem(949) >= .@i[3] && Zeny >= .@i[4]) {
+			mes "Você trouxe os itens que precisa.";
+			mes "Será rápido se eu trocar pelos itens prontos?";
+			delitem 7150,.@i[2]; //Bamboo_Cut
+			delitem 949,.@i[3]; //Feather
+			set Zeny, Zeny - .@i[4];
+			getitem .@i[1],1; //Makeover_Brush,Paint_Brush
+			close;
+		}
+		mes "Para pincel de"+((.@i[0] == 1)?"maquiagem":"pintura");
+		mes "você precisa de"+.@i[2]+"Corte de Bambu,";
+		mes .@i[3]+"Pena, e"+.@i[0]+"00.000 zenys.";
+		close;
+	}
+	mes "É o local de trabalho das sombras~";
+	next;
+	switch(select("Onde está a tinta?:Onde está o gerente?")) {
+	case 1:
+		mes "[RimiGX]";
+		mes "Tinta?";
+		mes "Pergunte a um assistente que trabalha ali.";
+		close;
+	case 2:
+		mes "[RimiGX]";
+		mes "Gerente? Ele está dentro do local de trabalho.";
+		mes "Mas quando você o visitar, deve ter algo para dizer a ele....";
+		close;
+	}
+}
+
+s_atelier,26,68,3	script	Vito#sc11_lgt	904,{
+	mes "[Vito]";
+	mes "Bem-vindo.";
+	if (Class == Job_Shadow_Chaser || Class == Job_Shadow_Chaser_T || Class == Job_Baby_Shadow_Chaser) {
+		mes "O que você está procurando?";
+		next;
+		set .@i, select("Fazer um novo pincel para maquiagem.:Fazer um novo pincel para pintura.:Nada.");
+		mes "[Vito]";
+		if (.@i == 1) setarray .@i[1],6121,1,10,100000;
+		else if (.@i == 2) setarray .@i[1],6122,2,30,200000;
+		else {
+			mes "Sempre que precisar de um blush, visite-me.";
+			mes "Até logo!";
+			close;
+		}
+		if (countitem(.@i[1])) {
+			mes "Nós oferecemos apenas um blush para cada pessoa.";
+			mes "Não podemos oferecer blushes extras.";
+			close;
+		}
+		if (countitem(7150) >= .@i[2] && countitem(949) >= .@i[3] && Zeny >= .@i[4]) {
+			mes "Você trouxe tudo o que precisa.";
+			mes "Vou trocar o blush que fiz anteriormente.";
+			delitem 7150,.@i[2]; //Bamboo_Cut
+			delitem 949,.@i[3]; //Feather
+			set Zeny, Zeny - .@i[4];
+			getitem .@i[1],1; //Makeover_Brush,Paint_Brush
+			close;
+		}
+		mes "Para o blush de"+((.@i[0] == 1)?"maquiagem":"pintura");
+		mes "você precisa de"+.@i[2]+"Corte de Bambu,";
+		mes .@i[3]+"Pena, e"+.@i[0]+"00.000 zenys.";
+		close;
+	}
+	mes "É o local de trabalho das sombras.";
+	next;
+	switch(select("Onde está a tinta?:Onde está o gerente?")) {
+	case 1:
+		mes "[Vito]";
+		mes "Tinta?";
+		mes "Pergunte ao assistente que está ali.";
+		close;
+	case 2:
+		mes "[Vito]";
+		mes "O homem parado na frente do balcão é o gerente.";
+		close;
+	}
+}
+
+// Warp Portal
+//============================================================
+tha_t01,149,228,0	script	#shadowc02	45,2,2,{
+	end;
+OnTouch:
+	mes "Você pode sentir um poder estranho.";
+	if (BaseJob == Job_Rogue && job_sha == 27) {
+		mes "Você está ficando tonto.";
+		close2;
+		warp "job3_sha01",71,36;
+		end;
+	}
+	mes "Você não sabe o que é isso.";
+	close;
+}
+
+// Quest Mob Spawn
+//============================================================
+tur_dun03,0,0	monster	Shadow of Deception	2076,1,1000
+ice_dun02,0,0	monster	Shadow of Illusion	2077,1,1000
+niflheim,0,0	monster	Shadow of Pleasure	2078,1,1000

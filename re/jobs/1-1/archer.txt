@@ -1,0 +1,129 @@
+//===== rAthena Script ======================================= 
+//= Renewal Archer Job Quest
+//===== By: ================================================== 
+//= Kisuka
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Job Change to Archer Class
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [Kisuka]
+//= 1.1 Added support for Baby classes. [Euphy]
+//============================================================ 
+payon_in02,64,71,4	script	Archer Guildsman#archer	85,{
+	if (Upper == 1) {
+		if (Class == Job_Novice_High && (ADVJOB == Job_Sniper || ADVJOB == Job_Clown || ADVJOB == Job_Gypsy)) {
+			mes "[Archer Guildsman]";
+			mes "Ei, eu conheço você.";
+			mes "Você fez este teste";
+			mes "antes, não foi?";
+			next;
+			mes "[Archer Guildsman]";
+			mes "Ah, você deve ter ido";
+			mes "a Valhalla e renascido.";
+			mes "Uau, isso é muito impressionante!";
+			next;
+			if (!callfunc("F_CanChangeJob")) {
+				mes "[Archer Guildsman]";
+				mes "Err...";
+				mes "É melhor você aprender todas as Habilidades Básicas antes de poder se tornar um Arqueiro.";
+				next;
+				mes "[Archer Guildsman]";
+				mes "Tudo bem, até logo.";
+				close;
+			}
+			mes "[Archer Guildsman]";
+			mes "Bem, então. Não preciso";
+			mes "dizer mais nada.";
+			mes "Sei que você será um ótimo Arqueiro...";
+			next;
+			skill "NV_TRICKDEAD",0,SKILL_PERM;
+			jobchange Job_Archer_high;
+			skill "AC_MAKINGARROW",1,SKILL_PERM;
+			skill "AC_CHARGEARROW",1,SKILL_PERM;
+			mes "[Archer Guildsman]";
+			mes "Embora não haja uma recompensa";
+			mes "especial para você desta vez, espero que compreenda. Cuide-se.";
+			close;
+		}else{
+			mes "[Archer Guildsman]";
+			mes "Oh...?";
+			mes "Ei, o que você";
+			mes "está fazendo aqui...?";
+			next;
+			mes "[Archer Guildsman]";
+			mes "Posso dizer que você não leva jeito para ser um Arqueiro. Parece que você nasceu para fazer";
+			mes "outra coisa...";
+			close;
+		}
+	}
+	mes "[Archer Guildsman]";
+	mes "Prazer em conhecê-lo. Como posso ajudar?";
+	next;
+	switch(select("Eu quero ser um Arqueiro.:Preciso dos requisitos, por favor.:Nada, obrigado.")) {
+	case 1:
+		mes "[Archer Guildsman]";
+		if(BaseJob != Job_Novice) {
+			if(BaseJob == Job_Archer)
+				mes "Haha, você está brincando comigo...";
+			else {
+				mes "Sinto muito, mas apenas Aprendizes podem mudar de classe.";
+				mes "Você já tem sua própria classe, não tem?";
+			}
+			close;
+		}else{
+			mes "Você é..."+strcharinfo(0)+", certo?";
+			next;
+			if (!callfunc("F_CanChangeJob")) {
+				mes "[Archer Guildsman]";
+				mes "Bem, você não está no nível de habilidade certo.";
+				mes "Seu nível de classe deve ser pelo menos ^4A4AFF10^000000 e sua Habilidade Básica deve chegar ao ^4A4AFFnível 9";
+				next;
+				mes "[Archer Guildsman]";
+				mes "Como um Arqueiro precisa de uma concentração extremamente alta, não aceitamos aqueles que têm pouca paciência.";
+				close;
+			}
+			mes "[Archer Guildsman]";
+			mes "Sua Habilidade Básica agora é suficiente..";
+			mes "....Hm~~ então você está pronto para ser um Arqueiro. Vou dar prosseguimento ao processo imediatamente.";
+			next;
+			mes "[Archer Guildsman]";
+			mes "Parabéns! Você agora é um Arqueiro! Além disso, esperamos que você participe ativamente de muitos programas para o renascimento da guilda dos Arqueiro.";
+			mes "Ah, os itens chegaram do Departamento de Produção. Aqui, pegue isto! É tudo seu!";
+			callfunc "Job_Change",Job_Archer;
+			getitem 1742,1;	// N_Composite_Bow
+			getitem 12004,1;	// Arrow_Container
+			getitem 12009,1;	// Silver_Arrow_Container
+			getitem 12008,1;	// Fire_Arrow_Container
+			next;
+			mes "[Archer Guildsman]";
+			mes "Com um arco e flechas, agora você se tornou um Arqueiro de verdade.";
+			mes "Se você abrir o aljava, encontrará flechas dentro e poderá equipá-las.";
+			mes "Bem, espero ouvir boas notícias de você. É hora de dizer adeus.";
+			mes "Tchau.";
+			close;
+		}
+	case 2:
+		mes "[Archer Guildsman]";
+		mes "Um Arqueiro possui habilidades usando arco e tem talentos variados.";
+		mes "A maior habilidade de um Arqueiro é atacar inimigos a longa distância.";
+		next;
+		mes "[Archer Guildsman]";
+		mes "Embora um Arqueiro tenha menos HP, ele ou ela pode atingir inimigos a um longo alcance,";
+		mes "então um Arqueiro fica mais seguro em uma batalha real.";
+		next;
+		mes "[Archer Guildsman]";
+		mes "Embora um Arqueiro em Ragnarok tenha menos HP, ele ou ela tem alta precisão e taxa de ataque para que o Arqueiro possa matar monstros antes que cheguem perto.";
+		next;
+		mes "[Archer Guildsman]";
+		mes "^8C2121Um Arqueiro pode mudar de classe para Caçador.^000000";
+		mes "^8C2121Além de Caçador, se você for homem, pode mudar de classe para Bardo e, se for mulher, pode mudar de classe para Odalisca.^000000";
+		close;
+	case 3:
+		mes "[Archer Guildsman]";
+		mes "Se tiver alguma dúvida, sinta-se à vontade para vir me perguntar.";
+		close;
+	}
+}

@@ -1,0 +1,2883 @@
+//===== rAthena Script =======================================
+//= Kagerou/Oboro Job Quest
+//===== By: ==================================================
+//= M45T3R, Dastgir Pojee, Euphy
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Job change Quest from Ninja -> Kagerou/Oboro.
+//===== Additional Comments: =================================
+//= 1.0 First version. Uses official script structure and text
+//=     from iRO (ripped by M45T3R/Dastgir Pojee). [Euphy]
+//============================================================
+
+// Starting the Quest
+//============================================================
+que_ng,28,156,0	script	Start#ko	139,1,1,{
+	end;
+OnTouch:
+	if (BaseLevel >= 99 && JobLevel >= 70 && job_kagero == 0 && Class == Job_Ninja) {
+		mes "Passagem Secreta para a ^25C18DGuilda dos Ninjas^25C18D";
+		mes "Você ouve vozes familiares conversando entre si.";
+		next;
+		mes "[Unknown Voice A]";
+		mes "Quanto tempo. Como vai? Como estão as crianças que você acolheu?";
+		next;
+		mes "[Unknown Voice B]";
+		mes "Tenho que admitir. Você escolheu alguns bem competitivos.";
+		next;
+		mes "[Unknown Voice A]";
+		mes "Soa como música para meus ouvidos. Ser enviado para uma terra estrangeira com poluição do ar já foi ruim o suficiente, agora assombrado por memórias deste lugar...";
+		next;
+		mes "[Unknown Voice A]";
+		mes "O que você acha? Devemos fazer o rodízio agora?";
+		next;
+		mes "[Unknown Voice B]";
+		mes "Não desistiu, não é? Você realmente acha que ele vai aprovar?";
+		next;
+		mes "[Unknown Voice A]";
+		mes "Não precisa ser amargo. Ei! Alguma das crianças que vêm e vão aqui foi a que encontrou o ^BD0408lugar^BD0408?";
+		next;
+		mes "[Unknown Voice B]";
+		mes "Já que encontrar o lugar escondido também era parte do teste.";
+		next;
+		mes "[Unknown Voice A]";
+		mes "Você é tão teimoso quanto da primeira vez que te conheci. É só uma parede em algum lugar...";
+		next;
+		mes "[Unknown Voice B]";
+		mes "Shiiiu! Acho que alguém está ouvindo atrás da porta. Rápido! Volte para a área da missão.";
+		next;
+		mes "A conversa parou abruptamente. Lugar escondido? Parede? Parte de um teste? O que é tudo isso?";
+		setquest 5131;
+		set job_kagero,1;
+		close;
+	} else if (BaseJob != Job_Ninja && job_kagero > 0) {
+		for (set .@i,5131; .@i<=5146; set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+		set job_kagero,0;
+	}
+	end;
+}
+
+que_ng,21,76,0	script	Wall with a Drawing#ko	844,{
+	if (Class == Job_Oboro || Class == Job_Kagerou) {
+		mes "Você não deveria mais usar esta passagem secreta.";
+		close;
+	} else if (job_kagero == 1 && Class == Job_Ninja) {
+		mes "Você encontrou um local que se assemelha ao lugar escondido.";
+		next;
+		mes "Esta parede sempre esteve aqui. Como eu não notei antes?";
+		next;
+		mes "Agora que sei que é uma passagem secreta, o que faço para entrar?";
+		next;
+		if(select("Rasgue o desenho.:Toque no desenho com a mão.") == 1) {
+			mes "Não posso rasgar porque não é meu.";
+			close;
+		}
+		mes "Você toca no desenho com a ponta da mão e sente uma sensação repentina de ser puxado.";
+		close2;
+		warp "job_ko",26,111;
+		end;
+	} else if (job_kagero > 1 && Class == Job_Ninja) {
+		mes "Entrada para o esconderijo da ^25C18DGuilda dos Ninjas^000000.";
+		next;
+		if(select("Entrar.:Não entrar.") == 2)
+			close;
+		mes "Ao tocar no desenho, você tem a sensação de estar sendo puxado..."; //custom translation
+		close2;
+		warp "job_ko",26,111;
+		end;
+	} else {
+		mes "Há uma parede com um grande desenho nela.";
+		close;
+	}
+	end;
+}
+
+job_ko,25,115,4	script	Old Man#ko	588,{
+	if (MaxWeight - Weight < 1000 || checkweight(1201,1) == 0) {
+		mes "[Kuuga Gai]";
+		mes "Você não precisa carregar tantas coisas."; //custom translation
+		close;
+	}
+	if (BaseJob != Job_Ninja) {
+		for (set .@i,5131; .@i<=5146; set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+		set job_kagero,0;
+		mes "[Kuuga Gai]";
+		mes "Você não pertence ao clã dos Ninja.";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	if (job_kagero == 1) {
+		cutin "job_ko03",2;
+		mes "^1A95E6Um velho com aparência saudável e forte está sentado e olhando para o nada.^1A95E6";
+		next;
+		if(select("Ignorar.:Falar com ele.") == 1) {
+			close2;
+			cutin "",255;
+			end;
+		}
+		mes "["+strcharinfo(0)+"]";
+		mes "Com licença...";
+		next;
+		mes "^1A95E6Você tentou falar com o velho, mas não há resposta. Justo quando você está prestes a se virar...^1A95E6";
+		next;
+		mes "[Old Man]";
+		mes "Finalmente, um cliente! Hmm... e um vivo, também!";
+		next;
+		select("Com licença... onde estou?");
+		mes "[Old Man]";
+		mes "^1A95E6Ele continua falando e não para para responder à sua pergunta.^1A95E6";
+		next;
+		mes "[Old Man]";
+		mes "Houve uma vez um clã silencioso vivendo nos tempos antigos de Amatsu que nunca é mencionado em livros de história ou contos.";
+		next;
+		mes "[Old Man]";
+		mes "Eles viviam sob as sombras, mas sempre ansiavam pelo sol brilhante, como um girassol.";
+		next;
+		mes "[Old Man]";
+		mes "Um clã que era leal ao seu senhor, a quem serviam como seu sol brilhante.";
+		next;
+		mes "[Old Man]";
+		mes "...um clã muito confiável...";
+		next;
+		mes "[Old Man]";
+		mes "....leais até o âmago...";
+		next;
+		mes "[Old Man]";
+		mes "...um clã de integridade...";
+		next;
+		select("O que aconteceu com eles?");
+		mes "^1A95E6O velho olha para você com um rosto melancólico.^1A95E6";
+		next;
+		mes "[Old Man]";
+		mes "Por que você está interessado em um clã que foi abandonado por seu senhor e desapareceu da própria história?";
+		next;
+		if(select("Eu sou um Ninja.:Estou entediado.") == 2) {
+			mes "[Old Man]";
+			mes "Foi bom conhecer você.";
+			close2;
+			warp "amatsu",147,136;
+			end;
+		}
+		cutin "job_ko02",2;
+		mes "[Old Man]";
+		mes "Ninja! Houve um tempo em que o clã também era chamado de ninjas.";
+		next;
+		erasequest 5131;
+		setquest 5132;
+		set job_kagero,2;
+		mes "[Old Man]";
+		mes "Você terá que me dar ouvidos, pois tenho muito a lhe contar sobre a história do clã.";
+		close2;
+		cutin "",255;
+		end;
+	} else if (job_kagero == 2) {
+		cutin "job_ko01",2;
+		mes "^1A95E6O velho inicia a história com um tom muito suave, como se estivesse contando uma história para seu neto.^1A95E6";
+		next;
+		mes "[Old Man]";
+		mes "Isso remonta aos tempos antigos e ninguém em Amatsu se lembra disso.";
+		next;
+		mes "[Old Man]";
+		mes "O clã trabalhava nos bastidores e, basicamente, vivia suas vidas para o seu lorde.";
+		next;
+		mes "[Old Man]";
+		mes "Eles eram muito leais, realizando qualquer ato que seu lorde pedisse.";
+		next;
+		mes "[Old Man]";
+		mes "Ninja, o clã era conhecido como o clã das sombras, mas isso não significa que eles queriam ficar escondidos na escuridão.";
+		next;
+		mes "[Old Man]";
+		mes "Eles eram leais o suficiente para se sentirem satisfeitos como servos do lorde, mas sua lealdade se tornou o problema.";
+		next;
+		select("Problema?");
+		mes "[Old Man]";
+		mes "Eles são uma organização secreta sobre a qual nem mesmo o lorde sabia muito.";
+		next;
+		mes "[Old Man]";
+		mes "Os poucos que sabiam da existência do clã tentaram investigá-los, mas ninguém conseguiu revelar sua verdadeira identidade.";
+		next;
+		mes "[Old Man]";
+		mes "É por isso que este clã cresceu de leais servos para um grupo temido por seus segredos.";
+		next;
+		mes "[Old Man]";
+		mes "O lorde rejeitou o clã e não os chamou mais para seus serviços, mas eles nunca o traíram.";
+		next;
+		select("Eles eram pessoas realmente leais.");
+		cutin "job_ko03",2;
+		mes "[Old Man]";
+		mes "Sim, eles eram. Muito leais.";
+		next;
+		erasequest 5132;
+		setquest 5133;
+		set job_kagero,3;
+		mes "^1A95E6O velho parece ainda mais desolado.^1A95E6";
+		close2;
+		cutin "",255;
+		end;
+	} else if (job_kagero == 3) {
+		cutin "job_ko03",2;
+		mes "[Old Man]";
+		mes "O clã vive escondido há muito tempo, desde os velhos tempos. O lorde atual nem sabia da existência deles.";
+		next;
+		select(".........");
+		cutin "job_ko01",2;
+		mes "[Old Man]";
+		mes "Eu sou o Líder Gion, o último do clã Ninja das sombras.";
+		next;
+		if(select("Acho que seu tempo acabou.:Preciso do seu ensinamento.") == 1) {
+			cutin "job_ko04",2;
+			mes "[Leader Gion]";
+			mes "Você é um Mercenário para acabar com a vida deste velho?";
+			next;
+			mes "[Leader Gion]";
+			mes "Então é por isso que você demonstrou interesse no meu clã. Não vou desistir facilmente.";
+			next;
+			percentheal -99,0;
+			mes "Pow!!";
+			mes "^1A95E6Você perde a consciência com o grande impacto.^000000";
+			close2;
+			warp "amatsu",147,136;
+			end;
+		}
+		cutin "job_ko02",2;
+		mes "[Leader Gion]";
+		mes "Ensinamento...";
+		mes "Faz muito tempo que não ouço essa palavra.";
+		next;
+		mes "[Leader Gion]";
+		mes "Acho que esta pequena visita não foi uma coincidência, mas o início de uma conexão.";
+		next;
+		mes "[Leader Gion]";
+		mes "Sinto muito, não sou um Professor. Mas!";
+		next;
+		mes "[Leader Gion]";
+		mes "Posso ajudá-lo no caminho que você escolheu, o ^33CC71"+((Sex == SEX_MALE)?"Kagerou":"Oboro")+"^000000 caminho.";
+		next;
+		mes "^1A95E6Você ouve a voz do Líder Gion fracamente enquanto perde os sentidos.^1A95E6";
+		next;
+		erasequest 5133;
+		setquest 5134;
+		set job_kagero,4;
+		mes "[Leader Gion]";
+		mes "Se você está preparado para me seguir, Líder Gion, no"+((Sex == SEX_MALE)?"Kagerou":"Oboro")+"caminho, nos encontraremos novamente.";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	} else if (job_kagero == 4) {
+		cutin "job_ko02",2;
+		mes "[Leader Gion]";
+		mes "Pensei que você estivesse com medo do ^33CC71caminho do"+((Sex == SEX_MALE)?"Kagerou":"Oboro")+"^33CC71 e não voltaria.";
+		next;
+		mes "[Leader Gion]";
+		mes "Mas pelo olhar em seus olhos, acho que o julguei mal.";
+		next;
+		mes "[Leader Gion]";
+		mes "Você terá que treinar sua mente e seu corpo para caminhar firmemente no mundo desconhecido e nunca cair na tentação de permanecer no caminho.";
+		next;
+		mes "[Leader Gion]";
+		mes "Nossos ancestrais tinham 4 testes para treinar nosso povo.";
+		next;
+		select("4 testes?");
+		cutin "job_ko01",2;
+		mes "[Leader Gion]";
+		mes "Sim, existem 4 testes.";
+		mes "Meus ancestrais treinaram meu povo com 4 testes que envolvem ^087FF8conhecimento^000000, ^087FF8sobrevivência^000000, ^087FF8armas^000000 e ^087FF8batalha^000000.";
+		next;
+		mes "[Leader Gion]";
+		mes "Sei que você está curioso para saber quais são esses testes. Deixe-me explicar um por um.";
+		next;
+		while(1) {
+			set .@i, select("Teste do Conhecimento:Teste da Sobrevivência:Teste das Armas:Teste da Batalha");
+			set .@test, .@test | (1<<(.@i-1));
+			switch (.@i) {
+			case 1:
+				mes "[Leader Gion]";
+				mes "Precisamos ser conhecedores para auxiliar o lorde. Este teste serve para este propósito.";
+				next;
+				mes "[Leader Gion]";
+				mes "Você pode passar no teste se resolver com sucesso mais de 9 das 10 perguntas.";
+				next;
+				if (.@test != 15) {
+					mes "[Leader Gion]";
+					mes "O teste será fácil de passar se você foi constante em seus estudos. Agora, sobre qual outro teste você está curioso?";
+					next;
+				}
+				break;
+			case 2:
+				mes "[Leader Gion]";
+				mes "Missões nem sempre são fáceis e seguras. É por isso que instintos de sobrevivência são vitais para nós.";
+				next;
+				mes "[Leader Gion]";
+				mes "Meus ancestrais chamam este teste de teste dos dados. É um teste para avançar dependendo dos resultados dos dados.";
+				next;
+				mes "[Leader Gion]";
+				mes "Pense nele como os jogos de dados simples que as pessoas jogam.";
+				next;
+				mes "[Leader Gion]";
+				mes "Mas nunca baixe a guarda durante o teste, porque ele não é chamado de teste de sobrevivência à toa.";
+				next;
+				mes "[Leader Gion]";
+				mes "Haverá blocos que ajudarão você, enquanto outros irão atrapalhar.";
+				next;
+				if (.@test != 15) {
+					mes "[Leader Gion]";
+					mes "Se você lidar com as várias situações com sabedoria, conseguirá passar no teste. Agora, sobre qual outro teste você está curioso?";
+					next;
+				}
+				break;
+			case 3:
+				mes "[Leader Gion]";
+				mes "Meu clã era famoso por usar armas únicas que nós criamos.";
+				next;
+				mes "[Leader Gion]";
+				mes "Você seria considerado abençoado se criasse sua própria arma única.";
+				next;
+				mes "[Leader Gion]";
+				mes "Criar uma arma para si mesmo e refiná-la é o objetivo deste teste.";
+				next;
+				if (.@test != 15) {
+					mes "[Leader Gion]";
+					mes "Espero que você seja abençoado e encontre a melhor arma para você. Agora, sobre qual outro teste você está curioso?";
+					next;
+				}
+				break;
+			case 4:
+				mes "[Leader Gion]";
+				mes "Missões nem sempre são feitas sozinho. Você frequentemente trabalhará em equipes de 2 ou 3 pessoas para um objetivo comum.";
+				next;
+				mes "[Leader Gion]";
+				mes "O teste de batalha é apenas para aqueles que passam nos testes de conhecimento, sobrevivência e armas. Então! É o último teste de todos.";
+				next;
+				mes "[Leader Gion]";
+				mes "Diferente dos outros três testes que são feitos sozinho, você terá que competir com outros neste teste final.";
+				next;
+				mes "[Leader Gion]";
+				mes "Há apenas um alvo!!";
+				mes "E apenas o primeiro a chegar ao alvo passa no teste.";
+				next;
+				mes "[Leader Gion]";
+				mes "Você terá sorte se não tiver competidores durante seu teste.";
+				next;
+				if (.@test != 15) {
+					mes "[Leader Gion]";
+					mes "Um desafio é melhor do que explicar cem vezes. É a experiência real que torna você melhor.";
+					next;
+				}
+				break;
+			}
+			if (.@test == 15) break;
+		}
+		cutin "job_ko02",2;
+		mes "[Leader Gion]";
+		mes "Ver para crer, então vá em frente e aceite o desafio."; //custom translation
+		next;
+		erasequest 5134;
+		setquest 5135;
+		set job_kagero,5;
+		mes "[Leader Gion]";
+		mes "Vamos começar assim que você terminar os preparativos.";
+		close2;
+		cutin "",255;
+		end;
+	} else if (job_kagero == 5) {
+		set .@ko_test_01, isbegin_quest(5136);
+		set .@ko_test_02, isbegin_quest(5137);
+		set .@ko_test_03, isbegin_quest(5138);
+		set .@ko_test, .@ko_test_01 + .@ko_test_02 + .@ko_test_03;
+		if (.@ko_test == 0) {
+			cutin "job_ko03",2;
+			mes "[Leader Gion]";
+			mes "Faz tempo.";
+			next;
+			mes "[Leader Gion]";
+			mes "Desde que me senti feliz assim. Sinto-me jovem e energético ao ver jovens como você desafiarem a si mesmos com um novo caminho.";
+			next;
+			mes "[Leader Gion]";
+			mes "Terminamos com as explicações sobre os testes, agora devo contar a história do meu clã?";
+			next;
+			cutin "job_ko01",2;
+			mes "[Leader Gion]";
+			mes "Meu clã começou com dois guerreiros.";
+			next;
+			mes "[Leader Gion]";
+			mes "Kagerou, um guerreiro como as chamas dançantes do sol.";
+			next;
+			mes "[Leader Gion]";
+			mes "Oboro, uma guerreira como o luar enevoado.";
+			next;
+			mes "[Leader Gion]";
+			mes "O Sol e a Lua.";
+			mes "A luz do sol que ilumina o mundo e a luz da lua que ilumina a noite. Ambos eram guerreiros muito parecidos, mas diferentes.";
+			next;
+			mes "[Leader Gion]";
+			mes "Houve um tempo em que houve inimizade entre ambos os guerreiros.";
+			next;
+			mes "[Leader Gion]";
+			mes "Mas não demorou muito para eles se tornarem um só como clã.";
+			next;
+			select("Como as coisas seguiram depois disso?");
+			cutin "job_ko02",2;
+			mes "[Leader Gion]";
+			mes "Ha ha ha. Nunca é divertido ouvir a história toda de uma vez, não é? Volte depois de passar em um teste e eu continuarei minha história.";
+			next;
+			mes "[Leader Gion]";
+			mes "Qual teste você selecionará como seu primeiro teste?";
+			next;
+			callsub L_StartTest,select("Teste de Conhecimento:Teste de Sobrevivência:Teste de Armamento"),1;
+			end;
+		} else if (.@ko_test == 2) {
+			cutin "job_ko01",2;
+			mes "[Leader Gion]";
+			if (.@ko_test_01 == 2) {
+				set .@menu$,":Teste de Sobrevivência:Teste de Armamento";
+				mes "Você passou no Teste de Conhecimento.";
+				next;
+				mes "[Leader Gion]";
+				mes "Meu amigo não aprova os outros tão facilmente, mas acho que ele gostou de você.";
+				next;
+			} else if (.@ko_test_02 == 2) {
+				set .@menu$,"Teste de Conhecimento::Teste de Armamento";
+				mes "Você passou no Teste de Sobrevivência.";
+				next;
+				mes "[Leader Gion]";
+				mes "Parece que você passou pelo inferno com este teste.";
+				next;
+			} else if (.@ko_test_03 == 2) {
+				set .@menu$,"Teste de Conhecimento:Teste de Sobrevivência:";
+				mes "Você passou no Teste de Armamento.";
+				next;
+				mes "[Leader Gion]";
+				mes "Fico me perguntando se Joe está satisfeito com o seu desempenho.";
+				next;
+			}
+			select("Por favor, continue com a história do clã.");
+			cutin "job_ko02",2;
+			mes "[Leader Gion]";
+			mes "Parece que você está bem ansioso para ouvir mais. Onde eu parei... Ah! Eu me lembro.";
+			next;
+			mes "[Leader Gion]";
+			mes "Kagerou, um guerreiro como as chamas dançantes do sol.";
+			next;
+			mes "[Leader Gion]";
+			mes "Oboro, uma guerreira como o luar enevoado.";
+			next;
+			mes "[Leader Gion]";
+			mes "No começo, os dois guerreiros não eram próximos, pois suas personalidades e tudo o resto eram completamente opostos.";
+			next;
+			mes "[Leader Gion]";
+			mes "O primeiro lugar onde se conheceram foi o campo de batalha. E você sabe como os inimigos se cumprimentam em um campo de batalha.";
+			next;
+			mes "[Leader Gion]";
+			mes "Eles acabaram ferindo gravemente um ao outro.";
+			next;
+			mes "[Leader Gion]";
+			mes "Mas o que se pode fazer? Guerra é guerra.";
+			next;
+			mes "[Leader Gion]";
+			mes "O amigo com quem você riu ontem é um inimigo com quem você tem que lutar em uma guerra hoje.";
+			next;
+			mes "[Leader Gion]";
+			mes "Portanto, ninguém consegue se dar bem com ninguém durante uma guerra.";
+			next;
+			mes "[Leader Gion]";
+			mes "Continuarei a história depois que você passar em outro teste.";
+			next;
+			mes "[Leader Gion]";
+			mes "Qual teste você escolherá para o segundo teste?";
+			next;
+			callsub L_StartTest,select(.@menu$),2;
+			end;
+		} else if (.@ko_test == 4) {
+			cutin "job_ko04",2;
+			mes "[Leader Gion]";
+			if (.@ko_test_01 == 2 && .@ko_test_02 == 2) {
+				set .@last_test,3;
+				mes "Você passou nos ^339CCCTestes de Conhecimento e Sobrevivência^000000!";
+			} else if (.@ko_test_01 == 2 && .@ko_test_03 == 2) {
+				set .@last_test,2;
+				mes "Você passou nos ^339CCCTestes de Conhecimento e Armamento^000000!";
+			} else if (.@ko_test_02 == 2 && .@ko_test_03 == 2) {
+				set .@last_test,1;
+				mes "Você passou nos ^339CCCTestes de Sobrevivência e Armamento^000000!";
+			}
+			next;
+			mes "[Leader Gion]";
+			mes "Você já terminou dois testes. Espero que tenha aprendido muito com eles.";
+			next;
+			cutin "job_ko01",2;
+			mes "[Leader Gion]";
+			mes "Devemos continuar com a história?";
+			next;
+			mes "[Leader Gion]";
+			mes "Kagerou, um guerreiro como as chamas dançantes do sol.";
+			next;
+			mes "[Leader Gion]";
+			mes "Oboro, uma guerreira como o luar enevoado.";
+			next;
+			mes "[Leader Gion]";
+			mes "Acho que parei quando os dois guerreiros se encontraram no campo de batalha como inimigos.";
+			next;
+			mes "[Leader Gion]";
+			mes "A longa guerra finalmente terminou, mas as feridas e a dor daqueles que sobreviveram tinham acabado de começar.";
+			next;
+			mes "[Leader Gion]";
+			mes "Então, esses dois guerreiros começaram a abraçar e curar as feridas da guerra juntos e se tornaram um só.";
+			next;
+			mes "[Leader Gion]";
+			mes "Há uma história de fundo sobre um homem que apareceu diante deles e conquistou a lealdade de ambos os guerreiros.";
+			next;
+			select("Quem é esse homem?");
+			mes "[Leader Gion]";
+			mes "Não se sabe muito sobre esse homem. Apenas uma breve menção aos dois guerreiros jurando lealdade.";
+			next;
+			mes "[Leader Gion]";
+			mes "Talvez as gerações atuais como a minha sejam descendentes do atual senhor de Amatsu? Mas isso é apenas uma suposição.";
+			next;
+			mes "[Leader Gion]";
+			mes "Estou quase no fim da história do meu clã. Volte depois de passar no terceiro teste e eu lhe contarei o resto.";
+			next;
+			callsub L_StartTest,.@last_test,3;
+			end;
+		} else if (.@ko_test == 6) {
+			cutin "job_ko01",2;
+			mes "[Leader Gion]";
+			mes "Você passou por três testes, restando apenas um para concluir.";
+			next;
+			mes "[Leader Gion]";
+			mes "Como eu disse antes, o último teste é diferente porque você tem que competir contra outros.";
+			next;
+			select("Você vai continuar a história?");
+			cutin "job_ko02",2;
+			mes "[Leader Gion]";
+			mes "Ha ha ha. Vou terminar a história.";
+			next;
+			mes "[Leader Gion]";
+			mes "Kagerou, um guerreiro como as chamas dançantes do sol.";
+			next;
+			mes "[Leader Gion]";
+			mes "Oboro, uma guerreira como o luar enevoado.";
+			next;
+			mes "[Leader Gion]";
+			mes "Dizem que o homem que conquistou a lealdade dos dois guerreiros era uma pessoa bem-humorada.";
+			next;
+			mes "[Leader Gion]";
+			mes "Ele gostava mais de piadas e conversas do que de brigas, e preferia mulheres a homens.";
+			next;
+			mes "[Leader Gion]";
+			mes "Hmm... Não sei por que essa parte da história foi mantida viva todos esses anos, mas esse homem queria unir esses dois guerreiros.";
+			next;
+			mes "[Leader Gion]";
+			mes "Ambos os guerreiros viajaram juntos após a guerra, mas mantiveram uma distância estranha um do outro.";
+			next;
+			mes "[Leader Gion]";
+			mes "Eles devem ter tido seus motivos, mas o senhor deles os enviava juntos para missões difíceis, colocava-os em uma sala secreta juntos e em todos os tipos de situações.";
+			next;
+			select("Parece uma pessoa peculiar.");
+			mes "[Leader Gion]";
+			mes "Sim, ele era. E seus esforços não foram em vão, já que os dois guerreiros acabaram se aproximando e se casaram.";
+			next;
+			mes "[Leader Gion]";
+			mes "É assim que o clã começou.";
+			next;
+			select("O que aconteceu depois?");
+			mes "[Leader Gion]";
+			mes "Infelizmente, a próxima parte da história foi descontinuada propositalmente.";
+			next;
+			mes "[Leader Gion]";
+			mes "Acho que é porque alguém queria que esquecêssemos o passado e seguíssemos em frente.";
+			next;
+			mes "[Leader Gion]";
+			mes "É isso. Agora, você não deveria estar se preparando para o último teste?";
+			next;
+			set job_kagero,6;
+			mes "[Leader Gion]";
+			mes "Mas você deve estar cansado de todos os testes até agora. Descanse um pouco.";
+			close2;
+			cutin "",255;
+			end;
+		} else if (.@ko_test == 1 || .@ko_test == 3 || .@ko_test == 5) {
+			cutin "job_ko04",2;
+			if (.@ko_test_01 == 1)
+				set .@test_ko$, "Knowledge";
+			else if (.@ko_test_02 == 1)
+				set .@test_ko$, "Survival";
+			else if (.@ko_test_03 == 1)
+				set .@test_ko$, "Weaponry";
+			mes "[Leader Gion]";
+			mes "Você não estava fazendo o Teste de" + .@test_ko$ + "agora pouco?"; //custom translation
+			next;
+			switch(select("Quero voltar para o local do teste.:Ah... não.")) {
+			case 1:
+				mes "[Leader Gion]";
+				mes "O local do Teste de" + .@test_ko$ + "fica por aqui."; //custom translation(?)
+				close2;
+				if (.@ko_test_01 == 1)
+					warp "job_ko",72,128;
+				else if (.@ko_test_02 == 1)
+					warp "job_ko",62,16;
+				else if (.@ko_test_03 == 1)
+					warp "job_ko",121,129;
+				end;
+			case 2:
+				mes "[Leader Gion]";
+				mes "A vila fica por aqui.";
+				close2;
+				warp "amatsu",147,136;
+				end;
+			}
+		}
+	} else if (job_kagero == 6) {
+		cutin "job_ko01",2;
+		mes "[Leader Gion]";
+		mes "Você já voltou? Poderia ter descansado mais. Existe algum motivo para tanta pressa?";
+		next;
+		input .@inputstr$;
+		cutin "job_ko03",2;
+		mes "[Leader Gion]";
+		mes "Por causa de ^B24E59" + .@inputstr$ + "^000000?";
+		next;
+		mes "[Leader Gion]";
+		mes "Tenho que admitir, não entendo você agora.";
+		next;
+		mes "[Leader Gion]";
+		mes "Mas, já que você passou por muita coisa, tenho certeza de que se sairá bem no teste final.";
+		next;
+		cutin "job_ko01",2;
+		mes "[Leader Gion]";
+		mes "Agora! Chega de conversa fiada. Vou te informar qual é o alvo para o Teste de Batalha.";
+		next;
+		mes "[Leader Gion]";
+		mes "O alvo é um monstro chamado ^FF0000Segredo do Clã^000000.";
+		next;
+		mes "[Leader Gion]";
+		mes "Você terá que ser cuidadoso, pois há muitos monstros com nomes e formas semelhantes no local do teste.";
+		next;
+		mes "[Leader Gion]";
+		mes "E, se tiver sorte, haverá outros caçando o mesmo monstro.";
+		next;
+		mes "[Leader Gion]";
+		mes "Que as bênçãos de '" + ((Sex == SEX_MALE)?"Kagerou, sol dançante":"Oboro, luar enevoado") + "' estejam com você.";
+		next;
+		setquest 5146;
+		set job_kagero,7;
+		mes "[Leader Gion]";
+		mes "Então vamos para o campo de teste de batalha.";
+		close2;
+		switch(rand(3)) {
+			case 0: warp "job_ko",142,20; break;
+			case 1: warp "job_ko",141,80; break;
+			case 2: warp "job_ko",107,60; break;
+		}
+		end;
+	} else if (job_kagero == 7 || job_kagero == 8) {
+		cutin "job_ko03",2;
+		mes "[Leader Gion]";
+		mes "Vejo que você está no meio do ^339CCCTeste de Batalha^000000. Você voltará para o local do teste?";
+		next;
+		switch(select("Voltar para o local do teste.:Visitar a vila.")) {
+		case 1:
+			mes "[Leader Gion]";
+			mes "O local do teste fica por aqui."; //custom translation(?)
+			close2;
+			switch(rand(3)) {
+				case 0: warp "job_ko",142,20; break;
+				case 1: warp "job_ko",141,80; break;
+				case 2: warp "job_ko",107,60; break;
+			}
+			end;
+		case 2:
+			mes "[Leader Gion]";
+			mes "A vila fica por aqui.";
+			close2;
+			cutin "",255;
+			end;
+		}
+	} else {
+		cutin "job_ko03",2;
+		mes "[Leader Gion]";
+		mes "Você não deveria estar aqui. Saia!";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	end;
+
+//callsub L_StartTest,<1=Knowledge,2=Survival,3=Weaponry>,<test number [1..3]>;
+L_StartTest:
+	switch (getarg(1)) {
+		case 1: set .@str$,"You are starting with the ^339CCCTest of %s^000000? "; break;
+		case 2: set .@str$,"You are taking the ^339CCCTest of %s^000000 as the second test? "; break; //custom translation
+		case 3: set .@str$,"Your third test is the ^339CCCTest of %s^000000! "; break;
+	}
+	mes "[Leader Gion]";
+	switch (getarg(0)) {
+	case 1:
+		mes sprintf(.@str$ + "Então eu poderei ver um rosto familiar depois de tanto tempo...","Conhecimento");
+		next;
+		select("Rosto familiar?");
+		setquest 5136;
+		mes "[Leader Gion]";
+		mes "Ha ha ha. Você saberá quando chegarmos lá. O Teste de Conhecimento é feito por aqui.";
+		close2;
+		warp "job_ko",72,128;
+		end;
+	case 2:
+		mes sprintf(.@str$ + "É um teste solitário que você precisa enfrentar sozinho.","Sobrevivência");
+		next;
+		setquest 5137;
+		mes "[Leader Gion]";
+		mes "Mas acredito que você dará conta. O Teste de Sobrevivência é feito por aqui.";
+		close2;
+		warp "job_ko",62,16;
+		end;
+	case 3:
+		mes sprintf(.@str$ + "Tenho algo para lhe dar antes de você ir.","Armamento");
+		next;
+		setquest 5138;
+		getitem 1002,5; //Iron_Ore
+		getitem 1010,1; //Phracon
+		mes "Você recebe 5 Minérios de Ferro e 1 Fracon.";
+		next;
+		mes "[Leader Gion]";
+		mes "Você achará isso útil. O Teste de Armamento é feito por aqui.";
+		close2;
+		warp "job_ko",121,129;
+		end;
+	}
+}
+
+// Test of Knowledge
+//============================================================
+job_ko,81,124,4	script	Kuuga Gai#ko	730,{
+	if (BaseJob != Job_Ninja) {
+		for (set .@i,5131; .@i<=5146; set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+		set job_kagero,0;
+		mes "[Kuuga Gai]";
+		mes "Desculpe, seu clã não é o mesmo que o nosso, há algo de errado?";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	if (job_kagero != 5) {
+		goto L_Kick;
+	}
+	if (MaxWeight - Weight < 1000 || checkweight(1201,1) == 0) {
+		mes "[Kuuga Gai]";
+		mes "Este é um teste de conhecimento, então por que você trouxe tantas coisas?"; //custom translation
+		close;
+	}
+	set .@ko_test_01, isbegin_quest(5136);
+	set .@ko_test_01_1, isbegin_quest(5139);
+	if (.@ko_test_01 == 1 && .@ko_test_01_1 == 0) {
+		mes "[Kuuga Gai]";
+		mes "Faz tempo.";
+		next;
+		select("Você não é o...");
+		mes "[Kuuga Gai]";
+		mes "Lembro-me de você de quando procurava pelo caminho do Ninja.";
+		next;
+		mes "[Kuuga Gai]";
+		mes "Você já ficou tão forte assim?";
+		next;
+		mes "[Kuuga Gai]";
+		mes "Ha ha ha-";
+		mes "Um jovem verdadeiramente determinado! Gostei disso.";
+		next;
+		mes "[Kuuga Gai]";
+		mes "Ótimo! O teste que você está prestes a realizar é o ^339CCCTeste de Conhecimento^000000.";
+		next;
+		mes "[Kuuga Gai]";
+		mes "Espero que você não tenha sido preguiçoso com seus estudos enquanto se concentrava em ficar mais forte?";
+		next;
+		switch(select("Sim:Não")) {
+		case 1:
+			setquest 5139;
+			mes "[Kuuga Gai]";
+			mes "Isso é um alívio. Avise-me quando estiver pronto para começar o teste.";
+			close;
+		case 2:
+			setquest 5139;
+			mes "[Kuuga Gai]";
+			mes "Então você só falava? Bem, avise-me quando estiver pronto.";
+			close;
+		}
+	} else if (.@ko_test_01 == 1 && .@ko_test_01_1 == 1) {
+		mes "[Kuuga Gai]";
+		mes "Eu estou pronto por aqui. Você está pronto para o teste?";
+		next;
+		if(select("Sim:Não") == 2) {
+			mes "[Kuuga Gai]";
+			mes "Bem, o que posso fazer além de esperar por você.";
+			close;
+		}
+		mes "[Kuuga Gai]";
+		mes "Este não é seu primeiro teste, não é?";
+		next;
+		mes "[Kuuga Gai]";
+		mes "Você só precisa escolher a resposta correta para minhas perguntas.";
+		next;
+		mes "[Kuuga Gai]";
+		mes "Vamos começar.";
+		next;
+
+		set .@questions,10;  // number of questions to ask
+
+		// shuffle array an array of questions to be asked
+		freeloop(1);
+		setarray .@n[0],
+			1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,
+			26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50;
+		for (set .@i,getarraysize(.@n)-1; .@i>0; set .@i,.@i-1) {
+			set .@rand, rand(0,.@i);
+			set .@tmp, .@n[.@i];
+			set .@n[.@i], .@n[.@rand];
+			set .@n[.@rand], .@tmp;
+		}
+		deletearray .@n[10],getarraysize(.@n) - .@questions;
+		freeloop(0);
+
+		set @job_ko_Kuuga,0;
+		for (set .@i,1; .@i<=.@questions; set .@i,.@i+1) {
+			mes "[Kuuga Gai]";
+			mes (.@i < .@questions)?"Pergunta número"+.@i+":":"Última pergunta:";
+			switch (.@n[.@i-1]) {
+				case 1: callsub L_Question,"What is the DEX + LUK total for a Job Master?",2,"8:10:12:14"; break;
+				case 2: callsub L_Question,"What is the highest job level for a ninja?",1,"70:50:99:100"; break;
+				case 3: callsub L_Question,"How many skill points do you need to master the Throw Coins skill?",3,"25:30:35:37"; break;
+				case 4: callsub L_Question,"Which of the following is the correct number of Evasion and effect duration for Mirror Image level 10?",4,"Up to 7 and 200 seconds:Up to 5 and 220 seconds:Up to 6 and 240 seconds:Up to 5 and 240 seconds"; break;
+				case 5: callsub L_Question,"How many skill points do you need to master the Cicada Skin Shed?",1,"5:3:1:4"; break;
+				case 6: callsub L_Question,"If Dagger Throwing Practice is at 7, how much ATK is added to Shuriken attacks?",2,"18:21:27:30"; break;
+				case 7: callsub L_Question,"What is the basic attack range for Throw Shuriken?",3,"7 blocks:8 blocks:9 blocks:10 blocks"; break;
+				case 8: callsub L_Question,"What is the maximum moving range of Shadow Leap?",4,"6 blocks:7 blocks:8 blocks:9 blocks"; break;
+				case 9: callsub L_Question,"How much money is used for Throw Coins level 6?",4,"2000-8000:1000-6000:3000-8000:3000-6000"; break;
+				case 10: callsub L_Question,"What is the most important aspect of increasing ATK for the Killing Strike skill?",2,"VIT:MAXHP:INT:MAXSP"; break;
+				case 11: callsub L_Question,"What is not the effect you get after reaching the STR status?",3,"Close range attack increase:Weight limit increase:Magic attack increase:Weapon attack increase"; break;
+				case 12: callsub L_Question,"What is not the effect you get after reaching the INT status?",4,"MAXSP increase:MATK increase:Magic damage increase:Staff attack increase"; break;
+				case 13: callsub L_Question,"What is not the effect you get after reaching the DEX status?",2,"Casting time decrease:Evasion increase:Accuracy increase:Long range attack increase"; break;
+				case 14: callsub L_Question,"What is not the effect you get after reaching the AGI status?",1,"Accuracy increase:Flee increase:Attack speed increase:Delay after attack decrease"; break;
+				case 15: callsub L_Question,"What is not the effect you get after reaching the VIT status?",4,"Weapon defense increase:MAXHP increase:Magic defense increase:Attack increase"; break;
+				case 16: callsub L_Question,"What is not the effect you get after reaching the LUK status?",3,"Accuracy increase:Complete evasion increase:Magic damage decrease:Critical rate increase"; break;
+				case 17: callsub L_Question,"You need to equip a card to your shoes to enhance Killing Strike attack. Which of the following is the appropriate card to equip?",2,"Gold Acidus Card:Matyr Card:Odium of Thantos Card:Eddga Card"; break;
+				case 18: callsub L_Question,"You need a catalyst to use ninja skills. Which of the following skills does not need a catalyst?",3,"Blaze Shield:Watery Evasion:Flaming Petals:Snow Flake Draft"; break;
+				case 19: callsub L_Question,"How much does STR/INT go up when Ninja Aura level 5 is used?",2,"4:5:6:7"; break;
+				case 20: callsub L_Question,"You are hunting the Orc Warrior. Which Kunai would you use? ",1,"Heat Wave Kunai:Icicle Kunai:Fell Poison Kunai:High Wind Kunai"; break;
+				case 21: callsub L_Question,"Which village is the Ninja Guild located in?",2,"Lutie:Amatsu:Dewata:Comodo"; break;
+				case 22: callsub L_Question,"How do Ninjas get promoted?",3,"By Val Kiwi:By Randgris:None:By Valkyrie"; break;
+				case 23: callsub L_Question,"What was next to me when you first met me?",4,"A cushion:A folding screen:A flowerpot:A brazier"; break;
+				case 24: callsub L_Question,"What is the level of Dagger Throwing Practice you have to reach to learn the Killing Strike skill?",1,"7:5:6:8"; break;
+				case 25: callsub L_Question,"How many hits does a Throw Kunai give to a monster?",2,"2:3:4:5"; break;
+				case 26: callsub L_Question,"When your First Wind is at level 4, what will go with the MATK and range?",3,"MATK400, 8 blocks:MATK500, 7 blocks:MATK500, 8 blocks:MATK400, 7 blocks"; break;
+				case 27: callsub L_Question,"Which of the following skills can't you learn at Dagger Throwing Practice level 7?",4,"Throw Kunai:Throw Huuma Shuriken:Killing Strike:Throw Coins"; break;
+				case 28: callsub L_Question,"What level do you have to be in Dagger Throwing Practice in order to learn the Throw Coins skill?",4,"4:6:8:10"; break;
+				case 29: callsub L_Question,"What is the attack range for the Exploding Dragon?",3,"3*3:4*4:5*5:6*6"; break;
+				case 30: callsub L_Question,"How long is the effect time for the Watery Evasion level 7 skill?",2,"40 seconds:45 seconds:50 seconds:55 seconds"; break;
+				case 31: callsub L_Question,"What is the attack effect for Haze Slasher level 4?",1,"140%:150%:160%:170%"; break;
+				case 32: callsub L_Question,"How much power is in the Huuma Blaze Shuriken weapon?",1,"Fireball 5 , DEX-2:Fireball 5 , DEX-3:Fireball 4 , DEX-2:Fireball 4 , DEX-3"; break;
+				case 33: callsub L_Question,"How much power is in the Murasame weapon?",2,"Human attack 10%:Human critical +10:Demon attack 10%:Demon critical +10"; break;
+				case 34: callsub L_Question,"What is the maximum hit number for Blaze Shield level 10?",3,"7:8:9:10"; break;
+				case 35: callsub L_Question,"What is the property of the Lightning Jolt?",4,"Fire:Water:Ground:Wind"; break;
+				case 36: callsub L_Question,"You are creating a weapon for small monsters. What is the best card to use?",4,"Hydra Card:Minorous Card:Skel Woker Card:Desert Wolf Card"; break;
+				case 37: callsub L_Question,"You are creating a weapon for mid-sized monsters. What is the best card to use?",3,"Hydra Card:Minorous Card:Skel Woker Card:Desert Wolf Card"; break;
+				case 38: callsub L_Question,"You are creating a weapon for huge monsters. What is the best card to use?",2,"Hydra Card:Minorous Card:Skel Woker Card:Desert Wolf Card"; break;
+				case 39: callsub L_Question,"Which NPC promotes you?",1,"Valkyrie:Val Kiwi:Balp Hiri:Elephant"; break;
+				case 40: callsub L_Question,"Which catalyst do you need to use the Blaze Shield skill?",2,"Ice Stone:Flame Stone:Wind Stone:Earth Stone"; break;
+				case 41: callsub L_Question,"Which of the following is not an effect of the Watery Evasion skill?",4,"Movement speed decrease:Waterball availability:Holy Water craftability:VIT decrease"; break;
+				case 42: callsub L_Question,"Which of the following matches are incorrect for skill and property?",3,"Flaming Petals-Fire:Snow Flake Draft-Water:Freezing Spear-Ground:Lightning Jolt-Wind"; break;
+				case 43: callsub L_Question,"Which of the following is the best skill to use when attacking a ground property enemy?",2,"First Wind:Exploding Dragon:Snow Flake Draft:Wind Blade"; break;
+				case 44: callsub L_Question,"Which Ninja Mastery skill level do you need to learn the Exploding Dragon skill?",1,"10:9:8:1"; break;
+				case 45: callsub L_Question,"What is the attack range when you master Flip Tatami?",3,"5:7:3:1"; break;
+				case 46: callsub L_Question,"What weapon cannot be made by the blacksmith Khaibara?",4,"Khukri:Murasame:Hakujin:Humma Wing Shuriken"; break;
+				case 47: callsub L_Question,"Which of the following correctly matches material needed to make a Icicle Kunai?",2,"4 Nimbus Shuriken, 2 Ice Stone:8 Nimbus Shuriken, 2 Ice Stone:2 Nimbus Shuriken, 1 Ice Stone:1 Nimbus Shuriken, 2 Ice Stone"; break;
+				case 48: callsub L_Question,"Which of the following Kunai will give the most damage to the ground property monster, Porcellio?",1,"Heat Wave Kunai:Icicle Kunai:Fell Poison Kunai:High Wind Kunai"; break;
+				case 49: callsub L_Question,"Which of the following blacksmiths do not create ninja items?",2,"Khaibara:Aiku:Tetsu:Toshu"; break;
+				case 50: callsub L_Question,"What is the name of the suspicious man you can meet during the Ninja job change quest?",3,"Red Leopard Jack:Black Leopard Jack:Red Leopard Joe:Black Leopard Joe"; break;
+				default:
+					mes "[Kuuga Gai]";
+					mes "Ocorreu um erro desconhecido.";
+					mes "Por favor, entre em contato com o atendimento ao cliente.";
+					close;
+			}
+		}
+		mes "[Kuuga Gai]";
+		mes "Você completou todas as 10 perguntas. Não foi tão ruim! A parte importante começa agora.";
+		next;
+		mes "[Kuuga Gai]";
+		mes "... ... ...";
+		next;
+		if (@job_ko_Kuuga < 90) {
+			mes "[Kuuga Gai]";
+			mes "Seu tolo!!";
+			mes "Você nem conseguiu resolver isso?";
+			next;
+			mes "[Kuuga Gai]";
+			mes "Não acredito que alguém que está seguindo um novo caminho possa ser tão patético.";
+			next;
+			mes "[Kuuga Gai]";
+			mes "Vou lhe dar outra chance.";
+			mes "Você fará o teste novamente com novas perguntas. É melhor passar desta vez.";
+		} else {
+			mes "[Kuuga Gai]";
+			mes "Humm." + (@job_ko_Kuuga) + "?";
+			next;
+			mes "[Kuuga Gai]";
+			mes "Bem, parece que você não foi preguiçoso com seus estudos.";
+			next;
+			mes "[Kuuga Gai]";
+			mes "O quê? Orgulhoso de si mesmo por resolver essas perguntas?";
+			next;
+			mes "[Kuuga Gai]";
+			mes "Você ainda tem um longo caminho pela frente e esta é apenas uma pequena parte dele.";
+			next;
+			mes "[Kuuga Gai]";
+			mes "Bem... estou curioso para saber até onde sua força de vontade pode levá-lo em outros testes.";
+			next;
+			completequest 5136;
+			erasequest 5139;
+			mes "[Kuuga Gai]";
+			mes "Vou deixá-lo ir agora, então vá reportar seus resultados ao Líder Gion.";
+			close2;
+			warp "job_ko",16,113;
+			end;
+		}
+		set @job_ko_Kuuga,0;
+		close;
+	} else if (.@ko_test_01 == 2 && .@ko_test_01_1 == 0) {
+		mes "[Kuuga Gai]";
+		mes "Vou deixá-lo ir agora, então vá reportar seus resultados ao Líder Gion.";
+		close2;
+		warp "job_ko",16,113;
+		end;
+	} else {  //custom translation
+	L_Kick:
+		mes "[Kuuga Gai]";
+		mes "Como você chegou aqui?";
+		next;
+		mes "[Kuuga Gai]";
+		mes "É meu dever me livrar de você.";
+		mes "^000099(Ele é um homem baixo e silencioso.)^000000";
+		mes "Isso vai empurrar você para trás!";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	end;
+
+//callsub L_Question,"<Question>",<correct answer choice>,"<Choice 1>:<Choice 2>:<Choice 3>:<Choice 4>";
+L_Question:
+	mes getarg(0);
+	next;
+	if(select(getarg(2)) == getarg(1))
+		set @job_ko_Kuuga, @job_ko_Kuuga + 10;
+	return;
+}
+
+// Test of Survival
+//============================================================
+
+// -----------------------------------------------------------
+//  Functions
+// -----------------------------------------------------------
+function	script	F_KO_Survival_mes	{
+	mes "[Nº." + getarg(0) + "]";
+	mes "^1A95E6Outras letras são pequenas demais para ler. Vamos olhar de perto.^000000";
+	close;
+}
+
+function	script	F_KO_Survival_warp	{
+	close2;
+	switch (getarg(0)) {
+		case  0: warp "job_ko",63,16; break;
+		case  1: warp "job_ko",54,16; break;
+		case  2: warp "job_ko",46,16; break;
+		case  3: warp "job_ko",38,16; break;
+		case  4: warp "job_ko",30,16; break;
+		case  5: warp "job_ko",22,16; break;
+		case  6: warp "job_ko",17,19; break;
+		case  7: warp "job_ko",17,27; break;
+		case  8: warp "job_ko",17,35; break;
+		case  9: warp "job_ko",17,43; break;
+		case 10: warp "job_ko",17,51; break;
+		case 11: warp "job_ko",17,60; break;
+		case 12: warp "job_ko",25,60; break;
+		case 13: warp "job_ko",33,60; break;
+		case 14: warp "job_ko",41,60; break;
+		case 15: warp "job_ko",49,60; break;
+		case 16: warp "job_ko",57,60; break;
+		case 17: warp "job_ko",62,56; break;
+		case 18: warp "job_ko",62,48; break;
+		case 19: warp "job_ko",62,40; break;
+		case 20: warp "job_ko",62,32; break;
+		case 21: warp "job_ko",62,23; break;
+		case 22: warp "job_ko",54,23; break;
+		case 23: warp "job_ko",46,23; break;
+		case 24: warp "job_ko",38,23; break;
+		case 25: warp "job_ko",30,23; break;
+		case 26: warp "job_ko",25,27; break;
+		case 27: warp "job_ko",25,35; break;
+		case 28: warp "job_ko",25,43; break;
+		case 29: warp "job_ko",25,52; break;
+		case 30: warp "job_ko",33,52; break;
+		case 31: warp "job_ko",41,52; break;
+		case 32: warp "job_ko",49,52; break;
+		case 33: warp "job_ko",54,48; break;
+		case 34: warp "job_ko",54,40; break;
+		case 35: warp "job_ko",54,31; break;
+		case 36: warp "job_ko",46,31; break;
+		case 37: warp "job_ko",38,31; break;
+		case 38: warp "job_ko",33,35; break;
+		case 39: warp "job_ko",33,44; break;
+		case 40: warp "job_ko",41,44; break;
+	}
+	end;
+}
+
+//callfunc "F_KO_Survival_dice",<location>{,<LP (default:1)>{,<0:auto-warp (default), 1:do not warp>}}
+//Return: dice value [1..6] ONLY IF arg2 = 1
+function	script	F_KO_Survival_dice	{
+	mes "Localização:" + getarg(0);
+	mes "LP Total:" + job_kagero_lp;
+	mes "Para rolar os dados, você precisa consumir" + getarg(1,1) + "^FD0260LP^000000.";
+	next;
+	select("Rolar os dados.");
+	if (job_kagero_lp < getarg(1,1)) {
+		mes "Devido à insuficiência de ^FD0260LP^000000, você será retornado à posição inicial.";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+	set job_kagero_lp, job_kagero_lp - getarg(1,1);
+	set .@dice, rand(1,6);
+	emotion ET_OTL + .@dice, playerattached();
+	mes "O dado resultou em" + .@dice + ".";
+	if (getarg(2,0))
+		return .@dice;
+	else {
+		mes "Pressione Fechar para avançar" + .@dice + "casas.";
+		callfunc "F_KO_Survival_warp", .@dice + getarg(0);
+		end;
+	}
+}
+
+//callfunc "F_KO_Survival_dice2",<location>{,<LP (default:2)>}
+function	script	F_KO_Survival_dice2	{
+	mes "Localização:" + getarg(0);
+	mes "LP Total:" + job_kagero_lp;
+	mes "Para rolar os dados, você precisa consumir" + getarg(1,2) + "^FD0260LP^000000.";
+	next;
+	select("Rolar o primeiro dado.");
+	if (job_kagero_lp < getarg(1,2)) {
+		mes "Devido à insuficiência de ^FD0260LP^000000, você será retornado à posição inicial.";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+	set job_kagero_lp, job_kagero_lp - getarg(1,2);
+	mes "< Usou" + getarg(1,2) + "LP >";
+	next;
+	set @job_ko_dice1, rand(1,6);
+	emotion ET_OTL + @job_ko_dice1, playerattached();
+	mes "O resultado do primeiro dado é" + @job_ko_dice1 + ". Você quer rolar o segundo dado?";
+	next;
+	select("Rolar o segundo dado.");
+	set @job_ko_dice2, rand(1,6);
+	emotion ET_OTL + @job_ko_dice2, playerattached();
+	return;
+}
+
+//Return: 1:win, 0:draw, -1:lose
+function	script	F_KO_Survival_rps	{
+	setarray .@rps$[1], "Scissors", "Rock", "Paper";
+	setarray .@emote[1], ET_SCISSOR, ET_ROCK, ET_WRAP;  //might be iRO custom(?)
+
+	mes "Pedra! Papel! Tesoura!";
+	next;
+	set .@pc, select("Escolher tesoura.:Escolher pedra.:Escolher papel.");
+	set .@npc, rand(1,3);
+	emotion .@emote[.@pc], playerattached();
+	emotion .@emote[.@npc];
+	mes "=Resultados do Jogo=";
+	mes "Máquina:" + .@rps$[.@npc] + ".";
+	mes "Você:" + .@rps$[.@pc] + ".";
+	next;
+	if ((.@npc == 1 && .@pc == 2) || (.@npc == 2 && .@pc == 3) || (.@npc == 3 && .@pc == 1)) {
+		mes "Você Venceu";
+		return 1;
+	} else if (.@pc == .@npc) {
+		mes "Empate";
+		return 0;
+	} else if ((.@npc == 1 && .@pc == 3) || (.@npc == 2 && .@pc == 1) || (.@npc == 3 && .@pc == 2)) {
+		mes "Você Perdeu";
+		return -1;
+	} else {
+		mes "Ocorreu um erro desconhecido.";
+		mes "Por favor, entre em contato com o atendimento ao cliente.";
+		close;
+	}
+}
+
+// -----------------------------------------------------------
+//  Templates
+// -----------------------------------------------------------
+-	script	Sight#ko_trap	-1,{
+	callfunc "F_KO_Survival_mes", atoi(substr(strnpcinfo(2),3,4));
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	switch (atoi(substr(strnpcinfo(2),3,4))) {
+		case  2: set .@id,0; break;
+		case  7: set .@id,5; break;
+		case 11: set .@id,9; break;
+		case 23: set .@id,18; break;
+		case 26: set .@id,20; break;
+		case 30: set .@id,9; break;
+		case 35: set .@id,29; break;
+	}
+	mes "Este bloco possui uma armadilha.";
+	mes "Pressione Fechar para voltar ao bloco" + .@id + ".";
+	callfunc "F_KO_Survival_warp", .@id;
+	end;
+}
+
+-	script	Sight#ko_trap2	-1,{
+	callfunc "F_KO_Survival_mes", atoi(substr(strnpcinfo(2),3,4));
+	end;
+OnTouch:
+	set .@id, atoi(substr(strnpcinfo(2),3,4));
+	switch (.@id) {
+		case 10: set .@var$, "$20110808_vko01"; break;
+		case 28: set .@var$, "$20110808_vko03"; break;
+		//case 38: set .@var$, "$20110808_vko04"; break;
+	}
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Se você não quer ser pego, instale uma armadilha.";
+	next;
+	if (getd(.@var$) == 0) {
+		mes "Atualmente não há nenhuma armadilha instalada.";
+		next;
+		mes "Você deseja usar 10 ^FD0260LP^000000 para instalar uma armadilha?";
+		next;
+		if(select("Instalar uma armadilha.:Jogar os dados.") == 1) {
+			if (job_kagero_lp > 9) {
+				mes "< Usou 10 LP >";
+				set job_kagero_lp, job_kagero_lp - 10;
+				setd .@var$,1;
+				next;
+				mes "A armadilha foi instalada. Por favor, jogue os dados.";
+				next;
+			} else {
+				mes "< Não usou 10 LP >";
+				mes "^FD0260LP^000000 insuficiente! Por favor, jogue os dados.";
+				next;
+			}
+		}
+	} else {
+		set job_kagero_lp,0;
+		setd .@var$,0;
+		mes "Você foi pego na armadilha instalada.";
+		mes "Pressione Fechar para voltar ao bloco 0.";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+	callfunc "F_KO_Survival_dice",.@id;
+	end;
+}
+
+-	script	Sight#ko_heal	-1,{
+	callfunc "F_KO_Survival_mes", atoi(substr(strnpcinfo(2),3,4));
+	end;
+OnTouch:
+	set .@id, atoi(substr(strnpcinfo(2),3,4));
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Este bloco é abençoado.";
+	mes "Pontos de Vida recuperam 7 ^FD0260LP^000000.";
+	mes "Não pode exceder o máximo de 100 ^FD0260LP^000000.";
+	next;
+	mes "< Recuperou" + ((job_kagero_lp + 7 > 100) ? "" : "7") + "LP >";
+	next;
+	set job_kagero_lp, ((job_kagero_lp + 7 > 100) ? 100 : job_kagero_lp + 7);
+	callfunc "F_KO_Survival_dice",.@id;
+	end;
+}
+
+-	script	Sight#ko_curse	-1,{
+	callfunc "F_KO_Survival_mes", atoi(substr(strnpcinfo(2),3,4));
+	end;
+OnTouch:
+	set .@id, atoi(substr(strnpcinfo(2),3,4));
+	set .@playtime, checkquest(5141,PLAYTIME);
+	if (.@playtime == -1) {
+		mes "Há letras minúsculas na placa.";
+		next;
+		mes "Se você não pagar 5 ^FD0260LP^000000, você será amaldiçoado e imobilizado por 2 minutos.";
+		next;
+		if(select("Usar 5 LP:Não pagar.") == 1) {
+			if (job_kagero_lp > 4) {
+				set job_kagero_lp, job_kagero_lp - 5;
+				mes "<Usou 5 LP>";
+				mes "Você pode jogar os dados.";
+				next;
+				callfunc "F_KO_Survival_dice",.@id;
+				end;
+			} else {
+				mes "< Não usou 5 LP >";
+				mes "Não conseguiu resistir à maldição.";  //custom translation
+				next;
+			}
+		}
+		setquest 5141;
+		mes "Você está amaldiçoado e não pode se mover para nenhum outro bloco por 2 minutos.";
+		close;
+	} else if (.@playtime == 0 || .@playtime == 1) {
+		mes "Você está amaldiçoado e não pode se mover para nenhum outro bloco por 2 minutos.";
+		close;
+	} else if (.@playtime == 2) {
+		mes "A maldição de imobilização durou 2 minutos e depois foi removida.";
+		next;
+		erasequest 5141;
+		callfunc "F_KO_Survival_dice",.@id;
+		end;
+	} else {
+		erasequest 5141;
+		mes "Ocorreu um erro desconhecido.";
+		mes "Por favor, entre em contato com o atendimento ao cliente.";
+		close;
+	}
+}
+
+-	script	Sight#ko_gravity	-1,{
+	callfunc "F_KO_Survival_mes", atoi(substr(strnpcinfo(2),3,4));
+	end;
+OnTouch:
+	set .@id, atoi(substr(strnpcinfo(2),3,4));
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Área amaldiçoada com 10 vezes a gravidade normal. Você precisará de 10 ^FD0260LP^000000 para jogar os dados.";
+	next;
+	callfunc "F_KO_Survival_dice",.@id,10;
+	end;
+}
+
+// -----------------------------------------------------------
+//  Blocks (00-40)
+// -----------------------------------------------------------
+
+job_ko,57,16,4	script	Sight#ko_00	858,1,1,{
+	callfunc "F_KO_Survival_mes",0;
+	end;
+OnTouch:
+	if (job_kagero != 5) {
+		mes "Você não deveria estar aqui.";  //custom translation
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	if (isbegin_quest(5137) == 1 && isbegin_quest(5140) == 0) {
+		mes "Há letras minúsculas na placa.";
+		next;
+		callsub L_Description;
+		setquest 5140;
+		set job_kagero_lp,100;
+		mes "Você ganhou 100 Pontos de Vida (LP).";
+		next;
+	} else {
+		if (checkquest(5141,PLAYTIME) > -1)
+			erasequest 5141;
+		set job_kagero_lp,100;
+		mes "Você retornou ao primeiro bloco. Seus LP foram recuperados.";
+		next;
+		callsub L_Description;
+	}
+	callfunc "F_KO_Survival_dice",0;
+	end;
+
+L_Description:
+	while (1) {
+		if(select("Ler a descrição.:Iniciar o teste.") == 2)
+			break;
+		mes "O Teste de Sobrevivência começa aqui e você usa ^FD0260100 Pontos de Vida (LP)^000000 e joga os dados para avançar através do teste.";
+		next;
+		mes "O teste inteiro vai do bloco 0 ao bloco 40 e cada bloco que você alcança pode conceder ou tirar seus LP.";
+		next;
+		mes "Você precisa ter alguns ^FD0260LP^000000 até chegar ao bloco de chegada no final para passar no teste.";
+		next;
+		mes "Mas! Você ainda passa no teste se seus ^FD0260LP^000000 chegarem a 0 quando você alcançar o bloco de chegada.";
+		next;
+		mes "As instruções do jogo terminam aqui. Boa sorte.";
+		next;
+	}
+	return;
+}
+
+job_ko,49,16,4	script	Sight#ko_01	858,1,1,{
+	callfunc "F_KO_Survival_mes",1;
+	end;
+OnTouch:
+	set .@life_p, job_kagero_lp;
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Você é realmente ruim em jogar dados. Como consegue tirar 1 logo no início? Você pode ir para o bloco 9 se pagar 10 LP neste bloco.";
+	next;
+	if(select("Usar 10 LP:Jogar os dados.") == 1) {
+		if (job_kagero_lp > 9) {
+			set .@reset_p, .@life_p - 10;
+			set job_kagero_lp, .@reset_p;
+			mes "< Usou 10 LP >";
+			mes "Pressione Fechar para se mover para o bloco 9.";
+			callfunc "F_KO_Survival_warp",9;
+			end;
+		} else {
+			mes "< Não usou 10 LP >";
+			mes "^FD0260LP^000000 insuficiente!";
+			next;
+		}
+	}
+	mes "Jogue os dados.";
+	next;
+	callfunc "F_KO_Survival_dice",1;
+	end;
+}
+
+job_ko,41,16,4	duplicate(Sight#ko_trap)	Sight#ko_02	858,1,1
+
+job_ko,33,16,4	script	Sight#ko_03	858,1,1,{
+	callfunc "F_KO_Survival_mes",3;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "5 LP foram usados, então você terá que resistir à maldição transmitida por gerações antes de seguir em frente.";
+	next;
+	select("Usar 5 LP");
+	if (job_kagero_lp > 4) {
+		mes "< Usou 5 LP >";
+		set job_kagero_lp, job_kagero_lp - 5;
+		callfunc "F_KO_Survival_dice",3;
+	} else {
+		mes "< Não usou 5 LP >";
+		mes "^FD0260LP^000000 insuficiente! Retornando ao local inicial.";
+		callfunc "F_KO_Survival_warp",0;
+	}
+	end;
+}
+
+job_ko,25,16,4	script	Sight#ko_04	858,1,1,{
+	callfunc "F_KO_Survival_mes",4;
+	end;
+OnTouch:
+	mes "Há letras minúsculas rabiscadas na placa.";
+	next;
+	if ($20110808_sko01$ != "") {
+		mes "^0000FF" + $20110808_sko01$ +"esteve aqui.^000000";
+		next;
+	}
+	mes "Devo deixar meu nome, já que fazer o teste é uma ocasião especial?";
+	next;
+	if(select("Use 5 LP e deixe seu nome.:Continue a jogar os dados.") == 1) {
+		if (job_kagero_lp > 4) {
+			mes "< Usou 5 LP >";
+			set job_kagero_lp, job_kagero_lp - 5;
+			next;
+			set $20110808_sko01$, strcharinfo(0);
+			mes strcharinfo(0)+"esteve aqui.";
+			mes "Você deixou seu nome.";
+			next;
+		} else {
+			mes "< Não usou 5 LP >";
+			mes "^FD0260LP^000000 insuficiente! Você pode jogar os dados.";
+			next;
+		}
+	}
+	callfunc "F_KO_Survival_dice",4;
+	end;
+}
+
+job_ko,17,16,4	duplicate(Sight#ko_curse)	Sight#ko_05	858,1,1
+
+job_ko,17,24,4	duplicate(Sight#ko_heal)	Sight#ko_06	858,1,1
+
+job_ko,17,32,4	duplicate(Sight#ko_trap)	Sight#ko_07	858,1,1
+
+job_ko,17,40,4	script	Sight#ko_08	858,1,1,{
+	callfunc "F_KO_Survival_mes",8;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Máquina de Pedra, Papel e Tesoura:";
+	mes "Se você vencer, mova-se para o bloco 15.";
+	mes "Se for um empate, jogue os dados.";
+	mes "Se você perder, mova-se para o bloco 0.";
+	next;
+	switch (callfunc("F_KO_Survival_rps")) {
+	case 1:
+		mes "Pressione Fechar para se mover para o bloco 15.";
+		callfunc "F_KO_Survival_warp",15;
+		end;
+	case 0:
+		mes "Um empate, então jogue os dados!";
+		next;
+		callfunc "F_KO_Survival_dice",8;
+		end;
+	case -1:
+		mes "Pressione Fechar para se mover para o bloco 0.";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+}
+
+job_ko,17,48,4	script	Sight#ko_09	858,1,1,{
+	callfunc "F_KO_Survival_mes",9;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Por favor, prossiga.";
+	next;
+	callfunc "F_KO_Survival_dice",9;
+	end;
+}
+
+job_ko,17,56,4	duplicate(Sight#ko_trap2)	Sight#ko_10	858,1,1
+
+job_ko,22,60,4	duplicate(Sight#ko_trap)	Sight#ko_11	858,1,1
+
+job_ko,30,60,4	script	Sight#ko_12	858,1,1,{
+	callfunc "F_KO_Survival_mes",12;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Máquina de Pedra, Papel e Tesoura:";
+	mes "Se você vencer, mova-se para o bloco 20.";
+	mes "Se for um empate, jogue os dados.";
+	mes "Se você perder, mova-se para o bloco 9.";
+	next;
+	switch (callfunc("F_KO_Survival_rps")) {
+	case 1:
+		mes "Pressione Fechar para se mover para o bloco 20.";
+		callfunc "F_KO_Survival_warp",20;
+		end;
+	case 0:
+		mes "Um empate, então jogue os dados!";
+		next;
+		callfunc "F_KO_Survival_dice",12;
+		end;
+	case -1:
+		mes "Pressione Fechar para se mover para o bloco 9.";
+		callfunc "F_KO_Survival_warp",9;
+		end;
+	}
+}
+
+job_ko,38,60,4	duplicate(Sight#ko_heal)	Sight#ko_13	858,1,1
+
+job_ko,46,60,4	duplicate(Sight#ko_curse)	Sight#ko_14	858,1,1
+
+job_ko,54,60,4	script	Sight#ko_15	858,1,1,{
+	callfunc "F_KO_Survival_mes",15;
+	end;
+OnTouch:
+	set .@playtime, checkquest(5141,PLAYTIME);
+	if (.@playtime == -1) {
+		mes "Há letras minúsculas na placa.";
+		next;
+		mes "Você será amaldiçoado por uma poderosa maldição gravitacional que o imobilizará por 2 minutos.";
+		setquest 5141;
+		close;
+	} else if (.@playtime == 0 || .@playtime == 1) {
+		mes "Você está amaldiçoado e não pode se mover para nenhum outro bloco por 2 minutos.";
+		close;
+	} else if (.@playtime == 2) {
+		mes "A maldição de imobilização durou 2 minutos e então foi removida.";
+		next;
+		erasequest 5141;
+		callfunc "F_KO_Survival_dice",15;
+		end;
+	} else {
+		erasequest 5141;
+		mes "Um erro desconhecido ocorreu.";
+		mes "Por favor, entre em contato com o atendimento ao cliente.";
+		close;
+	}
+}
+
+job_ko,62,60,4	script	Sight#ko_16	858,1,1,{
+	callfunc "F_KO_Survival_mes",16;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Consuma 2 ^FD0260LP^000000 e jogue os dados duas vezes.";
+	mes "Se você obtiver o mesmo número, pode se mover para o bloco 30; se os números forem diferentes, consuma 2 LP para jogar novamente... até obter números iguais.";
+	next;
+	while (1) {
+		callfunc "F_KO_Survival_dice2",16;
+		if (@job_ko_dice1 == @job_ko_dice2) break;
+		else {
+			mes "O resultado do segundo dado é" + @job_ko_dice2 + ", que não é o mesmo número.";  //custom translation
+			next;
+		}
+	}
+	set @job_ko_dice1,0;
+	set @job_ko_dice2,0;
+	//mes "Second dice result is " + @job_ko_dice2 + ", which is the same number. Press Close to move block 30.";
+	mes "Você obteve o mesmo número. Pressione Fechar para mover-se para o bloco 30.";
+	callfunc "F_KO_Survival_warp",30;
+	end;
+}
+
+job_ko,62,51,4	duplicate(Sight#ko_gravity)	Sight#ko_17	858,1,1
+
+job_ko,62,43,4	script	Sight#ko_18	858,1,1,{
+	callfunc "F_KO_Survival_mes",18;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Consuma 2 ^FD0260LP^000000 e jogue os dados duas vezes.";
+	next;
+	mes "Se a soma dos números de ambos os dados for menor que 5, mova-se para o bloco 30; se for maior que 5, mova-se para o bloco 19.";
+	next;
+	callfunc "F_KO_Survival_dice2",18;
+	mes "O resultado do segundo dado é" + @job_ko_dice2 + ".";
+	next;
+	set .@dice_sum, @job_ko_dice1 + @job_ko_dice2;
+	mes @job_ko_dice1 + "+" + @job_ko_dice2 + " = " + .@dice_sum;
+	set @job_ko_dice1,0;
+	set @job_ko_dice2,0;
+	if (.@dice_sum < 5) {
+		mes "O total é menor que 5. Pressione Fechar para se mover para o bloco 30.";
+		callfunc "F_KO_Survival_warp",30;
+		end;
+	} else {
+		mes "Seu total é maior que 5. Pressione Fechar para ir ao bloco 19.";
+		callfunc "F_KO_Survival_warp",19;
+		end;
+	}
+}
+
+job_ko,62,35,4	script	Sight#ko_19	858,1,1,{
+	callfunc "F_KO_Survival_mes",19;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Siga em frente.";
+	next;
+	callfunc "F_KO_Survival_dice",19;
+	end;
+}
+
+job_ko,62,27,4	duplicate(Sight#ko_heal)	Sight#ko_20	858,1,1
+
+job_ko,57,23,4	duplicate(Sight#ko_gravity)	Sight#ko_21	858,1,1
+
+job_ko,49,23,4	script	Sight#ko_22	858,1,1,{
+	callfunc "F_KO_Survival_mes",22;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Deixe todos os seus ^FD0260LP^000000 restantes e volte ao bloco 0, então a próxima pessoa será redimida.";
+	next;
+	if ($20110808_vko02 == 0) {
+		mes "Você quer deixar seus ^FD0260LP^000000?";
+		mes "Se você deixar seus ^FD0260LP^000000, a próxima pessoa a chegar ao bloco para o teste passará automaticamente.";
+		next;
+		if(select("Deixar todos os seus LP.:Continuar a rolar os dados.") == 1) {
+			set job_kagero_lp,0;
+			set $20110808_vko02,1;
+			mes "Deixe todos os ^FD0260LP^000000 restantes aqui. Pressione Fechar e volte ao bloco 0.";
+			callfunc "F_KO_Survival_warp",0;
+			end;
+		}
+	} else if ($20110808_vko02 == 1) {
+		set $20110808_vko02,0;
+		mes "Alguém antes de você sacrificou todos os seus ^FD0260LP^000000, então pressione Fechar e vá para o último bloco."; //custom translation
+		callfunc "F_KO_Survival_warp",40;
+		end;
+	} else {
+		mes "Um erro desconhecido ocorreu.";
+		mes "Por favor, entre em contato com o suporte ao cliente.";
+		close;
+	}
+	callfunc "F_KO_Survival_dice",22;
+	end;
+}
+
+job_ko,41,23,4	duplicate(Sight#ko_trap)	Sight#ko_23	858,1,1
+
+job_ko,33,23,4	script	Sight#ko_24	858,1,1,{
+	callfunc "F_KO_Survival_mes",24;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Consuma 2 ^FD0260LP^000000 e role os dados duas vezes.";
+	next;
+	mes "Se a soma dos números de ambos os dados for maior que 8, você pode ir para qualquer bloco entre 25 e 30. Mas! Se a soma for menor que 8, você deve voltar ao bloco 19.";
+	next;
+	callfunc "F_KO_Survival_dice2",24;
+	mes "O resultado do segundo dado é" + @job_ko_dice2 + ".";
+	next;
+	set .@dice_sum, @job_ko_dice1 + @job_ko_dice2;
+	if (.@dice_sum > 8) {
+		mes @job_ko_dice1 + "+" + @job_ko_dice2 + " = " + .@dice_sum;
+		set @job_ko_dice1,0;
+		set @job_ko_dice2,0;
+		mes "Seu total é maior que 8. Por favor, escolha um bloco para se mover entre os blocos 25 a 30.";
+		callfunc "F_KO_Survival_warp", select("Mover para o bloco 25:Mover para o bloco 26:Mover para o bloco 27:Mover para o bloco 28:Mover para o bloco 29:Mover para o bloco 30") + 24;
+		end;
+	} else {
+		set @job_ko_dice1,0;
+		set @job_ko_dice2,0;
+		mes "Seu total é menor que 8. Pressione Fechar para ir ao bloco 19.";
+		callfunc "F_KO_Survival_warp",19;
+		end;
+	}
+}
+
+job_ko,25,23,4	script	Sight#ko_25	858,1,1,{
+	callfunc "F_KO_Survival_mes",25;
+	end;
+OnTouch:
+	set .@playtime, checkquest(5141,PLAYTIME);
+	if (.@playtime == -1) {
+		mes "Há letras minúsculas na placa.";
+		next;
+		mes "Isso é ruim.";
+		mes "Não é possível ler o que está escrito. Deve haver uma maneira de ler isso.";
+		next;
+		switch(select("Tentar algo.:Não fazer nada.")) {
+		case 1:
+			specialeffect2 EF_TALK_FROSTJOKE;
+			mes "Tentou uma piada recente de Prontera para fazer algo.";
+			next;
+			setquest 5141;
+			mes "Foi amaldiçoado e ficou imobilizado por 2 minutos.";
+			close;
+		case 2:
+			if (rand(1,10) == 4) {
+				mes "É uma decisão sábia não fazer nada.";
+				next;
+			} else {
+				mes "Nada aconteceu. Ainda precisa fazer algo.";
+				close;
+			}
+			break;
+		}
+	} else if (.@playtime == 0 || .@playtime == 1) {
+		mes "Não pode se mover porque você está amaldiçoado.";
+		close;
+	} else if (.@playtime == 2) {
+		mes "A maldição de imobilização durou 2 minutos e então foi removida.";
+		next;
+		erasequest 5141;
+	} else {
+		erasequest 5141;
+		mes "Um erro desconhecido ocorreu.";
+		mes "Por favor, entre em contato com o suporte ao cliente.";
+		close;
+	}
+	callfunc "F_KO_Survival_dice",25;
+	end;
+}
+
+job_ko,25,32,4	duplicate(Sight#ko_trap)	Sight#ko_26	858,1,1
+
+job_ko,25,40,4	duplicate(Sight#ko_heal)	Sight#ko_27	858,1,1
+
+job_ko,25,48,4	duplicate(Sight#ko_trap2)	Sight#ko_28	858,1,1
+
+job_ko,30,52,4	script	Sight#ko_29	858,1,1,{
+	callfunc "F_KO_Survival_mes",29;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Siga em frente.";
+	next;
+	callfunc "F_KO_Survival_dice",29;
+	end;
+}
+
+job_ko,38,52,4	duplicate(Sight#ko_trap)	Sight#ko_30	858,1,1
+
+job_ko,46,52,4	duplicate(Sight#ko_curse)	Sight#ko_31	858,1,1
+
+job_ko,54,52,4	script	Sight#ko_32	858,1,1,{
+	callfunc "F_KO_Survival_mes",32;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Máquina de Pedra-Papel-Tesoura:";
+	mes "If you win, you get to move to any block between 33 to 38; if you lose or is a draw, you have to move to block 0.";
+	next;
+	switch (callfunc("F_KO_Survival_rps")) {
+	case 1:
+		mes "Por favor, escolha um bloco para se mover entre os blocos 33 a 38.";
+		next;
+		callfunc "F_KO_Survival_warp", select("Mover para o bloco 33:Mover para o bloco 34:Mover para o bloco 35:Mover para o bloco 36:Mover para o bloco 37:Mover para o bloco 38") + 32;
+		end;
+	case 0:
+	case -1:
+		mes "Pressione Fechar para ir ao bloco 0.";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+}
+
+job_ko,54,43,4	script	Sight#ko_33	858,1,1,{
+	callfunc "F_KO_Survival_mes",33;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Você pode ir para o bloco 39 se pagar todos os pontos, exceto pelo último 1 ^FD0260LP^000000, para rolar os dados uma última vez.";
+	next;
+	switch(select("Pagar LP.:Mover-se para frente um pouco de cada vez.")) {
+	case 1:
+		set .@sell_p, job_kagero_lp - 1;
+		set job_kagero_lp,1;
+		mes "< Usou" + .@sell_p + "LP >";
+		next;
+		mes "Pressione Fechar para ir ao bloco 39.";
+		callfunc "F_KO_Survival_warp",39;
+		end;
+	case 2:
+		mes "Por favor, role os dados.";
+		next;
+		break;
+	}
+	callfunc "F_KO_Survival_dice",33;
+	end;
+}
+
+job_ko,54,35,4	duplicate(Sight#ko_heal)	Sight#ko_34	858,1,1
+
+job_ko,49,31,4	duplicate(Sight#ko_trap)	Sight#ko_35	858,1,1
+
+job_ko,41,31,4	script	Sight#ko_36	858,1,1,{
+	callfunc "F_KO_Survival_mes",36;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Restam apenas 4 casas até a última casa.";
+	next;
+	mes "Regra 1 (Rolagem de Dado Normal)"; //iRO custom dialogue(?)
+	mes "Você pode passar se tirar 4 ou mais, mas ninguém sabe o que virá em uma rolagem de dados.";
+	next;
+	mes "Regra 2"; //iRO custom dialogue(?)
+	mes "If you get 1, 2, or 3 you move right to the arrival point; if you get 4, 5, or 6 you get to choose to move to block 29.";
+	next;
+	switch(select("Tente da outra maneira.:Siga as regras.")) {
+	case 1:
+		//mes "The Other Way (2nd Rule)"; //iRO custom dialogue(?)
+		set .@dodoripo,0;
+		break;
+	case 2:
+		set .@dodoripo,1;
+		break;
+	}
+	set .@dice, callfunc("F_KO_Survival_dice",36,1,1);
+	if (.@dodoripo == 0) {
+		if (.@dice <= 3) {
+			mes "Pressione Fechar para ir até o fim.";
+			callfunc "F_KO_Survival_warp",40;
+			end;
+		} else {
+			mes "Pressione Fechar para mover para a casa 29.";
+			callfunc "F_KO_Survival_warp",29;
+			end;
+		}
+	} else {
+		mes "Pressione Fechar para avançar" + .@dice + "casas.";
+		callfunc "F_KO_Survival_warp", ((.@dice <= 3) ? .@dice + 36 : 40);
+		end;
+	}
+}
+
+job_ko,33,31,4	script	Sight#ko_37	858,1,1,{
+	callfunc "F_KO_Survival_mes",37;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Faltam apenas 3 casas para a linha de chegada, mas você não conseguirá passar tão facilmente.";
+	next;
+	mes "If you get 1, 3, or 5, move to the arrival point; if you get 2, 4, or 6, go back to the starting point.";
+	next;
+	set .@dice, callfunc("F_KO_Survival_dice",37,1,1);
+	if (.@dice % 2) {
+		mes "Pressione Fechar para mover para a última casa.";
+		callfunc "F_KO_Survival_warp",40;
+		end;
+	} else {
+		mes "Pressione Fechar para voltar ao ponto de partida.";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+}
+
+job_ko,33,40,4	script	Sight#ko_38	858,1,1,{
+	callfunc "F_KO_Survival_mes",38;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Deixe 1 LP e invista o restante dos LPs para instalar uma armadilha e derrubar outros jogadores!";
+	next;
+	if ($20110808_vko04 == 0) {
+		mes "Não há nenhuma armadilha instalada no momento. Você quer instalar uma armadilha?";
+		next;
+		switch(select("Instalar uma armadilha.:Não instalar.")) {
+		case 1:
+			set .@reset_p, job_kagero_lp - 1;
+			set job_kagero_lp,1;
+			set $20110808_vko04,1;
+			mes "<" + .@reset_p + "LP utilizados >";
+			next;
+			mes "A armadilha foi instalada. Por favor, role os dados.";
+			next;
+			break;
+		case 2:
+			mes "Nenhuma armadilha foi definida. Por favor, role os dados.";
+			next;
+			break;
+		}
+	} else {
+		set $20110808_vko04,0;
+		set job_kagero_lp,0;
+		mes "Você caiu na armadilha instalada. Pressione Fechar para voltar à casa 0.";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+	set .@dice, callfunc("F_KO_Survival_dice",38,1,1);
+	mes "Pressione Fechar para avançar" + .@dice + "casas.";
+	callfunc "F_KO_Survival_warp", ((.@dice == 1) ? .@dice + 38 : 40);
+	end;
+}
+
+job_ko,38,44,4	script	Sight#ko_39	858,1,1,{
+	callfunc "F_KO_Survival_mes",39;
+	end;
+OnTouch:
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Agora resta apenas 1 casa até o final. Parabéns por tudo o que você passou para chegar aqui.";
+	next;
+	mes "Mas você não pode passar tão facilmente. Se tirar um 3, você voltará para a casa 3.";
+	next;
+	set .@dice, callfunc("F_KO_Survival_dice",39,1,1);
+	if (.@dice == 3) {
+		mes "Pressione Fechar para mover para a 3ª casa.";
+		callfunc "F_KO_Survival_warp",3;
+		end;
+	} else {
+		mes "Pressione Fechar para mover para o ponto de chegada.";
+		callfunc "F_KO_Survival_warp",40;
+		end;
+	}
+}
+
+job_ko,46,41,4	script	Sight#ko_40	858,1,1,{
+	callfunc "F_KO_Survival_mes",40;
+	end;
+OnTouch:
+	if (job_kagero != 5) {
+		mes "Você não deveria estar aqui.";  //custom translation
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	if (isbegin_quest(5137) != 1 || isbegin_quest(5140) != 1) {
+		mes "Você deve estar aqui por engano.";  //custom translation
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	mes "Há letras minúsculas na placa.";
+	next;
+	mes "Para aqueles que estão se preparando para um novo turno...";
+	mes "Começar bem é meio caminho andado. No entanto, lembre-se sempre de que não é o fim.";
+	next;
+	completequest 5137;
+	erasequest 5140;
+	if (isbegin_quest(5141)) erasequest 5141;
+	set job_kagero_lp,0;
+	mes "Vamos ler tudo o que está escrito na placa.";
+	mes "Você sente como se estivesse sendo movido para outro lugar.";
+	close2;
+	warp "job_ko",35,113;
+	end;
+}
+
+// Test of Weaponry
+//============================================================
+job_ko,127,125,4	script	Red Leopard Joe#ko	730,{
+	if (MaxWeight - Weight < 1000 || checkweight(1201,1) == 0) {
+		mes "[Red Leopard Joe]";
+		mes "Vá reduzir seu peso! Este teste será muito difícil caso contrário...";  //custom translation
+		close;
+	}
+	if (BaseJob != Job_Ninja) {
+		for (set .@i,5131; .@i<=5146; set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+		set job_kagero,0;
+		mes "[Red Leopard Joe]";
+		mes "Desculpe, seu clã não é o mesmo que o nosso, há algo de errado?";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	if (job_kagero != 5) {  //custom translation
+		mes "[Red Leopard Joe]";
+		mes "Você não deveria estar aqui...";
+		mes "É meu dever me livrar de você,";
+		mes "então vou te mandar de volta agora!";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	set .@ko_test_03_1, isbegin_quest(5138);
+	set .@ko_test_03_2, isbegin_quest(5142);
+	set .@ko_test_03_3, isbegin_quest(5143);
+	set .@ko_test_03_4, isbegin_quest(5144);
+	set .@ko_test_03_5, isbegin_quest(5145);
+	if (.@ko_test_03_1 == 1 && .@ko_test_03_2 == 0 && .@ko_test_03_3 == 0 && .@ko_test_03_4 == 0 && .@ko_test_03_5 == 0) {
+		mes "[Red Leopard Joe]";
+		mes "Faz tempo!";
+		next;
+		select("Muito tempo, de fato, Joe.");
+		mes "[Red Leopard Joe]";
+		mes "Você não está surpreso por eu estar aqui. Você encontrou ^0237FDKuuga Gai^000000 antes de vir para cá?";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Não gosto do fato de eu não ser o primeiro que você visitou, mas isso não é importante.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Certo," + strcharinfo(0) + "!";
+		mes "bem-vindo à oficina onde armas são criadas para o clã.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Nosso clã tem criado e usado armas únicas para servir em nossas missões secretas desde os tempos antigos.";
+		next;
+		select("Sério? Em Einbroch?");
+		mes "[Red Leopard Joe]";
+		mes "Hmm? Você não é tão lento quanto eu pensei que fosse!";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Sim. Einbroch é conhecida como uma cidade industrial, a cidade onde grandes ferreiros criam novas tecnologias.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Minha missão é analisar a tecnologia deles e reportar ao clã.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Falei mais do que pretendia.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Você trouxe ^6848B7Minério de Ferro, Ferro, Aço, Phracon, Emveretarcon, Oridecon Bruto e Elunium Bruto^000000 suficientes?";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Vamos criar um novo protótipo de arma agora.";
+		next;
+		specialeffect EF_GUIDEDATTACK,AREA,"Crafting Tools#ko_01";
+		mes "[Red Leopard Joe]";
+		mes "Sinta-se à vontade para usar as ferramentas daqui, e...";
+		next;
+		specialeffect EF_GUIDEDATTACK,AREA,"Crafting Tools#ko_02";
+		mes "[Red Leopard Joe]";
+		mes "...ali...";
+		next;
+		specialeffect EF_GUIDEDATTACK,AREA,"Crafting Tools#ko_03";
+		setquest 5142;
+		mes "[Red Leopard Joe]";
+		mes "...e em qualquer outro lugar. Agora, vamos começar!!";
+		close;
+	} else if (.@ko_test_03_1 == 1 && .@ko_test_03_2 == 1 && .@ko_test_03_3 == 0 && .@ko_test_03_4 == 0 && .@ko_test_03_5 == 0) {
+		callsub L_Weapon,":";
+		end;
+	} else if (.@ko_test_03_1 == 1 && .@ko_test_03_2 == 0 && (.@ko_test_03_3 == 1 || .@ko_test_03_4 == 1) && .@ko_test_03_5 == 0) {
+		callsub L_Weapon,":Yes, I'm done.";
+		if (countitem(13074)) {
+			mes "[Red Leopard Joe]";
+			mes "Hmm... Interessante... É uma adaga no formato de uma Kunai?";
+			next;
+			mes "[Red Leopard Joe]";
+		} else if (countitem(13312)) {
+			mes "[Red Leopard Joe]";
+			mes "Hmm... Esta é uma Huuma Comum?";
+			next;
+			mes "[Red Leopard Joe]";
+			mes "Ahh, não é uma Huuma Comum.";
+		} else {
+			mes "[Red Leopard Joe]";
+			mes "Ahh, como isso é possível? Você não tem armas? Talvez você a tenha equipado?";
+			close;
+		}
+		mes "Muito criativo. Vejo espaço para melhorias, mas a arma em si pode se tornar útil depois de alguns ajustes.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Bom. Acho que você está pronto.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Agora é hora de aprimorar?";
+		mes "Existem ferramentas de refinamento de ambos os meus lados. Use-as para refinar uma arma e volte.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Eu criei as ferramentas de refinamento pessoalmente com muito esforço, então você não terá problemas ao usá-las.";
+		next;
+		setquest 5145;
+		mes "[Red Leopard Joe]";
+		mes "Ah... Mas só por precaução,";
+		mes "^FF0000tome cuidado para não causar problemas mostrando isso a ferreiros fora daqui.^000000";
+		close;
+	} else if (.@ko_test_03_1 == 1 && .@ko_test_03_2 == 0 && (.@ko_test_03_3 == 1 || .@ko_test_03_4 == 1) && .@ko_test_03_5 == 1) {
+		disable_items;
+		mes "[Red Leopard Joe]";
+		mes "Você obteve um resultado bem-sucedido?";
+		next;
+		switch(select("Ainda não.:Aqui está.:Na verdade...")) {
+		case 1:
+			mes "[Red Leopard Joe]";
+			mes "Não é fácil obter um resultado satisfatório de primeira.";
+			close;
+		case 2:
+			break;
+		case 3:
+			mes "[Red Leopard Joe]";
+			mes "Você perdeu a arma, mesmo com o meu aviso.";
+			next;
+			mes "[Red Leopard Joe]";
+			mes "Não há mais nada que possamos fazer. Espere!";
+			next;
+			mes "O Leopardo Vermelho Joe murmura algo e, de repente, todas as armas são desequipadas.";
+			next;
+			nude;
+			if (countitem(13074) || countitem(13312)) {
+				mes "[Red Leopard Joe]";
+				mes "O que é isso? Você ainda tem o protótipo. Pare de brincadeiras.";
+				close;
+			}
+			mes "[Red Leopard Joe]";
+			mes "Oh! Você realmente a perdeu.";
+			next;
+			setquest 5142;
+			if (isbegin_quest(5143)) erasequest 5143;
+			if (isbegin_quest(5144)) erasequest 5144;
+			erasequest 5145;
+			mes "[Red Leopard Joe]";
+			mes "Bem! Vamos tentar fazer de novo!";
+			close;
+		}
+		mes "[Red Leopard Joe]";
+		mes "Parece que você obteve alguns resultados.";
+		next;
+		set .@part, EQI_HAND_R;
+		if (!getequipisequiped(.@part)) {
+			mes "[Red Leopard Joe]";
+			mes "Ahh! Você não equipou nenhuma arma!";
+			close;
+		} else {
+			set .@equip_id, getequipid(.@part);
+			set .@equip_refine, getequiprefinerycnt(.@part);
+			if (.@equip_id == 13074 || .@equip_id == 13312) {
+				mes "[Red Leopard Joe]";
+				mes "Essa arma é sua? Deixe-me dar uma olhada.";
+				next;
+			} else {  //custom translation
+				mes "[Red Leopard Joe]";
+				mes "Tem certeza de que é essa arma?";
+				next;
+				mes "[Red Leopard Joe]";
+				mes "Você planeja me enganar com isso? De novo!!";
+				close;
+			}
+		}
+		mes "Joe deu uma olhada minuciosa no selo.";
+		next;
+		if (.@equip_refine < 7) {
+			mes "[Red Leopard Joe]";
+			mes "Você é tão baixo assim?";
+			mes "Devo ter julgado mal você. Talvez você mesmo estivesse satisfeito, mas eu não estou. Faça de novo!!";
+			close;
+		} else if (.@equip_refine > 6 && .@equip_refine < 9) {
+			mes "[Red Leopard Joe]";
+			mes "Hmm... Este é o seu limite?";
+			mes "Você chegou muito perto de passar. Vou perguntar mais uma vez, você está satisfeito?";
+			next;
+			if(select("Sim:Não") == 2) {
+				mes "[Red Leopard Joe]";
+				mes "Você ainda está aqui. Por quê?";
+				close;
+			}
+			mes "[Red Leopard Joe]";
+			mes "Sua competência é suficiente.";
+			next;
+		} else if (.@equip_refine > 8 && .@equip_refine < 13) {  //custom translation(?)
+			mes "[Red Leopard Joe]";
+			mes "Ah, como eu esperava.";
+			mes "Eu ainda acredito que você não vai parar por aqui.";
+			next;
+			if(select("Quero parar.:Quero continuar.") == 2) {
+				mes "[Red Leopard Joe]";
+				mes "Ficarei no aguardo do seu resultado.";
+				close;
+			}
+			mes "[Red Leopard Joe]";
+			mes "Sua competência é o suficiente.";
+			next;
+		} else {  //custom translation(?)
+			mes "[Red Leopard Joe]";
+			mes "Melhor do que o esperado.";
+			next;
+			mes "[Red Leopard Joe]";
+			mes "Para um iniciante, muito bom. Este teste pode não ser significativo para você, mas sua competência é o suficiente.";
+			next;
+		}
+		mes "[Red Leopard Joe]";
+		mes "Eu consigo sentir.";
+		mes "Vou pegar esta arma para dar os toques finais.";
+		next;
+
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipRefineHack", .@part, .@equip_refine))
+			close;
+
+		delequip .@part;
+		erasequest 5145;
+		completequest 5138;
+		if (isbegin_quest(5143) == 1) completequest 5143;
+		if (isbegin_quest(5144) == 1) completequest 5144;
+		mes "[Red Leopard Joe]";
+		mes "'" + strcharinfo(0) + "'";
+		mes "Passou no teste de armas!!";
+		close;
+	} else if (.@ko_test_03_1 == 2 && .@ko_test_03_2 == 0 && (.@ko_test_03_3 == 2 || .@ko_test_03_4 == 2) && .@ko_test_03_5 == 0) {
+		mes "[Red Leopard Joe]";
+		mes "Ah, quase esqueci.";
+		mes "Vá relatar os resultados do teste para Gion!";
+		close2;
+		warp "job_ko",26,104;
+		end;
+	} else {  //custom translation
+		mes "[Red Leopard Joe]";
+		mes "Você não deveria ter vindo aqui...";
+		mes "É meu dever me livrar de você.";
+		mes "Isto vai mandar você para longe!";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	end;
+
+L_Weapon:
+	mes "[Red Leopard Joe]";
+	mes "Você já terminou de fazer o protótipo das novas armas?";
+	next;
+	switch(select("Ferramentas de criação?:Não tenho materiais suficientes.:Como você espera que eu faça uma arma?" + getarg(0))) {
+	case 1:
+		specialeffect EF_GUIDEDATTACK,AREA,"Crafting Tools#ko_01";
+		mes "[Red Leopard Joe]";
+		mes "Sinta-se à vontade para usar as ferramentas daqui, e...";
+		next;
+		specialeffect EF_GUIDEDATTACK,AREA,"Crafting Tools#ko_02";
+		mes "[Red Leopard Joe]";
+		mes "...ali...";
+		next;
+		specialeffect EF_GUIDEDATTACK,AREA,"Crafting Tools#ko_03";
+		mes "[Red Leopard Joe]";
+		mes "...e em todos os outros lugares.";
+		close;
+	case 2:
+		mes "[Red Leopard Joe]";
+		mes "Você não trouxe materiais suficientes?";
+		next;
+		specialeffect EF_GUIDEDATTACK,AREA,"Drawer#ko";
+		mes "[Red Leopard Joe]";
+		mes "Então teremos que fazer uma visita à vila. Tente a ^FF0000gaveta^000000 ali. Ela levará você à vila.";
+		close;
+	case 3:
+		mes "[Red Leopard Joe]";
+		mes "Hmm... Acho que esperei demais? Deixe-me explicar.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Primeiro, você tem que derreter o minério para usar na arma. E a melhor maneira de obter metal de alta pureza é derreter materiais do mesmo tipo.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Por exemplo, Minério de Ferro, Ferro e Aço possuem propriedades semelhantes, então você pode obter um metal de alta pureza a partir deles.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Assim que tiver derretido o metal de alta pureza, despeje-o em um molde para obter o formato da arma e depois firme-o através do polimento e têmpera.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "A propósito, você obterá os melhores resultados rotacionando, polindo e temperando minuciosamente.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Acho que isso é o suficiente para você começar, não acha? Agora vá e trabalhe nesse protótipo!!";
+		close;
+	case 4:
+		return;
+	}
+}
+
+job_ko,117,128,0	script	Drawer#ko	844,{
+	mes "Há algum tipo de dispositivo na gaveta.";
+	next;
+	if(select("Pare.:Tente operá-lo.") == 2) {
+		mes "Clang clunc clink";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	close;
+}
+
+job_ko,131,124,0	script	Crafting Tools#ko_01	844,{
+	if (MaxWeight - Weight < 1000 || checkweight(1201,1) == 0) {
+		mes "Muito pesado! Por favor, reduza seu peso.";  //custom translation
+		close;
+	}
+	if (isbegin_quest(5138) == 1 && isbegin_quest(5142) == 1 && isbegin_quest(5143) == 0 && isbegin_quest(5144) == 0 && isbegin_quest(5145) == 0) {
+		// fall through
+	} else {
+		mes "Uma ferramenta de criação.";
+		mes "Não preciso dela agora.";
+		close;
+	}
+	mes "Ferramenta para criar armas.";
+	next;
+
+	// Part 1: Melting Metal
+	// Input similar materials to proceed to next step.
+	mes "Primeiro, é preciso derreter metais como ferro e minério de ferro para usar na criação de uma arma.";
+	next;
+	callsub L_CheckMaterials;
+	while(1) {
+		switch(select("Derreter Minério de Ferro.:Derreter Ferro.:Derreter Aço.:Derreter Phracon.:Derreter Emveretarcon.:Derreter Oridecon Bruto.:Derreter Elunium Bruto.:Pare.")) {
+			case 1: set .@item,1002; setarray .@val[0],1,0,0; break;  //Iron_Ore
+			case 2: set .@item, 998; setarray .@val[0],2,0,0; break;  //Iron
+			case 3: set .@item, 999; setarray .@val[0],3,0,0; break;  //Steel
+			case 4: set .@item,1010; setarray .@val[0],0,1,0; break;  //Phracon
+			case 5: set .@item,1011; setarray .@val[0],0,2,0; break;  //Emveretarcon
+			case 6: set .@item, 756; setarray .@val[0],0,3,0; break;  //Oridecon_Stone
+			case 7: set .@item, 757; setarray .@val[0],0,0,5; break;  //Elunium_Stone
+			case 8: close;
+		}
+		if (countitem(.@item)) {
+			delitem .@item,1;
+			if (.@val[0]) {			//Iron Ore, Iron, Steel
+				set .@ston_t01, .@ston_t01 + .@val[0];
+				if (.@ston_t02 > 0)
+					set .@ston_t02, .@ston_t02 - .@val[0];
+			} else if (.@val[1]) {	//Phracon, Emveretarcon, Rough Oridecon
+				set .@ston_t02, .@ston_t02 + .@val[1];
+				if (.@ston_t01 > 0)
+					set .@ston_t01, .@ston_t01 - .@val[1];
+			} else if (.@val[2]) {	//Rouch Elunium
+				if (.@ston_t01 > 0)
+					set .@ston_t01, .@ston_t01 - .@val[2];
+				if (.@ston_t02 > 0)
+					set .@ston_t02, .@ston_t02 - .@val[2];
+			}
+			specialeffect EF_DEMONSTRATION;
+			mes "Derretido" + getitemname(.@item) + "em alta temperatura.";
+			next;
+			if (.@ston_t01 > 49 || .@ston_t02 > 49)
+				break;
+		} else {
+			mes "Não tenho" + getitemname(.@item) + ".";
+			next;
+		}
+		callsub L_CheckMaterials;
+		mes "Qual metal será derretido a seguir?";
+		next;
+	}
+	set .@boll_01, ((.@ston_t01 > 49) ? .@ston_t01 : .@ston_t02);
+
+	// Part 2: Forging
+	// Grind and temper a weapon.
+	mes "Agora o metal está derretido para ser usado na criação de armas.";
+	next;
+	mes "O próximo passo é firmar o metal derretido despejando-o em um molde. Qual formato de molde você usará?";
+	next;
+	switch(select("Molde de Adaga:Molde de Shuriken")) {
+	case 1:
+		set .@weapon_who,0;
+		mes "Despejou o metal derretido no molde de adaga.";
+		break;
+	case 2:
+		set .@weapon_who,1;
+		mes "Despejou o metal derretido no molde de shuriken.";
+		break;
+	}
+	next;
+	progressbar "ffff00",3;
+	mes "Parece que o metal está tomando forma. O que vem agora?";
+	next;
+	set @job_ko_forge,0;
+	set @job_ko_lastaction,0;
+	callsub L_ForgeWeapon,":";
+	while(1) {
+		mes "O que vem agora?";
+		next;
+		if (callsub(L_ForgeWeapon,":Final Touches") == 0)
+			break;
+	}
+	set .@boll_02, @job_ko_forge;
+	set @job_ko_forge,0;
+	set @job_ko_lastaction,0;
+
+	// Part 3: Create the Weapon
+	// Success rate based on previous two parts.
+	set .@boll_00, .@boll_01 + .@boll_02;
+	mes "Começar a afiar a ferramenta usando uma pedra de amolar para os toques finais.";
+	next;
+	progressbar "ffff00",3;
+	set .@success_pp, rand(1,100);
+	if (.@boll_00 < 100) {
+		if (.@success_pp == 77) set .@success,1;
+	} else {
+		if (.@success_pp != 44) set .@success,1;
+	}
+	if (.@success) {
+		specialeffect2 EF_PERFECTION;
+		erasequest 5142;
+		if (.@weapon_who == 0) {
+			setquest 5143;
+			getitem 13074,1; //Ninja_Cutter
+		} else {
+			setquest 5144;
+			getitem 13312,1; //Huuma_Job_Test
+		}
+		mes "A arma foi criada com sucesso.";
+		next;
+		mes "Vamos levar isso para o Leopardo Vermelho Joe.";
+		close;
+	} else {
+		specialeffect2 EF_SUI_EXPLOSION;
+		mes "A arma foi destruída enquanto se realizavam os toques finais nela.";
+		next;
+		mes "Deve ter havido algo esquecido durante a criação da arma. É uma pena que isso tenha acontecido, mas você terá que começar tudo de novo.";
+		close;
+	}
+	end;
+
+L_CheckMaterials:
+	if (!countitem(1002) && !countitem(998) && !countitem(999) && !countitem(1010) && !countitem(1011) && !countitem(756) && !countitem(757)) {
+		mes "Mas você não tem mais metal para derreter. Vamos tentar novamente depois de conseguir mais metal.";
+		close;
+	}
+	return;
+
+L_ForgeWeapon:
+	set .@i, select("Amolar a arma:Temperar a arma" + getarg(0));
+	switch (.@i) {
+	case 1:
+		specialeffect2 EF_DETOXICATION;
+		mes "Arma amolada.";
+		break;
+	case 2:
+		specialeffect2 EF_REPAIRWEAPON;
+		mes "Arma temperada.";
+		break;
+	case 3:
+		return 0;
+	}
+	next;
+	if (@job_ko_lastaction == .@i)
+		set @job_ko_forge, @job_ko_forge + 1;
+	else
+		set @job_ko_forge, @job_ko_forge + 2;
+	set @job_ko_lastaction, .@i;
+	return 1;
+}
+job_ko,129,129,0	duplicate(Crafting Tools#ko_01)	Crafting Tools#ko_02	844
+job_ko,116,124,0	duplicate(Crafting Tools#ko_01)	Crafting Tools#ko_03	844
+
+job_ko,121,121,0	script	Refinement Tools#ko_01	844,{
+	if (isbegin_quest(5138) == 1 && isbegin_quest(5142) == 0 && (isbegin_quest(5143) == 1 || isbegin_quest(5144) == 1) && isbegin_quest(5145) == 1) {
+		disable_items;
+	} else {
+		mes "Esta ferramenta ajuda a refinar suas armas automaticamente. No entanto, você não precisará disso agora.";
+		close;
+	}
+	mes "Você liga a ferramenta de refino.";
+	mes "O equipamento inicia com uma vibração agradável.";
+	next;
+	mes "Parece que você pode usar a ferramenta imediatamente para o refino, pois ela contém uma boa quantidade de Elunium e Oridecon.";
+	next;
+	if(select("Começar a refinar.:Não começar a refinar.") == 2) {
+		mes "Você desligou a ferramenta.";
+		close;
+	}
+	set .@part, EQI_HAND_R;
+	if (!getequipisequiped(.@part)) {
+		mes "Bzzzt";
+		mes "Um bipe de aviso vem da ferramenta.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Este equipamento não funciona sem um item equipado para refinar.";
+		close;
+	} else {
+		set .@equip_id, getequipid(.@part);
+		set .@equip_refine, getequiprefinerycnt(.@part);
+		setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+		if (.@equip_id == 13074 || .@equip_id == 13312) {
+			mes "Analisando a arma.";
+			next;
+		} else {
+			mes "[Red Leopard Joe]";
+			mes "Espere... esta arma não é customizada.";
+			next;
+			mes "[Red Leopard Joe]";
+			mes "Por que você não refina isso com aqueles ferreiros esquentados por aí?";
+			close;
+		}
+	}
+	if (!getequipisenableref(.@part)) {
+		mes "Bzzzt";
+		mes "Um bipe de aviso vem da ferramenta.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Essa arma não pode ser refinada. Onde você a conseguiu?";  //custom translation
+		close;
+	}
+	if (.@equip_refine >= 20) {
+		mes "Bzzzt";
+		mes "Um bipe de aviso vem da ferramenta.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Este equipamento está perfeitamente refinado. Guarde-o para você!";  //custom translation
+		close;
+	}
+	if (getequippercentrefinery(.@part) < 100) {
+		mes "Este equipamento está muito bem refinado. Você quer continuar? A habilidade de refino diminui em 1 se o refino falhar.";
+		next;
+		if(select("Continuar.:Parar.") == 2) {
+			mes "Você desligou a ferramenta.";
+			close;
+		}
+	} else {
+		mes "Começando a refinar.";  //custom translation
+		next;
+	}
+	progressbar "ffff00",1;
+	set .@rand, rand(1,100);
+	if (.@equip_refine < 5) {			// 0>5 100%
+		set .@wlevel_up,1;
+	} else if (.@equip_refine == 5) {	// 5>6  40%
+		if (.@rand < 41) set .@wlevel_up,1;
+	} else if (.@equip_refine == 6) {	// 6>7  30%
+		if (.@rand < 31) set .@wlevel_up,1;
+	} else if (.@equip_refine == 7) {	// 7>8  20%
+		if (.@rand < 21) set .@wlevel_up,1;
+	} else if (.@equip_refine == 8) {	// 8>9  10%
+		if (.@rand < 11) set .@wlevel_up,1;
+	} else if (.@equip_refine == 9) {	// 9>10  5%
+		if (.@rand < 6) set .@wlevel_up,1;
+	} else {							// 10>20 2%
+		if (.@rand < 3) set .@wlevel_up,1;
+	}
+
+	// anti-hack
+	if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3]) || callfunc("F_IsEquipRefineHack", .@part, .@equip_refine))
+		close;
+
+	if (.@wlevel_up) {
+		successrefitem .@part;
+		mes "Refino bem-sucedido.";
+		mes "Ferramenta de refino desligada.";
+		close;
+	} else {
+		downrefitem .@part;
+		mes "Falha no refino.";
+		mes "Sua habilidade de refino de arma caiu em 1.";
+		mes "Ferramenta de refino desligada.";
+		close;
+	}
+	end;
+}
+job_ko,127,121,0	duplicate(Refinement Tools#ko_01)	Refinement Tools#ko_02	844
+
+// Test of Battle
+//============================================================
+job_ko,148,46,4	script	Leader Gion#ko2	588,{
+	if (MaxWeight - Weight < 2000 || checkweight(1201,1) == 0) {
+		mes "[Leader Gion]";
+		mes "Você não precisa de tantas coisas agora!"; //custom translation
+		close;
+	}
+	if (job_kagero == 7) {
+		cutin "job_ko01",2;
+		mes "[Leader Gion]";
+		mes "Parece que você ainda não cuidou do alvo.";
+		next;
+		mes "[Leader Gion]";
+		mes "Direi mais uma vez. O alvo é o ^FF0000Segredo do Clã^000000.";
+		next;
+		mes "[Leader Gion]";
+		mes "Claro que o caminho será difícil, então continue procurando!"; //custom translation
+		close2;
+		cutin "",255;
+		end;
+	} else if (job_kagero == 8) {
+		cutin "job_ko02",2;
+		mes "[Leader Gion]";
+		mes "Parece que você cuidou do alvo. Hmm.";
+		next;
+
+		//custom translations
+		if (ismounting()) {
+			mes "[Leader Gion]";
+			mes "Mas, por favor, desça do seu sapo. Caso contrário, não posso continuar!";
+			close2;
+			cutin "",255;
+			end;
+		}
+		if (BaseLevel < 99 || JobLevel < 70) {
+			mes "[Leader Gion]";
+			mes "Como você ficou mais fraco? Volte quando tiver recuperado seus níveis anteriores.";
+			close2;
+			cutin "",255;
+			end;
+		}
+		if (SkillPoint != 0) {
+			mes "[Leader Gion]";
+			mes "Por favor, volte depois de usar todos os seus Pontos de Habilidade.";
+			close2;
+			cutin "",255;
+			end;
+		}
+
+		mapannounce "job_ko","[Gion] Interrompendo o Teste de Batalha.",bc_map;
+		cutin "job_ko04",2;
+		mes "[Leader Gion]";
+		mes "O Teste de Batalha será adiado por um tempo. Não se preocupe, pois isso não afeta outros testes.";
+		next;
+		mapannounce "job_ko","[Gion] Meu Amigo" + strcharinfo(0) + " made it to " + ((Sex == SEX_MALE)?"Kagerou":"Oboro") + " Path. Congratulations!!",bc_map;
+		mes "[Leader Gion]";
+		mes "Meu amigo" + strcharinfo(0) + "chegou ao" + ((Sex == SEX_MALE)?"Kagerou":"Oboro") + "Caminho. Parabéns!!";
+		next;
+		cutin "job_ko02",2;
+		mes "[Leader Gion]";
+		mes "É um prazer conhecer um jovem que está trilhando um novo caminho.";
+		next;
+		mes "[Someone's Voice]";
+		mes "Espere um pouco, Gion.";
+		next;
+		donpcevent "Kuuga Gai#ko2::OnEnable";
+		donpcevent "Red Leopard Joe#ko2::OnEnable";
+		cutin "job_ko04",2;
+		mes "[Leader Gion]";
+		mes "Sinto muito, quase me esqueci de vocês dois. Você tem algo a compartilhar com" + strcharinfo(0) + "?";
+		next;
+		cutin "",255;
+		mes "[Kuuga Gai]";
+		mes "Hmm... Que embaraçoso... falar tão de repente...";
+		next;
+		mes "[Kuuga Gai]";
+		mes strcharinfo(0) + ", você agora é um membro orgulhoso do nosso clã. Mantenha sempre a cabeça erguida e...";
+		next;
+		mes "[Kuuga Gai]";
+		mes "^777777(A voz de Gai desaparece.)^000000.";
+		mes "Sinto muito por ter te sufocado quando nos conhecemos.";
+		next;
+		donpcevent "Kuuga Gai#ko2::OnDisable";
+		mes "[Red Leopard Joe]";
+		mes "Hahaha! Gai só fala. Eu sei que fui mais valioso para você do que aquele Gai.";
+		next;
+		if (isbegin_quest(5143) == 2) {
+			set .@item,13075; //Kurenai
+			set .@weapon$,"dagger";
+		} else {
+			set .@item,13311; //Huuma_Shadow
+			set .@weapon$,"shuriken";
+		}
+		mes "[Red Leopard Joe]";
+		mes "Eu fiz alguns ajustes no protótipo" + .@weapon$ + "que você criou.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes getitemname(.@item) + "agora brilha lindamente com um tom escarlate depois que dei os toques finais.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Eu dei nome às suas armas por conta própria, mas sei que você vai gostar do nome.";
+		next;
+		mes "[Red Leopard Joe]";
+		mes "Líder Gion, por favor, continue.";
+		next;
+		cutin "job_ko01",2;
+		donpcevent "Red Leopard Joe#ko2::OnDisable";
+		mes "[Leader Gion]";
+		mes "Não tenho muito a acrescentar, já que Gai e Joe disseram tudo.";
+		next;
+		mes "[Leader Gion]";
+		mes "Apenas lamento que o ambiente de todos esses testes pudesse ter sido melhor para nossa próxima geração.";
+		next;
+		mes "[Leader Gion]";
+		mes "Você só precisa olhar para frente e nunca olhar para trás.";
+		next;
+		for (set .@i,5131; .@i<=5146; set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+		set job_kagero,9;
+		getnameditem .@item,strcharinfo(0);
+		jobchange (Sex == SEX_MALE)?Job_Kagerou:Job_Oboro;
+		donpcevent "Summon Target#ko::OnEnable";
+		mes "[Leader Gion]";
+		mes "Espero que as bênçãos de Kagerou, sol dançante, e Oboro, luar enevoado, estejam com você em sua jornada.";
+		close2;
+		warp "que_ng",21,71;
+		end;
+	} else if (job_kagero == 9) {
+		cutin "job_ko01",2;
+		mes "[Leader Gion]";
+		mes "Espero que as bênçãos de Kagerou, sol dançante, e Oboro, luar enevoado, estejam com você em sua jornada.";
+		close2;
+		warp "que_ng",21,71;
+		end;
+	} else {
+		cutin "job_ko01",2;
+		mes "[Leader Gion]";
+		mes "Você não deveria estar aqui. Por favor, vá embora!"; //custom translation
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+}
+
+job_ko,151,47,4	script	Kuuga Gai#ko2	730,{
+	mes "[Kuuga Gai]";
+	mes "Parabéns por escolher o caminho do desenvolvimento!";
+	close;
+OnInit:
+OnDisable:
+	disablenpc "Kuuga Gai#ko2";
+	end;
+OnEnable:
+	enablenpc "Kuuga Gai#ko2";
+	end;
+}
+
+job_ko,145,47,6	script	Red Leopard Joe#ko2	730,{
+	mes "[Red Leopard Joe]";
+	mes "Você não encontrou o alvo? Continue procurando.";
+	close;
+OnInit:
+OnDisable:
+	disablenpc "Red Leopard Joe#ko2";
+	end;
+OnEnable:
+	enablenpc "Red Leopard Joe#ko2";
+	end;
+}
+
+job_ko,1,1,4	script	Summon Target#ko	844,{
+	end;
+OnInit:
+OnTimer180000:
+	donpcevent "Summon Target#ko::OnEnable";
+	end;
+OnEnable:
+	stopnpctimer;
+	switch (rand(1,7)) {
+		case 1: set .@mob,1002; break;
+		case 2: set .@mob,1031; break;
+		case 3: set .@mob,1113; break;
+		case 4: set .@mob,1063; break;
+		case 5: set .@mob,1010; break;
+		case 6: set .@mob,1049; break;
+		case 7: set .@mob,1050; break;
+	}
+	areamonster "job_ko",120,30,160,70,"Clan Secret",.@mob,1,"Summon Target#ko::OnMyMobDead";
+	end;
+OnDisable:
+	initnpctimer;
+	end;
+OnMyMobDead:
+	if (mobcount("job_ko","Summon Target#ko::OnMyMobDead") < 1) {
+		if (job_kagero == 7) {
+			donpcevent "Summon Target#ko::OnDisable";
+			set job_kagero,8;
+		} else
+			donpcevent "Summon Target#ko::OnEnable";
+	}
+	end;
+}
+
+job_ko,1,2,4	script	Summon Fake#ko	844,{
+	end;
+OnInit:
+	donpcevent "Summon Fake#ko::OnEnable";
+	end;
+OnEnable:
+	areamonster "job_ko",120,30,160,70,"Clan's Legacy",1002,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Memory",1002,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Memory",1002,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Clan's Mistake",1031,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Mistake",1031,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Mistake",1031,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Clan's Memory",1113,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Past",1113,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Past",1113,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Clan's Legacy",1063,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Legacy",1063,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Legacy",1063,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Clan's Mistake",1010,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Memory",1010,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Memory",1010,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Clan's Past",1049,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Mistake",1049,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Mistake",1049,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Clan's Memory",1050,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Past",1050,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Past",1050,5,"Summon Fake#ko::OnMyMobDead";
+	end;
+OnDisable:
+	killmonster "job_ko","Summon Fake#ko::OnMyMobDead";
+	end;
+OnMyMobDead:
+	if (mobcount("job_ko","Summon Fake#ko::OnMyMobDead") < 100) {
+		donpcevent "Summon Fake#ko::OnDisable";
+		donpcevent "Summon Fake#ko::OnEnable";
+		warp "job_ko",16,113;
+	}
+	end;
+}
+
+// GM Control Panel (custom translations)
+//============================================================
+job_ko,3,1,4	script	Battle Test Control#ko	588,{
+	callfunc "F_GM_NPC";
+	if (callfunc("F_GM_NPC",1854,0) == 1) {
+		mes "Este é o NPC de Controle de Teste de Batalha.";
+		next;
+	} else {
+		mes "Senha incorreta.";
+		close;
+	}
+	switch(select("Invocar Alvo:Invocar Alvo Disable:Invocar Falso:Invocar Falso Disable")) {
+	case 1:
+		donpcevent "Summon Target#ko::OnEnable";
+		mes "Invocar Alvo ativado.";
+		break;
+	case 2:
+		donpcevent "Summon Target#ko::OnDisable";
+		mes "Invocar Alvo desativado.";
+		break;
+	case 3:
+		donpcevent "Summon Fake#ko::OnEnable";
+		mes "Invocar Falso ativado.";
+		break;
+	case 4:
+		donpcevent "Summon Fake#ko::OnDisable";
+		mes "Invocar Falso desativado.";
+		break;
+	}
+	next;
+	mes "O controle foi concluído.";
+	close;
+}
+
+job_ko,4,1,4	script	Guide#ko_helper	588,{
+	callfunc "F_GM_NPC";
+	if (callfunc("F_GM_NPC",1854,0) == 1) {
+		mes "Este é o NPC assistente de mudança de classe de Kagerou e Oboro.";
+		next;
+	} else {
+		mes "Senha incorreta.";
+		close;
+	}
+	mes "Posso resolver qualquer problema na missão de mudança de classe.";
+	next;
+	switch(select("Status Atual:Configurar Teste:Pré-Transferência:Inicializar")) {
+	case 1:
+		mes "Estados das variáveis (atual/máximo)";
+		mes "job_kagero (" + job_kagero + "/9)";
+		mes "job_kagero_lp (" + job_kagero_lp + "/100)";
+		next;
+		mes "Estados da missão (atual/máximo)";
+		mes "5131 (" + isbegin_quest(5131) + "/1)";
+		mes "5132 (" + isbegin_quest(5132) + "/1)";
+		mes "5133 (" + isbegin_quest(5133) + "/1)";
+		mes "5134 (" + isbegin_quest(5134) + "/1)";
+		mes "5135 (" + isbegin_quest(5135) + "/1)";
+		mes "5136 (" + isbegin_quest(5136) + "/2)";
+		mes "5139 (" + isbegin_quest(5139) + "/1)";
+		mes "5137 (" + isbegin_quest(5137) + "/2)";
+		mes "5140 (" + isbegin_quest(5140) + "/1)";
+		mes "5141 (" + checkquest(5141,PLAYTIME) + "/1)";
+		mes "5138 (" + isbegin_quest(5138) + "/2)";
+		mes "5142 (" + isbegin_quest(5142) + "/1)";
+		mes "5143 (" + isbegin_quest(5143) + "/2)";
+		mes "5144 (" + isbegin_quest(5144) + "/2)";
+		mes "5145 (" + isbegin_quest(5145) + "/1)";
+		mes "5146 (" + isbegin_quest(5146) + "/1)";
+		close;
+	case 2:
+		mes "Qual teste você deseja definir como concluído?";
+		mes "Três testes devem ser concluídos antes de mudar de classe. Se você deseja atingir o estado de mudança de classe, selecione [Pré-Transferência] diretamente no menu anterior!";
+		next;
+		switch(select("Concluir Teste de Conhecimento:Concluir Teste de Sobrevivência:Concluir Teste de Armamento")) {
+		case 1:
+			set job_kagero,5;
+			setquest 5136;
+			completequest 5136;
+			mes "O Teste de Conhecimento foi definido como concluído. Espero que você tenha finalizado sua inicialização.";
+			break;
+		case 2:
+			set job_kagero,5;
+			set job_kagero_lp,0;
+			setquest 5137;
+			completequest 5137;
+			mes "O Teste de Sobrevivência foi definido como concluído. Espero que você tenha finalizado sua inicialização.";
+			break;
+		case 3:
+			set job_kagero,5;
+			setquest 5138;
+			completequest 5138;
+			mes "O Teste de Armamento foi definido como concluído. Espero que você tenha finalizado sua inicialização.";
+			break;
+		}
+		close;
+	case 3:
+		mes "Vou mudar o status da sua missão para Pré-Transferência, mas antes disso...";
+		next;
+		mes "Por favor, selecione uma arma.";
+		next;
+		switch(select("Adaga:Shuriken")) {
+			case 1: set .@quest,5143; break;
+			case 2: set .@quest,5144; break;
+		}
+		setquest 5136;
+		completequest 5136;
+		setquest 5137;
+		completequest 5137;
+		setquest 5138;
+		completequest 5138;
+		setquest .@quest;
+		completequest .@quest;
+		setquest 5146;
+		set job_kagero,8;
+		mes "Defini o status de Pré-Transferência. Boa sorte!!";
+		close;
+	case 4:
+		set job_kagero,0;
+		set job_kagero_lp,0;
+		for (set .@i,5131; .@i<=5146; set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+		mes "A tarefa de inicialização foi concluída. Você pode confirmar isso através da opção [Status Atual]!";
+		close;
+	}
+	end;
+}

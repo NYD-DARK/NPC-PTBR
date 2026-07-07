@@ -1,0 +1,287 @@
+//===== rAthena Script =======================================
+//= Enchants NPCs.
+//===== Description: =========================================
+//= [Official Conversion]
+//= Hero Ring enchants NPCs
+//===== Changelogs: ==========================================
+//= 1.0 First Version. [Capuche]
+//= 1.1 Slight change to match official script. [Capuche]
+//============================================================
+
+moro_cav,32,73,5	script	Hero Token Exchanger#1	4_F_SHADOWCHASER,{
+	disable_items;
+	mes "[Hero Token Exchanger]";
+	mes "Se você lutou contra Morocc";
+	mes "e coletou";
+	mes "Hero Tokens,";
+	mes "eu posso trocá-los por um anel especial para você.";
+	mes "Você quer dar uma olhada no meu anel?";
+	while(true) {
+		next;
+		if (checkweight(2163,2) == 0) {
+			mes "[Hero Token Exchanger]";
+			mes "Sua mochila está com muitos itens,";
+			mes "por favor, volte depois de organizá-la!";
+			close;
+		}
+		switch( select( "Descrição do anel", "Trocar pelo anel.", "Encerrar conversa." ) ) {
+		case 1:
+			mes "[Hero Token Exchanger]";
+			mes "Este Hero Ring";
+			mes "pode não";
+			mes "parecer";
+			mes "impressionante,";
+			next;
+			mes "[Hero Token Exchanger]";
+			mes "mas leve-o ao";
+			mes "Especialista em Encantamentos Byrnes,";
+			mes "e ele poderá encantar";
+			mes "todos os 4 slots dele";
+			mes "e revelar";
+			mes "suas habilidades latentes.";
+			next;
+			mes "[Hero Token Exchanger]";
+			mes "O Hero Ring";
+			mes "pode ajudá-lo";
+			mes "a subjugar";
+			mes "Morocc.";
+			mes "Mais alguma pergunta?";
+			continue;
+		case 2:
+			mes "- Hero Ring -";
+			mes "^006400Um anel feito para guerreiros^000000";
+			mes "^006400na busca para derrotar Morocc..^000000";
+			mes "^006400Quando encantado,^000000";
+			mes "^006400ele confere ao seu dono^000000";
+			mes "^006400o poder de enfrentar Morocc.^000000";
+			mes "^006400Classe: Acessório/DEF: 0^000000";
+			mes "^006400Peso: 20/Nível Necessário: 160^000000";
+			mes "^006400Slot: 0/Equipável em: Todas as Classes^000000";
+			next;
+			mes "[Hero Token Exchanger]";
+			mes "O Hero Ring requer";
+			mes "30 Hero Tokens";
+			mes "para a troca.";
+			mes "Você deseja realizar a troca?";
+			next;
+			if (select( "Menu anterior.", "Trocar 30 Hero Tokens." ) == 1) {
+				mes "[Hero Token Exchanger]";
+				mes "Pense";
+				mes "novamente.";
+				continue;
+			}
+			if (countitem(6684) < 30) {
+				mes "[Hero Token Exchanger]";
+				mes "^006400Hero Token^000000";
+				mes "é dado àqueles";
+				mes "que bravamente lutaram contra Morocc.";
+				mes "Você não possui";
+				mes "30 ^006400Hero Tokens^000000,";
+				mes "e, portanto, não posso ajudá-lo.";
+				continue;
+			}
+			mes "[Hero Token Exchanger]";
+			mes "Eu trocarei";
+			mes "30 ^006400Hero Tokens^000000";
+			mes "por 1 ^006400Hero Ring^000000.";
+			mes "Mais alguma coisa?";
+			delitem 6684,30;	// TokenOfHero
+			getitem 2981,1;		// RingOfHero
+			continue;
+		case 3:
+			mes "[Hero Token Exchanger]";
+			mes "Um dia";
+			mes "você se verá";
+			mes "precisando de um Hero Ring.";
+			close;
+		}
+	}
+}
+
+moro_cav,34,65,5	script	Expert Enchanter Byrnes	1_M_03,{
+	disable_items;
+	mes "[Byrnes]";
+	mes "Você já ouviu falar do Hero Ring? Apenas verdadeiros heróis merecem possuir esse anel magnífico, e eu estive esperando por um.";
+	mes "O que posso fazer por você?";
+	next;
+	switch( select( "Encantar Hero Ring.", "Redefinir encantamentos do Hero Ring.", "Cancelar." ) ) {
+	case 1:
+		mes "[Byrnes]";
+		mes "Eu só posso encantar anéis equipados. Qual dos anéis equipados você deseja encantar?";
+		next;
+		setarray .@eqi_slot[0], EQI_ACC_L, EQI_ACC_R;
+		.@s = select( "Esquerdo", "Direito" ) - 1;
+		switch( getequipid(.@eqi_slot[.@s]) ) {
+		case -1:
+			mes "[Byrnes]";
+			mes "Por favor, equipe o Hero Ring que você deseja encantar.";
+			close;
+		case 2981:
+			break;
+		default:
+			mes "[Byrnes]";
+			mes "Por favor, equipe seu Hero Ring. Não posso encantar nada além disso.";
+			close;
+		}
+		// custom at this point
+		setarray .@card[0],
+			getequipcardid(.@eqi_slot[.@s],0),
+			getequipcardid(.@eqi_slot[.@s],1),
+			getequipcardid(.@eqi_slot[.@s],2),
+			getequipcardid(.@eqi_slot[.@s],3);
+
+		if (.@card[0] > 0) {
+			mes "[Byrnes]";
+			mes "Um Hero Ring totalmente encantado não pode ser encantado ainda mais.";
+			close;
+		}
+		if (.@card[3] == 0) {
+			setarray .@enchant_list$[0], "DEF", "MDEF";
+			.@slot = 4;
+		}
+		else if (.@card[2] == 0) {
+			setarray .@enchant_list$[0], "Max HP", "Max SP";
+			.@slot = 3;
+		}
+		else if (.@card[1] == 0) {
+			setarray .@enchant_list$[0], "Atk", "MAtk";
+			.@slot = 2;
+		}
+		else {
+			setarray .@enchant_list$[0], "STR", "INT", "AGI", "VIT", "DEX", "LUK";
+			.@slot = 1;
+		}
+		mes "[Byrnes]";
+		mes "Qual habilidade você deseja como encantamento no slot" + .@slot + "?";
+		next;
+		.@enchant_list_size = getarraysize(.@enchant_list$);
+		for ( .@i = 0; .@i < .@enchant_list_size; ++.@i )
+			.@menu$ += .@enchant_list$[.@i] + ":";
+		.@type = select(.@menu$) - 1;
+
+		switch(.@slot) {
+		case 4:
+			switch(.@type) {// enchant list index
+			case 0:	// DEF
+				setarray .@bonus[0], 4791, 4792, 4793, 4794, 4893;
+				break;
+			default:	// MDEF
+				setarray .@bonus[0], 4890, 4786, 4891, 4787, 4892;
+				break;
+			}
+			break;
+		case 3:
+			switch(.@type) {
+			case 0:	// Max HP
+				setarray .@bonus[0], 4861, 4862, 4867, 4868, 4900;
+				break;
+			default:	// Max SP
+				setarray .@bonus[0], 4800, 4870, 4871, 4801, 4802;
+				break;
+			}
+			break;
+		case 2:
+			switch(.@type) {
+			case 0:	// Atk
+				setarray .@bonus[0], 4882, 4766, 4767, 4894, 4895;
+				break;
+			default:	// Matk
+				setarray .@bonus[0], 4883, 4896, 4897, 4898, 4899;
+				break;
+			}
+			break;
+		case 1:
+			switch(.@type) {
+			case 0:	// STR
+				setarray .@bonus[0], 4700, 4701, 4702, 4703, 4704;
+				break;
+			case 1:	// INT
+				setarray .@bonus[0], 4710, 4711, 4712, 4713, 4714; 
+				break;
+			case 2:	// AGI
+				setarray .@bonus[0], 4730, 4731, 4732, 4733, 4734;
+				break;
+			case 3:	// VIT
+				setarray .@bonus[0], 4740, 4741, 4742, 4743, 4744;
+				break;
+			case 4:	// DEX
+				setarray .@bonus[0], 4720, 4721, 4722, 4723, 4724;
+				break;
+			default:	// LUK
+				setarray .@bonus[0], 4750, 4751, 4752, 4753, 4754;
+				break;
+			}
+			break;
+		}
+
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@eqi_slot[.@s], 2981) || callfunc("F_IsEquipCardHack", .@eqi_slot[.@s], .@card[0], .@card[1], .@card[2], .@card[3]))
+			close;
+
+		.@bonus_size = getarraysize(.@bonus);
+		.@card[.@slot-1] = .@bonus[ rand(.@bonus_size) ];	// unknown rates
+		specialeffect2 EF_ANGEL2;
+		mes "[Byrnes]";
+		mes "Encantamento concluído!";
+		delequip .@eqi_slot[.@s];
+		getitem2 2981,1,1,0,0,.@card[0],.@card[1],.@card[2],.@card[3];
+		close;
+	case 2:
+		mes "[Byrnes]";
+		mes "Para redefinir os encantamentos do seu Hero Ring, preciso de 3 Hero Tokens.";
+		next;
+		if (countitem(6684) < 3) {
+			mes "[Byrnes]";
+			mes "Você não tem Hero Tokens suficientes. Não posso redefinir seu Hero Ring.";
+			close;
+		}
+		mes "[Byrnes]";
+		mes "Eu só posso redefinir anéis equipados. Qual dos anéis equipados você deseja redefinir?";
+		next;
+		setarray .@eqi_slot[0], EQI_ACC_L, EQI_ACC_R;
+		.@s = select( "Esquerdo", "Direito" ) - 1;
+		switch( getequipid(.@eqi_slot[.@s]) ) {
+		case -1:
+			mes "[Byrnes]";
+			mes "Você deve primeiro equipar o item para redefinir seu status de encantamento.";
+			close;
+		case 2981:
+			break;
+		default:
+			mes "[Byrnes]";
+			mes "Por favor, equipe seu Hero Ring. Não posso redefinir nada além disso.";
+			close;
+		}
+		// custom at this point
+		if (countitem(6684) < 3) {
+			mes "[Byrnes]";
+			mes "Você não tem Hero Tokens suficientes. Não posso redefinir seu Hero Ring.";
+			close;
+		}
+		setarray .@card[0],
+			getequipcardid(.@eqi_slot[.@s],0),
+			getequipcardid(.@eqi_slot[.@s],1),
+			getequipcardid(.@eqi_slot[.@s],2),
+			getequipcardid(.@eqi_slot[.@s],3);
+
+		if (.@card[3] == 0) {
+			mes "[Byrnes]";
+			mes "Seu Hero Ring está atualmente em um estado sem encantamentos.";
+			close;
+		}
+
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@eqi_slot[.@s], 2981) || callfunc("F_IsEquipCardHack", .@eqi_slot[.@s], .@card[0], .@card[1], .@card[2], .@card[3]))
+			close;
+
+		specialeffect2 EF_ANGEL2;
+		mes "[Byrnes]";
+		mes "Inicialização concluída.";
+		delitem 6684,3;
+		delequip .@eqi_slot[.@s];
+		getitem 2981,1;
+		close;
+	case 3:
+		close;
+	}
+}

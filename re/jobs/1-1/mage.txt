@@ -1,0 +1,130 @@
+//===== rAthena Script ======================================= 
+//= Renewal Mage Job Quest
+//===== By: ================================================== 
+//= Kisuka
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Job Change to Mage Class
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [Kisuka]
+//= 1.1 Added support for Baby classes. [Euphy]
+//============================================================ 
+geffen_in,164,124,4	script	Mage Guildsman#mage	123,{
+	if (Upper == 1) {
+		if (ADVJOB == Job_High_Wizard || ADVJOB == Job_Professor) {
+			if (Class == Job_Novice_High) {
+				mes "[Mage Guildsman]";
+				mes "Uau, quanto tempo! Mas você não deveria estar morto?";
+				next;
+				mes "[Mage Guildsman]";
+				mes "Ah, você deve ter renascido. Bem, fico feliz em tê-lo de volta.";
+				next;
+				if (!callfunc("F_CanChangeJob")) {
+					mes "[Mage Guildsman]";
+					mes "Sinto muito, mas não acho que você esteja pronto para aprender magia ainda. Por que você não termina de aprender as Habilidades Básicas primeiro?";
+					next;
+					mes "[Mage Guildsman]";
+					mes "Não tenha pressa. Quanto mais você aprender, mais preparado estará para aprender magia novamente.";
+					close;
+				}
+				mes "[Mage Guildsman]";
+				mes "Bem, já que você passou no teste de Mago uma vez, não vou questionar sua qualificação. Você quer recuperar suas habilidades mágicas imediatamente, não quer?";
+				next;
+				skill "NV_TRICKDEAD",0,SKILL_PERM;
+				jobchange Job_Mage_High;
+				skill "MG_ENERGYCOAT",1,SKILL_PERM;
+				mes "[Mage Guildsman]";
+				mes "Uau, por algum motivo, você parece muito melhor do que antes. De qualquer forma, acredito que você fará um trabalho melhor sendo um Mago também.";
+				close;
+			}else{
+				mes "[Mage Guildsman]";
+				mes "Existe algo mais em que eu possa te ajudar? Se não, por que não vai testar suas habilidades? O mundo está esperando por você~!";
+				close;
+			}
+		}else{
+			mes "[Mage Guildsman]";
+			mes "O quê, você está interessado na guilda dos Mago? Eu não queria te dizer isso, mas você não pertence a este lugar.";
+			next;
+			mes "[Mage Guildsman]";
+			mes "Não tenho certeza de por que você ainda está parado na minha frente, mas posso dizer que você não nasceu para ser um Mago.";
+			close;
+		}
+	}
+	mes "[Mage Guildsman]";
+	if(BaseJob != Job_Novice) {
+		if(BaseJob == Job_Mage) {
+			mes "Ei, você não percebeu? Você já é um Mago, bobinho!";
+			mes "Qualquer dia desses você vai perceber o poder dentro de você quando conseguir criar Fogo com a sua mente!";
+		} else
+			mes "Ei~ Vamos lá. Pare com essas brincadeiras. Você não pode ser um Mago porque já tem outra Classe.";
+		close;
+	}else{
+		mes "Ei?";
+		next;
+		switch(select("Eu quero ser um Mago:Quais são os requisitos para ser um Mago?:Nada, obrigado.")) {
+		case 1:
+			mes "[Mage Guildsman]";
+			mes "Quer ser um Mago? Eh...";
+			next;
+			mes "[Mage Guildsman]";
+			if (Sex == SEX_MALE) {
+				mes "Ei, olhe para você! Você é meio fofo~! Não é do meu tipo, no entanto...";
+			}else{
+				mes "Oooh, você é uma gata tão atraente~!";
+				mes "Eu gosto de garotas como você~";
+			}
+			mes "Certo, você disse que quer ser um Mago?";
+			next;
+			if(select("Eu quero ser um Mago.:Nada, obrigado.") == 2) {
+				mes "[Mage Guildsman]";
+				mes "O quêêêê~?! Logo depois de me dizer que quer se tornar um Mago, você muda de ideia?! Seja um pouco mais decidido!";
+				close;
+			}
+			mes "[Mage Guildsman]";
+			if (!callfunc("F_CanChangeJob")) {
+				mes "Ah, cara, seu Nível de Habilidade Básica não é suficiente para ser um Mago.";
+				mes "Volte e suba o nível da sua Habilidade Básica.";
+				close;
+			}
+			mes "Tudo bem... assine o formulário de inscrição... Uau~ você tem uma caligrafia bonita! Ahh, ok. Isso é o suficiente.";
+			mes "Você é..."+strcharinfo(0)+".";
+			next;
+			mes "[Mage Guildsman]";
+			mes "Hmm, posso ver que você se esforçou à sua própria maneira. Embora pareça um pouco desajeitado, bem, acho que está bom!";
+			mes "Bom! Manter-se fiel ao básico é sempre o melhor! Vou transformá-lo agora mesmo.";
+			next;
+			mes "[Mage Guildsman]";
+			mes "Hahh..! Agora você é um Mago, um dos nossos colegas!";
+			mes "Damos as boas-vindas à guilda dos Mago, nosso novo amigo!";
+			next;
+			mes "[Mage Guildsman]";
+			mes "'Bem-vindo à guilda dos Mago~'";
+			mes "Parabéns por se tornar um membro da guilda dos Mago! Vá em frente!";
+			callfunc "Job_Change",Job_Mage;
+			getitem 1639,1;	// N_Rod
+			close;
+		case 2:
+			mes "[Mage Guildsman]";
+			mes "Quer ser um Mago, eh?";
+			mes "Eu ficaria feliz em explicar os requisitos para uma garota bonita como você!";
+			next;
+			mes "[Mage Guildsman]";
+			mes "Primeiro de tudo, você precisa atingir o Nível de Classe 10 como Aprendiz e aprender todas as Habilidades Básicas.";
+			next;
+			mes "[Mage Guildsman]";
+			mes "Antigamente, havia um teste complicado de fazer poções. Por causa disso, perdíamos candidatos aos poucos.";
+			mes "Então, decidimos aceitar todos os candidatos que atendem aos requisitos básicos.";
+			next;
+			mes "[Mage Guildsman]";
+			mes "Não hesite. Apenas seja um mago!";
+			close;
+		case 3:
+			mes "[Mage Guildsman]";
+			mes "Nada...?";
+			close;
+		}
+	}
+}

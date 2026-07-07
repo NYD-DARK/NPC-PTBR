@@ -1,0 +1,120 @@
+//===== rAthena Script =======================================
+//= Ghost Palace Exchange NPC.
+//===== Description: =========================================
+//= Walkthrough Conversion.
+//===== Changelogs: ==========================================
+//= 1.0 First Version. [Capuche]
+//============================================================
+
+dali02,51,130,4	script	Dimension Traveler	4_F_SHABBY,{
+	if (checkweight(28100,1) == 0) {// Thanos Axe
+		mes "- Você não pode prosseguir porque possui itens demais com você. -";
+		close;
+	}
+	.@item_name_req$ = getitemname(6672);// Gray_Shard
+	mes "[Dimension Traveler]";
+	mes "Amigo aventureiro," + mesitemlink( 6672 ) + "é o que eu preciso. Que tal trocá-lo por algo que eu tenho?";
+	next;
+	.@type = select( "Mostre-me sua arma.", "Mostre-me sua armadura.", "Algo especial?", "Não preciso." ) - 1;
+	mes "[Dimension Traveler]";
+	switch(.@type) {
+	case 0:
+		mes "Oh! Você está interessado em armas? Nós temos todas as armas que conseguimos do Palácio Fantasma. Por que não escolhe uma?";
+		break;
+	case 1:
+		mes "Armadura? Nós temos todas as armaduras que conseguimos do Palácio Fantasma. Por que não escolhe uma?";
+		break;
+	case 2:
+		mes "Huhh! Parece que muitos já ouviram que eu tenho os melhores itens. Sinta-se à vontade para conferir minhas coleções.";
+		break;
+	case 3:
+		mes "Adeus, amigo~ Volte sempre!";
+		close;
+	}
+	next;
+	mes "[Dimension Traveler]";
+	mes "Ah! O número que está escrito ao lado de" + mesitemlink( 6672 ) + "será necessário.";
+	mes "Por favor, tenha isso em mente.";
+
+	switch(.@type) {
+	case 0:
+		setarray .@items[0],
+			13441, 200,		// Thanos Sword
+			21009, 200, 	// Thanos Great Sword
+			1438,  200,		// Thanos Spear
+			1496,  200,		// Thanos Long Spear
+			1669,  200,		// Thanos Staff
+			2023,  200,		// Thanos Rod
+			18119, 200,		// Thanos Bow
+			13093, 200,		// Thanos Dagger
+			28000, 200,		// Thanos Katar
+			1836,  200,		// Thanos Knuckle
+			16028, 200,		// Thanos Hammer
+			28100, 200,		// Thanos Axe
+			1933,  200,		// Thanos Violin
+			1988,  200;		// Thanos Whip
+		break;
+	case 1:
+		setarray .@items[0],
+			2187,  100,		// Shield Of Gray
+			15090, 100, 	// Armor Of Gray
+			15091, 100,		// Gray Robe
+			20721, 100,		// Cloak Of Gray
+			22033, 100,		// Boots Of Gray
+			18820, 100;		// Gray Helmet
+		break;
+	case 2:
+		setarray .@items[0],
+			27184, 10000,		// Knight Sakray Card
+			23676, 50, 			// Gray Charcoal Melee (Melee)
+			23677, 50,			// Gray Charcoal Magic (Magic)
+			23678, 50;			// Gray Charcoal Range (Range)
+		break;
+	}
+	.@size = getarraysize(.@items);
+	for ( .@i = 0; .@i < .@size; .@i += 2 )
+		.@menu$ += getitemname(.@items[.@i]) + " - " + .@items[.@i+1] + ":";
+
+	while(true) {
+		next;
+		.@s = (select(.@menu$) - 1) * 2;
+		mes "[Dimension Traveler]";
+		if (.@type != 1)	// armor type doesn't display item info
+			mes "Você quer dizer" + mesitemlink( .@items[.@s] ) + "?";
+		mes "" + .@items[.@s+1] + "^006400" + .@item_name_req$ + "^000000 são necessários para a troca.";
+		next;
+		switch( select( "Vamos trocar.", "Deixe-me ver outras coisas.", "Voltarei mais tarde." ) ) {
+		case 1:
+			break;
+		case 2:
+			mes "[Dimension Traveler]";
+			switch(.@type) {
+			case 0:
+				mes "Eu tenho mais do que armas suficientes.";
+				break;
+			case 1:
+				mes "Nós temos muitas armaduras para você. Por que não escolhe uma?";
+				break;
+			case 2:
+				mes "Se você me trouxer" + .@item_name_req$ + ", eu trocarei pelo que você quiser.";
+				break;
+			}
+			continue;
+		case 3:
+			mes "[Dimension Traveler]";
+			mes "Cuide-se, amigo~ Até a próxima!";
+			close;
+		}
+		if (countitem(6672) < .@items[.@s+1]) {
+			mes "[Dimension Traveler]";
+			mes "Você me colocou em uma situação difícil, amigo.";
+			mes "Eu estou precisando de" + .@item_name_req$ + ". Eu trocarei por ^006400" + .@items[.@s+1] + " " + .@item_name_req$ + "^000000.";
+			close;
+		}
+		mes "[Dimension Traveler]";
+		mes "Obrigado. Volte se precisar de mais alguma coisa.";
+		delitem 6672, .@items[.@s+1];
+		getitem .@items[.@s], 1;
+		close;
+	}
+}

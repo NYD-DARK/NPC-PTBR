@@ -1,0 +1,1957 @@
+//===== rAthena Script =======================================
+//= Paradise Group Market
+//===== By: ==================================================
+//= Anity99
+//===== Current Version: =====================================
+//= 1.0.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= The Para Market is an NPC vending system in which certain monster-drop
+//= items are available from NPCs at a high price. Items are only available
+//= from designated Para Market NPCs. The Para Market is open all day and
+//= all week, however there are certain NPCs that are only available on
+//= the weekends. Items sold in the Para Market are sold in limited
+//= quantities for the entire server. It is unknown how often they restock
+//= their wares.
+//===== Additional Comments: =================================
+//= 1.0 First Version. [Nyalin]
+//= 1.0.1 Convert to Hercules [Ridley8819]
+//= 1.0.2 Convert to rAthena [Anity99]
+//= 1.0.3 Fix typos and update marketshop [Anity99]
+//= 1.0.4 Fixed item id typo [Everade]
+//============================================================
+
+// $event_paramk, 0 // Holiday Wednesday
+// $event_paramk, 1 // Monday, Tuesday, Thursday, Friday, Saturday, Sunday
+// $event_paramk, 2 // Friday, Saturday, Sunday
+// $event_paramk, 3 // Saturday, Sunday
+// $event_paramk, 4 // Late Saturday, Sunday
+
+function	script	F_CoolDown	{
+	if (@cd_marketshop + getarg(0) > gettimetick(2))
+		end;
+	@cd_marketshop = gettimetick(2);
+	return;
+}
+
+// Shop NPC
+// Limited
+-	marketshop	para_coin10	FAKE_NPC,6304:500000:10,6080:100000:10,6081:300000:10,6380:1000000:1000,6004:100000:1
+
+-	marketshop	para_hei10	FAKE_NPC,6608:150000:1,6607:20000:1,6755:200000:1,7642:10000:1,22687:200000:1,23016:1000000:1
+
+-	marketshop	para_key10	FAKE_NPC,7026:100000:10,7027:100000:10 // todo
+
+-	marketshop	para_wp00	FAKE_NPC,1181:10000000:1
+
+-	marketshop	para_arm10	FAKE_NPC,5007:2000000:1
+
+-	marketshop	para_ptn00	FAKE_NPC,678:80000:999,12016:50000:9999,525:100000:1000,12422:40000:100,12423:50000:100,12425:40000:100,12426:50000:100
+
+-	marketshop	para_ptn10	FAKE_NPC,505:40000:100,12679:100000:500,12676:30000:500,12680:50000:100
+
+-	marketshop	para_itm00	FAKE_NPC,12106:1500000:100,12107:500000:100,616:2500000:100,12194:200000:100
+
+-	marketshop	para_itm10	FAKE_NPC,12008:5000:99999,12009:5000:99999,12012:5000:100,12010:5000:100,12011:5000:100,12013:20000:100,12014:80000:100,7931:5000:100
+
+-	marketshop	para_seed10	FAKE_NPC,12290:5000:100,12376:5000:100,12291:10000:100,12377:10000:100,576:2000:100,587:2000:100,526:10000:100,607:70000:20,608:50000:20
+
+-	marketshop	para_mora10	FAKE_NPC,11526:5000:100,11525:5000:1000,11520:50000:100,12574:20000:100
+
+-	marketshop	para_ref10	FAKE_NPC,998:10000:500,1003:10000:500,1002:10000:500,999:10000:500
+
+-	marketshop	para_ref20	FAKE_NPC,984:200000:10,985:200000:100,987:240000:1,988:600000:1,989:1200000:1
+
+-	marketshop	para_jew10	FAKE_NPC,969:1000000:20,7289:500000:20,7290:500000:20,7291:500000:20,7292:500000:20,7293:500000:20,7294:500000:20,7295:500000:20,7296:500000:20,7297:500000:20
+
+-	marketshop	para_alc10	FAKE_NPC,971:20000:20,972:12000:20,970:12000:20:7136:7000:20,7135:18000:20
+
+-	marketshop	para_alc20	FAKE_NPC,1061:3000:1000,905:1000:1000,1059:1000:1000,7033:1000:1000,929:4000:1000
+
+-	marketshop	para_alc30	FAKE_NPC,1000:10000:100,1001:10000:100,990:10000:100,991:10000:100,992:10000:100,993:10000:100
+
+-	marketshop	para_fod10	FAKE_NPC,6252:40000:100,6253:8000:100,6254:30000:100,6256:15000:100,6257:15000:100,6259:15000:100,6260:10000:100,22658:80000:50,22659:100000:50
+
+-	marketshop	para_mag10	FAKE_NPC,12108:20000:99999,717:1500:99999,715:4500:99999,716:4500:99999,14512:100000:100,14513:100000:100,14514:100000:100,12737:500:99999,12734:1500:99999,12738:2000:100,12735:3000:50,12736:10000:10,6360:200:99999,6363:200:99999,6361:200:99999,6362:200:99999
+
+-	marketshop	para_mag11	FAKE_NPC,717:1500:99999,12737:500:99999,12734:1500:99999,6360:200:99999,6363:200:99999,6361:200:99999,6362:200:99999
+
+-	marketshop	para_mag20	FAKE_NPC,12119:8000:100,12121:8000:100,12120:5000:100,12118:15000:100
+
+-	marketshop	para_plt01	FAKE_NPC,709:10000:50,7932:4000:99999,7933:4000:99999,7934:4000:99999,7935:4000:99999,7936:4000:99999,7937:4000:99999
+
+// Update Market Shop
+-	script	Update_Shop	-1,{
+OnInit:
+OnClock0000:
+	npcshopupdate "para_coin10",6304,0,1;
+	npcshopupdate "para_coin10",6080,0,1;
+	npcshopupdate "para_coin10",6081,0,1;
+	npcshopupdate "para_coin10",6380,0,1;
+	npcshopupdate "para_coin10",6004,0,1;
+	npcshopupdate "para_hei10",6608,0,1;
+	npcshopupdate "para_hei10",6607,0,1;
+	npcshopupdate "para_hei10",6755,0,1;
+	npcshopupdate "para_hei10",7642,0,1;
+	npcshopupdate "para_hei10",22687,0,1;
+	npcshopupdate "para_hei10",23016,0,1;
+	npcshopupdate "para_key10",7026,0,10;
+	npcshopupdate "para_key10",7027,0,10;
+	npcshopupdate "para_wp00",1181,0,1;
+	npcshopupdate "para_arm10",5007,0,1;
+	npcshopupdate "para_ptn00",678,0,999;
+	npcshopupdate "para_ptn00",12016,0,9999;
+	npcshopupdate "para_ptn00",525,0,1000;
+	npcshopupdate "para_ptn00",12422,0,100;
+	npcshopupdate "para_ptn00",12423,0,100;
+	npcshopupdate "para_ptn00",12425,0,100;
+	npcshopupdate "para_ptn00",12426,0,100;
+	npcshopupdate "para_ptn10",505,0,100;
+	npcshopupdate "para_ptn10",12679,0,500;
+	npcshopupdate "para_ptn10",12676,0,500;
+	npcshopupdate "para_ptn10",12680,0,100;
+	npcshopupdate "para_itm00",12106,0,100;
+	npcshopupdate "para_itm00",12107,0,100;
+	npcshopupdate "para_itm00",616,0,100;
+	npcshopupdate "para_itm00",12194,0,100;
+	npcshopupdate "para_itm10",12008,0,99999;
+	npcshopupdate "para_itm10",12009,0,99999;
+	npcshopupdate "para_itm10",12012,0,100;
+	npcshopupdate "para_itm10",12010,0,100;
+	npcshopupdate "para_itm10",12011,0,100;
+	npcshopupdate "para_itm10",12013,0,100;
+	npcshopupdate "para_itm10",12014,0,100;
+	npcshopupdate "para_itm10",7931,0,100;
+	npcshopupdate "para_seed10",12290,0,100;
+	npcshopupdate "para_seed10",12376,0,100;
+	npcshopupdate "para_seed10",12291,0,100;
+	npcshopupdate "para_seed10",12377,0,100;
+	npcshopupdate "para_seed10",576,0,100;
+	npcshopupdate "para_seed10",587,0,100;
+	npcshopupdate "para_seed10",526,0,100;
+	npcshopupdate "para_seed10",607,0,20;
+	npcshopupdate "para_seed10",608,0,20;
+	npcshopupdate "para_mora10",11526,0,100;
+	npcshopupdate "para_mora10",11525,0,1000;
+	npcshopupdate "para_mora10",11520,0,100;
+	npcshopupdate "para_mora10",12574,0,100;
+	npcshopupdate "para_ref10",998,0,500;
+	npcshopupdate "para_ref10",1003,0,500;
+	npcshopupdate "para_ref10",1002,0,500;
+	npcshopupdate "para_ref10",999,0,500;
+	npcshopupdate "para_ref20",984,0,10;
+	npcshopupdate "para_ref20",985,0,100;
+	npcshopupdate "para_ref20",987,0,1;
+	npcshopupdate "para_ref20",988,0,1;
+	npcshopupdate "para_ref20",989,0,1;
+	npcshopupdate "para_jew10",969,0,20;
+	npcshopupdate "para_jew10",7289,0,20;
+	npcshopupdate "para_jew10",7290,0,20;
+	npcshopupdate "para_jew10",7291,0,20;
+	npcshopupdate "para_jew10",7292,0,20;
+	npcshopupdate "para_jew10",7293,0,20;
+	npcshopupdate "para_jew10",7294,0,20;
+	npcshopupdate "para_jew10",7295,0,20;
+	npcshopupdate "para_jew10",7296,0,20;
+	npcshopupdate "para_jew10",7297,0,20;
+	npcshopupdate "para_alc10",971,0,20;
+	npcshopupdate "para_alc10",972,0,20;
+	npcshopupdate "para_alc10",970,0,20;
+	npcshopupdate "para_alc10",7136,0,20;
+	npcshopupdate "para_alc10",7135,0,20;
+	npcshopupdate "para_alc20",1061,0,1000;
+	npcshopupdate "para_alc20",905,0,1000;
+	npcshopupdate "para_alc20",1059,0,1000;
+	npcshopupdate "para_alc20",7033,0,1000;
+	npcshopupdate "para_alc20",929,0,1000;
+	npcshopupdate "para_alc30",1000,0,100;
+	npcshopupdate "para_alc30",1001,0,100;
+	npcshopupdate "para_alc30",990,0,100;
+	npcshopupdate "para_alc30",991,0,100;
+	npcshopupdate "para_alc30",992,0,100;
+	npcshopupdate "para_alc30",993,0,100;
+	npcshopupdate "para_fod10",6252,0,100;
+	npcshopupdate "para_fod10",6253,0,100;
+	npcshopupdate "para_fod10",6254,0,100;
+	npcshopupdate "para_fod10",6256,0,100;
+	npcshopupdate "para_fod10",6257,0,100;
+	npcshopupdate "para_fod10",6259,0,100;
+	npcshopupdate "para_fod10",6260,0,100;
+	npcshopupdate "para_fod10",22658,0,50;
+	npcshopupdate "para_fod10",22659,0,50;
+	npcshopupdate "para_mag10",12108,0,99999;
+	npcshopupdate "para_mag10",717,0,99999;
+	npcshopupdate "para_mag10",715,0,99999;
+	npcshopupdate "para_mag10",716,0,99999;
+	npcshopupdate "para_mag10",14512,0,100;
+	npcshopupdate "para_mag10",14513,0,100;
+	npcshopupdate "para_mag10",14514,0,100;
+	npcshopupdate "para_mag10",12737,0,99999;
+	npcshopupdate "para_mag10",12734,0,99999;
+	npcshopupdate "para_mag10",12738,0,100;
+	npcshopupdate "para_mag10",12735,0,50;
+	npcshopupdate "para_mag10",12736,0,10;
+	npcshopupdate "para_mag10",6360,0,99999;
+	npcshopupdate "para_mag10",6363,0,99999;
+	npcshopupdate "para_mag10",6361,0,99999;
+	npcshopupdate "para_mag10",6362,0,99999;
+	npcshopupdate "para_mag11",717,0,99999;
+	npcshopupdate "para_mag11",12737,0,99999;
+	npcshopupdate "para_mag11",12734,0,99999;
+	npcshopupdate "para_mag11",6360,0,99999;
+	npcshopupdate "para_mag11",6363,0,99999;
+	npcshopupdate "para_mag11",6361,0,99999;
+	npcshopupdate "para_mag11",6362,0,99999;
+	npcshopupdate "para_mag20",12119,0,100;
+	npcshopupdate "para_mag20",12121,0,100;
+	npcshopupdate "para_mag20",12120,0,100;
+	npcshopupdate "para_mag20",12118,0,100;
+	npcshopupdate "para_plt01",709,0,50;
+	npcshopupdate "para_plt01",7932,0,99999;
+	npcshopupdate "para_plt01",7933,0,99999;
+	npcshopupdate "para_plt01",7934,0,99999;
+	npcshopupdate "para_plt01",7935,0,99999;
+	npcshopupdate "para_plt01",7936,0,99999;
+	npcshopupdate "para_plt01",7937,0,99999;
+	end;
+}
+
+// General Sales
+-	shop	para_wp01	FAKE_NPC,1501:-1,1504:-1,1507:-1,1510:-1,1513:-1,1519:-1,1516:-1,1522:-1,1601:-1,1604:-1,1607:-1,1610:-1,1617:-1,1619:-1,1801:-1,1803:-1,1805:-1,1807:-1,1811:-1,1809:-1
+
+-	shop	para_wp02	FAKE_NPC,1101:-1,1104:-1,1107:-1,1110:-1,1113:-1,1122:-1,1119:-1,1123:-1,1129:-1,1116:-1,1151:-1,1154:-1,1157:-1,1160:-1,1146:-1
+
+-	shop	para_wp03	FAKE_NPC,1701:-1,1704:-1,1707:-1,1710:-1,1713:-1,1714:-1,1718:-1,1721:-1,1901:-1,1903:-1,1905:-1,1950:-1,1952:-1,1954:-1
+
+-	shop	para_wp04	FAKE_NPC,1201:-1,1204:-1,1207:-1,1210:-1,1213:-1,1216:-1,1219:-1,1222:-1,13003:-1,1245:-1,1247:-1,1248:-1,1249:-1,13000:-1,1250:-1,1252:-1,1254:-1
+
+-	shop	para_wp05	FAKE_NPC,1301:-1,1351:-1,1354:-1,1357:-1,1360:-1,1401:-1,1404:-1,1407:-1,1451:-1,1454:-1,1457:-1,1460:-1,1463:-1,1410:-1
+
+-	shop	para_arm01	FAKE_NPC,2328:-1,2314:-1,2312:-1,2316:-1,2341:-1,2340:-1,2411:-1,2228:-1,2230:-1
+
+-	shop	para_arm02	FAKE_NPC,2101:-1,2103:-1,2105:-1,2107:-1
+
+-	shop	para_hat01	FAKE_NPC,2301:-1,2303:-1,2305:-1,2307:-1,2309:-1,2335:-1,2323:-1,2325:-1,2321:-1,2332:-1,2501:-1,2503:-1,2505:-1,2401:-1,2403:-1,2405:-1
+
+-	shop	para_hat02	FAKE_NPC,2239:-1,2203:-1,2201:-1,2243:-1,2242:-1,2205:-1,2220:-1,2226:-1,2222:-1,5114:-1,2216:-1,5092:-1,2218:-1,2211:-1,2212:-1,2208:-1,2232:-1
+
+-	shop	para_ptn01	FAKE_NPC,501:-1,502:-1,503:-1,504:-1,645:-1,656:-1,657:-1
+
+-	shop	para_itm01	FAKE_NPC,7940:-1,1065:-1
+
+-	shop	para_seed01	FAKE_NPC,522:-1
+
+-	shop	para_mora01	FAKE_NPC,11522:-1,11523:-1,11524:-1,11519:-1
+
+-	shop	para_fod01	FAKE_NPC,7482:-1,577:-1,580:-1,7457:-1,581:-1,7453:-1,7455:-1,7454:-1,7456:-1,7452:-1,579:-1
+
+-	shop	para_unm01	FAKE_NPC,537:-1,643:-1,10013:-1,10014:-1,6113:-1,6114:-1,6115:-1,6110:-1,6100:-1,6098:-1,6112:-1,6104:-1,6108:-1,6111:-1,6095:-1,7824:-1,6097:-1,6107:-1,6105:-1,6099:-1,25231:1000,25232:1000,25233:1000
+
+
+// setting map-variable
+-	script	MV_Eden Market Group	FAKE_NPC,{
+OnInit:
+OnClock0000:
+	switch( gettime(DT_DAYOFWEEK) ) {
+	case WEDNESDAY:
+		$event_paramk = 0;
+		break;
+	case FRIDAY:
+		$event_paramk = 2;
+		break;
+	case SATURDAY:
+		if (gettime(DT_HOUR) > 21)
+			$event_paramk = 4;
+		else
+			$event_paramk = 3;
+		break;
+	case THURSDAY:
+	default:
+		$event_paramk = 1;
+		break;
+	}
+	end;
+
+OnSat2200:
+	$event_paramk = 4;
+	end;
+}
+
+// Eden Market Group Hustler
+moc_para01,106,38,4	script	Market Group Hustler#ent	4_M_YOYOROGUE,{
+	mes "[Hustler]";
+	mes "Olá, aventureiro.";
+	mes "Posso levar você a um lugar agradável. Tem interesse?";
+	next;
+	switch (select("Ir para o Grupo do Mercado Éden!:Sobre o Grupo do Mercado Éden.:Cancelar.")) {
+	case 1:
+		mes "[Hustler]";
+		mes "Indo~!";
+		close2;
+		warp "paramk",97,17;
+		end;
+	case 2:
+		mes "[Hustler]";
+		mes "Hahaha... O Grupo do Mercado Éden é um lugar onde mercadores se reúnem para vender diversos itens.";
+		mes "E não estou falando de coisas comuns como Geléia Real, que você consegue em qualquer lugar. Aqui, só negociamos mercadorias de verdade.";
+		next;
+		mes "[Hustler]";
+		mes "Ingredientes simples, pedras preciosas, itens raros de masmorras e locais de escavação, e artefatos exóticos que vêm de outra dimensão...";
+		mes "Tudo o que você poderia desejar!";
+		next;
+		select("Você quer dizer que isso é um mercado negro?!");
+		mes "[Hustler]";
+		mes "Ah... Eu não diria isso.";
+		mes "Este mercado é, digamos, tecnicamente legal...";
+		mes "Lembre-se de que a maioria dos produtos especiais possui ^4d4dffquantidade limitada^000000. Se você se atrasar, eles podem estar esgotados.";
+		next;
+		mes "[Hustler]";
+		mes "Não espere descontos na maioria dos itens de quantidade limitada.";
+		mes "Você tem que pagar o preço cheio.";
+		next;
+		mes "[Hustler]";
+		mes "Aventureiros às vezes aparecem para vender o que encontraram em suas expedições.";
+		mes "Mas você tem que ver com seus próprios olhos!";
+		next;
+		mes "[Hustler]";
+		mes "Keep in mind that most stores are closed one day out of the week; ^4d4dffmost stores are not open on Wednesdays^000000.";
+		mes "Though, not all of them close on Wednesdays; majority of them are still open.";
+		next;
+		mes "[Hustler]";
+		mes "Mais itens especiais são vendidos nos finais de semana.";
+		mes "Eu até vi um" + mesitemlink( 709, false ) + "sendo vendido~";
+		mes "Foi incrível.";
+		mes "Claro que era super caro e apenas alguns poucos estavam à venda.";
+		next;
+		mes "[Hustler]";
+		mes "O que me diz? Interessado?";
+		mes "Não vale a pena dar uma conferida?";
+		mes "Hahahahaha!";
+		close;
+	case 3:
+		mes "[Hustler]";
+		mes "Apareça a qualquer momento, se quiser ir ao Grupo do Mercado Éden!";
+		close;
+	}
+}
+
+// Eden Market Group Guide
+paramk,101,22,3	script	Market Group Guide#info	4_F_ZONDAGIRL,{
+	mes "[Guide]";
+	mes "Olá. Bem-vindo ao Grupo do Mercado Éden, o mercado oficial administrado pela coalizão continental de Mercador, apoiado pelo Grupo Éden.";
+	next;
+	switch (select("Sobre o nosso horário de funcionamento.:Sobre os Produtos Especiais.:Sobre o Grupo do Mercado Éden.:Cancelar.")) {
+	case 1:
+		mes "[Guide]";
+		mes "O Grupo do Mercado Éden é um mercado que contém muitas lojas diferentes.";
+		next;
+		mes "[Guide]";
+		mes "Wednesday is an official holiday designated by the marketplace; most shops are closed on this day.";
+		next;
+		mes "[Guide]";
+		mes "No entanto, dependendo dos desejos do proprietário e do tipo de item oferecido, algumas lojas permanecem parcialmente abertas mesmo nos feriados.";
+		next;
+		mes "[Guide]";
+		mes "E, algumas lojas oferecem itens especiais em certos dias da semana. Mantenha isso em mente.";
+		close;
+	case 2:
+		mes "[Guide]";
+		mes "Some shops will sell different items on weekends, certain days of the week, or even during certain hours; these items are different than their usual daily items.";
+		next;
+		mes "[Guide]";
+		mes "'Amigos Maravilhosos' e 'Amigos Fortes' venderão um item raro cada um nos finais de semana.";
+		mes "A 'Coalizão dos Mineradores' venderá a bigorna para ferraria apenas nos finais de semana.";
+		next;
+		mes "[Guide]";
+		mes "Não posso te dizer quais itens as lojas individuais vendem, porque são todas diferentes.";
+		mes "Por que você não descobre por si mesmo visitando com frequência?";
+		close;
+	case 3:
+		mes "[Guide]";
+		mes "Existem muitas pessoas com alma de Mercador que gostariam de vender seus itens para quem precisa deles.";
+		mes "O Grupo do Mercado Éden designou um local para que essas pessoas comprem e vendam.";
+		next;
+		mes "[Guide]";
+		mes "Nós fornecemos os meios para que mercadorias que, de outra forma, seriam contrabandeadas, sejam compradas e vendidas de maneira justa e transparente, trabalhando em conjunto com as coalizões de Mercador e aventureiros.";
+		next;
+		mes "[Guide]";
+		mes "Algumas pessoas murmuram que o Grupo do Mercado Éden é um mercado negro... Haha, que ideia boba...";
+		mes "Somos apenas uma coalizão de Mercador.";
+		next;
+		mes "[Guide]";
+		mes "Uma parte dos nossos lucros vai para a manutenção do Grupo Éden, uma guilda de aventureiros.";
+		mes "Você pode vender os espólios das suas aventuras aqui, e os lucros que fazemos ajudam a fornecer serviços que beneficiam você. Estamos matando dois coelhos com uma cajadada só, na verdade.";
+		next;
+		mes "[Guide]";
+		mes "Lembre-se de que itens de quantidade limitada nunca entrarão em promoção!";
+		close;
+	case 4:
+		mes "[Guide]";
+		mes "Divirta-se!";
+		close;
+	}
+
+OnTimer60000:
+	npctalk "Bem-vindo. Este é o Grupo do Mercado Éden.";
+
+OnInit:
+	initnpctimer;
+	end;
+}
+
+// Guards
+paramk,103,17,3	script	Market Guard#1	4_M_YOUNGKNIGHT,{
+	callfunc("F_CoolDown", 5);
+	switch (atoi(strnpcinfo(2))) {
+	default:
+		npctalk "Bem-vindo.";
+		break;
+	case 3:
+		npctalk "Bem-vindo ao Grupo do Mercado Éden.";
+		break;
+	case 4:
+		npctalk "Como vai? Este é o Grupo do Mercado Éden.";
+		break;
+	case 5:
+		npctalk "Obrigado por comprar no Grupo do Mercado Éden.";
+		break;
+	case 6:
+		npctalk "Bem-vindo. O Grupo do Mercado Éden lhe dá as boas-vindas.";
+		break;
+	}
+	end;
+}
+
+// Guard Duplicates
+paramk,92,17,6	duplicate(Market Guard#1)	Market Guard#2	4_M_YOUNGKNIGHT
+paramk,53,47,3	duplicate(Market Guard#1)	Market Guard#3	4_M_YOUNGKNIGHT
+paramk,142,48,3	duplicate(Market Guard#1)	Market Guard#4	4_M_YOUNGKNIGHT
+paramk,142,67,3	duplicate(Market Guard#1)	Market Guard#5	4_M_YOUNGKNIGHT
+paramk,53,67,3	duplicate(Market Guard#1)	Market Guard#6	4_M_YOUNGKNIGHT
+
+
+// Center-North ConversationNPC
+// A wise customer
+paramk,78,44,3	script	A wise customer#gst01	4_TOWER_14,6,6,{
+OnTouch:
+	callfunc("F_CoolDown", 4);
+	npctalk "Estou esperando pela arma que será vendida nos finais de semana. Ouvi dizer que se eu vier no dia certo, tanto a versão vermelha quanto a azul serão oferecidas.";
+	end;
+}
+
+// A dining customer
+paramk,119,80,3	script	A dining customer#gst02	4_M_CHN8GUEK,6,6,{
+OnTouch:
+	callfunc("F_CoolDown", 4);
+	npctalk "Tão apimentado! Não me importo se este é o 'sabor da nossa terra natal' ou qualquer coisa, é apimentado demais! Aaaaaaahh!";
+	end;
+}
+
+// Customer
+paramk,106,61,3	script	Customer#gst03	4_TOWER_04,6,6,{
+OnTouch:
+	callfunc("F_CoolDown", 4);
+	npctalk "Eu venho aqui quando preciso de uma pausa. Adoro este lugar. Confortável e cheio de itens interessantes.";
+	end;
+}
+
+// Window-shopper
+paramk,77,60,3	script	Window-shopper#gst04	4_TOWER_02,6,6,{
+OnTouch:
+	callfunc("F_CoolDown", 4);
+	npctalk "Será que tudo bem eu ficar só olhando as vitrines o dia todo sem comprar nada...";
+	end;
+}
+
+// Cassie
+paramk,113,56,3	script	Cassie#gst05	1_F_PUBGIRL,6,6,{
+	npctalk "Bem-vindo ao Grupo do Mercado Éden~ Você quer uma bebida chique?";
+	mes "[Cassie]";
+	mes "Você deseja comprar uma bebida?";
+	next;
+	switch (select("Sograt Tropical.:Vermelho na Praia.:Não.")) {
+	case 1:
+		.@item = 12112;
+		break;
+	case 2:
+		.@item = 12113;
+		break;
+	case 3:
+		mes "[Cassie]";
+		mes "Divirta-se.";
+		close;
+	}
+	if (Zeny < 800) {
+		mes "[Cassie]";
+		mes "Uma bebida custa 800z.";
+		close;
+	}
+	mes "[Cassie]";
+	mes "Aproveite.";
+	Zeny -= 800;
+	getitem(.@item, 1);
+	close;
+
+OnTouch:
+	callfunc("F_CoolDown", 4);
+	npctalk "Bem-vindo ao Grupo do Mercado Éden. Você quer uma bebida sofisticada?";
+	end;
+}
+
+// Leria
+paramk,74,15,0	script	Leria#coin	4_M_BIBI,{
+	if ($event_paramk > 0) {
+		mes "[Leria]";
+		mes "Eu vendo moedas que coletei de dimensões alternativas.";
+		mes "Compre o que chamar sua atenção.";
+		mes "Esteja avisado: elas são bem caras. Tive que passar por imensos problemas para consegui-las.";
+		next;
+		if (select("Ver o que está à venda.:Cancelar.") == 1) {
+			mes "[Leria]";
+			mes "Talvez eu não tenha mais estoque, já que vendo apenas alguns itens.";
+			close2;
+			callshop "para_coin10";
+			end;
+		}
+		mes "[Leria]";
+		mes "Como eu vasculho o mundo para encontrar os itens que vendo, o preço é alto...";
+		mes "Mas há quem os compre mesmo assim.";
+		next;
+		mes "[Leria]";
+		mes "Bem, aqueles que precisam deles devem pagar o preço. Não é verdade?";
+		close;
+	} else { // holiday
+		mes "[Leria]";
+		mes "Ah... Hoje é o feriado do mercado.";
+		mes "Volte amanhã se precisar de moedas.";
+		close;
+	}
+}
+
+// Heimhunter
+paramk,71,15,3	script	Heimhunter#hei	4_GEFFEN_11,{
+	if ($event_paramk > 0) {
+		mes "[Heimhunter]";
+		mes "Ah, você é o cliente que quer 'aquilo' do castelo antigo?";
+		mes "Só consigo um por dia, mas eu o venderei.";
+		next;
+		if (select("Ver o item.:Cancelar.") == 1) {
+			mes "[Heimhunter]";
+			mes "Só existe um...";
+			mes "Pode ter sido comprado por outra pessoa.";
+			mes "Por favor, compreenda.";
+			close2;
+			callshop "para_hei10";
+			end;
+		}
+		mes "[Heimhunter]";
+		mes "Como desejar.";
+		close;
+	} else { // holiday
+		mes "[Heimhunter]";
+		mes "Hoje é o feriado oficial do mercado.";
+		mes "Eu também vou tirar uma folga.";
+		close;
+	}
+}
+
+// Zephet
+paramk,68,15,0	script	Zephet#key	4_M_HUMERCHANT,{
+	if ($event_paramk > 3) {
+		mes "[Zephet]";
+		mes "Você precisa de chaves?";
+		mes "Talvez eu tenha algumas chaves extras para a torre do relógio...";
+		next;
+		if (select("Comprar chaves.:Cancelar.") == 1) {
+			mes "[Zephet]";
+			mes "Eu mesmo reúno e vendo as chaves para a torre do relógio...";
+			mes "Mesmo vasculhando por elas a semana toda, não há muitas disponíveis.";
+			mes "Elas podem já ter se esgotado.";
+			close2;
+			callshop "para_key10";
+			end;
+		}
+		mes "[Zephet]";
+		mes "Você não precisa de chaves?";
+		mes "Lembre-se de que só vendo chaves aqui nos finais de semana.";
+		mes "Apenas para sua informação.";
+		close;
+	} else { // holiday
+		mes "[Zephet]";
+		mes "Ainda não tenho chaves suficientes.";
+		mes "Volte após a tarde de sábado.";
+		close;
+	}
+}
+
+
+// Strong Friends - Weapon shop
+// Sign
+paramk,72,33,0	script	[Strong Friends]#wp00	HIDDEN_NPC,{
+	mes "== Amigos Fortes ==";
+	mes "De armas comuns a espadas inestimáveis cravejadas de joias!";
+	mes "Toda arma que você poderia desejar está aqui para sua apreciação.";
+	close;
+}
+
+// Miffy
+paramk,65,30,3	script	Miffy#wp01	4_F_LGTGIRL,{
+	if ($event_paramk > 1) {
+		mes "[Miffy]";
+		mes "Uma coleção limitada, disponível apenas na sexta-feira, sábado e domingo!";
+		mes "Oferecemos uma variedade de armas antigas que aventureiros recuperaram de masmorras!";
+		next;
+		if (select("Olhar os itens.:Cancelar.") == 1) {
+			mes "[Miffy]";
+			mes "Deixe-nos mostrar a coleção especial 'Amigos Fortes'.";
+			mes "Se você abrir o baú e não houver nada lá,";
+			mes "isso significa que a arma já foi vendida.";
+			mes "Os espólios vão para as pessoas com reflexos rápidos.";
+			close2;
+			callshop "para_wp00";
+			end;
+		}
+		mes "[Miffy]";
+		mes "Armas especiais vendidas nos finais de semana!";
+		mes "Venha nos ver quando quiser!";
+		close;
+	} else { // Wednesday Holiday
+		mes "[Miffy]";
+		mes "Olá. Esta é a loja de armas 'Amigos Fortes'.";
+		mes "Nós vendemos armas que aventureiros recuperam de masmorras e em batalhas,";
+		mes "vagando pelo continente.";
+		next;
+		mes "[Miffy]";
+		mes "^000000Sexta, sábado e domingo, uma coleção limitada de armas oferecida por 3 dias consecutivos!^000000";
+		mes "Venha nos ver quando quiser!";
+		close;
+	}
+}
+
+// Nelsha
+paramk,70,31,3	script	Nelsha#wp02	4_M_SITDOWN,{
+	mes "[Nelsha]";
+	mes "Olá.";
+	mes "Este é o 'Amigos Fortes', onde uma variedade de armas básicas está disponível para sua apreciação.";
+	next;
+	setarray .@shopname$[0], "para_wp01", "para_wp02", "para_wp03", "para_wp04", "para_wp05";
+	setarray .@shopdesc$[0], "Maces, Rods and Knuckles", "One-Handed Swords and Two-Handed Sword", "Bows, Innstruments and Whips", "Daggers and Katars", "Axes and Spears";
+	.@s = select("Maças, Cajados, Socos:Espadas de Uma Mão, Espada de Duas Mãos:Arcos, Instrumentos, Chicotes:Adagas, Katares:Machados, Lanças:Cancelar") - 1;
+	if (.@s == 5) {
+		mes "[Nelsha]";
+		mes "Obrigado pela preferência.";
+		close;
+	}
+	mes "[Nelsha]";
+	mes "Eu vou lhe mostrar" + .@shopdesc$[.@s];
+	close2;
+	callshop(.@shopname$[.@s], 1);
+	end;
+}
+
+
+// Reliable Friends
+// Sign
+paramk,72,33,3	script	[Reliable Friends]#arm00	HIDDEN_NPC,{
+	mes "== Amigos Confiáveis ==";
+	mes "Você precisa de escudos, armaduras e capacetes resistentes?";
+	mes "Você pode contar com os Amigos Confiáveis!";
+	close;
+}
+
+// Coco
+paramk,78,31,3	script	Coco#arm01	4_F_SITDOWN,{
+	mes "[Coco]";
+	mes "Você precisa de armaduras resistentes para proteger seu corpo frágil?";
+	mes "Ou escudos, para bloquear os golpes de seus inimigos?";
+	next;
+	switch (select("Olhar armaduras.:Olhar escudos.:Cancelar.")) {
+	case 1:
+		mes "[Coco]";
+		mes "Armadura barata e resistente.";
+		close2;
+		callshop "para_arm01",1;
+		end;
+	case 2:
+		mes "[Coco]";
+		mes "Pode, ou não, bloquear golpes feitos com força razoável...";
+		close2;
+		callshop "para_arm02",1;
+		end;
+	case 3:
+		mes "[Coco]";
+		mes "Volte sempre.";
+		close;
+	}
+}
+
+
+// Handsome Friends
+// Sign
+paramk,84,33,3	script	[Handsome Friends]#cst00	HIDDEN_NPC,{
+	mes "== Amigos Elegantes ==";
+	mes "Uma loja de roupas para quem adora se vestir bem!";
+	close;
+}
+
+// Minho Doh
+paramk,90,31,3	script	Minho Doh#cst01	4W_M_01,{
+	if ($event_paramk > 2) {
+		mes "[Minho Doh]";
+		mes "Coleção limitada de itens, disponível apenas nos finais de semana!";
+		mes "Apenas um item. Se você quiser, compre rápido! Você já sabe como funciona.";
+		next;
+		if (select("Ver a coleção.:Cancelar.") == 1) {
+			mes "[Minho Doh]";
+			mes "Aqui está nossa coleção especial!";
+			mes "Se todos os baús estiverem vazios, significa que você chegou tarde demais!";
+			close2;
+			callshop "para_arm10";
+			end;
+		}
+		mes "[Minho Doh]";
+		mes "Até logo!";
+		mes "Hahahahaha!";
+		close;
+	} else { // holiday
+		mes "[Minho Doh]";
+		mes "Você quer dar uma olhada em nossa coleção especial de itens?";
+		mes "Mas a coleção não seria especial se você pudesse vê-la todos os dias, não é?";
+		next;
+		mes "[Minho Doh]";
+		mes "Venha nos fins de semana se quiser ver nossa coleção especial.";
+		mes "Vendemos UM item por dia, aos ^000000 sábados e domingos^000000.";
+		next;
+		mes "[Minho Doh]";
+		mes "Hahahaha.. Você não está ansioso pelos itens especiais que serão revelados em breve? Muhahahahaha!";
+		close;
+	}
+}
+
+// Lapelt
+paramk,94,32,3	script	Lapelt#hat01	4_M_LGTMAN,{
+	mes "[Lapelt]";
+	mes "Bem-vindo! Esta é a 'Handsome Friends', uma loja de roupas que vai deixar você na moda!";
+	mes "Vendemos roupas comuns e chapéus até mesmo em feriados.";
+	next;
+	switch (select("Roupas e sapatos.:Chapéus e óculos.:Cancelar.")) {
+	case 1:
+		mes "[Lapelt]";
+		mes "Não subestime os itens só porque são baratos.";
+		mes "São itens bem feitos de todas as partes do mundo.";
+		close2;
+		callshop "para_hat01",1;
+		end;
+	case 2:
+		mes "[Lapelt]";
+		mes "A moda vem de combinar acessórios!";
+		mes "Com itens combinando e um bom chapéu, você pode chegar ao ápice da moda!";
+		close2;
+		callshop "para_hat02",1;
+		end;
+	case 3:
+		mes "[Lapelt]";
+		mes "Adeus.";
+		close;
+	}
+}
+
+
+// Meds for Pharmacists
+// Sign
+paramk,96,33,3	script	[Meds for Pharma]#ptn00	HIDDEN_NPC,{
+	mes "== Remédios para Farmacêuticos ==";
+	mes "Vendemos poções variadas.";
+	mes "";
+	mes "[Days of Operation]";
+	mes "Poções especiais - Seg, Ter, Qui, Sex, Sáb";
+	mes "Poções comuns - todos os dias";
+	close;
+}
+
+// Head Pharmacist
+paramk,100,30,3	script	Head Pharmacist#ptn01	4_F_SCIENCE,{
+	if ($event_paramk > 0) {
+		mes "[Head Pharmacist]";
+		mes "Venenos potentes que vão te nocautear com um gole, remédios que protegerão seu corpo e espírito, remédios que concederão velocidade sobrenatural temporariamente.";
+		mes "Nós temos tudo isso.";
+		mes "'Remédios para Farmacêuticos', aqui para te fornecer a medicação que você precisa.";
+		next;
+		if (select("Remédios, por favor!:Cancelar.") == 1) {
+			mes "[Head Pharmacist]";
+			mes "Isto é o que sobrou atualmente.";
+			mes "Se não houver nada, significa que esgotamos nosso estoque.";
+			mes "Não preparamos poções em grandes lotes. Por favor, entenda.";
+			close2;
+			callshop "para_ptn00";
+			end;
+		}
+		mes "[Head Pharmacist]";
+		mes "Volte se tiver dúvidas sobre os remédios.";
+		close;
+	} else { // holiday
+		mes "[Head Pharmacist]";
+		mes "Oh, você precisa de poções?";
+		mes "Nós não vendemos remédios comuns. Nós focamos em poções especiais.";
+		mes "E hoje é feriado. Estamos preparando novas poções no momento.";
+		next;
+		mes "[Head Pharmacist]";
+		mes "Vou lhe mostrar uma coleção de nossas poções superiores se você voltar amanhã, ok?";
+		mes "Hehe~";
+		close;
+	}
+}
+
+// Johanna
+paramk,106,32,3	script	Johanna#ptn02	4_M_BRZ_JACI,{
+	mes "[Johanna]";
+	mes "Bem-vindo à 'Remédios para Farmacêuticos'.";
+	mes "O que você precisa?";
+	next;
+	switch (select("Ver itens.:Vender itens.:Dias de Funcionamento.:Cancelar.")) {
+	case 1:
+		mes "[Johanna]";
+		mes "Poções de cura aqui.";
+		mes "Boas poções vendidas a um preço acessível.";
+		close2;
+		callshop "para_ptn01",1;
+		end;
+	case 2:
+		mes "[Johanna]";
+		mes "Eu vou comprá-los de você e pagar um bom preço.";
+		mes "Não conte a outras pessoas que paguei tão caro.";
+		close2;
+		callshop "para_ptn01",2;
+		end;
+	case 3:
+		mes "[Johanna]";
+		mes "A maioria das lojas do Grupo Mercado Eden não funciona em feriados.";
+		mes "Algumas lojas permanecem abertas nos feriados, no entanto.";
+		next;
+		mes "[Johanna]";
+		mes "Nossa farmácia oferece poções de cura comuns até mesmo nos feriados, embora não as poções especiais.";
+		mes "Aproveite nossos serviços!";
+		close;
+	case 4:
+		mes "[Johanna]";
+		mes "Adeus.";
+		close;
+	}
+}
+
+// Wyn, independent contractor || Name is too long
+paramk,106,27,3	script	Brewer Wyn#ptn03	4_M_ALCHE_A,{
+	if ($event_paramk > 0) {
+		mes "[Wyn]";
+		mes "..Olá...";
+		mes "Aqui é a 'Remédios para Farmacêuticos'....";
+		mes "Você precisa de Poções Azuis...?";
+		mes "Eu faço 100 delas por dia... sim... apenas eu.";
+		next;
+		if (select("Ver itens.:Cancelar.") == 1) {
+			mes "[Wyn]";
+			mes "Uhhh.. Não tenho certeza se sobrou alguma.";
+			mes "Um momento, por favor. Se não, é porque esgotamos..";
+			mes "Aaaaa... Tenho que fazer mais.";
+			mes "Aaa... O fedor de ervas";
+			mes "Sinto vontade de vomitar... Aaa..";
+			close2;
+			callshop "para_ptn10";
+			end;
+		}
+		mes "[Wyn]";
+		mes "Obrigado.. Volte sempre.";
+		close;
+	} else { // holiday
+		mes "[Wyn]";
+		mes "Uhhh... Dor de cabeça..";
+		mes "Comecei a trabalhar para pagar minha faculdade...";
+		mes "Sinto vontade de vomitar. Cercado pelo cheiro de ervas a semana toda.";
+		mes "Blerch-!";
+		close;
+	}
+}
+
+
+// We-Have-Everything
+// sign
+paramk,108,33,3	script	[WeHaveEverything]#itm00	HIDDEN_NPC,{
+	mes "== Nós-Temos-Tudo ==";
+	mes "Aljavas elementais, Armadilhas, Um kit DIY para venenos.";
+	mes "Disponíveis sempre.";
+	mes "";
+	mes "[Days of Operation]";
+	mes "Qua - feriado!";
+	mes "Sex, Sáb, Dom - Vendas de Evento!";
+	close;
+}
+
+// Is-this-your-lucky-day Napeed#itm01
+paramk,114,30,3	script	Lucky Day Napeed#itm01	4_F_03,{
+	if ($event_paramk > 0) {
+		mes "[Napeed]";
+		mes "Obrigado por visitar durante a venda de fim de semana.";
+		mes "100 pacotes de itens aleatórios, vendidos apenas nos fins de semana! Apenas cem disponíveis!";
+		mes "Você quer alguma coisa?";
+		next;
+		if (select("Ver itens.:Cancelar.")) {
+			mes "[Napeed]";
+			mes "As escolhas populares são: 'Caixa de acessórios', 'Máscara de Presente', 'Álbum Velho', 'Presentes para levar para sua Cidade Natal'...";
+			mes "Se você não vir nada, significa que esgotamos nosso estoque. Volte no próximo fim de semana~";
+			close2;
+			callshop "para_itm00";
+			end;
+		}
+		mes "[Napeed]";
+		mes "Obrigado por frequentar a 'Nós-Temos-Tudo'!";
+		close;
+	} else { // holiday
+		mes "[Napeed]";
+		mes "Bem-vindo, bem-vindo~! Esta loja é a 'Nós-Temos-Tudo'. Tudo o que temos, nós temos, e tudo o que não temos, não temos!";
+		mes "Não estamos abertos no momento.";
+		mes "Hoje é feriado, então estamos preparando poções.";
+		close;
+	}
+}
+
+// Parayo
+paramk,118,31,3	script	Manager Parayo#itm02	4_F_KHELLISIA,{
+	if ($event_paramk > 0) {
+		mes "[Parayo]";
+		mes "Obrigado por vir à 'Nós-Temos-Tudo'.";
+		mes "Vendemos aljavas elementais e armadilhas variadas.";
+		mes "Há algo que você queira?";
+		next;
+		switch (select("Ver aljavas elementais.:Ver armadilhas.:Cancelar.")) {
+		case 1:
+			mes "[Parayo]";
+			mes "Tentamos manter o estoque para atender o maior número possível de clientes.";
+			mes "Mas, infelizmente, às vezes esgotamos nosso estoque.";
+			close2;
+			callshop "para_itm10";
+			end;
+		case 2:
+			mes "[Parayo]";
+			mes "Aqui estão as armadilhas.";
+			mes "A 'Nós-Temos-Tudo' está sempre aqui para você.";
+			close2;
+			callshop "para_itm01",1;
+			end;
+		case 3:
+			mes "[Parayo]";
+			mes "Obrigado por ser um cliente fiel da 'We-Have-Everything'.";
+			mes "Volte sempre.";
+			close;
+		}
+	} else { // holiday
+		mes "[Parayo]";
+		mes "Olá, esta é a 'We-Have-Everything'.";
+		mes "As quartas-feiras são feriados oficiais do Grupo do Mercado de Eden, então não estamos abertos durante este período.";
+		mes "Adeus.";
+		close;
+	}
+}
+
+
+// Malangdonya
+// sign
+paramk,122,33,3	script	[Malangdonya]#seed00	HIDDEN_NPC,{
+	mes "== Malangdonya ==";
+	mes "Itens especiais de Malangdo.";
+	mes "A série Yggdrasil e a série Doram estão aqui!";
+	mes "";
+	mes "[Days of Operation]";
+	mes "Série especial - Seg, Ter, Qui, Sex, Sáb, Dom";
+	mes "Sempre à Venda - Fruta Mastela.";
+	close;
+}
+
+// Whiteberry
+paramk,126,34,3	script	Whiteberry#seed01	4_CAT_SAILOR1,{
+	if ($event_paramk > 0) {
+		mes "[Whiteberry]";
+		mes "Purr~ Bem-vindo.";
+		mes "O grupo Catpaw Mercador tem o prazer de recebê-lo. Vendemos produtos especiais de Malangdo, purr~";
+	} else { // holiday
+		mes "[Whiteberry]";
+		mes "Vendemos Fruta Mastela~";
+		mes "Vendemos certos itens até mesmo em feriados~";
+	}
+	next;
+	switch (select("Ver itens.:Vender itens.:Cancelar.")) {
+	case 1:
+		mes "[Whiteberry]";
+		mes "Fruta Mastela fresca aqui, purr~";
+		mes "Por favor, compre bastante.";
+		mes "Embora nós mesmos as cultivemos, honestamente elas são muito azedas... ah... deixa pra lá.";
+		close2;
+		callshop "para_seed01",1;
+		end;
+	case 2:
+		mes "[Whiteberry]";
+		mes "Purr~ Compramos por um preço razoável.";
+		mes "Por favor, venda itens que sejam úteis.";
+		close2;
+		callshop "para_seed01",2;
+		end;
+	case 3:
+		mes "[Whiteberry]";
+		mes "Purr~ Adeus~";
+		close;
+	}
+}
+
+// Blackphone
+paramk,129,33,3	script	Blackphone#seed02	4_M_MERCAT2,{
+	if ($event_paramk > 0) {
+		mes "[Blackphone]";
+		mes "Miau~ Bem-vindo";
+		mes "Miau~ O grupo Malangdonya Catpaw Mercador dá-lhe as boas-vindas.";
+		mes "Miau~ Vendemos várias colheitas de Malangdo, bem como a série Doram.";
+		next;
+		if (select("Ver itens.:Cancelar.") == 1) {
+			mes "[Blackphone]";
+			mes "Miau~ Aqui estão latas e garrafas Doram, yggdrasil e bagas de espinho.";
+			mes "Miau~ Se você não vir nada, significa que esgotamos o estoque. Volte amanhã.";
+			close2;
+			callshop "para_seed10";
+			end;
+		}
+		mes "[Blackphone]";
+		mes "Miau~ Volte em breve. Oferecemos itens interessantes.";
+		close;
+	} else { // holiday
+		mes "[Blackphone]";
+		mes "Miau~ Nós não abrimos em feriados.";
+		mes "Miau~ Hoje é o dia em que nossos produtos chegam de Malangdo.";
+		mes "Miau~ Se precisar de garrafas ou latas de Doram, ou frutas de Yggdrasil, volte amanhã.";
+		close;
+	}
+}
+
+
+// These comments are spoken continuously when in a specific region
+// Restraurant
+// Jeffrey
+paramk,144,13,3	script	Jeffrey#food00	1_M_MERCHANT,{
+	mes "[Jeffrey]";
+	mes "Todos presumem que eu sou o cozinheiro aqui. Eu não sou! Estou apenas aqui para cobrar a dívida que o dono do restaurante tem comigo!";
+	next;
+	mes "[Jeffrey]";
+	mes "Eu fiz alguns pratos apenas para calar os clientes reclamões, mas isso está saindo do controle!";
+	close;
+
+OnTimer30000:
+	npctalk "Deixe-me deixar isso claro! Eu não sou o cozinheiro! Não fique esperando para ser servido! NÃO farei mais nenhum prato!";
+	initnpctimer;
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+}
+
+// Vincent
+paramk,140,18,3	script	Vincent#food01	4_TOWER_15,{
+	mes "[Vincent]";
+	mes "... O novo cozinheiro faz uma comida incrível, mas aparentemente ele é bem preguiçoso.";
+	close;
+
+OnTimer33000:
+	npctalk "Aceite os pedidos, não fique parado aí na cozinha! Por favor!";
+	initnpctimer;
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+}
+
+// Panel
+paramk,138,19,3	script	Panel#food02	4_TOWER_14,{
+	mes "[Panel]";
+	mes "Este restaurante abriu recentemente, mas tornou-se muito popular depois que contrataram um novo cozinheiro.";
+	close;
+
+OnTimer35000:
+	npctalk "Quem se importa se eu for servido com atraso. Tudo o que importa é o quão deliciosa a comida é.";
+	initnpctimer;
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+}
+
+// Matina
+paramk,136,20,3	script	Matina#food03	4_TOWER_05,{
+	mes "[Matina]";
+	mes "O que foi? Você vai pedir? Esqueça. Olhe para a fila.";
+	close;
+
+OnTimer37000:
+	npctalk "Por que você não está aceitando pedidos? Este lugar não é muito amigável ao consumidor...";
+	initnpctimer;
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+}
+
+// Lucy
+paramk,134,21,3	script	Lucy#food04	4_TOWER_10,{
+	mes "[Lucy]";
+	mes "Ah. Vou esperar um pouco mais, mas se eu ainda não for servido, vou embora.";
+	close;
+
+OnTimer40000:
+	npctalk "Isto é o limite! Não posso esperar mais. Cinco minutos e vou para casa.";
+	initnpctimer;
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+}
+
+// Mara
+paramk,136,16,3	script	Mara#food05	4_TOWER_02,{
+	mes "[Mara]";
+	mes "Ouvi dizer que o dono deste restaurante saiu em uma viagem para uma terra distante, e o novo cozinheiro está administrando este lugar. Ouvi dizer que a habilidade culinária dele é incrível.";
+	close;
+
+OnTimer28000:
+	npctalk "O novo cozinheiro parece ter um temperamento difícil. Acho isso atraente, na verdade.";
+	initnpctimer;
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+}
+
+// Lana
+paramk,133,16,3	script	Lana#food06	4_TOWER_04,{
+	mes "[Lana]";
+	mes "Eu vim há dois dias, ontem e hoje também. A massa que eles servem aqui é incrível. O único problema é que é muito difícil fazer um pedido aqui.";
+	close;
+
+OnTimer25000:
+	npctalk "Meu pedido foi aceito? Estou morrendo de fome aqui!";
+	initnpctimer;
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+}
+
+// Rahoul
+paramk,127,16,3	script	Rahoul#food07	4_TOWER_12,{
+	mes "[Rahoul]";
+	mes "Estou esperando há horas e o cozinheiro ainda não está aceitando pedidos. Ah, estou com tanta fome que posso desmaiar.";
+	close;
+
+OnTimer23000:
+	npctalk "Hunf. Fico me perguntando quanto tempo eles me fariam esperar...";
+	initnpctimer;
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+}
+
+// Nameless Drunk
+paramk,124,20,3	script	Drunk#food08	4_TOWER_06,{
+	mes "[Drunk]";
+	mes "Ei, traga mais vinho...";
+	close;
+
+OnTimer50000:
+	npctalk "Ehhhh.... Vinho.......";
+	initnpctimer;
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+}
+
+// Annoyed Customer
+paramk,127,10,3	script	Annoyed Customer#food09	4_TOWER_07,{
+	mes "[Annoyed Customer]";
+	mes "Vou falar com o dono assim que ele voltar de sua viagem. Diga a ele para demitir seus funcionários ali nos fundos.";
+	mes "Tantos clientes circulando e eles nem sequer atendem ninguém.";
+	close;
+
+OnTimer20000:
+	npctalk "Eu gostaria de poder fazer algo sobre os funcionários.";
+	initnpctimer;
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+}
+
+// Kalin
+paramk,124,11,3	script	Kalin#food10	4_F_01,{
+	mes "[Kalin]";
+	mes "Sou colega de Thrann e gosto de ser faxineiro nesta loja. Posso ser tão preguiçoso quanto quiser e ainda ser pago.";
+	close;
+}
+
+// Thrann
+paramk,121,11,3	script	Thrann#food11	4_F_02,{
+	mes "[Thrann]";
+	mes "Passo horas aqui bebendo café em paz, embora tecnicamente esteja no trabalho, fingindo limpar. Eles nem sequer me expulsam.";
+	close;
+
+OnTimer47000:
+	npctalk "Que confusão! Se eles não estão aceitando pedidos porque há algo errado na cozinha, é compreensível.";
+	initnpctimer;
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+}
+
+// Sobok the Cook
+paramk,127,88,3	script	Sobok the Cook#fd01	4_M_CHNCOOK,{
+	mes "[Sobok]";
+	mes "Chamo-me Sobok, do Sobokru, o restaurante líder do Grupo do Mercado de Eden.";
+	mes "Deseja fazer um pedido? Os pratos custam 3000 Zeny cada - O especial de fim de semana custa 5000 Zeny.";
+	next;
+	switch( select("Sopa de Ganso.:Macarrão.:Especial de Fim de Semana.:Cancelar.") ) {
+	case 1:
+		.@hp = 100;
+		.@sp = 0;
+		.@zeny = 3000;
+		.@talk$ = "Goose Soup shall detoxify and heal you.";
+		break;
+	case 2:
+		.@hp = 0;
+		.@sp = 100;
+		.@zeny = 3000;
+		.@talk$ = "Maccaroni Noodles shall refresh your spirit.";
+		break;
+	case 3:
+		.@hp = 100;
+		.@sp = 100;
+		.@zeny = 5000;
+		.@talk$ = "Ultimate combination for body and mind.";
+		break;
+	case 4:
+		mes "[Sobok]";
+		mes "Apareça quando puder.";
+		close;
+	}
+	mes "[Sobok]";
+	mes .@talk$;
+	next;
+	if (select("Sim:Não") == 2)
+		close;
+	if (Zeny < .@zeny) {
+		mes "[Sobok]";
+		mes "Você acha que pode comer de graça??";
+		close;
+	}
+	mes "[Sobok]";
+	mes "Delicioso, não é?";
+	Zeny -= .@zeny;
+	percentheal(.@hp, .@sp);
+	close;
+}
+
+
+// Cafe Mora
+// Pomegranate
+paramk,75,86,3	script	Pomegranate#mora01	4_F_RAFLE_PK,{
+	mes "[Pomegranate]";
+	mes "Venha, apresse-se!";
+	mes "Pergunta onde é aqui? Cafe Mora, sempre aberto.";
+	mes "Romã, isso e aquilo à venda.";
+	next;
+	switch (select("Verificar Loja.:Por que você fala assim?:Mais alguma coisa?")) {
+	case 1:
+		mes "[Pomegranate]";
+		mes "Temos! Seiva da Vila Mora!";
+		mes "Vendo! Torrada de carne.";
+		mes "Delicioso. Torrada de carne. Muito. Bom~";
+		mes "Romã!";
+		close2;
+		callshop "para_mora01",1;
+		end;
+	case 2:
+		mes "[Pomegranate]";
+		mes "Você não conhece a Língua Mora.";
+		mes "Romã. Conheço. Fala humana.";
+		mes "Romã, incrível.";
+		mes "Estudei, sim. Super difícil!";
+		close;
+	case 3:
+		mes "[Pomegranate]";
+		mes "Venda. Mestre. Sex-Sáb-Dom.";
+		mes "Delicioso. Suco de fruta. Mora é o melhor!";
+		close;
+	}
+}
+
+// Cocktail Master
+paramk,65,86,3	script	Cocktail Master#mora01	4_M_RAFLE_VI,{
+	if ($event_paramk > 1) {
+		mes "[Cocktail Master]";
+		mes "Bem-vindo ao Café Mora.";
+		mes "Oferecemos frutas e bebidas de Mora.";
+		mes "Elas são ^4d4dffRafflechino, Chá de Quadril de Mora, Mandarina de Mora e Baga de Mora^000000. Podemos ficar sem estoque.";
+		next;
+		if (select("Ver itens.:Cancelar.") == 1) {
+			mes "[Cocktail Master]";
+			mes "Se não há nada, significa que esgotamos. Volte amanhã.";
+			close2;
+			callshop "para_mora10";
+			end;
+		}
+		mes "[Cocktail Master]";
+		mes "Somos gratos por você ter vindo nos visitar.";
+		close;
+	} else { // holiday
+		mes "[Cocktail Master]";
+		mes "Deseja comprar Bebidas Mora especiais?";
+		mes "Lamentamos informar que só fazemos bebidas nos fins de semana. Volte na ^4d4dffSex, Sáb, Dom^000000.";
+		mes "Romã, vendo isso e aquilo.";
+		close;
+	}
+}
+
+
+// Forge
+// Hans of the miner coalition
+paramk,49,103,3	script	Hans #ref01	1_M_SIGNMCNT,{
+	if ($event_paramk > 3) {
+		mes "[Hans]";
+		mes "Vendemos minérios de metal extraídos pela nossa coalizão.";
+		mes "Se precisar de ferro, aço, carvão ou minérios de ferro, dê uma olhada.";
+		next;
+		if (select("Ver minérios.:Cancelar.") == 1) {
+			mes "[Hans]";
+			mes "Estamos esgotados se não houver nada aqui.";
+			mes "Mineramos ferro, aço, carvão e minérios de ferro todos os dias, então volte amanhã.";
+			close2;
+			callshop "para_ref10";
+			end;
+		}
+		mes "[Hans]";
+		mes "Nosso estoque de metais básicos como ferro, aço, carvão, etc., é reabastecido todos os dias.";
+		mes "Lembre-se disso.";
+		close;
+	} else { // holiday
+		mes "[Hans]";
+		mes "Estamos fechados hoje.";
+		mes "Estou prestes a visitar as minas.";
+		mes "Volte amanhã se precisar de algo.";
+		close;
+	}
+}
+
+// Dus the Smith
+paramk,53,104,3	script	Dus the Smith#ref02	2_M_OLDBLSMITH,{
+	if ($event_paramk > 3) {
+		mes "[Dus the Smith]";
+		mes "Oridecon, Elunium e Bigornas aqui.";
+		mes "Não muitos, mas feitos à mão, você verá.";
+		next;
+		if (select("Ver itens.:Cancelar.")) {
+			mes "[Dus the Smith]";
+			mes "Não tenho certeza se resta algum.";
+			mes "Por favor, compre se tivermos.";
+			close2;
+			callshop "para_ref20";
+			end;
+		}
+		mes "[Dus the Smith]";
+		mes "Minérios raros são difíceis de encontrar e difíceis de refinar.";
+		mes "É por isso que nosso estoque é limitado.";
+		close;
+	} else { // holiday
+		mes "[Dus the Smith]";
+		mes "Ah, um cliente?";
+		mes "Desculpe, não estamos vendendo minérios hoje.";
+		next;
+		mes "[Dus the Smith]";
+		mes "Eles são difíceis de fazer, sabe.";
+		mes "O que vendemos, você pergunta?";
+		mes "Ahhh, vendemos Oridecon, Elunium e Bigornas aqui.";
+		next;
+		mes "[Dus the Smith]";
+		mes "Se precisar de minérios raros ou bigornas, venha nos fins de semana.";
+		mes "O final da tarde de sábado seria perfeito.";
+		close;
+	}
+}
+
+
+// Rain-of-Gems
+// sign
+paramk,63,98,3	script	[Rain-of-Gems]#jw	HIDDEN_NPC,{
+	mes "? Chuva de Gemas ?";
+	mes "Negociamos ouro e pedras preciosas!";
+	mes "";
+	mes "[Days of Operation]";
+	mes "Estamos fechados em feriados.";
+	close;
+}
+
+// Aurora
+paramk,69,102,3	script	Aurora#jew01	4_F_02,{
+	if ($event_paramk > 0) {
+		mes "[Aurora]";
+		mes "Bem-vindo~";
+		mes "Esta é a 'Chuva de Gemas'. Nossos itens variam de ouro puro a pedras preciosas brutas como pedra-rosa!";
+		mes "Vendemos ouro, opalas, flogopita, muscovita, et cetera.";
+		mes "Eles são raros e difíceis de encontrar, portanto, caros!";
+		next;
+		switch (select("Ver itens.:Vender itens.:Cancelar.")) {
+		case 1:
+			mes "[Aurora]";
+			mes "Se você não vir nada, significa que tudo está esgotado!";
+			mes "Obrigado por visitar~!";
+			close2;
+			callshop "para_jew10";
+			end;
+		case 2:
+			mes "[Aurora]";
+			mes "Compraremos por um preço razoável.";
+			close2;
+			callshop "para_fod01",2;
+			end;
+		case 3:
+			mes "[Aurora]";
+			mes "Negociamos produtos como ouro, flogopita, ágata e turquesa.";
+			mes "Mas pedras preciosas brutas são raras.";
+			next;
+			mes "[Aurora]";
+			mes "Nós as adquirimos das minas, mas o suprimento é limitado~";
+			mes "Nosso estoque é reabastecido toda semana, então se você acertar o momento.. talvez? Haha.";
+			close;
+		}
+	} else { // holiday
+		mes "[Aurora]";
+		mes "Ah, desculpe por você ter vindo hoje.";
+		mes "Nosso Grupo de Mercado não abre às quartas-feiras.";
+		mes "Precisamos de tempo para reabastecer e verificar nossos níveis de inventário e, claro, tempo para descansar.";
+		next;
+		mes "[Aurora]";
+		mes "Se você vier amanhã, ficaríamos felizes em oferecer nossa variedade de produtos que tornarão suas armas mais poderosas!";
+		close;
+	}
+}
+
+
+// The Alchemical Cat
+// sign
+paramk,73,98,3	script	[Alchemical Cat]#alc00	HIDDEN_NPC,{
+	mes "== O Gato Alquímico ==";
+	mes "Reagentes para alquimia e";
+	mes "ingredientes para fazer medicação";
+	mes "Todos vendidos aqui~";
+	mes "";
+	mes "[Days of Operation]";
+	mes "Todos os dias, exceto em feriados";
+	close;
+}
+
+// Dye the Alchemist
+paramk,75,102,3	script	Dye the Alchemist#alc01	4_M_ALCHE_C,{
+	if ($event_paramk > 0) {
+		mes "[Dye the Alchemist]";
+		mes "Reagentes para alquimia!";
+		mes "Vendemos Álcool, Karvodailnirol e Detrimindexta!";
+		mes "Vendemos 20 de cada, por dia!";
+		next;
+		if (select("Ver os reagentes.:Cancelar.")) {
+			mes "[Dye the Alchemist]";
+			mes "Não tenho certeza se resta algum!";
+			mes "Se não, tudo está esgotado!";
+			mes "Eles podem ser um pouco caros, mas o consumo é fácil... bem, você sabe do que estou falando. Sim?";
+			close2;
+			callshop "para_alc10";
+			end;
+		}
+		mes "[Dye the Alchemist]";
+		mes "Venha amanhã, nós preparamos reagentes todos os dias!";
+		close;
+	} else { // holiday
+		mes "[Dye the Alchemist]";
+		mes "Estamos fechados às quartas-feiras~";
+		mes "Volte amanhã!";
+		close;
+	}
+}
+
+// Earl the Alchemist
+paramk,80,104,3	script	Earl the Alchemist#alc02	4_TOWER_16,{
+	if ($event_paramk > 0) {
+		mes "[Earl the Alchemist]";
+		mes "Ingredientes para fazer reagentes, poções,";
+		mes "e pedras elementais para experimentos mágicos, tudo vendido aqui!";
+		next;
+		mes "[Earl the Alchemist]";
+		mes "Não tenho certeza de quanto resta no nosso estoque, já que o suprimento é limitado, mas...";
+		mes "Procurando por algo?";
+		next;
+		switch (select("Ver ingredientes.:Ver pedras elementais.:Cancelar.")) {
+		case 1:
+			mes "[Earl the Alchemist]";
+			mes "Corações Imortais, Caules e muitos outros ingredientes de várias masmorras";
+			mes "oferecidos aqui por um preço razoável";
+			next;
+			mes "[Earl the Alchemist]";
+			mes "Se você não vir nada, significa que tudo está esgotado.";
+			close2;
+			callshop "para_alc20";
+			end;
+		case 2:
+			mes "[Earl the Alchemist]";
+			mes "Poeira Estelar e Farelo Estelar aqui.";
+			mes "Não tenho certeza se ainda temos algum.";
+			close2;
+			callshop "para_alc30";
+			end;
+		case 3:
+			mes "[Earl the Alchemist]";
+			mes "Volte sempre!";
+			mes "Tenha em mente que não abrimos às quartas-feiras, pois é quando recebemos mercadorias!";
+			close;
+		}
+	} else { // holiday
+		mes "[Earl the Alchemist]";
+		mes "Quarta-feira é feriado.";
+		mes "Volte amanhã se houver algo que queira comprar.";
+		close;
+	}
+}
+
+
+// Manbok Groceries
+// sign
+paramk,83,98,3	script	[Manbok Groceries]#fod00	HIDDEN_NPC,{
+	mes "== Mercearia Manbok ==";
+	mes "Oferecemos ingredientes culinários incríveis!";
+	mes "Sangue de Lobo e Caudas de Petite!";
+	mes "";
+	mes "[Days of Operation]";
+	mes "Todos os dias, exceto feriados";
+	close;
+}
+
+// Manbok
+paramk,87,101,3	script	Manbok#fod01	1_M_03,{
+	if ($event_paramk > 0) {
+		mes "[Manbok]";
+		mes "Bem-vindo.";
+		mes "Se você precisa de ingredientes culinários, veio ao lugar certo.";
+		next;
+		switch (select("Ingredientes culinários avançados.:Molhos e especiarias.:Vender itens.:Cancelar.")) {
+		case 1:
+			mes "[Manbok]";
+			mes "Não tenho certeza de quantos ainda temos.";
+			mes "Bem,^4d4dffse você não vir nada, significa que tudo está esgotado^000000.";
+			mes "Sinta-se à vontade para procurar.";
+			close2;
+			callshop "para_fod10";
+			end;
+		case 2:
+			mes "[Manbok]";
+			mes "Molhos e especiarias de todo o mundo..";
+			mes "Eu sou a pessoa certa se você quiser ingredientes culinários.";
+			close2;
+			callshop "para_fod01",1;
+			end;
+		case 3:
+			mes "[Manbok]";
+			mes "Se for um produto com o qual eu trabalho, comprarei de você por um preço razoável.";
+			close2;
+			callshop "para_fod01",2;
+			end;
+		case 4:
+			mes "[Manbok]";
+			mes "Você talvez já saiba, mas vou dizer mesmo assim.";
+			mes "Temos estoques limitados. Nossos ingredientes costumam esgotar se você hesitar por muito tempo.";
+			next;
+			mes "[Manbok]";
+			mes "Só avisando.";
+			close;
+		}
+	} else { // holiday
+		mes "[Manbok]";
+		mes "Não abrimos às quartas-feiras.";
+		mes "Repomos o estoque hoje. Volte amanhã.";
+		close;
+	}
+}
+
+
+// Magical Store, Ma-Ma-Ma-Ma
+// sign
+paramk,93,98,3	script	Ma-Ma-Ma-Ma#mag	HIDDEN_NPC,{
+	mes "== Ma-Ma-Ma-Ma ==";
+	mes "== Loja Mágica ==";
+	mes "Ingredientes e gemas para magia,";
+	mes "Especializada em pergaminhos mágicos";
+	mes "";
+	mes "[Days of Operation]";
+	mes "Alguns itens não são vendidos em feriados";
+	mes "Mas abrimos todos os dias.";
+	close;
+}
+
+// Madoha
+paramk,95,102,3	script	Madoha#mag01	4_M_SAGE_A,{
+	if ($event_paramk > 0) {
+		mes "[Madoha]";
+		mes "Bem-vindo.";
+		mes "Esta é a Ma-Ma-Ma-Ma Loja Mágica, administrada pelos irmãos Ma, ajudando não-Magos a usar magia.";
+		next;
+		mes "[Madoha]";
+		mes "Vendemos pergaminhos mágicos e gemas.";
+		mes "Algo em particular que esteja procurando?";
+		next;
+		if (select("Ver itens.:Cancelar.") == 1) {
+			mes "[Madoha]";
+			mes "Gemas azuis, vermelhas, amarelas. Pergaminhos mágicos como Tempestade de Raios, Nevasca, Fúria da Terra...";
+			mes "^4d4dffSe não houver nada, significa que tudo está esgotado^000000, por favor, esteja ciente.";
+			close2;
+			callshop "para_mag10";
+			end;
+		}
+		mes "[Madoha]";
+		mes "Fazer pergaminhos mágicos é um trabalho interessante.";
+		mes "Pergaminhos mágicos também ajudam muitos aventureiros não-Mago, permitindo que eles usem magias que não conhecem.";
+		next;
+		mes "[Madoha]";
+		mes "Mas há um limite de quantos pergaminhos posso escrever por semana, então às vezes eles acabam.";
+		close;
+	} else { // holiday
+		mes "[Madoha]";
+		mes "Oh, um cliente?";
+		mes "Hoje é feriado. Só vendemos ingredientes mágicos básicos hoje. Sem pergaminhos. Tudo bem?";
+		mes "Temos gemas azuis, pontos e pedras rúnicas..";
+		next;
+		if (select("Ver itens.:Cancelar.") == 1) {
+			mes "[Madoha]";
+			mes "Tentamos manter o estoque o máximo possível, mas podemos ter esgotado.";
+			mes "Se você não vir nada, significa que tudo está esgotado.";
+			close2;
+			callshop "para_mag11";
+			end;
+		}
+		mes "[Madoha]";
+		mes "Gemas amarelas e vermelhas, e pergaminhos mágicos, são vendidos em outros dias,";
+		mes "Então volte amanhã.";
+		close;
+	}
+}
+
+// Magiha
+paramk,100,102,3	script	Magiha#mag02	4_M_SAGE_C,{
+	if ($event_paramk > 0) {
+		mes "[Magiha]";
+		mes "Bem-vindo também.";
+		mes "Ma-Ma-Ma-Ma, a Loja Mágica.";
+		mes "Vendemos poções de resistência para aumentar sua resistência elemental..";
+		next;
+		if (select("Ver itens.:Cancelar.") == 1) {
+			mes "[Magiha]";
+			mes "Nós fabricamos e vendemos quatro tipos de poções de resistência que protegem contra água, vento, terra ou fogo.";
+			mes "Se você não vir nada, significa que todas as poções estão esgotadas.";
+			close2;
+			callshop "para_mag20";
+			end;
+		}
+		mes "[Magiha]";
+		mes "Volte sempre!";
+		close;
+	} else { // holiday
+		mes "[Magiha]";
+		mes "Hoje é feriado! Não fabriquei nenhuma poção hoje...";
+		mes "Volte amanhã.";
+		close;
+	}
+}
+
+// Blessings of Yggdrasil
+// sign
+paramk,103,98,3	script	[Yggdrasil Blessing]#00	HIDDEN_NPC,{
+	mes "== Bênçãos de Yggdrasil ==";
+	mes "Mudando-se em breve";
+	close;
+}
+
+
+// Exotic Plants
+// sign
+paramk,113,98,3	script	[Exotic Plants]#plt	HIDDEN_NPC,{
+	mes "== Plantas Exóticas ==";
+	mes "Plantas venenosas à venda.";
+	mes "Dias de Funcionamento: sempre";
+	close;
+}
+
+// Hwaran
+paramk,116,100,3	script	Hwaran#plt01	4_F_RUSGREEN,{
+	mes "[Hwaran]";
+	mes "Bem-vindo à Plantas Exóticas.";
+	mes "Eu lido com plantas que são chocantemente amargas quando você as mastiga.";
+	mes "Vai dar uma olhada?";
+	next;
+	if (select("Ver itens.:Cancelar.") == 1) {
+		mes "[Hwaran]";
+		mes "Por favor, trate-as com carinho, embora sejam plantas venenosas.";
+		mes "Eu mesmo selecionei esses bebês da fazenda. Muito potentes quando transformadas em remédios.";
+		close2;
+		callshop "para_plt01";
+		end;
+	}
+	mes "[Hwaran]";
+	mes "Muitos clientes frequentes da minha loja são da guilda dos Mercenários, surpreendentemente. Não sei por quê.";
+	mes "Obviamente, eles devem ser pessoas que amam a paz no fundo, já que gostam tanto de plantas.";
+	close;
+}
+
+// You and Me
+// sign
+paramk,133,98,3	script	[You and Me]#unm00	HIDDEN_NPC,{
+	mes "== Você e Eu ==";
+	mes "Especializados em itens para Bichos de Estimação";
+	mes "Apresentamos a você feras que pode montar e companheiros com os quais pode caçar";
+	mes "[Days of Operation]";
+	mes "Sempre!";
+	close;
+}
+
+// Gecko the Trainer
+paramk,124,97,3	script	Gecko the Trainer#unm01	4_M_DESERT,{
+	mes "[Gecko the Trainer]";
+	switch( Class ) {
+	case Job_Rune_Knight:
+	case Job_Rune_Knight_T:
+	case Job_Baby_Rune_Knight:
+		mes "Bem-vindo. Gostaria de alugar um Dragão?";
+		next;
+		if (select("Sim:Não") == 2) {
+			mes "[Gecko the Trainer]";
+			mes "Entendo. Então tenha um ótimo dia.";
+			close;
+		}
+		// if (!getskilllv("RK_DRAGONTRAINING")) {
+		if (!getskilllv("KN_RIDING")) {
+			mes "[Gecko the Trainer]";
+			mes "Por favor, aprenda a montar em um Dragão primeiro.";
+			close;
+		} else if (checkriding() || checkdragon()) {
+			mes "[Gecko the Trainer]";
+			mes "Você já tem um Dragão.";
+			close;
+		} else if (ismounting()) {
+			mes "[Gecko the Trainer]";
+			mes "Por favor, remova sua montaria de aluguel.";
+			close;
+		}
+		setdragon;
+		close;
+
+	case Job_Royal_Guard:
+	case Job_Royal_Guard_T:
+	case Job_Baby_Royal_Guard:
+		mes "Bem-vindo. Gostaria de alugar um Grifo?";
+		next;
+		if (select("Sim:Não") == 2) {
+			mes "[Gecko the Trainer]";
+			mes "Entendo. Então tenha um ótimo dia.";
+			close;
+		}
+		if (!getskilllv("KN_RIDING")) {
+			mes "[Gecko the Trainer]";
+			mes "Por favor, aprenda a montar em um Grifo primeiro.";
+			close;
+		}
+		if (checkriding()) {
+			mes "[Gecko the Trainer]";
+			mes "Você já tem um Grifo.";
+			close;
+		}
+		if (ismounting()) {
+			mes "[Gecko the Trainer]";
+			mes "Por favor, remova sua montaria de aluguel.";
+			close;
+		}
+		setriding;
+		close;
+
+	default:
+		mes "Estou aqui para fornecer criaturas de montaria para Cavaleiros Rúnicos e Guardiões Reais.";
+		close;
+	}
+}
+
+// Tete
+paramk,126,100,3	script	Tamer Tete#unm02	4_M_DST_CHILD,{
+	mes "[Tete]";
+	mes "'Você e Eu', nós amamos animais!";
+	mes "Estamos abertos 24/7 para fornecer todos os itens que seus Bichos de Estimação e animais de companhia precisam!";
+	mes "Você precisa de itens para seu Bicho de Estimação?";
+	next;
+	if (select("Ver itens.:Cancelar.") == 1) {
+		mes "[Tete]";
+		mes "Temos uma seleção diversificada de comida para Bichos de Estimação.";
+		mes "Temos incubadoras também!";
+		close2;
+		callshop "para_unm01",1;
+		end;
+	}
+	mes "[Tete]";
+	mes "Obrigado pela visita~!";
+	close;
+}
+
+// Mist the Hunter
+paramk,130,98,3	script	Mist the Hunter#unm03	4_M_JOB_HUNTER,{
+	if (Upper == 0) .@price = 2500; // Normal Falcon - default price
+	if (Upper == 1) .@price = 2500; // Scarf Falcon
+	if (Upper == 2) .@price = 2500; // Baby Falcon
+	mes "[Mist, the Caçador]";
+	if (BaseJob == Job_Hunter) {
+		if (checkoption(Option_Wug) || checkoption(Option_Wugrider)) {
+			mes "Hum...";
+			mes "Você não pode alugar um Falcão";
+			mes "antes de dispensar seu warg primeiro!";
+			close;
+		}
+		mes "Você precisa de um Falcão?";
+		mes "Você pode alugar sua própria";
+		mes "ave de rapina de confiança por uma";
+		mes "taxa de apenas" + .@price + "zeny~";
+		next;
+		switch (select("Alugar Falcão.:Comprar uma Flauta de Falcão.:Cancelar.")) {
+		case 1:
+			if (checkwug()) {
+				mes "[Mist, the Caçador]";
+				mes "Hum...";
+				mes "Você não pode alugar um Falcão";
+				mes "antes de dispensar seu warg primeiro!";
+				close;
+			}
+			if (Zeny < .@price) {
+				mes "[Mist, the Caçador]";
+				mes "O que é isso?";
+				mes "Você não tem";
+				mes "zeny suficiente?!";
+				mes "É melhor começar a";
+				mes "caçar dinheiro";
+				mes "ao invés de monstros~";
+				close;
+			}
+			if (getskilllv("HT_FALCON") == 0) {
+				mes "[Mist, the Caçador]";
+				mes "Poxa~";
+				mes "Vá aprender como";
+				mes "manejar um Falcão";
+				mes "primeiro! Eu não posso alugar um";
+				mes "para você se não souber";
+				mes "lidar com ele, sabe.";
+				close;
+			}
+			if (checkfalcon()) {
+				mes "[Mist, the Caçador]";
+				mes "Hum...";
+				mes "Você já tem";
+				mes "um Falcão. Ele está";
+				mes "bem ali, não consegue vê-lo?";
+				close;
+			}
+			Zeny -= .@price;
+			setfalcon;
+			close;
+		case 2:
+			mes "[Mist, the Caçador]";
+			mes "Com uma Flauta mágica, você pode chamar seu Falcão de qualquer lugar!";
+			next;
+			mes "[Mist, the Caçador]";
+			mes "É maravilhoso, não é? Ha ha ha!";
+			next;
+			mes "[Mist, the Caçador]";
+			mes "Por que estou vendendo essas Flautas de Falcão?";
+			mes "É porque não tenho a menor ideia de como funcionam.";
+			mes "Ha ha ha!";
+			next;
+			mes "[Mist, the Caçador]";
+			mes "É claro que você precisará da habilidade ^ff0000Adestrar Falcão^000000.";
+			mes "Eu não tenho a habilidade, então não sei como lidar com Falcões.";
+			mes "Pelo visto, talvez eu nunca tenha um Falcão.";
+			next;
+			mes "[Mist, the Caçador]";
+			mes "Mas eu não posso te dar um de graça!";
+			mes "Tenho que ganhar dinheiro já que também preciso comer!";
+			next;
+			mes "[Mist, the Caçador]";
+			mes "Se você precisar de uma Flauta de Falcão, venderei por 12.500 zeny. Ou isso é caro demais?";
+			next;
+			if (eaclass()&EAJL_THIRD) {
+				mes "[Mist, the Caçador]";
+				mes "Para Sentinelas, no entanto, tenho um preço especial de 10.000 zeny!";
+				.@price = 10000;
+				next;
+			} else
+				.@price = 12500;
+			if (select("Não comprar.:Comprar uma Flauta de Falcão.") == 1) {
+				mes "[Mist, the Caçador]";
+				mes "Que pena. Se precisar de uma, volte aqui!";
+				close;
+			}
+			if (Zeny >= .@price) {
+				if (countitem(12848) >= 1) { // Falcon_Flute
+					mes "[Mist, the Caçador]";
+					mes "Pelo que vejo, você já tem uma Flauta de Falcão!";
+					mes "Não se preocupe, meu jovem amigo, uma vez que você tenha comprado a Flauta de Falcão, não precisará comprar outra,";
+					mes "já que a Flauta de Falcão não desaparece ao ser usada, não é ótimo?";
+					close;
+				}
+				mes "[Mist, the Caçador]";
+				mes "Aqui, pegue esta flauta.";
+				mes "Com ela, você pode assobiar para seu Falcão de qualquer lugar.";
+				Zeny -= .@price;
+				getitem(12848, 1); // Falcon_Flute
+				next;
+				mes "[Mist, the Caçador]";
+				mes "Apenas um lembrete.";
+				mes "Você precisa da habilidade ^ff0000Adestrar Falcão^000000 para usá-la!";
+				close;
+			}
+			mes "[Mist, the Caçador]";
+			mes "Sinto muito, mas você não tem dinheiro suficiente para comprar uma Flauta de Falcão, por favor volte quando tiver mais dinheiro!";
+			close;
+
+		case 3:
+			mes "[Mist the Hunter]";
+			mes "Ver outros itens em nossa loja.";
+			mes "Talvez estejamos oferecendo novos itens para Bichos de Estimação em breve~";
+			mes "Hahahaha!";
+			close;
+		}
+	} else {
+		mes "Jovem tolo!";
+		mes "Falcões só podem";
+		mes "ser usados por Caçadores";
+		mes "e Arquilanceiros, entendeu?";
+		mes "...He he, está com inveja?";
+		close;
+	}
+}
+
+// exit
+paramk,97,5,0	warp	paramk#ex	1,1,moc_para01,106,35

@@ -1,0 +1,146 @@
+//===== rAthena Script ======================================= 
+//= Falcon & Wolf Flute Trader
+//===== By: ================================================== 
+//= Masao, Muad_Dib, Ziu
+//===== Current Version: ===================================== 
+//= 1.2a
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Sells Falcon Flute and Wolf Flute.
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [Masao]
+//= 1.1 Added Baby Hunter and Baby Ranger check. bugreport:5728 [Masao]
+//= 1.2 Added Wolf Flute trader, optimized. [Euphy]
+//= 1.2a Fixed some conditions. [Euphy]
+//============================================================ 
+
+// Falcon Flute :: falcon_flute
+//============================================================
+-	script	Falcon Flute Trader::fflute	-1,{
+	mes "[Falcon Flute Trader]";
+	if (BaseJob == Job_Hunter) {
+		mes "Você precisa de um Falcão?";
+		mes "Com uma Flauta mágica, você pode chamar seu Falcão de qualquer lugar!";
+		next;
+		mes "[Falcon Flute Trader]";
+		mes "É maravilhoso, não é? Ha ha ha!";
+		next;
+		mes "[Falcon Flute Trader]";
+		mes "Por que estou vendendo essas Flautas de Falcão?";
+		mes "É porque não faço ideia de como elas funcionam.";
+		mes "Ha ha ha!";
+		next;
+		mes "[Falcon Flute Trader]";
+		mes "Claro, você precisará da habilidade ^ff0000Adestrar Falcão^000000.";
+		mes "Eu não tenho a habilidade, então não sei como lidar com Falcões.";
+		mes "Do jeito que as coisas estão, talvez eu nunca tenha um Falcão.";
+		next;
+		mes "[Falcon Flute Trader]";
+		mes "Mas não posso te dar uma de graça!";
+		mes "Preciso ganhar dinheiro, já que também preciso comer!";
+		next;
+		mes "[Falcon Flute Trader]";
+		mes "Se você precisa de uma Flauta de Falcão, eu vendo por 12.500 zenys. Ou isso é muito caro?";
+		next;
+		if (eaclass()&EAJL_THIRD) {
+			mes "[Falcon Flute Trader]";
+			mes "Para Sentinelas, porém, tenho um preço especial de 10.000 zenys!";
+			set .@price,10000;
+			next;
+		} else
+			set .@price,12500;
+		if(select("Não comprar:Comprar uma Flauta de Falcão") == 1) {
+			mes "[Falcon Flute Trader]";
+			mes "Que pena. Se precisar de uma, volte aqui!";
+			close;
+		}
+		if (Zeny >= .@price) {
+			if (countitem(12848) >= 1) {
+				mes "[Falcon Flute Trader]";
+				mes "Pelo que vejo, você já tem uma Flauta de Falcão!";
+				mes "Não se preocupe, meu jovem amigo, uma vez que você tenha comprado a Flauta de Falcão, não precisará fazer isso de novo";
+				mes "já que a Flauta de Falcão não desaparece ao ser usada, não é ótimo?";
+				close;
+			}
+			mes "[Falcon Flute Trader]";
+			mes "Aqui, pegue esta flauta.";
+			mes "Com ela, você pode assobiar para seu Falcão de qualquer lugar.";
+		  	set Zeny, Zeny - .@price;
+			getitem 12848,1; //Falcon_Flute
+			next;
+			mes "[Falcon Flute Trader]";
+			mes "Apenas um lembrete.";
+			mes "Você precisa da habilidade ^ff0000Adestrar Falcão^000000 para usá-la!";
+			close;
+		}
+		mes "[Falcon Flute Trader]";
+		mes "Sinto muito, mas você não tem zenys suficientes para comprar uma Flauta de Falcão. Por favor, volte quando tiver mais dinheiro!";
+		close;
+	}
+	if (BaseJob == Job_Archer) {
+		mes "Olá, jovem!";
+		mes "No momento não posso te ajudar,";
+		mes "mas por que você não volta quando se tornar um grande Caçador e aprender a lidar com Falcões adequadamente?";
+		close;
+	}
+	mes "Não é um dia lindo hoje?";
+	close;
+}
+hu_in01,386,306,3	duplicate(fflute)	Falcon Flute Trader#fft	51
+pay_arche,91,134,3	duplicate(fflute)	Falcon Flute Trader#fft2	51
+
+// Wolf Flute :: job_ranger
+//============================================================
+tur_dun01,89,170,5	script	Expert Flute Crafter	59,{
+	if (Class == Job_Ranger || Class == Job_Ranger_T || Class == Job_Baby_Ranger) {
+		if (countitem(6124)) {
+			mes "[Expert Flute Crafter]";
+			mes "A Flauta de Lobo que você tem foi feita por mim, com madeira.";
+			mes "Você pode voltar aqui e me procurar se perder sua Flauta de Lobo!";
+			next;
+			mes "[Expert Flute Crafter]";
+			mes "A flauta só pode ser feita por mim.";
+			mes "É muito simples para mim fazer outra flauta!!";
+			close;
+		}
+		mes "[Expert Flute Crafter]";
+		mes "Você precisa de alguma coisa?";
+		mes "Uma nova Flauta de Lobo?";
+		next;
+		switch(select("Por favor, faça uma nova Flauta de Lobo para mim.:Não.")) {
+		case 1:
+			if (countitem(7150) && Zeny >= 100000) {
+				mes "[Expert Flute Crafter]";
+				mes "Você trouxe todos os materiais?";
+				mes "Uau! Todos os seus materiais não estão nada mal!";
+				mes "Isso é o suficiente.";
+				next;
+				mes "[Expert Flute Crafter]";
+				mes "Aqui está a nova Flauta de Lobo.";
+				mes "Espero que esteja pronto para usá-la.";
+				delitem 7150,1; //Bamboo_Cut
+				set Zeny, Zeny-100000;
+				getitem 6124,1; //Wolf's_Flute
+				close;
+			}
+			mes "[Expert Flute Crafter]";
+			mes "Se você quer fabricar uma nova Flauta de Lobo, preciso que me traga ^4d4dff1 Corte de Bambu e 100.000 zenys.^000000";
+			next;
+			mes "[Expert Flute Crafter]";
+			mes "^4d4dffCorte de Bambu pode ser obtido de Kapha ou Karakasa.^000000";
+			close;
+		case 2:
+			mes "[Expert Flute Crafter]";
+			mes "Se você não invoca um lobo, então você não precisa da Flauta de Lobo.";
+			mes "Você pode voltar aqui e me encontrar se mudar de ideia.";
+			mes "Não é verdade?";
+			close;
+		}
+	}
+	mes "[Expert Flute Crafter]";
+	mes "Eehh? Você não é um Sentinela?";
+	mes "Então esta flauta é totalmente inútil para você!";
+	close;
+}

@@ -1,0 +1,469 @@
+//===== rAthena Script =======================================
+//= Guild Dungeon Daily Quest Coin Exchange
+//===== Description: =========================================
+//= [Official Conversion]
+//= NPCs reward from Guild Dungeon's Daily Missions.
+//===== Changelogs: ==========================================
+//= 1.0 First Version. [Cydh]
+//= 1.1 Minified the script. [Secretdataz]
+//= 1.2 Script cleanup. [aleos]
+//= 1.3 Minified Kvasir's ring part. [Lemongrass]
+//============================================================
+
+// Templates
+-	script	#GldDungeonReward	-1,{
+	if (checkweight(1304,3) == 0) {
+		mes "Você tem itens demais para prosseguir com a missão.";
+		mes "Por favor, alivie sua carga e tente novamente.";
+		close;
+	}
+
+	mes "É uma máquina que troca Moedas Comemorativas da Guerra do Emperium por itens especiais.";
+	mes "Selecione o item desejado e insira a quantidade necessária de moedas.";
+	next;
+	while(1) {
+		switch(select("Ver itens trocáveis","Trocar por Certificados de Investimento","Trocar por Bons Medicamentos","Trocar por Presentes","Anel de Kvasir","Sair")) {
+			case 1:
+				mes "[ClickClick MeowMeow-GX]";
+				mes "Obrigado por escolher a ClickClick MiauMiau!";
+				mes "Aqui está uma lista de itens que você pode comprar com Moedas Comemorativas da Guerra do Emperium.";
+				next;
+				mes "= Sangue de Gigante de Gelo =";
+				mes "Novo medicamento desenvolvido pelo esforço conjunto da União de Alquimia de 3 países. Concede ao usuário poderes sobrenaturais por um curto período.";
+				mes "^4d4dffDrena 3000 de HP, mas aumenta o dano físico e mágico causado a outros jogadores em 100% por 10 segundos.";
+				mes "Nível Necessário: 80 ou superior^000000";
+				next;
+				mes "= Núcleo de Golem =";
+				mes "Novo medicamento desenvolvido pelo esforço conjunto da União de Alquimia de 3 países. Concede ao usuário poderes sobrenaturais por um curto período.";
+				mes "^4d4dffDrena 300 de SP, mas reduz o dano recebido de outros jogadores em 50% por 10 segundos.";
+				mes "Nível Necessário: 80 ou superior^000000";
+				next;
+				setarray .@status$, "Stun", "Petrify", "Frozen", "Sleep", "Curse", "Silence", "Blind";
+				.@size = getarraysize(.@status$);
+				for(.@i = 0; .@i < .@size; ++.@i) {
+					mes "= Lágrima de Fada (" + .@status$[.@i] + ") =";
+					mes "Uma poção desenvolvida por Vicent, um gênio farmacêutico. Concede ao usuário poderes sobrenaturais por um curto período.";
+					mes "^4d4dffDrena 3000 de HP, mas permite ao usuário tornar-se imune ao status" + (.@i == 1 ? "Petrificação" : .@status$[.@i]) + "por 10 segundos.^000000";
+					next;
+				}
+				mes "= Boina de Plumas[1] =";
+				mes "Um chapéu confortável, na cor azul-celeste, decorado com penas.";
+				mes "^4d4dffDEFM + 1, reduz o dano recebido de outros jogadores em 10%.";
+				mes "Slot de Carta [1], disponível para todas as classes, exceto Aprendizes.";
+				next;
+				mes "= Boina de Plumas Visual =";
+				mes "Um chapéu confortável, na cor azul-celeste, decorado com penas.";
+				mes "^4d4dffEquipamento Visual, disponível para todas as classes.^000000";
+				next;
+				mes "Esta é a fim da lista.";
+				break;
+
+			case 2:
+				mes "[ClickClick MeowMeow-GX]";
+				mes "Nós trocamos ^4d4dff1Certificado de Investimento^000000 do Grupo Mercador Pata de Gato por ^4d4dff10Moedas Comemorativas!^000000";
+				mes "Você deseja realizar a troca?";
+				next;
+				switch(select("Sim.","Ver outros itens.")) {
+					case 1:
+						mes "[ClickClick MeowMeow-GX]";
+						if (countitem(6615) > 9) {
+							mes "Obrigado por usar nosso serviço, miau!";
+							delitem 6615,10; // Siege_Guild_Coin
+							getitem 6489,1; // Cats_Invest_Certif
+						} else {
+							mes "Você não tem moedas suficientes para Certificados de Investimento.";
+							mes "1 Certificado de Investimento vale 10 moedas.";
+						}
+						break;
+
+					case 2:
+						mes "[ClickClick MeowMeow-GX]";
+						mes "Você decidiu ver outros itens.";
+						break;
+				}
+				break;
+
+			case 3:
+				mes "[ClickClick MeowMeow-GX]";
+				mes "Você selecionou a lista de bons medicamentos!";
+				mes "Todos os itens listados abaixo custam ^4d4dff300 moedas cada^000000, miau!";
+				next;
+				switch(select("Sangue de Gigante de Gelo", "Núcleo de Golem", "Lágrima de Fada (Atordoar)", "Lágrima de Fada (Congelar)", "Lágrima de Fada (Sono)", "Lágrima de Fada (Maldição)", "Lágrima de Fada (Petrificar)", "Lágrima de Fada (Silenciar)", "Lágrima de Fada (Cegueira)", "Ver outros itens.")) {
+					case 1:
+						callsub S_PurchaseMedicine, "Blood of Frost Giant", 12874;
+						break;
+					case 2:
+						callsub S_PurchaseMedicine, "Core of Golem", 12875;
+						break;
+					case 3:
+						callsub S_PurchaseMedicine, "Fairy's Tear(Stun)", 12876;
+						break;
+					case 4:
+						callsub S_PurchaseMedicine, "Fairy's Tear(Frozen)", 12878;
+						break;
+					case 5:
+						callsub S_PurchaseMedicine, "Fairy's Tear(Sleep)", 12879;
+						break;
+					case 6:
+						callsub S_PurchaseMedicine, "Fairy's Tear(Curse)", 12880;
+						break;
+					case 7:
+						callsub S_PurchaseMedicine, "Fairy's Tear(Petrify)", 12877;
+						break;
+					case 8:
+						callsub S_PurchaseMedicine, "Fairy's Tear(Silence)", 12881;
+						break;
+					case 9:
+						callsub S_PurchaseMedicine, "Fairy's Tear(Blind)", 12882;
+						break;
+					case 10:
+						mes "Você decidiu ver outros itens.";
+						break;
+				}
+				break;
+
+			case 4:
+				mes "[ClickClick MeowMeow-GX]";
+				mes "Você selecionou a lista de bons presentes!";
+				mes "O preço de cada item está listado separadamente, miau!";
+				next;
+				switch(select("Álbum de Cartas Antigo - 500 Moedas", "Caixa de Presente Roxa - 300 Moedas", "Caixa de Presente Azul - 100 Moedas", "Caixa de Joias - 500 Moedas", "Máscara Envolta - 500 Moedas", "Boina de Plumas","Sair")) {
+					case 1:
+						callsub S_PurchaseGift, "Old Card Album", 616, 500;
+						break;
+					case 2:
+						callsub S_PurchaseGift, "Old Purple box", 617, 300;
+						break;
+					case 3:
+						callsub S_PurchaseGift, "Old Blue Box", 603, 100;
+						break;
+					case 4:
+						callsub S_PurchaseGift, "Jewelry Box", 12106, 500;
+						break;
+					case 5:
+						callsub S_PurchaseGift, "Wrapped Mask", 12107, 500;
+						break;
+					case 6:
+						mes "[ClickClick MeowMeow-GX]";
+						mes "Você selecionou uma linda boina decorada com penas!";
+						mes "Temos Boinas de Plumas e Boinas de Plumas Visuais nas quais você pode instalar cartas, miau!";
+						next;
+						switch(select("Boina de Plumas[1] - 1500 Moedas","Boina de Plumas Visual - 800 Moedas","Comprar uma Boina","Ver outros itens.")) {
+							case 1:
+								mes "[ClickClick MeowMeow-GX]";
+								mes "É uma boina de penas na qual você pode instalar cartas!";
+								mes "Ela custa 1500 Moedas Comemorativas. Você deseja comprá-la?";
+								next;
+								switch(select("Sim!","Não!")) {
+									case 1:
+										mes "[ClickClick MeowMeow-GX]";
+										if (countitem(6615) > 1499) {
+											mes "Obrigado por usar nosso serviço, miau!";
+											delitem 6615,1500; // Siege_Guild_Coin
+											getitem 18755,1; // Feather_Beret_
+										} else {
+											mes "Você precisa de 1500 Moedas Comemorativas para comprar o item selecionado.";
+											mes "Você decidiu ver outros itens.";
+										}
+										break;
+
+									case 2:
+										mes "[ClickClick MeowMeow-GX]";
+										mes "Você decidiu ver outros itens.";
+										break;
+								}
+								break;
+
+							case 2:
+								mes "[ClickClick MeowMeow-GX]";
+								mes "É uma boina de penas visual!";
+								mes "Ela custa 800 Moedas Comemorativas. Você deseja comprá-la?";
+								next;
+								switch(select("Sim!","Não!")) {
+									case 1:
+										mes "[ClickClick MeowMeow-GX]";
+										if (countitem(6615) > 799) {
+											mes "Obrigado por usar nosso serviço, miau!";
+											delitem 6615,800; // Siege_Guild_Coin
+											getitem 19585,1; // C_Feather_Beret
+										} else {
+											mes "Você precisa de 800 Moedas Comemorativas para comprar o item selecionado.";
+											mes "Você decidiu ver outros itens.";
+										}
+										break;
+
+									case 2:
+										mes "[ClickClick MeowMeow-GX]";
+										mes "Você decidiu ver outros itens.";
+										break;
+								}
+								break;
+
+							case 3:
+								mes "[ClickClick MeowMeow-GX]";
+								mes "Os preparativos para mudar a cor das Boinas de Plumas visuais estão em andamento.";
+								mes "Por favor, volte mais tarde!";
+								mes "Deixe-me mostrar outros itens!";
+								break;
+
+							case 4:
+								mes "[ClickClick MeowMeow-GX]";
+								mes "Você decidiu ver outros itens.";
+								break;
+						}
+						break;
+
+					case 7:
+						mes "[ClickClick MeowMeow-GX]";
+						mes "Não use a máquina de troca.";
+						break;
+				}
+				break;
+
+			case 5:
+				mes "[ClickClick MeowMeow-GX]";
+				mes "Esta é a categoria dos Anéis de Kvasir.";
+				mes "Você pode ver a descrição de cada anel e comprar um aqui.";
+				next;
+				switch(select("Trocar por Anel de Kvasir (Azul)", "Trocar por Anel de Kvasir (Vermelho)", "Trocar por Anel de Kvasir (Verde)", "Trocar por Anel de Kvasir (Marrom)", "Sair")) {
+					case 1:
+						mes "= Anel de Kvasir (Azul) =";
+						mes "Um anel que, segundo rumores, está repleto com o poder de Kvasir, um deus Sábio.";
+						mes "^4d4dffSPM + 30. Habilidade 'Passo Sombrio' Nv 1 disponível^000000";
+						mes "Acessório. Disponível para todas as classes. Nível Necessário: 1";
+						next;
+						mes "[ClickClick MeowMeow-GX]";
+						mes "O Anel de Kvasir (Azul) pode ser comprado com ^4d4dff20 Sangue de Gigante de Gelo e 20 Núcleos de Golem^000000";
+						mes "ou ^4d4dff1 Anel de Kvasir de cor diferente e 10 Moedas Comemorativas!^000000";
+						mes "Você deseja comprá-lo?";
+						next;
+						switch(select("Pagar com Sangue e Núcleo","Pagar com Anel de Kvasir (Vermelho)","Pagar com Anel de Kvasir (Verde)","Pagar com Anel de Kvasir (Marrom)","Sair")) {
+							case 1:
+								mes "[ClickClick MeowMeow-GX]";
+								if ((countitem(12874) > 19) & (countitem(12875) > 19)) {
+									mes "Anel de Kvasir (Azul) comprado com sucesso.";
+									delitem 12874,20; // Frost_Giant_Blood
+									delitem 12875,20; // Golem_Stone
+									getitem 2951,1; // Kvasir_Ring_Blue
+								} else {
+									mes "Parece que o Anel de Kvasir (Azul) pode ser comprado com ^4d4dff20 Sangue de Gigante de Gelo e 20 Núcleos de Golem.^000000";
+									mes "Você não tem itens suficientes para concluir a compra. Ver outros itens.";
+								}
+								break;
+
+							case 2:
+								callsub S_Kvasir, "Kvasir's Ring (Red)", 2952, "Kvasir's Ring (Blue)", 2951;
+								break;
+
+							case 3:
+								callsub S_Kvasir, "Kvasir's Ring (Green)", 2953, "Kvasir's Ring (Blue)", 2951;
+								break;
+
+							case 4:
+								callsub S_Kvasir, "Kvasir's Ring (Brown)", 2954, "Kvasir's Ring (Blue)", 2951;
+								break;
+
+							case 5:
+								mes "[ClickClick MeowMeow-GX]";
+								mes "Você decidiu ver outros itens.";
+								break;
+						}
+					break;
+
+					case 2:
+						mes "= Anel de Kvasir (Vermelho) =";
+						mes "Um anel que, segundo rumores, está repleto com o poder de Kvasir, um deus Sábio.";
+						mes "^4d4dffSPM + 30. Habilidade 'Petala da Peônia' Nv 1 disponível^000000";
+						mes "Acessório. Disponível para todas as classes. Nível Necessário: 1";
+						next;
+						mes "[ClickClick MeowMeow-GX]";
+						mes "O Anel de Kvasir (Vermelho) pode ser adquirido com ^4d4dff1 Anel de Kvasir e 10 Moedas Comemorativas.^000000";
+						mes "Qual dos itens a seguir você deseja trocar pelo Anel de Kvasir (Vermelho)?";
+						next;
+						switch(select("Anel de Kvasir (Azul)","Anel de Kvasir (Verde)","Anel de Kvasir (Marrom)","Sair")) {
+							case 1:
+								callsub S_Kvasir, "Kvasir's Ring (Blue)", 2951, "Kvasir's Ring (Red)", 2952;
+								break;
+
+							case 2:
+								callsub S_Kvasir, "Kvasir's Ring (Green)", 2953, "Kvasir's Ring (Red)", 2952;
+								break;
+
+							case 3:
+								callsub S_Kvasir, "Kvasir's Ring (Brown)", 2954, "Kvasir's Ring (Red)", 2952;
+								break;
+
+							case 4:
+								mes "[ClickClick MeowMeow-GX]";
+								mes "Você decidiu ver outros itens.";
+								break;
+						}
+						break;
+
+					case 3:
+						mes "= Anel de Kvasir (Verde) =";
+						mes "Um anel que dizem estar repleto do poder de Kvasir, um deus Sábio.";
+						mes "^4d4dffSP Máx + 100. Nível 1 de 'Sada Ear' disponível.^000000";
+						mes "Acessório. Disponível para todas as classes. Nível Necessário: 1";
+						next;
+						mes "[ClickClick MeowMeow-GX]";
+						mes "O Anel de Kvasir (Verde) pode ser adquirido com ^4d4dff1 Anel de Kvasir e 10 Moedas Comemorativas.^000000";
+						mes "Qual dos itens a seguir você deseja trocar pelo Anel de Kvasir (Vermelho)?";
+						next;
+						switch(select("Anel de Kvasir (Azul)","Anel de Kvasir (Vermelho)","Anel de Kvasir (Marrom)","Sair")) {
+							case 1:
+								callsub S_Kvasir, "Kvasir's Ring (Blue)", 2951, "Kvasir's Ring (Green)", 2953;
+								break;
+
+							case 2:
+								callsub S_Kvasir, "Kvasir's Ring (Red)", 2952, "Kvasir's Ring (Green)", 2953;
+								break;
+
+							case 3:
+								callsub S_Kvasir, "Kvasir's Ring (Brown)", 2954, "Kvasir's Ring (Green)", 2953;
+								break;
+
+							case 4:
+								mes "[ClickClick MeowMeow-GX]";
+								mes "Você decidiu ver outros itens.";
+								break;
+						}
+						break;
+
+					case 4:
+						mes "= Anel de Kvasir Marrom =";
+						mes "Um anel que dizem estar repleto do poder de Kvasir, um deus Sábio.";
+						mes "^4d4dffSP Máx + 100. Nível 1 de 'Dust of Galaxy' disponível.^000000";
+						mes "Acessório. Disponível para todas as classes. Nível Necessário: 1";
+						next;
+						mes "[ClickClick MeowMeow-GX]";
+						mes "O Anel de Kvasir (Marrom) pode ser adquirido com ^4d4dff1 Anel de Kvasir e 10 Moedas Comemorativas.^000000";
+						mes "Qual dos itens a seguir você deseja trocar pelo Anel de Kvasir (Vermelho)?";
+						next;
+						switch(select("Anel de Kvasir (Azul)","Anel de Kvasir (Vermelho)","Anel de Kvasir (Verde)","Sair")) {
+							case 1:
+								callsub S_Kvasir, "Kvasir's Ring (Blue)", 2951, "Kvasir's Ring (Brown)", 2954;
+								break;
+
+							case 2:
+								callsub S_Kvasir, "Kvasir's Ring (Red)", 2952, "Kvasir's Ring (Brown)", 2954;
+								break;
+
+							case 3:
+								callsub S_Kvasir, "Kvasir's Ring (Green)", 2953, "Kvasir's Ring (Brown)", 2954;
+								break;
+
+							case 4:
+								mes "[ClickClick MeowMeow-GX]";
+								mes "Você decidiu ver outros itens.";
+								break;
+						}
+						break;
+
+					case 5:
+						mes "[ClickClick MeowMeow-GX]";
+						mes "Você decidiu ver outros itens.";
+						break;
+				}
+				break;
+
+			case 6:
+				mes "[ClickClick MeowMeow-GX]";
+				mes "Não usar a máquina de troca.";
+				break;
+		}
+	}
+	close;
+
+S_PurchaseMedicine:
+	mes "[ClickClick MeowMeow-GX]";
+	mes "Você está comprando 1" + getarg(0) + ", miau!";
+	mes "Tem certeza?";
+	next;
+	switch(select("Sim!","Não!")) {
+		case 1:
+			mes "[ClickClick MeowMeow-GX]";
+			if (countitem(6615) > 299) {
+				mes "Obrigado por usar nosso serviço, miau!";
+				delitem 6615,300; // Siege_Guild_Coin
+				getitem getarg(1),1;
+			} else
+				mes "Um bom remédio vale 300 moedas comemorativas que você juntou com tanto esforço...";
+			break;
+
+		case 2:
+			mes "[ClickClick MeowMeow-GX]";
+			mes "Você decidiu ver outros itens.";
+			break;
+	}
+	return;
+	
+S_PurchaseGift:
+	.@itemid = getarg(1);
+	.@price = getarg(2);
+	mes "[ClickClick MeowMeow-GX]";
+	mes "Você está comprando 1" + getarg(0) + ", miau!";
+	mes "Tem certeza?";
+	next;
+	switch(select("Sim!","Não!")) {
+		case 1:
+			mes "[ClickClick MeowMeow-GX]";
+			if (countitem(6615) >= .@price) {
+				mes "Obrigado por usar nosso serviço, miau!";
+				delitem 6615,.@price; // Siege_Guild_Coin
+				getitem .@itemid,1;
+			} else {
+				mes "Você precisa de" + .@price + "Moedas Comemorativas para comprar o item selecionado.";
+				mes "Você decidiu ver outros itens.";
+			}
+			break;
+
+		case 2:
+			mes "[ClickClick MeowMeow-GX]";
+			mes "Você decidiu ver outros itens.";
+			break;
+	}
+	return;
+
+S_Kvasir:
+	.@fromid = getarg(1);
+	.@fromname$ = getarg(2);
+	.@toid = getarg(3);
+	.@toname$ = getarg(4);
+	
+	mes "[ClickClick MeowMeow-GX]";
+	// One of Kvasir's Rings and 10 Siege_Guild_Coin
+	if( countitem( .@fromid ) > 0 && countitem( 6615 ) > 9 ){
+		mes "Você tem" + .@fromname$ + ".";
+		mes "Você quer trocar isso por" + .@toname$ + "?";
+		next;
+		mes "[ClickClick MeowMeow-GX]";
+		switch( select( "Sim!:Sair" ) ){
+			case 1:
+				// Recheck the items once more
+				if( countitem( .@fromid ) > 0 && countitem( 6615 ) > 9 ){
+					mes "Você trocou" + .@fromname$ + "por" + .@toname$ + ".";
+					delitem .@fromid, 1;
+					delitem 6615, 10; // Siege_Guild_Coin
+					getitem .@toid, 1;
+					close;
+				}
+				break;
+			case 2:
+				mes "Você decidiu ver outros itens.";
+				return;
+		}
+	}
+	mes "Você precisa de 1" + .@fromname$ + "e 10 Moedas Comemorativas para completar a compra.";
+	return;
+}
+
+// Main NPCs
+alde_gld,180,163,3	duplicate(#GldDungeonReward)	ClickClick MeowMeow-GX#1	2_VENDING_MACHINE1
+pay_gld,196,176,5	duplicate(#GldDungeonReward)	ClickClick MeowMeow-GX#2	2_VENDING_MACHINE1
+gef_fild13,198,246,3	duplicate(#GldDungeonReward)	ClickClick MeowMeow-GX#3	2_VENDING_MACHINE1
+sch_gld,266,119,5	duplicate(#GldDungeonReward)	ClickClick MeowMeow-GX#4	2_VENDING_MACHINE1
+aru_gld,89,204,5	duplicate(#GldDungeonReward)	ClickClick MeowMeow-GX#5	2_VENDING_MACHINE1
+prt_gld,107,155,3	duplicate(#GldDungeonReward)	ClickClick MeowMeow-GX#6	2_VENDING_MACHINE1
+te_prt_gld,107,155,3	duplicate(#GldDungeonReward)	ClickClick MeowMeow-GX#7	2_VENDING_MACHINE1
+te_alde_gld,180,163,3	duplicate(#GldDungeonReward)	ClickClick MeowMeow-GX#8	2_VENDING_MACHINE1

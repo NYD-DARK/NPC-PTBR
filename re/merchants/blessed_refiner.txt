@@ -1,0 +1,191 @@
+//===== rAthena Script ======================================= 
+//= Blessed Refiner
+//===== Description: =========================================
+//= [Official Conversion]
+//= Refiners that use Blessed ores to refine equipment.
+//= Upon failure, the equipment is not destroyed. The success
+//= rate is identical to that for Enriched ores.
+//= - "Blacksmith Dister" only refines from +6~12.
+//= NOTE: This NPC is currently disabled on official servers.
+//===== Changelog: ===========================================
+//= 1.0 First version. [Euphy]
+//= 1.1 Removed re-roll behavior. [Secret]
+//============================================================
+
+// Main NPC :: new_smelting612
+//============================================================
+-	script	::BlacksmithDister	-1,{
+	disable_items;
+	mes "[Blacksmith Dister]";
+	mes "Nesta sociedade altamente competitiva, precisamos ser diferentes para sobreviver!";
+	mes "Eu só refino equipamentos entre os níveis +6 e +12.";
+	next;
+	mes "[Blacksmith Dister]";
+	mes "Vou precisar de ^ff9999Oridecon Abençoado^000000 para armas e ^ff9999Elunium Abençoado^000000 para armaduras.";
+	mes "Refinos falhos ^FF0000não quebrarão nem reduzirão o nível de refino^000000.";
+	next;
+	mes "[Blacksmith Dister]";
+	mes "E então? Você quer refinar?";
+	next;
+	setarray .@indices[1], EQI_HEAD_TOP, EQI_ARMOR, EQI_HAND_L, EQI_HAND_R, EQI_GARMENT, EQI_SHOES, EQI_ACC_L, EQI_ACC_R, EQI_HEAD_MID, EQI_HEAD_LOW;
+	for(set .@i,1; .@i<=10; set .@i,.@i+1)
+		set .@menu$, .@menu$ + ( getequipisequiped(.@indices[.@i]) ? getequipname(.@indices[.@i]) : F_getpositionname(.@indices[.@i]) +"-[Desequipado]" ) +":";
+	set .@part, .@indices[ select(.@menu$) ];
+	if (!getequipisequiped(.@part)) {
+		mes "[Blacksmith Dister]";
+		switch(.@part) {
+		case EQI_HEAD_TOP:
+			mes "Eu sou um Ferreiro, não um cabeleireiro.";
+			break;
+		case EQI_ARMOR:
+			mes "Com meu martelo, farei de você uma estrela no céu.";
+			break;
+		case EQI_HAND_L:
+		case EQI_HAND_R:
+			mes "Fazer mãos artificiais não é minha especialidade.";
+			break;
+		case EQI_GARMENT:
+			mes "Traga o item para que eu possa refiná-lo!";
+			break;
+		case EQI_SHOES:
+			mes "De onde vem esse cheiro estranho?";
+			break;
+		case EQI_ACC_L:
+		case EQI_ACC_R:
+			mes "Onde está o acessório?";
+			break;
+		case EQI_HEAD_MID:
+			mes "O que você quer que eu refine?";
+			break;
+		case EQI_HEAD_LOW:
+			mes "Hã? O que você quer que eu faça?";
+			break;
+		}
+		close;
+	}
+	if (!getequipisenableref(.@part)) {
+		mes "[Blacksmith Dister]";
+		mes "Este item não pode ser refinado.";
+		close;
+	}
+	.@equip_id = getequipid(.@part);
+	.@itemtype = getiteminfo( .@equip_id, ITEMINFO_TYPE );
+	.@equip_refine = getequiprefinerycnt(.@part);
+	setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+
+	if (.@equip_refine < 6 || .@equip_refine > 12) {
+		mes "[Blacksmith Dister]";
+		mes "Este equipamento foi refinado para"+.@equip_refine+". Eu só lido com itens com níveis de refino de +6 a +12!";
+		close;
+	}
+	if( .@itemtype == IT_ARMOR ){
+		.@equip_lv = getequiparmorlv( .@part );
+		.@type$ = "Armor";
+
+		switch(.@equip_lv) {
+			case 1:
+				set .@price,20000;
+				set .@material,6439; //Unbreakable_Def
+				break;
+			default:
+				// TODO:
+				close;
+		}
+	}else if( .@itemtype == IT_WEAPON ){
+		.@equip_lv = getequipweaponlv( .@part );
+		.@type$ = "Weapon";
+
+		switch( .@equip_lv ){
+			case 1:
+				set .@price,1000;
+				set .@material,6438; //Unbreakable_Weap
+				break;
+			case 2:
+				set .@price,2000;
+				set .@material,6438; //Unbreakable_Weap
+				break;
+			case 3:
+				set .@price,20000;
+				set .@material,6438; //Unbreakable_Weap
+				break;
+			case 4:
+				set .@price,40000;
+				set .@material,6438; //Unbreakable_Weap
+				break;
+			default:
+				// TODO:
+				close;
+		}
+	}else{
+		// TODO:
+		close;
+	}
+	set .@ore$,"^ff9999Blessed "+.@type$+" Ore^000000";
+	mes "[Blacksmith Dister]";
+	mes "Este"+.@type$+"foi refinado para"+.@equip_refine+". Para refiná-lo, preciso de"+.@ore$+"e uma taxa de refino de"+callfunc("F_InsertComma",.@price)+"zeny.";
+	mes "Você deseja prosseguir?";
+	next;
+	if(select("Sim:Não") == 2) {
+		mes "[Blacksmith Dister]";
+		mes "Estou ocupado, não brinque comigo!";
+		close;
+	}
+	if (getequippercentrefinery(.@part) < 100) {
+		mes "[Blacksmith Dister]";
+		mes "Este"+.@type$+"foi refinado muitas vezes. Embora não desapareça em caso de falha, o"+.@ore$+"desaparecerá!";
+		next;
+		mes "[Blacksmith Dister]";
+		mes "Claro, a taxa de refino não será devolvida! Você quer continuar?";
+		next;
+		if(select("Sim:Não") == 2) {
+			mes "[Blacksmith Dister]";
+			mes "Ótimo. Eu ficaria triste se falhasse também.";
+			close;
+		}
+	}
+	if (countitem(.@material) == 0 || Zeny < .@price) {
+		mes "[Blacksmith Dister]";
+		mes "Materiais insuficientes.";
+		mes "Para refinar um nível"+.@equip_lv+" "+.@type$+", eu preciso de"+.@ore$+"e uma taxa de refino de"+callfunc("F_InsertComma",.@price)+"zeny.";
+		close;
+	}
+	delitem .@material,1;
+	set Zeny, Zeny-.@price;
+
+	// anti-hack
+	if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3]) || callfunc("F_IsEquipRefineHack", .@part, .@equip_refine))
+		close;
+
+	mes "[Blacksmith Dister]";
+	mes "Tac! Tac! Tac!";
+	if (getequippercentrefinery(.@part, true) > rand(100)) {
+		specialeffect EF_BLESSING;
+		successrefitem .@part;
+		next;
+		mes "[Blacksmith Dister]";
+		mes "Hahahahahaha!!!";
+		next;
+		mes "[Blacksmith Dister]";
+		mes "O refino foi um enorme sucesso~ Hahaha!";
+		close;
+	}
+	specialeffect EF_CURSEATTACK;
+	specialeffect2 EF_SUI_EXPLOSION;
+	next;
+	emotion (!rand(5))?ET_ANGER:ET_HUK;
+	mes "[Blacksmith Dister]";
+	mes "Meu Deus do céu!!!!";
+	next;
+	mes "[Blacksmith Dister]";
+	mes "Oh! Embora tenha sido abençoado por"+.@ore$+"para manter o equipamento...";
+	next;
+	mes "[Blacksmith Dister]";
+	mes "Meu humor fica pior quando eu falho!!";
+	close;
+}
+prt_in,52,56,3	duplicate(BlacksmithDister)	Blacksmith Dister#prt	826
+payon,148,172,3	duplicate(BlacksmithDister)	Blacksmith Dister#pay	826
+alberta_in,20,56,3	duplicate(BlacksmithDister)	Blacksmith Dister#alb	826
+yuno_in01,175,18,3	duplicate(BlacksmithDister)	Blacksmith Dister#yuno	826
+ein_in01,26,82,3	duplicate(BlacksmithDister)	Blacksmith Dister#ein	826
+lhz_in02,280,15,3	duplicate(BlacksmithDister)	Blacksmith Dister#lhz	826

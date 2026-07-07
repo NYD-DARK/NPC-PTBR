@@ -1,0 +1,144 @@
+//===== rAthena Script =======================================
+//= Merchant WoE TE
+//===== Description: =========================================
+//= [Official Conversion]
+//= Merchants and Rental merchant template for WoE TE
+//	(duplicates in re/woe_te/<castle file>).
+//===== Changelogs: ==========================================
+//= 1.0 First Version. [Capuche]
+//============================================================
+
+te_prt_gld,114,153,4	shop	TE Potion Merchant#prt	4_M_TELEPORTER,11557:-1,11558:-1
+te_alde_gld,215,184,4	duplicate(TE Potion Merchant#prt)	TE Potion Merchant#alde	4_M_TELEPORTER
+
+// Rental Items manager
+//=======================================
+-	script	rental_woe_TE	-1,{
+	mes "[Rental Items Manager]";
+	if (jobcanentermap("te_prtcas01") == 1) {
+		.@list01$ = "[Shield] [Armor] [Garment]";
+		.@list02$ = "[Helmet] [Accessory] [Shoes]";
+		.@list03$ = "[Sword] [Spear] [Axe] [Katar]";
+		.@list04$ = "[Mace] [Staff] [Fist] [Book]";
+		.@list05$ = "[Bow] [Gun] [Musical Instrument] [Whip]";
+
+		mes "^4d4dffOferecemos vários equipamentos de batalha que você pode usar nas regiões de Gloria e Kafragarten, com base nas regras da Guerra do Emperium TE.^000000";
+		next;
+		mes "[Rental Items Manager]";
+		mes "^4d4dffOferecemos períodos de aluguel de 1 dia gratuitamente.^000000";
+		mes "No entanto, os itens alugados fornecidos ^4d4dffnão serão eficazes fora da área da Guerra do Emperium TE.^000000";
+		next;
+		mes "[Rental Items Manager]";
+		mes "^4d4dffVocê precisa estar no nível 40 ou superior para alugar um item.^000000";
+		mes "Selecione o equipamento desejado.";
+		next;
+		while(1) {
+			switch( select( "Ver equipamentos de aluguel", .@list01$, .@list02$, .@list03$, .@list04$, .@list05$, "Sair" ) ) {
+			case 1:
+				mes "[Rental Items Manager]";
+				mes "Aqui está uma lista de itens de aluguel e descrições.";
+				close2;
+				readbook 11059,1;// WoE_TE_Rental_List
+				end;
+			case 2:
+				callsub( S_Rent, "shields, armors, and garments",
+					 2178,"TE Siege Buckler",		// TE_Woe_Buckler
+					 2179,"TE Siege Shield",		// TE_Woe_Shield
+					 2180,"TE Siege Magic Guard",	// TE_Woe_Magic_Guard
+					15062,"TE Siege Long Coat",		// TE_Woe_Coat
+					15063,"TE Siege Mail",			// TE_Woe_Chain_Mail
+					15064,"TE Siege Magic Coat",	// TE_Woe_Mage_Coat
+					20702,"TE Siege Muffler",		// TE_Woe_Muffler
+					20703,"TE Siege Cape",			// TE_Woe_Manteau
+					20704,"TE Siege Magic Cape" );	// TE_Woe_Magic_Manteau
+				break;
+			case 3:
+				callsub( S_Rent, "helmets, accessories, and shoes",
+					2496,"TE Siege Shoes",			// TE_Woe_Shoes
+					2497,"TE Siege Boots",			// TE_Woe_Boots
+					2498,"TE Siege Magic Sandals",	// TE_Woe_Magic_Sandal
+					2944,"TE Guardian Ring",		// TE_Ring_Of_Protection
+					2945,"TE Ring of Wrath",		// TE_Ring_Of_Rage
+					2946,"TE Ring of Rebellion",	// TE_Ring_Of_Defiance
+					18732,"TE Siege Cap",			// TE_Woe_Cap
+					18733,"TE Siege Bone Helm",		// TE_Woe_Bone_Helm
+					18734,"TE Siege Magic Eyes" );	// TE_Woe_Magic_Eyes
+				break;
+			case 4:
+				callsub( S_Rent, "swords, spears, axes, and katars",
+					1299,"TE Siege Katar",				// TE_Woe_Katar
+					1399,"TE Siege Two-Handed Axe",		// TE_Woe_Two_Handed_Axe
+					1495,"TE Siege Lance",				// TE_Woe_Lance
+					13317,"TE Siege Magic Shuriken",	// TE_Woe_Huuma
+					21006,"TE Siege Two-Handed Sword",	// TE_Woe_Two_Hand_Sword
+					1319,"TE Siege Axe",				// TE_Woe_Axe
+					1437,"TE Siege Pike",				// TE_Woe_Pike
+					13083,"TE Siege Knife",				// TE_Woe_Knife
+					13439,"TE Siege Sword" );			// TE_Woe_Sword
+				break;
+			case 5:
+				callsub( S_Rent, "staves, maces, books, and fists",
+					2019,"TE Siege Two-Handed Staff",// TE_Woe_Two_Hand_Staff
+					1591,"TE Siege Book",			// TE_Woe_Book
+					1667,"TE Siege Staff",			// TE_Woe_Staff
+					1834,"TE Siege Fist",			// TE_Woe_Fist
+					16025,"TE Siege Mace" );		// TE_Woe_Mace
+				break;
+			case 6:
+				callsub( S_Rent, "bows, guns, musical instruments, and whips",
+					18118,"TE Siege Bow",			// TE_Woe_Bow
+					13117,"TE Siege Pistol",		// TE_Woe_Pistol
+					13184,"TE Siege Rifle",			// TE_Woe_Rifle
+					13185,"TE Siege Gatling Gun",	// TE_Woe_Gatling
+					13186,"TE Siege Shotgun",		// TE_Woe_Shotgun
+					13187,"TE Siege Grenade Gun",	// TE_Woe_Grenade
+					1932,"TE Siege Guitar",			// TE_Woe_Guitar
+					1987,"TE Siege Rope" );			// TE_Woe_Rope
+				break;
+			case 7:
+				mes "[Rental Items Manager]";
+				mes "Volte sempre que desejar.";
+				close;
+			}
+		}
+	}
+	mes "Oferecemos vários equipamentos de batalha que você pode usar nas regiões de Gloria e Kafragarten, com base nas regras da Guerra do Emperium TE.";
+	next;
+	mes "[Rental Items Manager]";
+	mes "Sinto muito, mas sua classe não tem permissão para participar da Guerra do Emperium TE.";
+	mes "Receio que não posso oferecer nenhum item para você.";
+	close;
+
+S_Rent:
+	mes "[Rental Items Manager]";
+	if (checkweight(1304,3) == 0) {
+		mes "Você já possui muitos itens para receber um novo equipamento de aluguel.";
+		mes "Por favor, organize seus itens e tente novamente.";
+		close;
+	}
+	mes "Nós temos"+ getarg(0) +"pronto para você.";
+	mes "Selecione o item desejado.";
+	next;
+	for ( .@i = 1; .@i < getargcount(); .@i += 2 ) {
+		if (rentalcountitem(getarg(.@i)) > isequippedcnt(getarg(.@i)))// don't count item equipped
+			.@menu$ = .@menu$ + "^4d4dff"+ getarg(.@i+1) +"- Adquirido^000000:";
+		else
+			.@menu$ = .@menu$ + getarg(.@i+1) + ":";
+	}
+	.@total_item = (getargcount() -1) /2;
+	.@s = select( .@menu$ + ":Ver outros itens" ) -1;
+	if (.@s <= .@total_item) {
+		.@index = .@s *2 +1;
+		mes "[Rental Items Manager]";
+		if (rentalcountitem(getarg(.@index)) > isequippedcnt(getarg(.@index)))
+			mes "Você já possui"+ getarg(.@index+1) +".";
+		else {
+			mes "Aqui está"+ getarg(.@index+1) +".";
+			mes "^4d4dffEste item é eficaz pelas próximas 24 horas^000000 e, após isso, ele expira.";
+			rentitem getarg(.@index),86400;
+		}
+		mes "Você precisa de mais alguma coisa?";
+		next;
+	}
+	return;
+}

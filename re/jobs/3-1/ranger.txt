@@ -1,0 +1,1813 @@
+//===== rAthena Script ======================================= 
+//= Ranger Job Quest
+//===== By: ================================================== 
+//= Muad_Dib
+//===== Current Version: ===================================== 
+//= 1.7
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job change Quest from Hunter / Sniper -> Ranger.
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [Masao]
+//= 1.1 Updated SC_STONE duration from 2 Seconds to 2 Minutes
+//=     and fixed Mercenary check.
+//= 1.2 Fixed first quest so that when a false poring got killed
+//=     it decreases the total points by 1, commented the SC_STONE
+//=     part until M_DESERT_WOLF_B Mercenary is fully working.
+//= 1.3 Fixed waves not being announced and counted [Elias]
+//= 1.3a Little beauty fix, changed break; to next; . [Masao]
+//= 1.4 Some optimization. [Euphy]
+//= 1.5 Updated script, optimized. [Euphy]
+//= 1.6 Added GM management function. [Euphy]
+//= 1.7 Added VIP features. [Euphy]
+//============================================================
+
+tur_dun01,156,36,5	script	Survival Instructor#jr01	59,{
+	mes "[Instrutor de Sobrevivência, Resgate]";
+	if (BaseJob == Job_Hunter) {
+		if (job_ranger01 < 1) {
+			mes "Eeeeei~ ha!";
+			mes "O tempo está realmente ótimo.";
+			next;
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "O que manda?";
+			mes "Os monstros aqui são um";
+			mes "pouco difíceis, então tome cuidado.";
+			next;
+			if(select("Eu vim aqui para me tornar um Sentinela.:Eu só vim para dar uma olhada.") == 2) {
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Ah é?";
+				mes "O tempo está realmente ótimo. Vamos tirar uma foto para comemorar?";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Não?";
+				mes "Então apenas dê uma olhada silenciosamente e depois volte.";
+				close;
+			}
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Hã?";
+			mes "Como você me encontrou?";
+			next;
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Bem, é uma nota positiva que você me reconheça... deixe-me ver.";
+			next;
+			if (BaseLevel < 99 || JobLevel < 50) {
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Não.";
+				mes "Posso dizer só de olhar para você que parece ser inexperiente.";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Tenha mais orgulho do seu trabalho e ganhe mais experiência, e então, quando você crescer como um Caçador ou um Atirador de Elite e puder fazer uma aura por conta própria, por favor, volte novamente.";
+				close;
+			}
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Ok!";
+			mes "Parece que você tem";
+			mes "experiência suficiente.";
+			next;
+			if (VIP_SCRIPT) {
+				callfunc "VIP_Third_Class";
+				set job_ranger01,1;
+				setquest 8254;
+				next;
+			}
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Bom.";
+			mes "Primeiro de tudo, deixe-me lhe dizer as qualificações de mudança de classe para ser um Sentinela.";
+			next;
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Eu já verifiquei a primeira qualificação, de que você tem experiência suficiente para fazer uma aura como Caçador ou Atirador de Elite.";
+			next;
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Para a segunda qualificação, para julgar a habilidade de alguém com precisão, você precisa aliviar seu corpo e mente.";
+			next;
+			if (Class == Job_Hunter || Class == Job_Baby_Hunter) {
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Ah, espere, antes disso.";
+				mes "Quando você muda sua classe para Sentinela a partir de um Caçador,";
+				mes "você não terá nenhuma chance de aprender as habilidades de um Atirador de Elite, isso seria um problema?";
+				next;
+				switch(select("Vou pensar melhor sobre isso.:Eu já quero ser um Sentinela.")) {
+				case 1:
+					mes "[Instrutor de Sobrevivência, Resgate]";
+					mes "Tudo bem.";
+					mes "Leve o tempo que precisar para pensar, se estiver tudo bem, volte depois.";
+					close;
+				case 2:
+					mes "[Instrutor de Sobrevivência, Resgate]";
+					mes "Tudo certo.";
+					mes "Então você está pronto.";
+					next;
+				}
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Bem, vamos continuar nossa conversa.";
+				mes "Antes de mudar para Sentinela, mesmo que tenha alcançado o nível mais alto de Caçador, esta não é a melhor avaliação de suas habilidades.";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Então, para verificar suas habilidades, precisarei avaliar suas habilidades puras.~";
+				next;
+			} else {
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Antes de mudar para Sentinela, mesmo que tenha alcançado o nível mais alto de Atirador de Elite, esta não é a melhor avaliação de suas habilidades.";
+				next;
+				mes "[Survival Instructor]";
+				mes "Então, para verificar suas habilidades, precisarei avaliar suas habilidades puras.~";
+				next;
+			}
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Para fazer isso, você precisa estar purificado de corpo e alma.";
+			mes "Certifique-se de que seu peso seja igual a '0' para continuar.";
+			set job_ranger01,1;
+			setquest 8254;
+			close2;
+			warp "alberta",117,57;
+			end;
+		} else if (job_ranger01 == 1) {
+			if (Weight < 1) {
+				mes "Uau, você voltou tão rápido.";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Ok, agora falarei sobre os requisitos para fazer o teste para se tornar um Sentinela.";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Todos os testes para se tornar um Sentinela serão feitos com meios práticos.";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Haverá um teste escrito?";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Por que você quer um?";
+				mes "A parte mais importante deste teste é o teste de sua experiência no campo de batalha.";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Portanto, o que eu peço a você é que prove seu poder de sobrevivência.";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Eu quero ver o verdadeiro poder de sobrevivência, mesmo que você caia e apanhe.";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Se você for bem-sucedido neste teste de poder de sobrevivência, receberá a primeira qualificação.";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Bem, vamos conversar sobre os detalhes quando você obtiver a qualificação para fazer o teste.";
+				mes "Quando quiser fazer o teste de poder de sobrevivência, por favor, fale comigo novamente.";
+				set job_ranger01,2;
+				changequest 8254,8255;
+				close;
+			}
+			mes "Antes de mudar para Sentinela, precisarei avaliar suas habilidades puras.";
+			next;
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Para fazer isso, você precisa estar purificado de corpo e alma.";
+			mes "Certifique-se de que seu peso seja igual a 0 para continuar.";
+			close;
+		} else if (job_ranger01 == 2) {
+			if (Weight < 1) {
+				mes "Hum. O fato de você ter falado comigo novamente significa que está determinado a mudar para Sentinela e fazer o teste de poder de sobrevivência.";
+				next;
+				if(select("Vou pensar mais sobre isso:Vou fazer o teste") == 1) {
+					mes "[Instrutor de Sobrevivência, Resgate]";
+					mes "Prepare-se muito bem antes de fazer este teste.";
+					next;
+					mes "[Instrutor de Sobrevivência, Resgate]";
+					mes "Pense bem e volte depois.";
+					close;
+				}
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Se você está determinado, então não há nada pelo que esperar.";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Vou explicar de forma simples.";
+				mes "O que vou lhe fornecer são 10 Asas de Mosca, 500 Flechas e 1 Arco de teste.";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Pegue os itens fornecidos e tudo o que você tem a fazer para o teste de poder de sobrevivência é ^0000ffir para a área noroeste da Ilha das Tartarugas e encontrar o Instrutor Teardrop^000000.";
+				mes "Fácil, não é?";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Lembre-se de que você não está usando nenhum equipamento, então tome cuidado com os monstros.";
+				mes "Pronto para começar?";
+				next;
+				if(select("Espere um segundo:Sim, estou pronto") == 1) {
+					mes "[Instrutor de Sobrevivência, Resgate]";
+					mes "Que tipo de preparação pode ser tão demorada?";
+					next;
+					mes "[Instrutor de Sobrevivência, Resgate]";
+					mes "Volte quando estiver absolutamente pronto.";
+					close;
+				}
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Bem, então vamos começar.";
+				mes "Não há tempo para hesitar.";
+				mes "Dê o seu melhor.";
+				set job_ranger01,3;
+				changequest 8255,8256;
+				getitem 1703,1; //Bow__
+				getitem 12323,10; //N_Fly_Wing
+				getitem 1750,500; //Arrow
+				close;
+			}
+			mes "Eu sabia.";
+			next;
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Por que você trouxe tanta coisa?";
+			mes "É bom que você se esforce na mudança de classe, mas o segredo deste teste é avaliar nossas verdadeiras habilidades...";
+			next;
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Se o seu peso não estiver 0, você não poderá fazer o teste.";
+			close;
+		} else if (job_ranger01 == 3) {
+			mes "Hum?";
+			mes "O que você está esperando?";
+			next;
+			if(select("Diga-me a missão novamente.:Eu só queria conversar.") == 1) {
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Ah, sim.";
+				mes "Esta é a mentalidade de uma pessoa que vai fazer o teste?";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Fique alerta e escute.";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Pegue os itens fornecidos e tudo o que você precisa fazer para o teste de sobrevivência é ^0000ffir até a área noroeste da Ilha das Tartarugas e encontrar o Instrutor Teardrop^000000.";
+				mes "Não é tão fácil?";
+				next;
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Como você não está usando nenhum equipamento, tome cuidado com os monstros no campo.";
+				mes "Bem, vamos começar?";
+				next;
+				if(select("Espere um minuto:Eu vou começar") == 1) {
+					mes "[Instrutor de Sobrevivência, Resgate]";
+					mes "Que tipo de preparação pode ser tão demorada?";
+					next;
+					mes "[Instrutor de Sobrevivência, Resgate]";
+					mes "Volte quando estiver absolutamente pronto.";
+					close;
+				}
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Ok, vamos começar.";
+				mes "Não há tempo para hesitar, então dê o seu melhor.";
+				close;
+			}
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Acho que você não tem tempo para isso.";
+			next;
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Apresse-se e termine o teste.";
+			close;
+		} else if (job_ranger01 > 3 && job_ranger01 < 7) {
+			mes "Você ainda está vagando por aqui?";
+			next;
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Bem, se você é uma pessoa tranquila, não é da minha conta, mas se você se decidiu, não seria melhor fazer o teste prático em um minuto e me encontrar depois de se tornar um Sentinela?";
+			close;
+		} else if (job_ranger01 == 7) {
+			mes "Oh, ei. O que você está fazendo aqui?";
+			next;
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Como você desapareceu de repente, o Mestre Sentinela estava procurando por você.";
+			mes "Você quer ir até ele agora?";
+			next;
+			switch(select("Não vá:Vá")) {
+			case 1:
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Você está ocupado com outra coisa?";
+				close;
+			case 2:
+				mes "[Instrutor de Sobrevivência, Resgate]";
+				mes "Então eu vou te enviar, fique bem.";
+				close2;
+				warp "job3_rang01",89,38;
+				end;
+			}
+		}
+		mes "Oh, ei. Quem é este?";
+		next;
+		mes "[Instrutor de Sobrevivência, Resgate]";
+		mes "Ei, você está ótimo.";
+		mes "Parabéns por se tornar um Sentinela~";
+		next;
+		mes "[Instrutor de Sobrevivência, Resgate]";
+		mes "Da próxima vez, tente não intimidar outras pessoas.";
+		close;
+	}
+	if (Class == Job_Ranger || Class == Job_Ranger_T || Class == Job_Baby_Ranger) {
+		if (job_ranger01 == 8) {
+			mes "Ho. Quem é este~";
+			mes "Você realmente parece talentoso...";
+			next;
+			mes "[Instrutor de Sobrevivência, Resgate]";
+			mes "Da próxima vez, tente não intimidar outras pessoas.";
+			close;
+		}
+	}
+	mes "Ha ~ ha.";
+	mes "O tempo está realmente ótimo.";
+	next;
+	mes "[Instrutor de Sobrevivência, Resgate]";
+	mes "E aí?";
+	mes "Os monstros aqui são um";
+	mes "pouco difíceis, então tome cuidado.";
+	close;
+}
+
+tur_dun01,91,169,3	script	Test Instructor#jr02	732,{
+	mes "[Instrutor de Teste, Teardrop]";
+	if (BaseJob == Job_Hunter) {
+		if (job_ranger01 < 3) {
+			mes "Pronto para ir!!!!!!";
+			next;
+			mes "[Instrutor de Teste, Teardrop]";
+			mes "Huh? Quem é você? O que está fazendo aqui, seu Arqueiro Bebê.";
+			next;
+			mes "[Instrutor de Teste, Teardrop]";
+			mes "Posso te dizer uma coisa?";
+			mes "Se você quer mudar de classe para Sentinela, primeiro fale com o Instrutor de Sobrevivência Resgate.";
+			next;
+			mes "[Instrutor de Teste, Teardrop]";
+			mes "Então ele lhe dirá os requisitos para o teste de mudança de classe!!!";
+			close;
+		} else if (job_ranger01 == 3) {
+			mes "Pronto para ir!!!!!!";
+			next;
+			mes "[Instrutor de Teste, Teardrop]";
+			mes "Huh? Quem é você? O que está fazendo aqui, seu Arqueiro Bebê.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Esse seu entra e sai está me irritando, você poderia parar com isso?!";
+			next;
+			if(select("Sentinela teste prático?:Vim para o teste.") == 1) {
+				mes "[Test Instructor, Teardrop]";
+				mes "O quê, o que você está...?";
+				next;
+				mes "[Test Instructor, Teardrop]";
+				mes "O que você acha que está olhando?";
+				next;
+				mes "[Test Instructor, Teardrop]";
+				mes "Como você pode ser um Sentinela se nem consegue reconhecer o que está à sua frente? Saia daqui!";
+				close;
+			}
+			mes "[Test Instructor, Teardrop]";
+			mes "Ho, ter chegado até aqui significa que você passou no primeiro teste de sobrevivência.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Mas, você tem certeza de que não houve trapaça?";
+			next;
+			if (Weight > 500) {
+				mes "[Test Instructor, Teardrop]";
+				mes "Viu só, eu sabia.";
+				next;
+				mes "[Test Instructor, Teardrop]";
+				mes "Tendo feito o teste normalmente, você teria ajustado seu peso para 0 e carregado os itens fornecidos pelo Resgate!";
+				mes "Mas, como é que você pesa tanto?";
+				next;
+				mes "[Test Instructor, Teardrop]";
+				mes "Considero isso uma trapaça!";
+				mes "Venha me ver novamente!";
+				close2;
+				warp "tur_dun01",162,33;
+				end;
+			}
+			mes "[Test Instructor, Teardrop]";
+			mes "Hmm. É duvidoso...";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Não sinto nenhum sinal de trapaça. Por enquanto...";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Antes de fazer um teste prático, quero comer alguma coisa.";
+			mes "Você sabe que a situação da comida nem sempre é boa em uma terra estrangeira.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Sei que a maneira mais básica de sobreviver pode ser aumentar a força do próprio corpo. Mas acho mais fácil enviar aventureiros.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Então, mate ^0000ff1 Cauda de Dragão^000000 e traga-me ^0000ff1 Asa de Libélula^000000.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Se você ficar sem os itens fornecidos, não poderemos mais apoiá-lo, então tome cuidado.";
+			mes "Considere isso como uma extensão do teste de poder de sobrevivência.";
+			set job_ranger01,4;
+			changequest 8256,8257;
+			close;
+		} else if (job_ranger01 == 4) {
+			if (checkquest(8257,HUNTING) == 2) {
+				if (countitem(7064) > 0) {
+					mes "Oh! Oh! Uau!";
+					mes "Você trouxe! Deixe-me ver...";
+					next;
+					mes "[Test Instructor, Teardrop]";
+					mes "Hmmmm, ainda está quente?!";
+					mes "Você não parece estar ferido em lugar nenhum...";
+					next;
+					mes "[Test Instructor, Teardrop]";
+					mes "Bom, por enquanto você está qualificado para o teste prático.";
+					next;
+					mes "[Test Instructor, Teardrop]";
+					mes "Bem, antes de explicar, você poderia me dar aquela asa de Libélula?";
+					mes "Você já ouviu o ditado: \"em qualquer situação, comer vem primeiro\"?";
+					delitem 7064,1; //Dragon_Fly_Wing
+					set job_ranger01,5;
+					changequest 8257,8258;
+					close;
+				}
+			}
+			mes "O que você está fazendo aí? Parado com um olhar vazio.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Estou com fome.";
+			mes "Antes de fazer o teste prático, quero comer alguma coisa.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Sei que a maneira mais básica de sobreviver pode ser aumentar a força do próprio corpo. Mas acho mais fácil enviar aventureiros.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Então, mate ^0000ff1 Cauda de Dragão^000000 e traga-me ^0000ff1 Asa de Libélula^000000.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Se você ficar sem os itens fornecidos, não poderemos mais apoiá-lo, então tome cuidado.";
+			mes "Considere isso como uma extensão do teste de poder de sobrevivência.";
+			close;
+		} else if (job_ranger01 == 5) {
+			mes "Awooo. Nham nham.";
+			mes "Eh? O que você está olhando?";
+			mes "Você quer comer um pouco?";
+			next;
+			switch(select("Oh, apenas coma:...")) {
+			case 1:
+				mes "[Test Instructor, Teardrop]";
+				mes "Por que você não está comendo?";
+				mes "É bem comestível.";
+				mes "Se você cobrir com arroz, é como alga assada, muito saboroso e delicioso.";
+				next;
+				mes "[Test Instructor, Teardrop]";
+				mes "Você precisa ser forte o suficiente para não ser tão exigente com essas coisas...";
+				next;
+				break;
+			case 2:
+				mes "["+strcharinfo(0)+"]";
+				mes "Não, obrigado... de qualquer forma...";
+				next;
+				mes "[Test Instructor, Teardrop]";
+				mes "Hmm? Oh céus, oh céus, eu mostrei minha falta de jeito.";
+				next;
+				break;
+			}
+			mes "[Test Instructor, Teardrop]";
+			mes "Ok, vou enviá-lo para o campo de teste prático.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "O teste prático consiste em 3 partes no total.";
+			mes "É para verificar novamente as coisas que você aprendeu como Caçador ou Atirador de Elite, então não há muito com o que se preocupar.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Se você obtiver uma nota de aprovação nos três testes, estará a caminho de se tornar um Sentinela.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Vou explicar os caminhos para o teste.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Assim que você entrar no campo de teste, um instrutor estará esperando por você. Entre na sala feita pelo instrutor e aguarde.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "O teste é feito um por um, então, se houver muitas pessoas, talvez você precise esperar.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "O primeiro teste é para avaliar o quão aguçados são seus olhos.";
+			mes "Monstros diferentes aparecerão em 8 lugares. Mate apenas o monstro chamado 'Poring' e você ganhará um ponto; quando atingir uma determinada marca, você passará. Fácil, né?";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "O segundo teste é sobre o quanto você pode usar uma armadilha com eficiência.";
+			mes "Livre-se dos monstros e cumpra a missão usando apenas as armadilhas fornecidas, e você passará. Apenas tome cuidado para não ser engolido pela explosão.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Para o 3º teste, quando você se tornar um Sentinela, poderá lidar com um lobo, então você será testado sobre quão bem pode lidar com tal animal.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Quando você remove uma bomba usando o lobo fornecido, você ganha pontos. Você é aprovado quando atinge uma certa pontuação no teste.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "A equipe ali lhe dará mais detalhes também.";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Agora, vou levá-lo ao campo de teste prático, sua preparação está concluída?";
+			next;
+			if(select("Espere um pouco:Vamos para o campo de teste prático!") == 1) {
+				mes "[Test Instructor, Teardrop]";
+				mes "Hum? Você não está pronto?";
+				next;
+				mes "[Test Instructor, Teardrop]";
+				mes "Bem. Ser cuidadoso é bom.";
+				mes "Volte quando estiver pronto.";
+				close;
+			}
+			callsub L_Start,0;
+			close;
+		} else if (job_ranger01 == 6) {
+			mes "Pronto para ir!!!!!!!";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Hum? O que aconteceu?";
+			mes "Por que você está andando por aqui? E o teste?";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Aha... Você falhou no meio do caminho!";
+			mes "Você é um tolo.";
+			emotion ET_KIK;
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Então, o que você vai fazer? Tentar novamente?";
+			next;
+			switch(select("Espere um minuto:Vá para o campo de teste prático!:Eu desisto da mudança de classe.")) {
+			case 1:
+				mes "[Test Instructor, Teardrop]";
+				mes "Hum? Você ainda não está pronto?";
+				next;
+				mes "[Test Instructor, Teardrop]";
+				mes "Tudo bem. Ser cuidadoso é bom.";
+				mes "Venha quando estiver pronto.";
+				close;
+			case 2:
+				callsub L_Start,1;
+				close;
+			case 3:
+				mes "[Test Instructor, Teardrop]";
+				mes "Hum? O quê, você está brincando, né?";
+				next;
+				mes "[Test Instructor, Teardrop]";
+				mes "Pense bem.";
+				mes "Você realmente quer desistir da mudança de classe para se tornar um Sentinela?";
+				next;
+				switch(select("Não, vou tentar novamente:Eu desisto!")) {
+				case 1:
+					mes "[Test Instructor, Teardrop]";
+					mes "Ei. Você estava brincando afinal?";
+					next;
+					mes "[Test Instructor, Teardrop]";
+					mes "Isso não tem graça, então não faça esse tipo de piada novamente.";
+					close;
+				case 2:
+					mes "[Test Instructor, Teardrop]";
+					mes "Você não tem tanta coragem quanto eu pensava.";
+					nude;
+					next;
+					if (countitem(1703) > 0) {
+						mes "[Test Instructor, Teardrop]";
+						mes "Ok. Vou respeitar sua opinião.";
+						mes "Vou cancelar o pedido de mudança de classe de"+strcharinfo(0)+".";
+						delitem 1703,1; //Bow__
+						set job_ranger01,0;
+						for(set .@i,8254; .@i<=8262; set .@i,.@i+1)
+							if (checkquest(.@i) > -1) erasequest .@i;
+						close;
+					}
+					mes "[Test Instructor, Teardrop]";
+					mes "Hã? Onde está o arco que eu lhe dei para os testes práticos?";
+					next;
+					mes "[Test Instructor, Teardrop]";
+					mes "Se você não devolvê-lo, não posso cancelar seu pedido de mudança de classe.";
+					close;
+				}
+			}
+		} else if (job_ranger01 == 7) {
+			mes "Oh, ei. O que você está fazendo aqui?";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Como você desapareceu de repente, o Mestre dos Sentinela estava procurando por você.";
+			mes "Você quer ir até ele agora?";
+			next;
+			switch(select("Não vá:Ir")) {
+			case 1:
+				mes "[Test Instructor, Teardrop]";
+				mes "Você está ocupado com outra coisa?";
+				close;
+			case 2:
+				mes "[Test Instructor, Teardrop]";
+				mes "Então eu vou enviá-lo, fique bem.";
+				close2;
+				warp "job3_rang01",89,38;
+				end;
+			}
+		}
+		mes "Uau. Quem é este?";
+		next;
+		mes "[Test Instructor, Teardrop]";
+		mes "Parece que seus olhos opacos ficaram um tanto aguçados agora?";
+		next;
+		mes "[Test Instructor, Teardrop]";
+		mes "Então, aproveite bem a aventura como um Sentinela.";
+		close;
+	}
+	mes "Pronto para iroooooooo!!!!!!";
+	next;
+	mes "[Test Instructor]";
+	mes "Hã? O que é você? De onde você é?";
+	mes "Não fique vagando por aqui sem fazer nada. Esta é minha área!";
+	close;
+L_Start:
+	if (getmercinfo(1)) {
+		mes "[Test Instructor, Teardrop]";
+		mes "Pare!";
+		next;
+		mes "[Test Instructor, Teardrop]";
+		mes "Onde você pensa que vai com esse mercenário?!";
+		next;
+		mes "[Test Instructor, Teardrop]";
+		mes "Se você não cancelar o mercenário, não poderá entrar no campo de teste! Cancele-o primeiro!";
+		close;
+	}
+	if (getarg(0) == 1) {
+		if (countitem(12380)) {
+			mes "[Test Instructor, Teardrop]";
+			mes "O quê, o que é isso?";
+			mes "Você não deveria manter isso por perto!";
+			delitem 12380,countitem(12380); //Desert_Wolf_Babe_Scroll
+			next;
+		}
+		if (countitem(12258)) {
+			mes "[Test Instructor, Teardrop]";
+			mes "O quê, o que é isso, uma Cápsula de Bombring.";
+			mes "Você não deveria manter uma coisa tão perigosa!";
+			delitem 12258,countitem(12258); //Bombring_Box
+			next;
+		}
+		if (countitem(6156)) {
+			mes "[Test Instructor, Teardrop]";
+			mes "O quê, o que são todos esses Documentos?";
+			mes "Acho que sei. Você ia enviar isso para o Caution, certo?";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Se você mantiver tal coisa, isso atrapalhará seu teste prático, então vou ficar com isso.";
+			delitem 6156,countitem(6156); //Approval_Report
+			next;
+		}
+	}
+	if (Weight > 500) {
+		mes "[Test Instructor, Teardrop]";
+		mes "Bem, então vamos iroooooooo.... oo, hum?";
+		next;
+		mes "[Test Instructor, Teardrop]";
+		mes "Ei, o que você está escondendo aí?";
+		mes "Eu já apontei isso diversas vezes, você nem deveria pensar em entrar aí secretamente com qualquer coisa que não sejam os itens fornecidos!";
+		next;
+		mes "[Test Instructor, Teardrop]";
+		mes "É melhor você aliviar seu peso.";
+		close;
+	}
+	mes "[Test Instructor, Teardrop]";
+	mes "Veja, pela última vez, eu aviso que trapaça é estritamente proibida.";
+	next;
+	if (countitem(1750) < 100) {
+		mes "[Test Instructor, Teardrop]";
+		mes "Ok, mais uma vez fornecerei flechas a você, então deixarei você entrar.";
+		set .@arrow,1;
+		next;
+	}
+	mes "[Test Instructor, Teardrop]";
+	mes "Boa sorte.";
+	mes "Torne-se um Sentinela e nos encontraremos novamente.";
+	set job_ranger01,6;
+	if (getarg(0) == 0)
+		changequest 8258,8259;
+	else {
+		erasequest 8260;
+		erasequest 8261;
+	}
+	if (.@arrow) getitem 1750,100; //Arrow
+	close2;
+	warp "job3_rang01",30,36;
+	end;
+}
+
+job3_rang01,30,44,3	script	Test Waiting Room#jr_03	88,{
+	mes "[Staff DTS]";
+	mes "Por favor, aguarde na sala de espera do teste prático para iniciar o processo de avaliação.";
+	next;
+	mes "[Staff DTS]";
+	mes "Na ordem de entrada, você poderá realizar o teste prático um por um.";
+	mes "Existem 3 tipos de testes práticos de mudança de classe para Sentinela, que levam cerca de 10 minutos no total.";
+	next;
+	switch(select("Explicação do teste:Cancelar:Desisto do teste de Sentinela")) {
+	case 1:
+		break;
+	case 2:
+		mes "[Staff DTS]";
+		mes "Você não precisa de nenhuma explicação?";
+		next;
+		mes "[Staff DTS]";
+		mes "Entre na sala de bate-papo, aguarde sua vez e realize o teste prático de mudança de classe.";
+		close;
+	case 3:
+		mes "[Staff DTS]";
+		mes "Por favor, pense nisso novamente.";
+		mes "Se você desistir aqui, seu pedido de mudança de classe será cancelado. Você realmente quer desistir da mudança de classe para Sentinela?";
+		next;
+		switch(select("Não, continuarei com o teste:Desisto da mudança de classe para Sentinela")) {
+		case 1:
+			mes "[Staff DTS]";
+			mes "Se você deseja continuar com o teste prático, por favor, entre na sala de bate-papo.";
+			close;
+		case 2:
+			mes "[Staff DTS]";
+			mes "Você não tem tanta coragem quanto eu pensava.";
+			nude;
+			next;
+			if (countitem(1703) > 0) {
+				mes "[Staff DTS]";
+				mes "Tudo bem. Vou respeitar sua opinião.";
+				mes "Cancelarei o pedido de mudança de classe de"+strcharinfo(0)+".";
+				delitem 1703,1; //Bow__
+				set job_ranger01,0;
+				for(set .@i,8254; .@i<=8262; set .@i,.@i+1)
+					if (checkquest(.@i) > -1) erasequest .@i;
+				close;
+				close2;
+				warp "alberta",117,57;
+				end;
+			}
+			mes "[Staff DTS]";
+			mes "Hã? Onde está o arco que eu dei a você para os testes práticos?";
+			next;
+			mes "[Test Instructor, Teardrop]";
+			mes "Se você não devolvê-lo, não posso cancelar seu pedido de mudança de classe.";
+			close;
+		}
+	}
+	while (1) {
+		mes "[Staff DTS]";
+		mes "Vou explicar o teste prático de mudança de classe de Sentinela.";
+		mes "Dentre o 1º, 2º e 3º testes práticos, sobre qual método de teste você está curioso?";
+		next;
+		switch(select("1º Teste:2º Teste:3º Teste:Cancelar")) {
+		case 1:
+			mes "[Staff DTS]";
+			mes "No 1º teste, avaliamos sua visão e precisão.";
+			next;
+			mes "[Staff DTS]";
+			mes "Monstros aparecem aleatoriamente em 8 direções (esquerda, direita, cima e baixo) ao redor do jogador; entre eles, se você eliminar um monstro chamado 'Poring', você ganha um ponto.";
+			next;
+			mes "[Staff DTS]";
+			mes "^0000ffIndependentemente da aparência, você precisa matar o monstro chamado 'Poring' para ganhar um ponto, e se você eliminar outros, seus pontos serão deduzidos, então tome cuidado.^000000";
+			next;
+			mes "[Staff DTS]";
+			mes "O tempo de duração do 1º teste será de cerca de 3 minutos. Quando você obtiver 15 pontos ou mais de 20, será enviado para o campo do 2º teste.";
+			next;
+			break;
+		case 2:
+			mes "[Staff DTS]";
+			mes "O 2º teste serve para avaliar a capacidade de execução de missão e o uso eficiente de armadilhas.";
+			next;
+			mes "[Staff DTS]";
+			mes "O participante recebe 10 'Cápsulas de Bombring'. Quando você consome a Cápsula de Bombring, um Bombring é invocado nas proximidades e, após um certo tempo, o Bombring explode.";
+			next;
+			mes "[Staff DTS]";
+			mes "^0000ffA explosão do Bombring afeta você, então tome cuidado para não ser atingido. Você precisa eliminar o monstro usando a Cápsula de Bombring, concluir a missão e sair vivo.^000000";
+			next;
+			mes "[Staff DTS]";
+			mes "O tempo de duração do 2º teste será de cerca de 3 minutos. Quando você consumir todas as Cápsulas de Bombring, coletar o equipamento oculto e sobreviver, você será enviado para o campo do 3º teste.";
+			next;
+			break;
+		case 3:
+			mes "[Staff DTS]";
+			mes "O 3º teste serve para avaliar como você pode usar eficientemente um lobo, que é fornecido aos Rangers.";
+			next;
+			mes "[Staff DTS]";
+			mes "O testador recebe uma flauta de invocação de lobo descartável. Remova todas as bombas espalhadas aqui e ali controlando o warg invocado para ganhar pontos.";
+			next;
+			mes "[Staff DTS]";
+			mes "^0000ffO testador não pode se mover enquanto o teste estiver acontecendo, e o teste é concluído quando ele ou ela remove as bombas de forma rápida e precisa dentro do tempo, usando apenas o warg.^000000";
+			next;
+			mes "[Staff DTS]";
+			mes "O tempo de duração do 3º teste será de cerca de 3 minutos; quando você obtiver 10 pontos ou mais de 20, todos os testes práticos estarão concluídos.";
+			next;
+			break;
+		case 4:
+			mes "[Staff DTS]";
+			mes "Quando quiser prosseguir com o teste prático, por favor, entre na sala de bate-papo.";
+			close;
+		}
+	}
+	end;
+OnInit:
+	waitingroom "Practical Test Waiting Room",20,"Test Waiting Room#jr_03::OnStartArena",1;
+	enablewaitingroomevent;
+	end;
+OnStartArena:
+	warpwaitingpc "job3_rang02",45,48;
+	donpcevent "Test Supervisor#jr_04::OnEnable";
+	disablewaitingroomevent;
+	end;
+OnEnable:
+	enablewaitingroomevent;
+	end;
+OnDisable:
+	disablewaitingroomevent;
+	end;
+}
+
+job3_rang02,100,95,0	script	Test Supervisor#jr_04	139,{
+OnInit:
+	set $@job_rang_point01,0;
+	disablenpc "Test Supervisor#jr_04";
+	end;
+OnEnable:
+	enablenpc "Test Supervisor#jr_04";
+	set $@job_rang_point01,0;
+	initnpctimer;
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "Test Supervisor#jr_04";
+	end;
+OnStart:
+	stopnpctimer;
+	donpcevent "CallCorrectAnswer#jr::OnEnable";
+	donpcevent "CallWrongAnswer#jr::OnEnable";
+	donpcevent "First Test Timer#jr_05::OnEnable";
+	disablenpc "Test Supervisor#jr_04";
+	end;
+OnTimer3000:
+	mapannounce "job3_rang02","Supervisor de Teste, Aviso: Bem-vindo ao Teste de Mudança de Classe de Sentinela. Eu sou o Supervisor de Teste, Aviso.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer6000:
+	mapannounce "job3_rang02","Supervisor de Teste, Aviso: O 1º teste serve para avaliar sua visão e precisão.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer9000:
+	mapannounce "job3_rang02","Supervisor de Teste, Aviso: O método do teste é matar monstros chamados 'Poring' entre os monstros gerados aleatoriamente em 8 locais.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer12000:
+	mapannounce "job3_rang02","Supervisor de Teste, Aviso: Independentemente da aparência, você precisa matar o monstro chamado 'Poring' para ganhar um ponto, e se matar outros, perderá pontos, então tome cuidado.",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+OnTimer15000:
+	mapannounce "job3_rang02","Supervisor de Teste, Aviso: O tempo de duração do teste será de cerca de 3 minutos. Você precisa obter 15 pontos ou mais para se qualificar para o próximo teste.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer18000:
+	stopnpctimer;
+	mapannounce "job3_rang02","Supervisor de Teste, Aviso: Então, vamos começar o teste. Boa sorte.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	donpcevent "Test Supervisor#jr_04::OnStart";
+	end;
+}
+
+job3_rang02,102,95,0	script	First Test Timer#jr_05	139,{
+OnInit:
+	disablenpc "First Test Timer#jr_05";
+	end;
+OnEnable:
+	enablenpc "First Test Timer#jr_05";
+	set $@job_rang_point01,0;
+	set $@job_rang_text01,0;
+	setarray .text$[1],
+		"First","Second","Third","Fourth","Fifth","Sixth","Seventh","Eighth","Ninth","Tenth","Eleventh",
+		"Twelfth","Thirteenth","Fourteenth","Fifteenth","Sixteenth","Seventeenth","Eighteenth","Nineteenth","Last";
+	initnpctimer;
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "First Test Timer#jr_05";
+	end;
+OnTimer8000:
+OnTimer15000:
+OnTimer22000:
+OnTimer29000:
+OnTimer36000:
+OnTimer43000:
+OnTimer50000:
+OnTimer57000:
+OnTimer64000:
+OnTimer71000:
+OnTimer78000:
+OnTimer85000:
+OnTimer92000:
+OnTimer99000:
+OnTimer106000:
+OnTimer113000:
+OnTimer120000:
+OnTimer127000:
+OnTimer134000:
+OnTimer141000:
+	donpcevent "CallCorrectAnswer#jr::OnReset";
+	donpcevent "CallWrongAnswer#jr::OnReset";
+	end;
+OnTimer3000:
+OnTimer10000:
+OnTimer17000:
+OnTimer24000:
+OnTimer31000:
+OnTimer38000:
+OnTimer45000:
+OnTimer52000:
+OnTimer59000:
+OnTimer66000:
+OnTimer73000:
+OnTimer80000:
+OnTimer87000:
+OnTimer94000:
+OnTimer101000:
+OnTimer108000:
+OnTimer115000:
+OnTimer122000:
+OnTimer129000:
+OnTimer136000:
+	set $@job_rang_text01,$@job_rang_text01+1;
+	mapannounce "job3_rang02","Supervisor de Teste, Aviso:"+.text$[$@job_rang_text01]+" Wave! Kill the Poring!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	donpcevent "CallCorrectAnswer#jr::OnStart";
+	end;
+OnTimer143000:
+	mapannounce "job3_rang02","Supervisor de Teste, Aviso: Muito bem! Agora, aqui está o resultado do seu teste!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer146000:
+	if ($@job_rang_point01 < 1)
+		set $@job_rang_point01,0;
+	mapannounce "job3_rang02","Supervisor de Teste, Aviso : Vou anunciar o resultado do teste. O número de Porings que você derrotou de um total de 20 é..." + $@job_rang_point01 + "!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer149000:
+	if ($@job_rang_point01 > 14) {
+		mapannounce "job3_rang02","Supervisor de Teste, Aviso : Parabéns! Você derrotou" + $@job_rang_point01 + " out of 20 Porings total, so you've passed the 1st test. I will send you to the 2nd test field.",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+		mapwarp "job3_rang02","job3_rang02",113,58;
+		donpcevent "Second Test Timer#jr_08::OnEnable";
+		stopnpctimer;
+	} else
+		mapannounce "job3_rang02","Supervisor de Teste, Aviso : Você não conseguiu derrotar 15 Porings ou mais de um total de 20, então você falhou no 1º teste... Sinto muito, mas por favor, tente novamente.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer151000:
+	mapannounce "job3_rang02","Supervisor de Teste, Aviso : O 1º teste do aventureiro termina aqui. Por favor, esforce-se para ser mais capaz. Adeus.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	end;
+OnTimer154000:
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	donpcevent "CallCorrectAnswer#jr::OnDisable";
+	donpcevent "CallWrongAnswer#jr::OnDisable";
+	end;
+OnTimer157000:
+	stopnpctimer;
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	set $@job_rang_point01,0;
+	set $@job_rang_text01,0;
+	donpcevent "Test Supervisor#jr_04::OnDisable";
+	donpcevent "Test Waiting Room#jr_03::OnEnable";
+	donpcevent "First Test Timer#jr_05::OnDisable";
+	end;
+}
+
+job3_rang02,104,95,0	script	CallCorrectAnswer#jr	139,{
+OnInit:
+OnDisable:
+	disablenpc "CallCorrectAnswer#jr";
+	end;
+OnEnable:
+	enablenpc "CallCorrectAnswer#jr";
+	end;
+OnStart:
+	setarray .@label$[0],"OnOne","OnTwo","OnThree","OnFour","OnFive","OnSix","OnSeven","OnEight";
+	setarray .@x[0],35,44,54,35,54,35,44,54;
+	setarray .@y[0],58,58,58,49,49,39,39,39;
+	setarray .@id[0],1002,1031,1242,1113;
+	set .@i, rand(8);
+	donpcevent "CallWrongAnswer#jr::"+.@label$[.@i];
+	monster "job3_rang02",.@x[.@i],.@y[.@i],"Poring",.@id[rand(4)],1,"CallCorrectAnswer#jr::OnMyMobDead";
+	end;
+OnReset:
+	killmonster "job3_rang02","CallCorrectAnswer#jr::OnMyMobDead";
+	end;
+OnMyMobDead:
+	specialeffect2 EF_POTION_CON;
+	set $@job_rang_point01, $@job_rang_point01+1;
+	mapannounce "job3_rang02","Supervisor de Teste, Aviso : Alvo Correto! Você tem uma visão muito boa!",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+}
+
+job3_rang02,106,95,0	script	CallWrongAnswer#jr	139,{
+OnInit:
+OnDisable:
+	disablenpc "CallWrongAnswer#jr";
+	end;
+OnEnable:
+	enablenpc "CallWrongAnswer#jr";
+	end;
+OnOne:
+	monster "job3_rang02",44,58,"Poing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Horing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Poporing",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Puring",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Poriring",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Marine",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Dropporing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnTwo:
+	monster "job3_rang02",35,58,"Poyong",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Puding",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Porin",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Poja",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Poporing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Drops",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Pororing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnThree:
+	monster "job3_rang02",35,58,"Poporing",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,58,"Podaegi",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Poing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Poja",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Maporing",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Drops",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Pororing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnFour:
+	monster "job3_rang02",35,58,"Poing",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,58,"Hoing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Marine",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Drops",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Puding",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Droporing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Marine",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnFive:
+	monster "job3_rang02",35,58,"Popuri",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,58,"Poporing",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Mariring",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Poyong",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Marine",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Puding",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Hoing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnSix:
+	monster "job3_rang02",35,58,"Pork",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,58,"Drops",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Poja",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Poporing",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Horing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Marun",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Drawing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnSeven:
+	monster "job3_rang02",35,58,"Marine",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,58,"Pororing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Pork",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Porin",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Poporing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Horin",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Puding",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnEight:
+	monster "job3_rang02",35,58,"Marun",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,58,"Poja",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Drops",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Poing",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Puding",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Horing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Poporing",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnReset:
+	killmonster "job3_rang02","CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnMyMobDead:
+	specialeffect2 EF_DEVIL;
+	set $@job_rang_point01, $@job_rang_point01-1;
+	mapannounce "job3_rang02","Supervisor de Teste, Aviso : Alvo Errado! Controle-se!",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+}
+
+job3_rang02,100,93,0	script	Second Test Timer#jr_08	139,{
+OnInit:
+	disablenpc "Second Test Timer#jr_08";
+	end;
+OnEnable:
+	enablenpc "Second Test Timer#jr_08";
+	initnpctimer;
+	donpcevent "Test Supervisor#jr_04::OnDisable";
+	donpcevent "First Test Timer#jr_05::OnDisable";
+	donpcevent "CallCorrectAnswer#jr::OnDisable";
+	donpcevent "CallWrongAnswer#jr::OnDisable";
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "Second Test Timer#jr_08";
+	end;
+OnStop:
+	stopnpctimer;
+	end;
+OnTimer3000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Sim. Parabéns por passar no 1º teste prático. Eu sou o supervisor do 2º teste prático, Cautela.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer6000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : O Segundo Teste é sobre o desempenho e o uso eficaz de armadilhas.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer9000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Quando o teste começar, você receberá 'Cápsulas de Bombring' de um membro da equipe perto de você, e deverá derrotar os monstros em seu caminho.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer11000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Ao usar uma 'Cápsula de Bombring', um Bombring é invocado perto de você e, após 3 segundos, ele explodirá.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer14000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : O alcance da explosão do Bombring é de 5x5 células ao redor dele, então tenha cuidado para não ser pego na explosão.",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+OnTimer17000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Durante o progresso, se você completar a missão dada por um membro da equipe, venha me ver e você passará no 2º teste prático!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer20000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Ah! Quando vier me ver, todas as 'Cápsulas de Bombring' devem ter sido usadas.",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+OnTimer23000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : O período do teste levará 3 minutos no total! Complete a missão em 3 minutos e mantenha-se vivo! Então venha me ver!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer26000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Bem, o teste começa agora!! Comece a ir!!!!!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	donpcevent "Staff Rust#jr_09::OnEnable";
+	end;
+OnTimer80000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : 1 minuto se passou. Você está vindo me ver, certo?",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer83000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Não seja corajoso demais a ponto de correr e acabar morrendo, seja paciente e cuidadoso.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer140000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : 2 minutos se passaram. Chegar aqui a tempo deveria ser sua prioridade máxima?",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer143000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : No entanto, você precisa estar vivo para cumprir o limite de tempo, certo? Por favor, tome cuidado.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer170000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : 2 minutos e 30 segundos se passaram. Não resta muito tempo!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer173000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Apresse-se! Apresse-se! Vamos.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer200000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : 3 minutos se passaram! 3 minutos!!!! Vou ser um pouco tolerante com você, então apresse-se!!!!!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer205000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : 5 segundos restantes!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer206000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : 4 segundos restantes!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer207000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : 3 segundos restantes!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer208000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : 2 segundos restantes!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer209000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : 1 segundo restante!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer210000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Ugh... O que você está fazendo? Seu tempo acabou!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer213000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Você não conseguiu chegar aqui a tempo, portanto, o 2º teste prático termina aqui!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer217000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Se quiser culpar algo, culpe sua própria estupidez! Comece tudo de novo! Seu tolo!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	end;
+OnTimer220000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Se quiser culpar algo, culpe sua própria estupidez! Comece tudo de novo! Seu tolo!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	donpcevent "Staff Rust#jr_09::OnDisable";
+	donpcevent "Summon Monster#jr_10::OnDisable";
+	donpcevent "Test Supervisor#jr_11::OnDisable";
+	end;
+OnTimer223000:
+	stopnpctimer;
+	donpcevent "Test Waiting Room#jr_03::OnEnable";
+	donpcevent "Second Test Timer#jr_08::OnDisable";
+	end;
+}
+
+job3_rang02,111,56,3	script	Staff Rust#jr_09	89,{
+	if (job_ranger01 == 6) {
+		if (countitem(12258) < 1) {
+			percentheal 100,0;
+			specialeffect2 EF_ABSORBSPIRITS;
+			mes "[Staff Rust]";
+			mes "Vou lhe dar as 'Cápsulas de Bombring'.";
+			mes "As 'Cápsulas de Bombring' só podem ser dadas novamente para quem as utilizou totalmente, então, por favor, lembre-se disso.";
+			if (countitem(6156)) {
+				getitem 12258,5; //Bombring_Box
+				close;
+			}
+			next;
+			emotion ET_FRET;
+			mes "[Staff Rust]";
+			mes "E a missão é... entregar estes documentos ao supervisor, Cautela. Ele não aceita o que eu dou...";
+			setquest 8260;
+			getitem 6156, (MaxWeight-Weight-2000)/10; //Approval_Report
+			getitem 12258,10; //Bombring_Box
+			getitem 569,100; //Novice_Potion
+			close;
+		}
+		mes "[Staff Rust]";
+		mes "Sinto muito, mas você já possui as 'Cápsulas de Bombring', então não posso lhe fornecer mais.";
+		close;
+	}
+	mes "[Staff Rust]";
+	mes "Com licença, mas como você entrou?";
+	next;
+	mes "[Staff Rust]";
+	mes "Se você não está aqui para o teste de mudança de classe, por favor, saia.";
+	close;
+OnInit:
+	disablenpc "Staff Rust#jr_09";
+	end;
+OnEnable:
+	enablenpc "Staff Rust#jr_09";
+	donpcevent "Summon Monster#jr_10::OnEnable";
+	donpcevent "Test Supervisor#jr_11::OnEnable";
+	end;
+OnDisable:
+	disablenpc "Staff Rust#jr_09";
+	end;
+}
+
+job3_rang02,136,21,0	script	Summon Monster#jr_10	139,5,5,{
+OnInit:
+	disablenpc "Summon Monster#jr_10";
+	end;
+OnEnable:
+	enablenpc "Summon Monster#jr_10";
+	monster "job3_rang02",112,45,"Mandragora",1020,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",114,45,"Mandragora",1020,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",116,45,"Mandragora",1020,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",110,30,"Flora",1118,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",112,30,"Flora",1118,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",114,30,"Flora",1118,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",116,30,"Flora",1118,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",116,41,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",112,41,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",111,34,"Flora",1118,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",117,22,"Muscipular",1780,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",114,21,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",115,23,"Parasite",1500,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",135,25,"Drosera",1781,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",135,23,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",137,36,"Drosera",1781,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",139,34,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",144,41,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",152,41,"Parasite",1500,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",168,49,"Drosera",1781,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",165,48,"Muscipular",1780,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",160,56,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",158,56,"Drosera",1781,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",170,53,"Flora",1118,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",168,56,"Parasite",1500,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",174,63,"Muscipular",1780,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",176,60,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",170,59,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",126,19,"Nepenthes",1988,1,"Summon Monster#jr_10::OnMyMobDead";
+	end;
+OnDisable:
+	killmonster "job3_rang02","Summon Monster#jr_10::OnMyMobDead";
+	disablenpc "Summon Monster#jr_10";
+	end;
+OnTouch_:
+	percentheal 10,0;
+	specialeffect2 EF_ABSORBSPIRITS;
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Você está indo bem! Se você chegar um pouco mais perto, deverá conseguir me ver.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnMyMobDead:
+	end;
+}
+
+job3_rang02,180,78,3	script	Test Supervisor#jr_11	882,1,1,{
+	mes "[Test Supervisor, Caution]";
+	mes "Venha, chegue mais perto, mais perto, mais perto!!";
+	close;
+OnInit:
+	disablenpc "Test Supervisor#jr_11";
+	end;
+OnEnable:
+	enablenpc "Test Supervisor#jr_11";
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "Test Supervisor#jr_11";
+	end;
+OnTouch_:
+	if (job_ranger01 == 6) {
+		if (countitem(12258)) {
+			mes "[Test Supervisor, Caution]";
+			mes "Não, não!";
+			mes "Você precisa usar todas as 'Cápsulas de Bombring'?!";
+			next;
+			mes "[Test Supervisor, Caution]";
+			mes "Use todas e volte!";
+			mes "O tempo está passando, então é melhor se apressar.";
+			close;
+		}
+		if (countitem(6156) > 0) {
+			mes "[Test Supervisor, Caution]";
+			mes "Você chegou em segurança!!!";
+			donpcevent "Second Test Timer#jr_08::OnDisable";
+			donpcevent "Staff Rust#jr_09::OnDisable";
+			donpcevent "Summon Monster#jr_10::OnDisable";
+			initnpctimer;
+			next;
+			mes "[Supervisor de Teste, Cautela]";
+			mes "O que são esses documentos?";
+			emotion ET_STARE_ABOUT;
+			next;
+			select("O Sr. Rust pediu para eu te entregar isto.");
+			mes "[Supervisor de Teste, Cautela]";
+			mes "Haaaaaaaah!!";
+			mes "Eu tenho evitado ele tanto!!";
+			delitem 6156,countitem(6156); //Approval_Report
+			erasequest 8260;
+			next;
+			mes "[Supervisor de Teste, Cautela]";
+			mes "Nunca imaginei que isso pudesse ser um teste...";
+			emotion ET_CRY;
+			next;
+			mes "[Supervisor de Teste, Cautela]";
+			mes "De qualquer forma, você passou muito bem no 2º teste.";
+			next;
+			mes "[Supervisor de Teste, Cautela]";
+			mes "Passe no 3º e você se tornará um grande Sentinela.";
+			close2;
+			warp "job3_rang02",250,49;
+			donpcevent "Test Supervisor#jr_13::OnEnable";
+			end;
+		}
+	}
+	mes "[Supervisor de Teste, Cautela]";
+	mes "Você chegou em segurança...... uh?";
+	next;
+	mes "[Supervisor de Teste, Cautela]";
+	mes "Rust não lhe deu nada?";
+	next;
+	mes "[Supervisor de Teste, Cautela]";
+	mes "Onde você perdeu isso?";
+	mes "Pegue rápido!";
+	close;
+OnTimer60000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Venha aqui, você não precisa se apressar no seu teste, mas por que está atrasando o teste?",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+OnTimer63000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Eu odeio pessoas que me fazem esperar! Se você não falar comigo em 30 segundos para continuar o teste, encerrarei seu progresso no teste!",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+OnTimer93000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Rápido! Rápido! Vamos logo.",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+OnTimer96000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Você não conseguiu chegar a tempo, portanto o 2º teste prático termina aqui!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer99000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Se você quer culpar alguém, culpe sua própria estupidez! Comece tudo de novo! Seu tolo!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	end;
+OnTimer102000:
+	mapannounce "job3_rang02","Supervisor de Teste, Cautela : Se você quer culpar alguém, culpe sua própria estupidez! Comece tudo de novo! Seu tolo!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	donpcevent "Staff Rust#jr_09::OnDisable";
+	donpcevent "Summon Monster#jr_10::OnDisable";
+	donpcevent "Second Test Timer#jr_08::OnDisable";
+	end;
+OnTimer105000:
+	stopnpctimer;
+	donpcevent "Test Waiting Room#jr_03::OnEnable";
+	donpcevent "Test Supervisor#jr_11::OnDisable";
+	end;
+}
+
+job3_rang02,104,93,0	script	Third Test Timer#jr_12	139,{
+OnInit:
+	disablenpc "Third Test Timer#jr_12";
+	end;
+OnEnable:
+	enablenpc "Third Test Timer#jr_12";
+	initnpctimer;
+	end;
+OnDisable:
+	stopnpctimer;
+	set $@job_rang_point03,0;
+	disablenpc "Third Test Timer#jr_12";
+	end;
+OnTimer3000:
+	mapannounce "job3_rang02","Supervisor de Teste, Freeze : Muito bem, então vamos começar o 3º teste prático! Você está pronto?",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer6000:
+	mapannounce "job3_rang02","Supervisor de Teste, Freeze : A partir de agora, a cada 3 segundos uma 'Bomba de Ovo' aparecerá! Olhe com atenção e faça seu lobo atacar a bomba de ovo para desarmá-la!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer9000:
+	mapannounce "job3_rang02","Supervisor de Teste, Freeze : Você pode controlar o lobo pressionando a tecla Alt e clicando com o botão esquerdo do mouse na superfície, então o lobo se moverá para esse ponto! Depois, mire na bomba e clique mais uma vez, e ele a atacará!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer12000:
+	mapannounce "job3_rang02","Supervisor de Teste, Freeze : As 'Bombas de Ovo' aparecerão 20 vezes! Cada vez que você desarmar uma com sucesso, ganha 1 ponto! Se obtiver 10 pontos ou mais, você passa no teste prático, então vá em frente! Agora vou começar!!!!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	set .n,14;
+	end;
+OnTimer15000:
+OnTimer20000:
+OnTimer25000:
+OnTimer30000:
+OnTimer35000:
+OnTimer40000:
+OnTimer45000:
+OnTimer50000:
+OnTimer55000:
+OnTimer60000:
+OnTimer65000:
+OnTimer70000:
+OnTimer75000:
+OnTimer80000:
+OnTimer85000:
+OnTimer90000:
+OnTimer95000:
+OnTimer100000:
+OnTimer105000:
+OnTimer110000:
+	donpcevent "Egg Bomb#"+(.n+rand(3))+"::OnEnable";
+	if (.n == 26) set .n,14;
+	else set .n,.n+3;
+	end;
+OnTimer113000:
+	mapannounce "job3_rang02","Supervisor de Teste, Freeze : O teste acaaaaaaaaaaaaaabooooooou!!!!!!!!!!!!!!!!!!!!!!!!!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	for(set .@i,14; .@i<=28; set .@i,.@i+1)
+		donpcevent "Egg Bomb#"+.@i+"::OnDisable";
+	set .n,0;
+	end;
+OnTimer116000:
+	mapannounce "job3_rang02","Supervisor de Teste, Freeze : Bem, vamos ver o resultado?!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer119000:
+	mapannounce "job3_rang02","Supervisor de Teste, Freeze : Sua pontuação é..." + $@job_rang_point03 + " out of 20!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer121000:
+	if ($@job_rang_point03 > 9) {
+		mapannounce "job3_rang02","Supervisor de Teste, Freeze : Você tem sido bem-sucedido até agora! Você passou em todos os testes práticos! Vamos para a sala de espera!!!!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+		mapwarp "job3_rang02","job3_rang01",89,38;
+	} else
+		mapannounce "job3_rang02","Supervisor de Teste, Freeze : É uma pena, mas você não conseguiu atingir os 10 pontos, então você reprovou!!!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer124000:
+	mapannounce "job3_rang02","Supervisor de Teste, Freeze : É uma pena, mas você precisará refazer o teste desde o início! Por favor, volte!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	end;
+OnTimer127000:
+	mapannounce "job3_rang02","Supervisor de Teste, Freeze : É uma pena, mas você precisará refazer o teste desde o início! Por favor, volte!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	set $@job_rang_point03,0;
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	donpcevent "Test Supervisor#jr_13::OnDisable";
+	end;
+OnTimer130000:
+	stopnpctimer;
+	set $@job_rang_point03,0;
+	donpcevent "Test Waiting Room#jr_03::OnEnable";
+	donpcevent "Third Test Timer#jr_12::OnDisable";
+	end;
+}
+
+job3_rang02,251,49,3	script	Test Supervisor#jr_13	732,{
+	mes "[Supervisor de Teste, Freeze]";
+	if (job_ranger01 == 6) {
+		if (checkquest(8261) == -1) {
+			mes "Parabéns por passar no 2º teste prático! Eu sou o supervisor do 3º teste prático, Freeze!";
+			next;
+			mes "[Supervisor de Teste, Freeze]";
+			mes "Para o 3º teste, vou testar o quão eficaz você consegue ser usando um lobo. Quando você se tornar um Sentinela no futuro, você aprenderá a usar um lobo!";
+			next;
+			mes "[Supervisor de Teste, Freeze]";
+			mes "^0000ffO testado recebe uma Flauta de convocação de Lobo descartável! Quando você remove as bombas de ovo que aparecem aqui e ali controlando o lobo convocado, você ganha pontos!^000000";
+			next;
+			mes "[Supervisor de Teste, Freeze]";
+			mes "O testado não pode se mover durante o teste, e o teste é concluído quando todas as bombas são removidas rápida e precisamente dentro do tempo estipulado, usando apenas o lobo!";
+			next;
+			mes "[Supervisor de Teste, Freeze]";
+			mes "^0000ffA maneira de controlar um lobo é pressionar a tecla Alt e clicar com o botão esquerdo do mouse na superfície; então o lobo se moverá para o ponto onde você clicou!^000000";
+			mes "^0000ffQuando você mira na bomba e pressiona mais uma vez, ele começa a atacar!^000000";
+			next;
+			mes "[Supervisor de Teste, Freeze]";
+			mes "O limite de tempo do 3º teste é de cerca de 3 minutos; quando você obtiver 10 dos 20 pontos, você pode passar no teste prático!";
+			next;
+			mes "[Supervisor de Teste, Freeze]";
+			mes "Muito bem, primeiro pegue esta Flauta de Lobo e, após convocar o lobo, fale comigo!";
+			getitem 12380,1; //Desert_Wolf_Babe_Scroll
+			setquest 8261;
+			close;
+		}
+		if (getmercinfo(1) == 2034) {
+			erasequest 8261;
+			mes "Ótimo! Então vou começar o teste agora mesmo!";
+			next;
+			mes "[Supervisor de Teste, Freeze]";
+			mes "Lembre-se! Você precisa remover a bomba de ovo antes que ela exploda, usando apenas um lobo!";
+			next;
+			mes "[Supervisor de Teste, Freeze]";
+			mes "Então, boa sorte!";
+			sc_start SC_STONE,120000,10;
+			close2;
+			donpcevent "Test Supervisor#jr_13::OnDisable";
+			donpcevent "Third Test Timer#jr_12::OnEnable";
+			end;
+		}
+		if (countitem(12380) < 1) {
+			mes "Hã?! Não tem lobo, não tem Flauta de Teste, onde você se livrou deles?!";
+			next;
+			mes "[Supervisor de Teste, Freeze]";
+			mes "Vou te dar mais uma chance especialmente, então concentre-se!";
+			next;
+			mes "[Supervisor de Teste, Freeze]";
+			mes "Convoque o lobo rapidamente e fale comigo novamente!";
+			getitem 12380,1; //Desert_Wolf_Babe_Scroll
+			close;
+		}
+		mes "Hã? O que você está fazendo?";
+		next;
+		mes "[Supervisor de Teste, Freeze]";
+		mes "Toque a Flauta de Teste rapidamente para convocar o lobo e fale comigo!";
+		close;
+	}
+	mes "Quem é você?";
+	next;
+	mes "[Test Supervisor, Freeze]";
+	mes "Esta área é para o teste de mudança de classe de Sentinela!";
+	mes "Você não tem autorização para estar aqui, por favor, saia!";
+	close;
+OnInit:
+	disablenpc "Test Supervisor#jr_13";
+	end;
+OnEnable:
+	enablenpc "Test Supervisor#jr_13";
+	initnpctimer;
+	donpcevent "Second Test Timer#jr_08::OnDisable";
+	donpcevent "Staff Rust#jr_09::OnDisable";
+	donpcevent "Summon Monster#jr_10::OnDisable";
+	donpcevent "Test Supervisor#jr_11::OnDisable";
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "Test Supervisor#jr_13";
+	end;
+OnTimer3000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Bem-vindo ao 3º campo de testes práticos! Eu sou o Supervisor de Testes 3º prático, Freeze!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer6000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Para o bom andamento dos testes para os outros candidatos, se você não falar comigo novamente em 2 minutos para iniciar o 3º teste, o teste será encerrado!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer9000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Não hesite e vamos começar!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer60000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Para o bom andamento dos testes para os outros candidatos, se você não falar comigo novamente em 1 minuto para iniciar o 3º teste, o teste será encerrado!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer63000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Não hesite e vamos começar!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer120000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Por que você não está começando o teste?",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer123000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Você não chegou a tempo para o teste, então estou encerrando o 3º teste prático!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer127000:
+	set $@job_rang_point03,0;
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Que pena, mas tente novamente!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	end;
+OnTimer130000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Que pena, mas tente novamente!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	end;
+OnTimer133000:
+	stopnpctimer;
+	donpcevent "Third Test Timer#jr_12::OnDisable";
+	donpcevent "Test Waiting Room#jr_03::OnEnable";
+	donpcevent "Test Supervisor#jr_13::OnDisable";
+	end;
+}
+
+-	script	Egg Bomb#0	-1,{
+OnInit:
+	disablenpc();
+	end;
+OnEnable:
+	enablenpc();
+	initnpctimer;
+	getmapxy(.@map$,.@x,.@y,BL_NPC);
+	monster "job3_rang02",.@x,.@y,"Egg Bomb",1047,1,strnpcinfo(0)+"::OnMyMobDead";
+	switch(atoi(strnpcinfo(2))%3) {
+		case 0: set .@str$,"Hey, I am going to explode. What are you going to do?"; break;
+		case 1: set .@str$,"I... no, I can't stand anymore!!"; break;
+		case 2: set .@str$,"I am almost done now... Don't stop me."; break;
+	}
+	mapannounce "job3_rang02","Egg Bomb :"+.@str$,bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnDisable:
+	stopnpctimer;
+	killmonster "job3_rang02",strnpcinfo(0)+"::OnMyMobDead";
+	disablenpc();
+	end;
+OnMyMobDead:
+	set $@job_rang_point03, $@job_rang_point03+1;
+	switch(atoi(strnpcinfo(2))%3) {
+		case 0: set .@str$,"The world is meaningless and my dream is so far away..."; break;
+		case 1: set .@str$,"Don't be relieved. Misery always comes from carelessness."; break;
+		case 2: set .@str$,"Alas, it was only a dream for a short time..."; break;
+	}
+	mapannounce "job3_rang02","Egg Bomb :"+.@str$,bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	donpcevent strnpcinfo(0)+"::OnDisable";
+	end;
+OnTimer10000:
+	mapannounce "job3_rang02","Egg Bomb : Ughhhhhhhhhhhhhh!!! Mas o que eu disse!!",bc_map,"0xFF9900"; //FW_NORMAL 12 0 0
+	donpcevent strnpcinfo(0)+"::OnDisable";
+	end;
+}
+job3_rang02,246,42,0	duplicate(Egg Bomb#0)	Egg Bomb#14	139
+job3_rang02,249,46,0	duplicate(Egg Bomb#0)	Egg Bomb#15	139
+job3_rang02,256,43,0	duplicate(Egg Bomb#0)	Egg Bomb#16	139
+job3_rang02,243,54,0	duplicate(Egg Bomb#0)	Egg Bomb#17	139
+job3_rang02,246,58,0	duplicate(Egg Bomb#0)	Egg Bomb#18	139
+job3_rang02,255,56,0	duplicate(Egg Bomb#0)	Egg Bomb#19	139
+job3_rang02,260,48,0	duplicate(Egg Bomb#0)	Egg Bomb#20	139
+job3_rang02,244,53,0	duplicate(Egg Bomb#0)	Egg Bomb#21	139
+job3_rang02,254,50,0	duplicate(Egg Bomb#0)	Egg Bomb#22	139
+job3_rang02,241,41,0	duplicate(Egg Bomb#0)	Egg Bomb#23	139
+job3_rang02,259,41,0	duplicate(Egg Bomb#0)	Egg Bomb#24	139
+job3_rang02,256,52,0	duplicate(Egg Bomb#0)	Egg Bomb#25	139
+job3_rang02,259,58,0	duplicate(Egg Bomb#0)	Egg Bomb#26	139
+job3_rang02,254,52,0	duplicate(Egg Bomb#0)	Egg Bomb#27	139
+job3_rang02,247,42,0	duplicate(Egg Bomb#0)	Egg Bomb#28	139
+
+job3_rang01,90,43,3	script	Ranger Master#jr_29	832,{
+	mes "[Sentinela Master, Neveragain]";
+	if (job_ranger01 < 6) {
+		mes "... ...Hã?";
+		mes "É estranho... Como você chegou aqui?";
+		next;
+		mes "[Sentinela Master, Neveragain]";
+		mes "Você não parece pertencer a este lugar...";
+		next;
+		mes "[Sentinela Master, Neveragain]";
+		mes "Vá embora.";
+		mes "Você não deveria estar aqui.";
+		close2;
+		warp "alberta",117,57;
+		end;
+	} else if (job_ranger01 == 6 || job_ranger01 == 7) {
+		if (BaseLevel < 99 || JobLevel < 50) {
+			mes "Não.";
+			mes "Posso dizer apenas olhando para você que você parece ser inexperiente.";
+			next;
+			mes "[Sentinela Master, Neveragain]";
+			mes "Tenha mais orgulho da sua classe e ganhe mais experiência, e então, quando você crescer como Caçador ou Atirador de Elite e puder criar uma aura sozinho, por favor, volte aqui novamente.";
+			close2;
+			warp "alberta",117,57;
+			end;
+		}
+		mes "Parabéns!";
+		mes "Você completou todos os testes práticos árduos!";
+		if (job_ranger01 == 6) {
+			set job_ranger01,7;
+			changequest 8259,8262;
+		}
+		next;
+		mes "[Sentinela Master, Neveragain]";
+		mes "Bem, você já teve experiência suficiente, então não preciso me alongar.";
+		next;
+		mes "[Sentinela Master, Neveragain]";
+		mes "Antes de realizar a mudança de classe, ^0000ffdispense seu Falcão^000000 e verifique se você usou todos os seus ^0000ffPontos de Habilidade^000000.";
+		next;
+		if(select("Espere um minuto:Estou pronto") == 1) {
+			mes "[Sentinela Master, Neveragain]";
+			mes "Não estou indo a lugar algum, então não tenha pressa.";
+			close;
+		}
+		mes "[Sentinela Master, Neveragain]";
+		if (checkfalcon()) {
+			mes "Você não dispensou seu falcão??";
+			next;
+			mes "[Sentinela Master, Neveragain]";
+			mes "Por favor, dispense seu falcão e volte a falar comigo.";
+			close;
+		}
+		if (SkillPoint != 0) {
+			mes "Acho que você precisa aprender mais.";
+			next;
+			mes "[Ranger Master Neveragain]";
+			mes "Gaste todos os seus pontos de habilidade antes de continuar.";
+			close;
+		}
+		mes "Bom. Sem falcão e você gastou todos os seus pontos de habilidade.";
+		next;
+		mes "[Sentinela Master, Neveragain]";
+		mes "Ok, antes de você realmente mudar de classe para Sentinela, vou te perguntar mais uma vez.";
+		mes "Você realmente deseja se tornar um Sentinela?";
+		next;
+		if(select("Não:Sim!") == 1) {
+			mes "[Sentinela Master, Neveragain]";
+			mes "...Hum? Essa não é a resposta que eu estava esperando...";
+			next;
+			mes "[Sentinela Master, Neveragain]";
+			mes "Mesmo depois de passar por todos os testes práticos árduos, você não quer se tornar um Sentinela... tem certeza?";
+			close;
+		}
+		mes "[Sentinela Master, Neveragain]";
+		if (ismounting()) {
+			mes "Você está montado em um mascote,";
+			mes "então não pode mudar de classe.";
+			mes "Por favor, desmonte do seu mascote e tente novamente!";
+			close;
+		}
+		if (BaseJob != Job_Hunter) {
+			mes "Espere, quem é você?";
+			mes "Você não é um Caçador ou um Atirador de Elite?!";
+			next;
+			mes "[Sentinela Master, Neveragain]";
+			mes "O que você está fazendo aqui?";
+			mes "Você não deveria estar aqui. Saia!";
+			set job_ranger01,0;
+			for(set .@i,8254; .@i<=8262; set .@i,.@i+1)
+				if (checkquest(.@i) > -1) erasequest .@i;
+			close2;
+			warp "alberta",117,57;
+			end;
+		}
+		mes "Sua resposta firme parece muito confiável!";
+		next;
+		nude;
+		if (countitem(1703) < 1) {
+			mes "[Sentinela Master, Neveragain]";
+			mes "Umm?";
+			mes "Você precisa devolver o item emprestado.";
+			mes "Onde está o arco que foi dado a você para o teste de mudança de classe?";
+			close;
+		}
+		mes "[Sentinela Master, Neveragain]";
+		mes "De agora em diante, seja ativo como um esplêndido Sentinela!";
+		mes "Desejo-lhe sorte em seu futuro!";
+		delitem 1703,1; //Bow__
+		set job_ranger01,8;
+		completequest 8262;
+		jobchange roclass(eaclass()|EAJL_THIRD);
+		getitem 5748,1; //Sniper_Goggle
+		getitem 2795,1; //Green_Apple_Ring
+		getitem 6124,1; //Wolf's_Flute
+		close;
+	}
+	mes "Ei, você parece ótimo.";
+	mes "O que você está fazendo aqui?";
+	next;
+	switch(select("Eu só vim dar uma passada:Por favor, deixe-me sair")) {
+	case 1:
+		mes "[Sentinela Master, Neveragain]";
+		mes "Bem, não há nada para ver e você veio mesmo assim.";
+		next;
+		mes "[Sentinela Master, Neveragain]";
+		mes "Descanse o quanto quiser.";
+		mes "Este é um lugar onde você pode tomar um chá tranquilamente.";
+		close;
+	case 2:
+		mes "[Sentinela Master, Neveragain]";
+		mes "Foi bom ver você.";
+		mes "Não perca a dignidade de um Sentinela onde quer que vá.";
+		close2;
+		warp "alberta",117,57;
+		end;
+	}
+}
+
+job3_rang01,58,1,0	script	Worker#job_ranger	88,{
+	callfunc "F_GM_NPC";
+	switch(select("Habilitar Sala de Espera:Desabilitar Sala de Espera:Habilitar 1º Teste:Desabilitar 1º Teste:Habilitar 2º Teste:Desabilitar 2º Teste:Habilitar 3º Teste:Desabilitar 3º Teste:Cancelar")) {
+	case 1:
+		mes "Sala de Espera Habilitada";
+		donpcevent "Test Waiting Room#jr_03::OnEnable";
+		close;
+	case 2:
+		mes "Sala de Espera Desabilitada";
+		donpcevent "Test Waiting Room#jr_03::OnDisable";
+		close;
+	case 3:
+		mes "1º Teste Habilitado";
+		donpcevent "Test Supervisor#jr_04::OnEnable";
+		close;
+	case 4:
+		mes "1º Teste Desabilitado";
+		donpcevent "Test Supervisor#jr_04::OnDisable";
+		donpcevent "First Test Timer#jr_05::OnDisable";
+		donpcevent "CallCorrectAnswer#jr::OnReset";
+		donpcevent "CallWrongAnswer#jr::OnReset";
+		donpcevent "CallCorrectAnswer#jr::OnDisable";
+		donpcevent "CallWrongAnswer#jr::OnDisable";
+		close;
+	case 5:
+		mes "2º Teste Habilitado";
+		donpcevent "Second Test Timer#jr_08::OnEnable";
+		close;
+	case 6:
+		mes "2º Teste Desabilitado";
+		donpcevent "Second Test Timer#jr_08::OnDisable";
+		close;
+	case 7:
+		mes "3º Teste foi Habilitado";
+		donpcevent "Third Test Timer#jr_12::OnEnable";
+		close;
+	case 8:
+		mes "3º Teste foi Desabilitado";
+		donpcevent "Third Test Timer#jr_12::OnDisable";
+		for(set .@i,14; .@i<=28; set .@i,.@i+1)
+			donpcevent "Egg Bomb#"+.@i+"::OnDisable";
+		close;
+	case 9:
+		close;
+	}
+}

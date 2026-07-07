@@ -1,0 +1,202 @@
+//===== rAthena Script ======================================= 
+//= Renewal Thief Job Quest
+//===== By: ================================================== 
+//= Kisuka
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Job Change to Thief Class
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [Kisuka]
+//= 1.1 Added support for Baby classes. [Euphy]
+//============================================================ 
+moc_prydb1,39,129,2	script	Thief Guide#thief	69,{
+	if (Upper == 1) {
+		if (ADVJOB == Job_Assassin_Cross || ADVJOB == Job_Stalker) {
+			if (Class == Job_Novice_High) {
+				mes "[Thief Guide]";
+				mes "Hein? Eu te conheço? É estranho, parece que já te vi antes. Você não tem um gêmeo, tem?";
+				next;
+				if (!callfunc("F_CanChangeJob")) {
+					mes "[Thief Guide]";
+					mes "O quê, você quer ser um Gatuno? Sinto muito, mas parece que você precisa de mais treinamento.";
+					next;
+					mes "[Thief Guide]";
+					mes "Leve o tempo que precisar e aprenda todas as Habilidades Básicas, ok? Bem, então, até mais~!";
+					close;
+				}
+				mes "[Thief Guide]";
+				mes "Bem, tenho a sensação de que você já passou por uma vida inteira de lutas, então estou te promovendo a Gatuno agora mesmo. É melhor eu dar a vocês, durões, o que vocês querem...";
+				next;
+				skill "NV_TRICKDEAD",0,SKILL_PERM;
+				jobchange Job_Thief_High;
+				skill "TF_SPRINKLESAND",1,SKILL_PERM;
+				skill "TF_BACKSLIDING",1,SKILL_PERM;
+				skill "TF_PICKSTONE",1,SKILL_PERM;
+				skill "TF_THROWSTONE",1,SKILL_PERM;
+				mes "[Thief Guide]";
+				mes "Já que você se tornou um Gatuno, viva como um Gatuno. Agora, vá em frente! Próximo~";
+				close;
+			}else{
+				mes "[Thief Guide]";
+				if (Sex == SEX_MALE)
+					mes "Ei, cara.";
+				else
+					mes "Ei, gata~";
+				close;
+			}
+		}else{
+			mes "[Thief Guide]";
+			if (Sex == SEX_MALE)
+				mes "Ei, cara.";
+			else
+				mes "Ei, gata.";
+			mes "...Ei! Você parece certinho demais para querer ser um Gatuno!! Agora suma, estou ocupada. Próximo!";
+			close;
+		}
+	}
+	if(q_job_thief == 1) {
+		mes "[Thief Guildsman]";
+		mes "Ehh... Parece um(a) amado(a)"+(Sex == SEX_MALE?"filho":"filha")+"de uma família rica, mas por que você está aqui neste lugar sujo?";
+		next;
+		mes "[Thief Guildsman]";
+		mes "Bem, eu não sou responsável por te tornar um Gatuno. Eu apenas aceito as inscrições, entendeu?";
+		mes "Se você quer se tornar um Gatuno, peça ao cara de olhar afiado ao meu lado.";
+		close;
+	}
+	mes "[Thief Guildsman]";
+	if(BaseJob != Job_Novice) {
+		if(BaseJob == Job_Thief) {
+			mes "Ei~ se tiver algum problema, pode falar comigo a qualquer hora, tá?";
+			close;
+		}else{
+			mes "Que diabos...?";
+			if(Sex == SEX_MALE) {
+				mes "Huh... você é um(a)"+jobname(Class)+", cabeça-dura!";
+				next;
+				mes "[Thief Guildsman]";
+				mes "Ei, irmão.";
+			}else{
+				next;
+				mes "[Thief Guildsman]";
+				mes "Ei, moça.";
+			}
+			mes "Por que você está aqui? Volte para o seu lugar~ volte~~";
+			close;
+		}
+	}
+	mes "Ehh... Parece um(a) amado(a)"+(Sex == SEX_MALE?"filho":"filha")+"de uma família rica, mas por que você está aqui neste lugar sujo?";
+	next;
+	if(select("Eu quero ser um Gatuno.:Nada.") == 2) {
+		mes "[Thief Guildsman]";
+		mes "Você sabe que não pode ser um Gatuno sem uma inscrição...";
+		mes "O que está pensando...?";
+		close;
+	}
+	mes "[Thief Guildsman]";
+	mes "Bem, você está tão orgulhoso disso?";
+	mes "Você está me dizendo com tanto orgulho que quer ser um Gatuno! Por que você não vai a todas as vilas e faz propaganda de si mesmo como um Gatuno?";
+	mes "'Ha ha ha! Vá colocar uma faixa que diga 'Serei um orgulhoso Gatuno que rouba as coisas dos outros'.";
+	next;
+	mes "[Thief Guildsman]";
+	mes "Você quer tanto assim ser um Gatuno?";
+	next;
+	switch(select("Sim.:Não.:E você?")) {
+	case 1:
+		mes "[Thief Guildsman]";
+		mes "Oh, é mesmo...? Huh.. bem... eu vivo e aprendo a ver pessoas estranhas como você.";
+		next;
+		break;
+	case 2:
+		mes "[Thief Guildsman]";
+		mes "Então por que você está aqui? Você acha que pode se tornar um Gatuno tão facilmente?";
+		next;
+		break;
+	case 3:
+		mes "[Thief Guildsman]";
+		mes "Eh..? eu? eu?";
+		mes "Bem... eu simplesmente me encaixo bem como Gatuno... caracteristicamente... não me importo com essa bobagem.";
+		next;
+		break;
+	}
+	mes "[Thief Guildsman]";
+	mes "De qualquer forma, no mundo lá fora, nunca diga que você quer ser um Gatuno!!";
+	next;
+	mes "[Thief Guildsman]";
+	mes "Então, você quer se inscrever para ser um Gatuno?";
+	next;
+	if(select("Sim, eu quero.:Não.") == 2) {
+		mes "[Thief Guildsman]";
+		mes "Bem... faça o que quiser fazer~ Siga o seu caminho~";
+		close;
+	}
+	mes "[Thief Guildsman]";
+	mes "Certo, me diga seu nome. Huh? O quê?";
+	mes ""+strcharinfo(0)+". Então"+strcharinfo(0)+", certo...?";
+	next;
+	if (!callfunc("F_CanChangeJob")) {
+		mes "[Thief Guildsman]";
+		mes "Posso ver sua forte vontade de se tornar um Gatuno......";
+		mes "Mas apenas com sua vontade, você não consegue se sair bem em uma luta de verdade, consegue?";
+		mes "Então vá e alcance pelo menos o Nível 9 de Habilidade Básica.";
+		close;
+	}
+	mes "[Thief Guildsman]";
+	mes "Hmm.... Encontrei seus antecedentes criminais interessantes nos dados da agência de detetives. Bem, você parece ter o que é preciso para ser um bom Gatuno.";
+	mes ""+strcharinfo(0)+". Agora declaro que você passou na entrevista de emprego!";
+	next;
+	mes "[Thief Guildsman]";
+	mes "Bem, eu não sou responsável por te tornar um Gatuno. Eu apenas aceito as inscrições, entendeu?";
+	mes "Se você quer se tornar um Gatuno, peça ao cara ao meu lado.";
+	set q_job_thief,1;
+	close;
+}
+
+moc_prydb1,42,133,2	script	Thief Guildsman#thief	118,{
+	if(q_job_thief == 1) {
+		mes "[Thief Guildsman]";
+		mes "Certo. Você deve ter passado na entrevista de emprego, né?";
+		mes "Bom. Eu aceitarei você.";
+		mes "Vamos começar a cerimônia de mudança de classe da nossa guilda!";
+		next;
+		mes "[Commander of Thief Guild]";
+		mes "'"+strcharinfo(0)+".'";
+		mes "'Para aqueles que estão prontos, o luar abrirá o caminho. Agora que você está totalmente pronto, eu permito oficialmente que você se torne um membro da Guilda dos Gatuno.'";
+		callfunc "Job_Change",Job_Thief;
+		set q_job_thief,0;
+		getitem 13041,1;	// N_Main_Gauche
+		next;
+		mes "[Commander of Thief Guild]";
+		mes "'Parabéns por se tornar um Gatuno.'";
+		mes "'De agora em diante, cumpra as regras da nossa guilda e seja um membro honrado.'";
+		mes "'Se você nos trouxer qualquer desonra ao quebrar nossas regras, é melhor tomar cuidado.'";
+		mes "'De qualquer forma, espero que você seja um grande Gatuno.'";
+		next;
+		mes "[Brad]";
+		mes "Heee~Yaaaa~! Parabéns! Meu amigo.";
+		mes "Meu nome é 'Brad'. Sou o responsável pelos recursos humanos aqui.";
+		mes "Não tenho certeza agora, mas você terá mais chances de me ver mais tarde.";
+		next;
+		mes "[Brad]";
+		mes "Certo, fiz o que podia por você, então siga seu caminho. Sou um homem muito ocupado.";
+		mes "Até mais.";
+		close;
+	}
+	if(BaseJob != Job_Novice) {
+		if(BaseJob == Job_Thief) {
+			mes "[Brad]";
+			mes "Não tenho nenhum evento especial agora. Então siga seu caminho e volte mais tarde.";
+		}else{
+			mes "[Thief Guildsman]";
+			mes "Ei~ Ei~ Você não é um Aprendiz nem um Gatuno!";
+			mes "O que está fazendo aqui? Você não é bem-vindo para fazer deste lugar sua casa~ Hweeeee~ Saia daqui~";
+		}
+		close;
+	}
+	mes "[Thief Guildsman]";
+	mes "Ho? Por que um Aprendiz como você está visitando aqui?";
+	mes "Se você está aqui para ser um Gatuno, peça à moça de temperamento ruim logo ao meu lado.";
+	close;
+}

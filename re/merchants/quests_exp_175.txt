@@ -1,0 +1,90 @@
+//===== rAthena Script =======================================
+//= Merchants from new dungeons for Level 175
+//===== Description: =========================================
+//= [Walkthrough Conversion]
+//--- Merchants related to new dungeons.
+//===== Changelog: ===========================================
+//= 1.0 Initial release of Einbech Dungeon 3 merchants. [Capuche]
+//============================================================
+
+einbech,149,257,4	script	Site manager Elmen#extdq0	4_TOWER_16,{
+	if (checkweight(25814,100) == 0 || checkweight(1201,1) == 0 || (MaxWeight - Weight) < 10000) {
+		mes "- Você não pode prosseguir porque possui itens demais. -";
+		close;
+	}
+	mes "[Elmen]";
+	mes "Olá, aventureiro.";
+	mes "Se você está aqui para comprar equipamentos de mineração de Dynite ou refinar minérios em Dynite, veio ao lugar certo.";
+	next;
+	switch( select( "Refinar Dynite", "Loja de Dynite", "Troca de Equipamentos de Dynite" ) ) {
+	case 1:
+		npctalk "Elmen: Você pode refinar até 100 Dynites por vez. A máquina é pequena.", "", bc_self;
+		mes "[Elmen]";
+		mes "" + mesitemlink(25814) + "Minério Refinado.";
+		mes "" + mesitemlink(25809) + "^777777(atualmente" + countitem(25809) + ")^000000";
+		mes "" + mesitemlink(25810) + "^777777(atualmente" + countitem(25810) + ")^000000";
+		mes "" + mesitemlink(25811) + "^777777(atualmente" + countitem(25811) + ")^000000";
+		mes "" + mesitemlink(25812) + "^777777(atualmente" + countitem(25812) + ")^000000";
+		mes "" + mesitemlink(25813) + "^777777(atualmente" + countitem(25813) + ")^000000";
+		mes "Você precisa de um de cada um dos cinco tipos de minério.";
+		next;
+		input .@val;
+		if (.@val > 100) {
+			mes "[Elmen]";
+			mes "Sinto muito, aventureiro.";
+			mes "A Refinação de Dynite só pode ser feita em até 100 por vez? A máquina é pequena, não há o que fazer. Por favor, entenda.";
+			close;
+		}
+		if (.@val == 0) {
+			mes "[Elmen]";
+			mes "Cancelar?";
+			mes "Se precisar refinar Dynite, pode me procurar a qualquer momento. Não há ninguém que possa fazer isso além de mim.";
+			close;
+		}
+		if (countitem(25809) < .@val || countitem(25810) < .@val || countitem(25811) < .@val || countitem(25812) < .@val || countitem(25813) < .@val) {
+			mes "[Elmen]";
+			mes "Ei! Isso dificulta as coisas para ambos, você não ficou sem os materiais necessários para o refino? Os materiais!";
+			close;
+		}
+		specialeffect EF_REPAIRWEAPON;
+		progressbar_npc "FFFF00",1;
+		delitem 25809,.@val;	// Ein_REDIUM
+		delitem 25810,.@val;	// Ein_RINDIUM
+		delitem 25811,.@val;	// Ein_ODIUM
+		delitem 25812,.@val;	// Ein_PURDIUM
+		delitem 25813,.@val;	// Ein_WHIDIUM
+		getitem 25814,.@val;	// Ein_DYNITE
+		mes "[Elmen]";
+		mes "" + .@val + "Dynites foram refinados. Está perfeito hoje!";
+		close;
+	case 2:
+		mes "[Elmen]";
+		mes "Existem vários acessórios e licenças de modificação. Olhe com cuidado o que deseja antes de comprar.";
+		close2;
+		callshop "barter_ein_dun03";
+		end;
+	case 3:
+		mes "[Elmen]";
+		mes "Eu posso trocar o equipamento por Dynite, mas eles já estão em uma caixa bem lacrada.";
+		mes "Me dê 50 ^4d4dffDynites^000000 e eu abrirei uma ^4d4dffcaixa de arma^000000 para você.";
+		next;
+		mes "[Elmen]";
+		mes "Eu não sei o que vai sair, mas a qualidade é boa. Você gostaria de abrir?";
+		next;
+		if (select( "Feche os olhos e troque.", "Não trocar." ) == 2) {
+			mes "[Elmen]";
+			mes "Kee, isso é um desperdício, era um bom negócio.";
+			close;
+		}
+		if (countitem(25814) < 50) {
+			mes "[Elmen]";
+			mes "Você não tem Dynites suficientes, amigo.";
+			mes "Não sei o que vai sair, então é difícil ir a qualquer lugar e conseguir esse tipo de equipamento por esse preço.";
+			close;
+		}
+		delitem 25814,50;
+		// unknown text
+		getgroupitem(IG_EIN_1HITEMBOX);
+		end;
+	}
+}

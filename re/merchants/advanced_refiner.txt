@@ -1,0 +1,222 @@
+//===== rAthena Script =======================================
+//= Advanced Refiner
+//===== Description: =========================================
+//= [Official Conversion]
+//= Refiner that uses Enriched ores to increase upgrade success.
+//===== Changelog: ===========================================
+//= 1.0 Added Malangdo Refiner "Holink". [Euphy]
+//= 1.1 Removed re-roll behavior. [Secret]
+//= 1.2 Added db-based material ID [Secret]
+//============================================================
+
+// Main NPC :: mal_jerun
+//============================================================
+malangdo,221,174,6	script	Holink#mal_cash	559,{
+	disable_items;
+	mes "[Holink]";
+	mes "Eu sou o miau~ Ferreiro Holink~";
+	mes "Mestre da refinação, Holink~";
+	mes "Eu sou o gato especial Holink, que aprendeu em Morocc~";
+	mes "Minha filha tem tanto orgulho de mim, Holink~";
+	mes "O que o Holink~ deve refinar hoje?";
+	next;
+
+	setarray .@indices[1], EQI_HEAD_TOP, EQI_ARMOR, EQI_HAND_L, EQI_HAND_R, EQI_GARMENT, EQI_SHOES, EQI_ACC_L, EQI_ACC_R, EQI_HEAD_MID, EQI_HEAD_LOW;
+	for (set .@i,1; .@i<=10; set .@i,.@i+1)
+		set .@menu$, .@menu$ + ( getequipisequiped(.@indices[.@i]) ? getequipname(.@indices[.@i]) : F_getpositionname(.@indices[.@i]) +"-[Vazio]" ) +":";
+	set .@part, .@indices[ select(.@menu$) ];
+
+	if (!getequipisequiped(.@part)) {
+		mes "[Holink]";
+		switch(.@part) {
+		case EQI_HEAD_TOP:
+			mes "Meu mestre Aragam disse miau~";
+			mes "Não existe cura para a estupidez...";
+			break;
+		case EQI_ARMOR:
+			mes "Não há nada para ver aqui, miau!!";
+			break;
+		case EQI_HAND_L:
+			mes "Miau? O que você quer que eu faça com esta mão esquerda...?";
+			break;
+		case EQI_HAND_R:
+			mes "Miau? O que você quer que eu faça com esta mão direita...?";
+			break;
+		case EQI_GARMENT:
+			mes "Miau? Você não está usando nada.";
+			break;
+		case EQI_SHOES:
+			mes "Kyang~! Não mexa com meu olfato sensível, miau~.";
+			break;
+		case EQI_ACC_L:
+		case EQI_ACC_R:
+			mes "Miau? Onde está o acessório?";
+			break;
+		case EQI_HEAD_MID:
+		case EQI_HEAD_LOW:
+			mes "Miau? Você está falando das outras partes da cabeça, miau?~";
+			break;
+		}
+		close;
+	}
+	if (!getequipisenableref(.@part)) {
+		mes "[Holink]";
+		mes "Nem mesmo Aragam consegue refinar algo assim, miau.";
+		close;
+	}
+	if (getequiprefinerycnt(.@part) >= 10) {
+		mes "[Holink]";
+		mes "Miau~ Refinação perfeita. Será que o Aragam fez isso, miau?~";
+		close;
+	}
+	mes "[Holink]";
+	.@refineitemid = getequipid(.@part); // save id of the item
+	.@itemtype = getiteminfo( .@refineitemid, ITEMINFO_TYPE );
+	.@refinerycnt = getequiprefinerycnt(.@part); //save refinery count
+	setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+// Holink has different hardcoded prices
+//	.@price = getequiprefinecost(.@part, REFINE_COST_NORMAL, REFINE_ZENY_COST);
+	.@material = getequiprefinecost(.@part, REFINE_COST_NORMAL, REFINE_MATERIAL_ID);
+
+	if( .@itemtype == IT_ARMOR ){
+		.@equip_lv = getequiparmorlv( .@part );
+		.@type$ = "armor";
+		mes "Você escolheu uma armadura, miau~";
+
+		switch(.@equip_lv) {
+			case 1:
+				.@price = 15000;
+				break;
+			default:
+				// TODO:
+				close;
+		}
+	}else if( .@itemtype == IT_WEAPON ){
+		.@equip_lv = getequipweaponlv( .@part );
+		.@type$ = "weapon";
+
+		switch( .@equip_lv ){
+			case 1: // Level 1 Weapon
+				.@price = 500;
+				mes "Uma arma de nível 1...?";
+				break;
+			case 2: // Level 2 Weapon
+				.@price = 2000;
+				mes "Miau, uma arma de nível 2...?";
+				break;
+			case 3: // Level 3 Weapon
+				.@price = 20000;
+				mes "Miau Miau~~ Uma arma de nível 3~~";
+				break;
+			case 4: // Level 4 Weapon
+				.@price = 50000;
+				mes "Mi-Miau!... Uma arma de nível 4...!";
+				mes "Eu só vi isso duas vezes enquanto";
+				mes "aprendia com Aragam... Mi-Miau!!";
+				break;
+			default:
+				// TODO:
+				close;
+		}
+	}else{
+		// TODO:
+		close;
+	}
+
+	mes "Você precisa de ^ff9999"+getitemname(.@material)+"^000000 e ^ff9999"+.@price+"^000000 Zenys para esta refinação, miau~";
+	mes "Quer continuar, miau?~";
+	next;
+	if(select("Sim!!:Não!!") == 2) {
+		mes "[Holink]";
+		mes "Kyack!!";
+		mes "Você não acredita no mestre da refinação Holink, miau?~";
+		close;
+	}
+	if (getequippercentrefinery(.@part, true) < 100) {
+		mes "[Holink]";
+		mes "Miau!!";
+		if (.@type$ == "armor")
+			mes "Esta armadura já foi refinada tantas vezes, miau.";
+		else {
+			mes "Perigo. Perigo~";
+			mes "Esta arma já foi muito refinada, miau~";
+			next;
+			mes "[Holink]";
+		}
+		mes "Você pode quebrá-la se continuar";
+		mes "tentando refinar este item mais ainda, miau.";
+		next;
+		mes "[Holink]";
+		mes "Uma vez que o"+.@type$+"se quebra, você nunca";
+		mes "mais poderá usá-lo, miau. Sem mencionar que... todas as";
+		mes "^ff0000cartas e encantamentos atuais irão desaparecer com certeza^000000.";
+		mes "Você ainda quer tentar, miau~?";
+		next;
+		if(select("Sim, eu quero!!:Esqueça isso!!") == 2) {
+			mes "[Holink]";
+			mes "Miau! Escolha sábia, miau.";
+			mes "Mas!!";
+			mes "Não fico feliz em ver você duvidando do mestre da refinação Holink, miau~";
+			close;
+		}
+	}
+	if (countitem(.@material) == 0 || Zeny < .@price) {
+		mes "[Holink]";
+		mes "Você não tem os ingredientes.";
+		mes "Você precisa de ^ff9999"+getitemname(.@material)+"^000000 e ^ff9999"+.@price+"^000000 Zenys, miau~";
+		mes "Vá buscar, miau~";
+		close;
+	}
+	delitem .@material,1;
+	set Zeny, Zeny-.@price;
+
+	// anti-hack
+	if (callfunc("F_IsEquipIDHack", .@part, .@refineitemid) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3]) ||
+		callfunc("F_IsEquipRefineHack", .@part, .@refinerycnt)) {
+		mes "[Holink]";
+		emotion ET_FRET;
+		mes "Espere um segundo...";
+		mes "Você acha que eu sou estúpido?!";
+		mes "Você trocou o item enquanto eu não estava olhando! Caia fora daqui!";
+		close;
+	}
+
+	if (getequippercentrefinery(.@part, true) > rand(100)) {
+		successrefitem .@part;
+		mes "[Holink]";
+		mes "Mi~ Mi~ Miau! Que refinação divertida~";
+		next;
+		emotion ET_CHUP;
+		mes "[Holink]";
+		mes "Perfeito!! Perfeito, miau!!";
+		mes "Eu sou o discípulo do Bruxo refinador Aragam~";
+		mes "Holink!!";
+		mes "Mais um dia de refinação bem-sucedida, miau!!";
+		close;
+	}
+	failedrefitem .@part;
+	mes "[Holink]";
+	mes "Meo~ Meow~ Kyaaak!!";
+	next;
+	switch(rand(1,5)) {
+		case 1: emotion ET_CRY; break;
+		case 2: emotion ET_PROFUSELY_SWEAT; break;
+		case 3: emotion ET_KEK; break;
+		case 4: emotion ET_SCRATCH; break;
+		case 5: emotion ET_BIGTHROB; break;
+	}
+	mes "[Holink]";
+	mes "Miau!! Aaaaakk~~!!!!";
+	mes "Kyaaak!! Eu falhei, miau!!";
+	next;
+	mes "[Holink]";
+	mes "......";
+	mes "......";
+	mes "Tudo~ Tudo~ Quebrado, miau...";
+	next;
+	mes "[Holink]";
+	mes "Miau.... O mestre Aragam disse uma vez,";
+	mes "aprenda com seus fracassos...";
+	mes "Humano, este único fracasso será o início do seu sucesso no futuro.";
+	close;
+}

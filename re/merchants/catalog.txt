@@ -1,0 +1,110 @@
+//===== rAthena Script =======================================
+//= Catalog Magician
+//===== By: ==================================================
+//= skyiing, Scriptor
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Catalogs allow players to easily search for items in-game,
+//= and to buy/sell directly from the catalog interface.
+//===== Additional Comments: =================================
+//= 1.0 Moved from root directory. [Euphy]
+//= 1.1 Updated dialogue. [Euphy]
+//============================================================ 
+
+// Main NPC :: catalog_merchant
+//============================================================
+moc_para01,22,16,5	script	Catalog Magician#catal01	704,{
+	if (!checkweight(1301,3)) {
+		mes "- Você tem itens demais. Por favor, libere espaço. -";
+		close;
+	}
+	set .@ticket_cost, 200;
+	mes "[Catalog Magician]";
+	mes "Veja... a Academia de Magia";
+	mes "em Geffen está agora";
+	mes "vendendo diretamente o novo";
+	mes "^007777Catálogo Prateado Universal^000000!";
+	next;
+	mes "Ele está olhando para as palavras";
+	mes "escritas em sua mão.";
+	mes "Ele parece ocupado demais";
+	mes "para olhar para você.";
+	next;
+	mes "[Catalog Magician]";
+	mes "Um novo catálogo";
+	mes "acabou de ser lançado!";
+	mes "Você pode verificar";
+	mes "quais itens pode trocar";
+	mes "e quais itens estão à venda";
+	mes "pelos vendedores.";
+	next;
+	mes "[Catalog Magician]";
+	mes "O ^007777Catálogo Prateado Universal^000000";
+	mes "custa apenas 200z!";
+	mes "Você pode comprar até 50 unidades de uma vez!";
+	next;
+	switch(select("Comprar um ^007777Catálogo Prateado Universal^000000:Eu não preciso disso!:Você não parece um vendedor!")) {
+	case 1:
+		mes "[Catalog Magician]";
+		mes "Você... quer todas as 50 unidades?";
+		mes "Ou de quantas você precisa?";
+		next;
+		while (1) {
+			input .@input;
+			mes "[Catalog Magician]";
+			if (.@input == 0) {
+				mes "A negociação foi interrompida!";
+				mes "Eu não sei o que fazer a seguir...";
+				mes "O que devo fazer?";
+				emotion ET_PROFUSELY_SWEAT, playerattached();
+				close;
+			} else if (.@input < 1 || .@input > 50) {
+				mes "Deve ser menos de 50 unidades.";
+				next;
+			} else
+				break;
+		}
+		set .@sell, .@ticket_cost * .@input;
+		mes "O número total de catálogos que você está tentando comprar é" + .@input + "unidades.";
+		mes "Custa" + .@sell + "z.";
+		if (Zeny < .@sell) {
+			mes "Parece que você não tem dinheiro suficiente.";
+			mes "Você pode vender seus equipamentos";
+			mes "para conseguir mais dinheiro... se quiser.";
+			close;
+		}
+		mes "Ok, aqui está.";
+		set Zeny, Zeny - .@sell;
+		getitem 12580,.@input; //Vending_Search_Scroll
+		close;
+	case 2:
+		mes "[Catalog Magician]";
+		mes "Argh... você realmente precisa deste";
+		mes "item... Quer que eu";
+		mes "explique novamente? Eu não sei";
+		mes "o que fazer a seguir...";
+		mes "O que devo fazer?";
+		emotion ET_PROFUSELY_SWEAT, playerattached();
+		close;
+	case 3:
+		mes "[Catalog Magician]";
+		mes "Meu verdadeiro emprego é mago.";
+		mes "Eu ia pedir à guilda dos Mercador";
+		mes "para vendê-los, mas eles estavam";
+		mes "tentando usá-los como um apêndice";
+		mes "nas vendas de vassouras. É por isso";
+		mes "que estou vendendo-os eu mesmo.";
+		next;
+		mes "[Catalog Magician]";
+		mes "Há muitos aventureiros";
+		mes "aqui que vão e vêm.";
+		mes "Tenho quase certeza de que poderei vender para todos eles em breve.";
+		mes "Você não acha?";
+		mes "Então... vamos começar!! Compre mais deles, por favor! POR FAVOR...!";
+		close;
+	}
+}
