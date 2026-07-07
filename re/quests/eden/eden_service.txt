@@ -1,0 +1,67 @@
+//===== rAthena Script =======================================
+//= Eden Group Quests - Service NPCs
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.3
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Paradise Group storage access.
+//===== Additional Comments: =================================
+//= 1.0 First Version.
+//= 1.1 Replaced 2nd NPC with duplicate function. [Masao]
+//= 1.2 Added support to Para_Team_Mark_ in Eden Group. [Ragno]
+//= 1.3 Added use of F_HasEdenGroupMark function. [Ragno]
+//============================================================
+
+// Goods Cabinets :: pare_service
+//============================================================
+-	script	Goods Cabinet#00::pggc	-1,{
+	mes "É um Armário de Itens.";
+	mes "Há uma mensagem escrita em um pedaço de papel.";
+	next;
+	mes "+ Este armário é exclusivo +";
+	mes "+ para o Grupo Eden +";
+	mes "Se você deseja usar este";
+	mes "armário, por favor verifique";
+	mes "o seguinte:";
+	next;
+	mes "1. Você é um membro";
+	mes "do Grupo Eden?";
+	mes "2. Você aprendeu";
+	mes "habilidades básicas suficientes?";
+	mes "3. A taxa do armário é";
+	mes "^4d4dff500 zenys^000000!";
+	next;
+	if (callfunc("F_HasEdenGroupMark")) {
+		mes "Você precisa inserir zenys para usar o armário.";
+		mes "Custo: 500 Zenys";
+		mes "Você gostaria de usá-lo?";
+		next;
+		switch(select("Usar o Armário.:Cancelar.")) {
+			case 1:
+				if (Zeny > 499) {
+					if(!callfunc("F_CanOpenStorage")){
+						mes "O armário não está funcionando para mim.";
+						mes "Talvez eu ainda não esteja qualificado para usar o Armário.";
+						close;
+					}
+					set Zeny, Zeny - 500;
+					close2;
+					openstorage;
+					end;
+				}
+				mes "Eu não tenho zenys suficientes.";
+				mes "Preciso de pelo menos 500 zenys para usar o Armário.";
+				close;
+			case 2:
+				mes "Vou usá-lo na próxima vez.";
+				close;
+		}
+	}
+	mes "Preciso de uma Marca do Grupo Eden para usar este Armário.";
+	close;
+}
+moc_para01,173,120,0	duplicate(pggc)	Goods Cabinet#01	111
+moc_para01,170,120,0	duplicate(pggc)	Goods Cabinet#02	111

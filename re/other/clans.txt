@@ -1,0 +1,632 @@
+//===== rAthena Script =======================================
+//= Clan masters
+//===== Description: =========================================
+//= The clan master NPCs that allow you to join and leave
+//= one of the clans.
+//===== Changelogs: ==========================================
+//= 1.0 Initial release. [Lemongrass]
+//= 1.1 iRO translation. [RagnarokNova]
+//= 1.2 Dialogue cleanup. [Aleos]
+//= 1.3 Added clan helper. [exneval]
+//============================================================
+
+prontera,138,183,7	script	Clan Helper	703,{
+	mes "[Clan Helper]";
+	mes "Você quer criar conexões sem estar em uma guilda?";
+	next;
+	mes "[Clan Helper]";
+	mes "Não consegue encontrar a guilda perfeita para você?";
+	next;
+	mes "[Clan Helper]";
+	mes "Você pode entrar ou sair de clãs livremente! Apenas junte-se!";
+	next;
+	mes "[Clan Helper]";
+	mes "Agora, venha e conheça os mestres dos melhores clãs do Reino!";
+	close;
+}
+
+prt_in,33,114,5	script	Raffam Oranpere	10058,{
+	cutin "laperm01.bmp", 2;
+	mes "[Raffam Oranpere]";
+	mes "Oi! Sou Raffam, mestre do ^3131FFClã da Espada^000000 no Reino de Rune-Midgard.";
+	next;
+	switch( select( "Informações do Clã:Entrar.:Sair." ) ){
+		case 1:
+			switch( select( "O que são Clãs?:Sobre o Clã da Espada:Cancelar." ) ){
+				case 1:
+					mes "[Raffam Oranpere]";
+					mes "Os ^3131FFClãs^000000 são um tipo de guilda administrada pelo Reino.";
+					mes "Eles não participam da Guerra do Emperium, então os membros são livres para entrar/sair a qualquer momento.";
+					next;
+					mes "[Raffam Oranpere]";
+					mes "Eu gostaria que pudéssemos participar da Guerra. Eu adoraria voar no meu dragão e queimar todo mundo no meu caminho!";
+					mes "Ops, empolguei demais!";
+					next;
+					mes "[Raffam Oranpere]";
+					mes "Junte-se a nós, se nenhum Clã for do seu agrado.";
+					mes "Novos membros recebem ^3131FFbônus de atributos gratuitos^000000.";
+					next;
+					mes "[Raffam Oranpere]";
+					mes "Atributos de combate corpo a corpo são oferecidos como o nome ^3131FFClã da Espada^000000 sugere, mas nem todos os membros são classes de combate corpo a corpo.";
+					mes "Não se sinta pressionado, apenas conte comigo!";
+					next;
+					cutin "laperm02.bmp", 2;
+					mes "[Raffam Oranpere]";
+					mes "Diferenças na variedade criam a diversão.";
+					mes "Esses grupos peculiares nunca me entediam no grupo.";
+					next;
+					mes "[Raffam Oranpere]";
+					mes "E quem sabe você não encontra sua alma gêmea no Clã? Hahah!";
+					break;
+				case 2:
+					mes "[Raffam Oranpere]";
+					mes "O ^3131FFClã da Espada^000000 apoia principalmente aventureiros de combate corpo a corpo.";
+					mes "Junte-se para receber ^FF0000<STR+1, VIT+1, MHP+30, MSP+10>^000000 grátis!";
+					next;
+					mes "[Raffam Oranpere]";
+					mes "Lembre-se, sem participação na Guerra do Emperium.";
+					mes "Você deve entrar em contato com outras guildas para a Guerra.";
+					next;
+					mes "[Raffam Oranpere]";
+					mes "Alguma pergunta?";
+					mes "Animado para se juntar a mim? Hahah!";
+					break;
+				case 3:
+					break;
+			}			
+			break;
+		case 2:
+			mes "[Raffam Oranpere]";
+			mes "Oh, você vai entrar? Ótima escolha!";
+			mes "Vamos verificar a política do Clã para iniciar os procedimentos de admissão.";
+			next;
+			mes "[Raffam Oranpere]";
+			mes "^3131FFMembros do Clã^000000 não podem participar da Guerra do Emperium.";
+			mes "Novos membros recebem estes bônus de atributos: ^FF0000<STR+1, VIT+1, MHP+30, MSP+10>^000000.";
+			mes "Estamos de acordo até aqui?";
+			next;
+			if( select( "Sim.:Não." ) == 1 ){
+				mes "[Raffam Oranpere]";
+				mes "Você pode entrar e sair de um Clã a qualquer momento, mas se não fizer login por ^FF0000mais de 2 semanas^000000, você será ^FF0000expulso^000000.";
+				mes "Mestres de clã existem por um motivo, como eu.";
+				mes "Entendido?";
+				next;
+				if( select( "Sim.:Não." ) == 1 ){
+					mes "[Raffam Oranpere]";
+					mes "Ótimo, assine seu nome aqui para se registrar.";
+					next;
+					input .@name$;
+					mes "[Raffam Oranpere]";
+					mes "Então, você é ^3131FF" + strcharinfo( 0 ) + "^000000! Belo nome!";
+					mes "Deixe-me registrá-lo.";
+					next;
+					if( getcharid( 2 ) ){
+						mes "[Raffam Oranpere]";
+						mes "Volte para entrar depois que sair da sua guilda atual.";
+						close3;
+					}else if( getcharid( 5 ) != 0 ){
+						cutin "laperm04.bmp", 2;
+						mes "[Raffam Oranpere]";
+						mes "Eh? Oh, você está em um Clã.";
+						mes "Não brinque comigo, isso não é legal!";
+					}else{
+						cutin "laperm02.bmp", 2;
+						if (clan_join(SWORDCLAN)) {
+							sc_start2 SC_SWORDCLAN, INFINITE_TICK, 0, SWORDCLAN;
+							mes "[Raffam Oranpere]";
+							mes "Bem-vindo ao ^3131FFClã da Espada^000000!";
+							mes "Você pode revisar as informações do Clã com ^3131FFCtrl+G^000000.";
+							mes "À sua disposição!";
+						} else
+							mes "Ocorreu um erro.";
+					}
+				}else{
+					mes "[Raffam Oranpere]";
+					mes "Ah, oh. Vamos voltar ao início.";
+				}
+			}else{
+				cutin "laperm03.bmp", 2;
+				mes "[Raffam Oranpere]";
+				mes "Ah, oh. Vamos voltar ao início.";
+			}
+			break;
+		case 3:
+			cutin "laperm01.bmp", 2;
+			mes "[Raffam Oranpere]";
+			mes "Você quer sair?";
+			mes "Sem problemas. Espero que encontre um Clã mais adequado.";
+			mes "Pronto para a retirada?";
+			next;
+			if( select( "Continuar.:Cancelar." ) == 1 ){
+				if( getcharid( 5 ) == 0 ){
+					cutin "laperm04.bmp", 2;
+					mes "[Raffam Oranpere]";
+					mes "Espere, você não está conosco! Grr, não me faça cuspir fogo em você!";
+				}else if( getcharid( 5 ) != SWORDCLAN ){
+					cutin "laperm04.bmp", 2;
+					mes "[Raffam Oranpere]";
+					mes "Ei, fale com seu mestre de guilda se quiser sair.";
+				}else{
+					if (clan_leave()) {
+						sc_end SC_SWORDCLAN;
+						mes "[Raffam Oranpere]";
+						mes "Ok, está feito. Mas não vamos nos tratar como estranhos, ok?";
+						mes "Foi bom ter você conosco!";
+					} else
+						mes "Ocorreu um erro.";
+				}
+			}
+			break;
+	}
+	close2;
+	cutin "", 255;
+	end;
+
+OnInit:
+	sc_start2 SC_SWORDCLAN, INFINITE_TICK, 0, SWORDCLAN, 10000, SCSTART_NOAVOID, getnpcid(0);
+	end;
+}
+
+prt_in,35,114,5	script	Devon Aire	10059,{
+	cutin "debon01.bmp", 2;
+	mes "[Devon Aire]";
+	mes "Sou Devon, mestre do ^3131FFClã do Cajado Arcano^000000.";
+	next;
+	switch( select( "Informações do Clã:Entrar.:Sair." ) ){
+		case 1:
+			switch( select( "O que são Clãs?:Sobre o Clã do Cajado Arcano:Cancelar." ) ){
+				case 1:
+					mes "[Devon Aire]";
+					mes "Os ^3131FFClãs^000000 são administrados pelo Reino, não privadamente como outros.";
+					mes "E eu gerencio um deles.";
+					next;
+					cutin "debon02.bmp", 2;
+					mes "[Devon Aire]";
+					mes "...";
+					mes "O que é esse olhar? Você tem algum problema?";
+					next;
+					cutin "birman01.bmp", 2;
+					mes "[Berman Aire]";
+					mes "Irmão, você está assustando um membro em potencial, seja legal.";
+					next;
+					cutin "debon02.bmp", 2;
+					mes "[Devon Aire]";
+					mes "...";
+					next;
+					cutin "debon01.bmp", 2;
+					mes "[Devon Aire]";
+					mes "Junte-se se você estiver procurando um lugar para se encaixar. Damos ^3131FFbônus de atributos gratuitos^000000. Mas sem participação na Guerra do Emperium.";
+					next;
+					mes "[Devon Aire]";
+					mes "A maioria dos membros são classes Mago ofensivas, como o nome ^3131FFClã do Cajado Arcano^000000 sugere, mas isso não é um requisito.";
+					next;
+					cutin "debon02.bmp", 2;
+					mes "[Devon Aire]";
+					mes "...Ei, Shaam Rumi.";
+					mes "Pare de dar em cima do meu irmão e vá trabalhar.";
+					next;
+					cutin "sham03.bmp", 2;
+					mes "[Shaam Rumi]";
+					mes "Tanto faz!";
+					next;
+					cutin "debon02.bmp", 2;
+					mes "[Devon Aire]";
+					mes "...Hmpf!";
+					mes "Escute, o mestre do Clã da Besta é mau.";
+					next;
+					cutin "sham02.bmp", 2;
+					mes "[Shaam Rumi]";
+					mes "Supere-me, Devon! Não espalhe boatos!";
+					next;
+					cutin "birman01.bmp", 2;
+					mes "[Berman Aire]";
+					mes "Haha. Parem com isso. Vocês dois estão causando uma cena.";
+					mes "Vamos lá, voltem ao trabalho, pessoal.";
+					break;
+				case 2:
+					cutin "debon01.bmp", 2;
+					mes "[Devon Aire]";
+					mes "O ^3131FFClã da Varinha Arcana^000000 apoia principalmente as classes Mago ofensivas.";
+					mes "We offer ^FF0000<INT+1, DEX+1, MHP+30, MSP+10>^000000 to new members. Don't ask for more; it's the Kingdom's rule.";
+					next;
+					mes "[Devon Aire]";
+					mes "^3131FFMembros do Clã^000000 não podem participar da Guerra do Emperium.";
+					mes "Se você gosta da Guerra, então vá entrar em um clã normal.";
+					next;
+					mes "[Devon Aire]";
+					mes "Isso é tudo. Sem perguntas.";
+					break;
+				case 3:
+					break;
+			}
+			break;
+		case 2:
+			cutin "debon01.bmp", 2;
+			mes "[Devon Aire]";
+			mes "...";
+			mes "Vamos verificar a política do Clã para iniciar os procedimentos de admissão.";
+			next;
+			mes "[Devon Aire]";
+			mes "^3131FFMembros do Clã^000000 não podem participar da Guerra do Emperium.";
+			mes "Novos membros recebem estes bônus de atributos: ^FF0000<INT+1, DEX+1, MHP+30, MSP+10>^000000.";
+			mes "Entendido até aqui?";
+			next;
+			if( select( "Sim.:Não." ) == 1 ){
+				mes "[Devon Aire]";
+				mes "Você pode entrar e sair de um Clã a qualquer momento, mas se não logar por ^FF0000mais de 2 semanas^000000, você será ^FF0000expulso^000000.";
+				mes "Você concorda?";
+				next;
+				if( select( "Sim.:Não." ) == 1 ){
+					mes "[Devon Aire]";
+					mes "Assine seu nome aqui.";
+					next;
+					input .@name$;
+					mes "[Devon Aire]";
+					mes "^3131FF" + strcharinfo( 0 ) + "^000000.....";
+					mes "Ótimo, deixe-me convidá-lo.";
+					next;
+					if( getcharid( 2 ) ){
+						mes "[Devon Aire]";
+						mes "Saia do seu clã primeiro para entrar no meu Clã, né.";
+						close3;
+					}else if( getcharid( 5 ) != 0 ){
+						cutin "debon03.bmp", 2;
+						mes "[Devon Aire]";
+						mes "Você já está em um Clã. Tá brincando?!";
+						mes "Ah, eu também sei ser engraçado... PILAR DE FOGO!";
+					}else{
+						if (clan_join(ARCWANDCLAN)) {
+							sc_start2 SC_ARCWANDCLAN, INFINITE_TICK, 0, ARCWANDCLAN;
+							mes "[Devon Aire]";
+							mes "Você entrou para o ^3131FFClã da Varinha Arcana^000000.";
+							next;
+							mes "[Devon Aire]";
+							mes "Você pode revisar as informações do Clã com ^3131FFCtrl+G^000000.";
+							mes "Então não me incomode depois.";
+							next;
+							mes "[Devon Aire]";
+							mes "Isso é tudo. Visite sempre ou será expulso. Dispensado.";
+						} else
+							mes "Ocorreu um erro.";
+					}
+				}else{
+					mes "[Devon Aire]";
+					mes "Então eu não quero você.";
+				}
+			}else{
+				mes "[Devon Aire]";
+				mes "Poxa, ouça a política novamente.";
+			}
+			break;
+		case 3:
+			mes "[Devon Aire]";
+			mes "Quer sair, é?";
+			mes "Eu entendo, é por causa da Guerra. Se não, por que você está... Esquece...";
+			mes "Vou processar sua saída.";
+			next;
+			if( select( "Continuar.:Cancelar." ) == 1 ){
+				if( getcharid( 5 ) == 0 ){
+					cutin "debon03.bmp", 2;
+					mes "[Devon Aire]";
+					mes "Crianças malcriadas merecem um bom Trovão de Júpiter.";
+				}else if( getcharid( 5 ) != ARCWANDCLAN ){
+					cutin "debon02.bmp", 2;
+					mes "[Devon Aire]";
+					mes "Você está procurando no lugar errado. Vá falar com o mestre do seu Clã.";
+				}else{
+					if (clan_leave()) {
+						sc_end SC_ARCWANDCLAN;
+						mes "[Devon Aire]";
+						mes "Você foi removido do Clã.";
+						mes "Agora vá embora. Não estou mais com vontade de conversar.";
+					} else
+						mes "Ocorreu um erro.";
+				}
+			}		
+			break;
+	}
+	close2;
+	cutin "", 255;
+	end;
+
+OnInit:
+	sc_start2 SC_ARCWANDCLAN, INFINITE_TICK, 0, ARCWANDCLAN, 10000, SCSTART_NOAVOID, getnpcid(0);
+	end;
+}
+
+prt_in,37,114,5	script	Berman Aire	10060,{
+	cutin "birman01.bmp", 2;
+	mes "[Berman Aire]";
+	mes "Prazer em conhecê-lo. Sou Berman Aire, mestre do ^3131FFClã da Maça Dourada^000000.";
+	mes "Também sou o irmão mais velho de Devon Aire. Devon parece durão, mas tem um bom coração.";
+	next;
+	switch( select( "Informações do Clã:Entrar.:Sair." ) ){
+		case 1:
+			switch( select( "O que são Clãs?:Sobre o Clã da Maça Dourada:Cancelar." ) ){
+				case 1:
+					mes "[Berman Aire]";
+					mes "Os ^3131FFClãs^000000 são estabelecidos pelo Reino para ajudar aventureiros a se conectarem e compartilharem informações.";
+					next;
+					mes "[Berman Aire]";
+					mes "Como o Reino administra o Clã, não há participação na Guerra, mas pelo menos os membros recebem ^3131FFbônus de atributos^000000.";
+					mes "Os bônus de atributos são pequenos, mas podem ser muito úteis para aventureiros iniciantes.";
+					next;
+					mes "[Berman Aire]";
+					mes "Nosso nome é ^3131FFClã da Maça Dourada^000000, mas não discriminamos candidatos com base em suas classes.";
+					mes "O nome é apenas para ajudar você a escolher seu Clã facilmente.";
+					next;
+					cutin "sham02.bmp", 2;
+					mes "[Shaam Rumi]";
+					mes "Berman, chega de explicações. Vamos passear em Glast Heim.";
+					next;
+					cutin "debon03.bmp", 2;
+					mes "[Devon Aire]";
+					mes "... Ei.";
+					next;
+					cutin "sham03.bmp", 2;
+					mes "[Shaam Rumi]";
+					mes "Ah, você está me assustando.";
+					mes "Berman, me ligue quando puder!~";
+					next;
+					cutin "birman03.bmp", 2;
+					mes "[Berman Aire]";
+					mes "Hah hah, peço desculpas pelas discussões deles.";
+					next;
+					cutin "birman01.bmp", 2;
+					mes "[Berman Aire]";
+					mes "Você tem alguma pergunta?";
+					mes "Se você está cansado de viajar sozinho, junte-se a nós! Você pode entrar e sair do Clã quando quiser.";
+					break;
+				case 2:
+					mes "[Berman Aire]";
+					mes "O ^3131FFClã da Maça Dourada^000000 ajuda principalmente classes de suporte.";
+					mes "Oferecemos ^FF0000<INT+1, LUK+1, MHP+30, MSP+10>^000000 para novos membros.";
+					next;
+					mes "[Berman Aire]";
+					mes "Como eu disse antes, Clãs não podem participar da Guerra pois já pertencem ao Reino.";
+					mes "Se você quer participar da Guerra, recomendo entrar em um clã normal.";
+					next;
+					mes "[Berman Aire]";
+					mes "Você entendeu o propósito dos Clãs agora?";
+					break;
+				case 3:
+					break;
+			}
+			break;
+		case 2:
+			mes "[Berman Aire]";
+			mes "Ótimo!";
+			mes "Vamos verificar a política do Clã para iniciar os procedimentos de admissão.";
+			next;
+			mes "[Berman Aire]";
+			mes "^3131FFMembros do Clã^000000 não podem participar da Guerra do Emperium.";
+			mes "Como nosso novo membro, você receberá os seguintes bônus de atributos: ^FF0000<INT+1, LUK+1, MHP+30, MSP+10>^000000.";
+			mes "Você concorda?";
+			next;
+			if( select( "Sim.:Não." ) == 1 ){
+				mes "[Berman Aire]";
+				mes "Você pode entrar e sair de um Clã a qualquer momento, mas se não logar por ^FF0000mais de 2 semanas^000000, você será ^FF0000expulso^000000.";
+				mes "Você concorda em manter uma boa reputação no Clã?";
+				next;
+				if( select( "Sim.:Não." ) == 1 ){
+					mes "[Berman Aire]";
+					mes "Agora, por favor, escreva seu nome aqui.";
+					next;
+					input .@name$;
+					mes "[Berman Aire]";
+					mes "^3131FF" + strcharinfo( 0 ) + "^000000! Que belo nome!";
+					mes "Ok, então...";
+					next;
+					if( getcharid( 2 ) ){
+						mes "[Berman Aire]";
+						mes "Oh, não.";
+						mes "Para entrar, você precisa primeiro sair do seu clã atual.";
+						close3;
+					}else if( getcharid( 5 ) != 0 ){
+						mes "[Berman Aire]";
+						mes "Você já está em um Clã.";
+						mes "Você está apenas confuso, não está?";
+					}else{
+						if (clan_join(GOLDENMACECLAN)) {
+							sc_start2 SC_GOLDENMACECLAN, INFINITE_TICK, 0, GOLDENMACECLAN;
+							cutin "birman02.bmp", 2;
+							mes "[Berman Aire]";
+							mes "Bem-vindo ao ^3131FFClã da Maça Dourada^000000!";
+							next;
+							mes "[Berman Aire]";
+							mes "Você pode revisar as informações do Clã com ^3131FFCtrl+G^000000.";
+							next;
+							mes "[Berman Aire]";
+							mes "Lembre-se das poucas precauções que lhe passei e aproveite suas atividades do Clã!";
+						} else
+							mes "Ocorreu um erro.";
+					}
+				}
+			}
+			break;
+		case 3:
+			mes "[Berman Aire]";
+			mes "Todo encontro traz uma despedida.";
+			mes "Espero que tenha aproveitado seu tempo no ^3131FFClã da Maça Dourada^000000.";
+			mes "Agora, devo processar sua saída?";
+			next;
+			if( select( "Continuar.:Cancelar." ) == 1 ){
+				if( getcharid( 5 ) == 0 ){
+					mes "[Berman Aire]";
+					mes "Você não pode sair do Clã sem entrar nele primeiro.";
+				}else if( getcharid( 5 ) != GOLDENMACECLAN ){
+					mes "[Berman Aire]";
+					mes "Sinto muito, mas não posso remover você de outro Clã...";
+				}else{
+					if (clan_leave()) {
+						sc_end SC_GOLDENMACECLAN;
+						mes "[Berman Aire]";
+						mes "Processado.";
+						mes "Volte sempre ao ^3131FFClã da Maça Dourada^000000. Estarei aqui.";
+					} else
+						mes "Ocorreu um erro.";
+				}
+			}
+			break;
+	}
+	close2;
+	cutin "", 255;
+	end;
+
+OnInit:
+	sc_start2 SC_GOLDENMACECLAN, INFINITE_TICK, 0, GOLDENMACECLAN, 10000, SCSTART_NOAVOID, getnpcid(0);
+	end;
+}
+
+prt_in,39,114,5	script	Shaam Rumi	10027,{
+	cutin "sham01.bmp", 2;
+	mes "[Shaam Rumi]";
+	mes "Olá! Eu sou Shaam, mestre do ^3131FFClã da Besta^000000.";
+	mes "O que posso fazer por você?";
+	next;
+	switch( select( "Informações do Clã:Entrar.:Sair." ) ){
+		case 1:
+			switch( select( "O que são Clãs?:Sobre o Clã da Besta:Cancelar." ) ){
+				case 1:
+					mes "[Shaam Rumi]";
+					mes "Os Clãs foram estabelecidos pelo Reino de Rune-Midgard para...";
+					mes "Raffam, por que nossos ^3131FFclãs^000000 foram criados?";
+					next;
+					cutin "laperm01.bmp", 2;
+					mes "[Raffam Oranpere]";
+					mes "Você dormiu na aula? Poxa vida.";
+					mes "Os Clãs ajudam aventureiros solitários a se conectarem e compartilharem informações.";
+					next;
+					cutin "sham01.bmp", 2;
+					mes "[Shaam Rumi]";
+					mes "Ah, entendi! Obrigado, Capitão!";
+					mes "Você também ouviu isso, certo?";
+					next;
+					mes "[Shaam Rumi]";
+					mes "Administrados pelo próprio Reino, os Clãs não têm permissão para participar da Guerra do Emperium, mas a boa notícia é que os membros recebem alguns ^3131FFbônus de atributos^000000.";
+					next;
+					mes "[Shaam Rumi]";
+					mes "Caso esteja se perguntando se o ^3131FFClã da Besta^000000 só recruta Arqueiros, não, não é verdade.";
+					mes "Todos os Clãs aceitam todas as classes. Você pode escolher o que melhor atende às suas necessidades.";
+					next;
+					cutin "sham02.bmp", 2;
+					mes "[Shaam Rumi]";
+					mes "Isso deve cobrir tudo o que há para saber.";
+					mes "Berman, vamos sair por Glast Heim.";
+					next;
+					cutin "debon03.bmp", 2;
+					mes "[Devon Aire]";
+					mes "Você...";
+					next;
+					cutin "sham03.bmp", 2;
+					mes "[Shaam Rumi]";
+					mes "Ah, que medo! Você é muito protetora com seu irmão.";
+					break;
+				case 2:
+					mes "[Shaam Rumi]";
+					mes "O ^3131FFClã da Besta^000000 é ideal para classes de longo alcance.";
+					next;
+					mes "[Shaam Rumi]";
+					mes "Eh, deixe-me conferir o manual do Clã. Ah, oferecemos bônus de atributos para novos membros: ^FF0000<DES+1, AGI+1, HP Máx+30, SP Máx+10>^000000.";
+					next;
+					mes "[Shaam Rumi]";
+					mes "The Clans are not allowed to participate in the Siege; you should join a private guild instead for Siege.";
+					mes "Os Clãs são para aventureiros que odeiam ficar presos a compromissos.";
+					next;
+					mes "[Shaam Rumi]";
+					mes "Você tem alguma dúvida?";
+					break;
+				case 3:
+					break;
+			}
+			break;
+		case 2:
+			mes "[Shaam Rumi]";
+			mes "Ah, é mesmo? Ótima escolha!";
+			mes "Vamos verificar a política do Clã para iniciar os procedimentos de admissão.";
+			next;
+			mes "[Shaam Rumi]";
+			mes "^3131FFMembros do Clã^000000 não podem participar da Guerra do Emperium.";
+			mes "Como nosso novo membro, você receberá os seguintes bônus de atributos: ^FF0000<DES+1, AGI+1, HP Máx+30, SP Máx+10>^000000.";
+			mes "Você concorda?";
+			next;
+			if( select( "Sim.:Não." ) == 1 ){
+				mes "[Shaam Rumi]";
+				mes "Você pode entrar e sair de um Clã a qualquer momento, mas se não fizer login por ^FF0000mais de 2 semanas^000000, você será ^FF0000expulso^000000.";
+				mes "Você promete manter uma boa conduta?";
+				next;
+				if( select( "Sim.:Não." ) == 1 ){
+					mes "[Shaam Rumi]";
+					mes "Ótimo, escreva seu nome aqui.";
+					next;
+					input .@name$;
+					mes "[Shaam Rumi]";
+					mes "^3131FF" + strcharinfo( 0 ) + "^000000..!";
+					mes "Ugh, sua caligrafia precisa melhorar. Deixe-me processar sua inscrição.";
+					next;
+					if( getcharid( 2 ) ){
+						mes "[Shaam Rumi]";
+						mes "Você resolveu as coisas com sua guilda?";
+						close3;
+					}else if( getcharid( 5 ) != 0 ){
+						mes "[Shaam Rumi]";
+						mes "Eh, você já está em um Clã. Ei, isso não tem graça.";
+					}else{
+						if (clan_join(CROSSBOWCLAN)) {
+							sc_start2 SC_CROSSBOWCLAN, INFINITE_TICK, 0, CROSSBOWCLAN;
+							cutin "sham02.bmp", 2;
+							mes "[Shaam Rumi]";
+							mes "Bem-vindo ao ^3131FFClã da Besta^000000!";
+							next;
+							cutin "sham01.bmp", 2;
+							mes "[Shaam Rumi]";
+							mes "Você pode revisar as informações do Clã com ^3131FFCtrl+G^000000.";
+							next;
+							mes "[Shaam Rumi]";
+							mes "Não arrume brigas com outros membros. Seja sociável.";
+							mes "Se precisar de ajuda, pode sempre me enviar um sussurro, ok? Até mais!";
+						} else
+							mes "Ocorreu um erro.";
+					}
+				}else{
+					mes "[Shaam Rumi]";
+					mes "Tudo bem então. Vou sair um pouco para me divertir.";
+				}
+			}else{
+				mes "[Shaam Rumi]";
+				mes "Ah, você precisa de tempo para pensar sobre isso? Sem problemas.";
+			}
+			break;
+		case 3:
+			mes "[Shaam Rumi]";
+			mes "Por quê, encontrou um Clã melhor?";
+			mes "Estou desapontado, mas a decisão é sua. Deixe-me processar sua saída.";
+			next;
+			if( select( "Continuar.:Cancelar." ) == 1 ){
+				if( getcharid( 5 ) == 0 ){
+					cutin "sham04.bmp", 2;
+					mes "[Shaam Rumi]";
+					mes "Não posso deixar você sair... você nem está no meu Clã!";
+				}else if( getcharid( 5 ) != CROSSBOWCLAN ){
+					mes "[Shaam Rumi]";
+					mes "Desculpe, mas não me meto nos assuntos de outros Clãs.";
+				}else{
+					if (clan_leave()) {
+						sc_end SC_CROSSBOWCLAN;
+						mes "[Shaam Rumi]";
+						mes "Está feito.";
+						mes "Se algum dia sentir nossa falta, não hesite em voltar, certo?";
+					} else
+						mes "Ocorreu um erro.";
+				}
+			}
+			break;
+	}
+	close2;
+	cutin "", 255;
+	end;
+
+OnInit:
+	sc_start2 SC_CROSSBOWCLAN, INFINITE_TICK, 0, CROSSBOWCLAN, 10000, SCSTART_NOAVOID, getnpcid(0);
+	end;
+}

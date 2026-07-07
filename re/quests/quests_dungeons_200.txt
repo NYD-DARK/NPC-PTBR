@@ -1,0 +1,1931 @@
+//===== rAthena Script =======================================
+//= New dungeons
+//===== Description: =========================================
+//= [Walkthrough Conversion]
+//===== Changelog: ===========================================
+//= 1.0 Added sp_rudus4 quests. [Capuche]
+//= 1.1 Added nif_dun01 and nif_dun02 quests. [Capuche]
+//= 1.2 Added amicitia1 and amicitia2 quests. [Capuche]
+//============================================================
+
+// sp_rudus4
+pub_cat,94,43,5	script	Yulma#rudus4	4_F_ANYA,{
+	if (BaseLevel < 200) {
+		mes "[Yulma]";
+		mes "Uh... quem é você?";
+		mes "Desculpe, não sou bom em lembrar rostos de pessoas! Mas acho que você não é bom o suficiente para perguntar sobre meu trabalho aqui.";
+		next;
+		mes "- Esta é uma missão que pode ser realizada no nível 200 ou superior -";
+		close;
+	}
+	switch( isbegin_quest(16521) ) {
+	case 0:
+		emotion ET_SMILE;
+		mes "[Yulma]";
+		mes "Oh," + strcharinfo(0) + ". Você está aqui para beber algo?";
+		mes "Eu acabei de fazer um negócio, e correu bem.";
+		next;
+		select( "Para que serve isso?" );
+		mes "[Yulma]";
+		mes "Você sabe que a Ala Secreta e nossos Insurgente têm rastreado os vestígios dos experimentos ilegais da Ilusão, certo?";
+		next;
+		mes "[Yulma]";
+		mes "Nesse meio tempo, encontrei um caminho para o 4º andar de Rudus.";
+		next;
+		switch( select( "Bem, eu sei.", "Onde ficava Rudus?" ) ) {
+		case 1:
+			emotion ET_DELIGHT;
+			mes "[Yulma]";
+			mes "Hehe, é bom ter uma conversa agradável com" + strcharinfo(0) + ".";
+			break;
+		case 2:
+			emotion ET_SURPRISE;
+			mes "[Yulma]";
+			mes "O quê, quantas vezes você esqueceu?";
+			mes "Era o lugar onde a Ilusão abandonou os trabalhos fracassados que foram criados após o experimento.";
+			next;
+			mes "[Yulma]";
+			mes "Lembra do Morning? Onde o garotinho fica.";
+			mes "Ele está no primeiro andar, e a própria Rudus existe no segundo e terceiro andares.";
+			break;
+		}
+		next;
+		mes "[Yulma]";
+		mes "Aliás, o 4º andar de Rudus é incrível...";
+		mes "De alguma forma, entre os cobaias abandonados em Rudus, apenas os particularmente fortes parecem estar reunidos lá.";
+		next;
+		mes "[Yulma]";
+		mes "Pesquisadores da Ala Secreta dizem que, após uma competição acirrada entre os sujeitos, os mais fortes parecem ter se estabelecido lá.";
+		next;
+		mes "[Yulma]";
+		mes "Bem, na verdade, não tenho certeza de quão complicado é!";
+		mes "Parece que os pesquisadores da Ala Secreta precisam estudar as entidades de lá.";
+		next;
+		mes "[Yulma]";
+		mes "Então eu estava procurando alguém para me ajudar.";
+		mes "Para ser preciso, você," + strcharinfo(0) + "!";
+		next;
+		mes "[Yulma]";
+		mes "Precisa de um trabalho? Eu sei de tudo~";
+		mes "Se tiver uma ideia, vá para o 3º andar de Rudus.";
+		next;
+		mes "[Yulma]";
+		mes "<NAVI>[Pion]<INFO>sp_rudus3,380,42,0,101,0</INFO></NAVI> está no controle do caminho que leva ao quarto andar.";
+		mes "Vá e diga a ele que eu o enviei, e veja se vale a pena vir!";
+		setquest 16521;
+		close2;
+		navigateto("sp_rudus3",380,42);
+		end;
+	case 1:
+		mes "[Yulma]";
+		mes "Precisa de um trabalho? Eu sei de tudo~";
+		mes "Se tiver uma ideia, vá para o 3º andar de Rudus.";
+		next;
+		mes "[Yulma]";
+		mes "<NAVI>[Pion]<INFO>sp_rudus3,380,42,0,101,0</INFO></NAVI> está no controle do caminho que leva ao quarto andar.";
+		mes "Vá e diga a ele que eu o enviei, e veja se vale a pena vir!";
+		close;
+	case 2:
+		break;
+	}
+	if (isbegin_quest(16522) == 1) {
+		mes "[Yulma]";
+		mes "Oh, você desceu ao 4º andar de Rudus. Como foi?";
+		mes "O Pian está bem? Os sujeitos pareceram dignos de uma luta?";
+		next;
+		mes "[Yulma]";
+		mes "Então me ajude a estudar o pessoal da Ala Secreta.";
+		mes "Eu estava procurando alguém para caçá-los, porque eu não era capaz de capturar e pesquisar monstros sozinho.";
+		next;
+		select( "Pergunte se posso apenas caçar" );
+		emotion ET_KEK;
+		mes "[Yulma]";
+		mes "Oh, quase esqueci.";
+		mes "Se você prender este chip em algum lugar do seu corpo e caçá-los, os pesquisadores poderão receber dados.";
+		next;
+		mes "[Yulma]";
+		mes "Material novo, ecológico, não tóxico, material seguro, então você não precisa se preocupar com isso.";
+		mes "Onde você gostaria de pendurá-lo?";
+		next;
+		select( "Lóbulo da orelha", "Nuca", "Dorso da mão", "Testa" );
+		mes "[Yulma]";
+		mes "Certo, vou prendê-lo bem para que não te incomode.";
+		mes "Certo, então é isso...";
+		completequest 16522;
+		next;
+	}
+	mes "[Yulma]";
+	mes "Por favor, cuide bem de mim hoje!";
+	mes "Então, com que tipo de pesquisa você gostaria de ajudar hoje?";
+	next;
+	switch( select("Solidão Abissal", "Transformação e Evolução", "Backup de Dados", "Não ajudar" ) ) {
+	case 1:
+		switch( checkquest(16523,PLAYTIME) ) {
+		case -1:
+			break;
+		case 0:
+		case 1:
+			mes "[Yulma]";
+			mes "Os pesquisadores da Ala Secreta estão descansando.";
+			mes "Então," + strcharinfo(0) + ", que tal voltar depois de um pouco de descanso?";
+			next;
+			mes "[Yulma]";
+			mes "O 4º andar de Rudus não é um lugar confortável para entrar e sair facilmente.";
+			mes "Vamos descansar um pouco e trabalhar totalmente preparados!";
+			close;
+		case 2:
+			erasequest 16523;
+			break;
+		}
+		switch( checkquest(16524,HUNTING) ) {
+		case -1:
+			mes "[Yulma]";
+			mes "Um lugar onde apenas indivíduos fortes sobrevivem e mordem os mais fracos...";
+			mes "Como um poço profundo e escuro de solidão.";
+			next;
+			emotion ET_SWEAT;
+			mes "[Yulma]";
+			mes "Bem, eu não sei sobre isso!";
+			mes "Meu trabalho é entregar os pedidos dos pesquisadores.";
+			next;
+			mes "[Yulma]";
+			mes "Os pesquisadores querem saber como os sujeitos de Rudus diferem daqueles distribuídos no 4º andar.";
+			next;
+			emotion ET_PROFUSELY_SWAT;
+			mes "[Yulma]";
+			mes "O quanto eles perderam sua forma original e se mudaram após o experimento.";
+			mes "<FONT SIZE = 9>Hum... esses pesquisadores também parecem um pouco perigosos? Acho que todos os pesquisadores são assim, para alguém como eu.</FONT>";
+			next;
+			mes "[Yulma]";
+			mes "De qualquer forma, você quer coletar dados de <FONT COLOR = 0000CD>Dolorian, Plagarion e Deadre</FONT>.";
+			mes "Que tal caçarmos 10 indivíduos de cada?";
+			next;
+			if (select( "Eu virei caçar", "Eu recuso" ) == 2) {
+				mes "[Yulma]";
+				mes "Já somos camaradas no mesmo barco~?";
+				mes "Não é verdade, camarada? Pense bem!";
+				close;
+			}
+			mes "[Yulma]";
+			mes "Certo, se você for caçar, os dados serão coletados.";
+			mes "E minha mesada estará acumulando!";
+			setquest 16524;
+			close;
+		case 0:
+		case 1:
+			mes "[Yulma]";
+			mes "Os pesquisadores da Ala Secreta querem coletar dados de <FONT COLOR = 0000CD>Dolorian, Plagarion e Deadre</FONT>.";
+			mes "Que tal caçarmos 10 indivíduos de cada?";
+			close;
+		case 2:
+			mes "[Yulma]";
+			mes "A caça de hoje parece ter sido um sucesso!";
+			mes "Como você sabia," + strcharinfo(0) + ", o chip que coloquei em você funcionou hoje.";
+			next;
+			emotion ET_DELIGHT;
+			mes "[Yulma]";
+			mes "Eu vejo isso toda vez, mas toda vez é incrível, como o chip funciona.";
+			mes "Bem, eu deveria te pagar pelo trabalho que você fez hoje.";
+			next;
+			mes "[Yulma]";
+			mes "Aqui está!";
+			mes "Então, já que você terminou seu trabalho, descanse bem. Por favor, cuide de mim amanhã também~";
+			erasequest 16524;
+			setquest 16523;
+			getexp 15915940,11141160;	// TODO: the amount has been changed with the monster update
+			close;
+		}
+		end;
+	case 2:
+		switch( checkquest(16525,PLAYTIME) ) {
+		case -1:
+			break;
+		case 0:
+		case 1:
+			mes "[Yulma]";
+			mes "Os pesquisadores da Ala Secreta já foram embora.";
+			mes "Então," + strcharinfo(0) + ", que tal voltar depois de um descanso?";
+			next;
+			mes "[Yulma]";
+			mes "O 4º andar de Rudus não é um lugar confortável para entrar e sair facilmente.";
+			mes "Você também, descanse bem e vamos trabalhar totalmente preparados!";
+			close;
+		case 2:
+			erasequest 16525;
+			break;
+		}
+		switch( checkquest(16526,HUNTING) ) {
+		case -1:
+			mes "[Yulma]";
+			mes "As entidades do 4º andar, Giant Caput e Venedi, são muito diferentes das entidades dos outros andares";
+			mes "por se tornarem gigantescas, ou por abrigarem mais veneno...";
+			next;
+			emotion ET_PROFUSELY_SWAT;
+			mes "[Yulma]";
+			mes "Os pesquisadores parecem estar muito interessados neles.";
+			mes "É por isso que peço que você os cace.";
+			mes "<FONT SIZE = 9>Hum... por que não fazemos isso? Deve haver algo complicado no nível superior. Eu não sei.</FONT>";
+			next;
+			mes "[Yulma]";
+			mes "Você pode caçar 15 <FONT COLOR = 0000CD>Giant Caput e Venedi</FONT> de cada?";
+			mes "Os dados serão coletados automaticamente, então você só precisa se concentrar na caça.";
+			next;
+			if (select( "Eu irei caçá-los", "Eu recuso" ) == 2) {
+				mes "[Yulma]";
+				mes "Nós já somos camaradas no mesmo barco, não somos~?";
+				mes "Não é verdade, camarada? Pense bem!";
+				close;
+			}
+			mes "[Yulma]";
+			mes "Ok, vá e cace com vontade!";
+			mes "Meu bônus depende do seu desempenho!";
+			setquest 16526;
+			close;
+		case 0:
+		case 1:
+			mes "[Yulma]";
+			mes "Você pode caçar 15 <FONT COLOR = 0000CD>Giant Caput e Venedi</FONT> de cada?";
+			mes "Os dados serão coletados automaticamente, então você só precisa se concentrar na caça.";
+			close;
+		case 2:
+			mes "[Yulma]";
+			mes "Como você tem passado? Você voltou da caça em segurança.";
+			mes "Por favor, diga-me que os pesquisadores trabalharam duro hoje.";
+			next;
+			mes "[Yulma]";
+			mes "Parece que bons dados foram coletados.";
+			mes "Então eu deveria te pagar pelo trabalho que você fez hoje.";
+			next;
+			mes "[Yulma]";
+			mes "Aqui está!";
+			mes "Você trabalhou duro hoje, então descanse bem e volte. Vamos trabalhar duro amanhã!";
+			erasequest 16526;
+			setquest 16525;
+			getexp 15176970,11001900;	// TODO: the amount has been changed with the monster update
+			close;
+		}
+		end;
+	case 3:
+		switch( checkquest(16527,PLAYTIME) ) {
+		case -1:
+			break;
+		case 0:
+		case 1:
+			mes "[Yulma]";
+			mes "O pesquisador disse que se retirou agora. A manutenção do chip é suficiente uma vez por dia!";
+			mes "Então," + strcharinfo(0) + ", que tal voltar depois de um descanso?";
+			next;
+			mes "[Yulma]";
+			mes "O 4º andar de Rudus não é um lugar confortável para entrar e sair facilmente.";
+			mes "Vamos descansar um pouco e trabalhar totalmente preparados!";
+			close;
+		case 2:
+			erasequest 16527;
+			break;
+		}
+		switch( isbegin_quest(16528) ) {
+		case 0:
+			mes "[Yulma]";
+			mes "Ah, a propósito, os chips estão grudando bem?";
+			mes "Não dura muito tempo...";
+			next;
+			mes "[Yulma]";
+			mes "E eu tenho que fazer backup e formatar os dados que coletei para poder receber novos dados, mas não tenho talento para isso...";
+			next;
+			mes "[Yulma]";
+			mes "Vou apresentá-lo a um pesquisador que está atualmente em campo, você gostaria de ir diretamente?";
+			mes "Ele provavelmente está disfarçado para observar monstros, mas vou te dar a localização, então vá verificar!";
+			next;
+			if (select( "Procurar por ele", "Não procurar por ele" ) == 2) {
+				mes "[Yulma]";
+				mes "Não é frustrante trabalhar apenas comigo?";
+				mes "Não seria uma má ideia conhecer os pesquisadores que trabalham em campo...";
+				close;
+			}
+			mes "[Yulma]";
+			mes "Sim! Não é frustrante encontrar apenas comigo para receber trabalho?";
+			next;
+			mes "[Yulma]";
+			mes "Estou a caminho de vê-lo, então se você tiver alguma dúvida, pode perguntar diretamente a ele!";
+			mes "Ouvi dizer que o <NAVI>[Researcher]<INFO>sp_rudus4,192,204,0,101,0</INFO></NAVI> fica principalmente pelo centro do 4º andar de Rudus.";
+			setquest 16528;
+			close;
+		case 1:
+			mes "[Yulma]";
+			mes "Estou a caminho de encontrar o pesquisador da Ala Secreta, então se você tiver alguma dúvida, pode perguntar diretamente a ele!";
+			mes "Ouvi dizer que o <NAVI>[Researcher]<INFO>sp_rudus4,192,204,0,101,0</INFO></NAVI> fica principalmente pelo centro do 4º andar de Rudus.";
+			close;
+		case 2:
+			mes "[Yulma]";
+			mes "Você esteve lá? Vocês conversaram um pouco?";
+			mes "O pesquisador está se escondendo bem?";
+			next;
+			mes "[Yulma]";
+			mes "Ele é conhecido por se esconder muito bem, embora não tenha as habilidades para se esconder.";
+			mes "É por isso que você está em campo.";
+			next;
+			mes "[Yulma]";
+			mes "Porque isso também é um trabalho... Como eu o substituí com segurança, meus superiores pediram que eu cuidasse da recompensa.";
+			next;
+			mes "[Yulma]";
+			mes "Bem, é bom que você tenha voltado para mim também!";
+			mes "Então tenha um bom dia e até amanhã!";
+			erasequest 16528;
+			erasequest 16540;
+			setquest 16527;
+			getexp 15000000,11000000;
+			close;
+		}
+		end;
+	case 4:
+		mes "[Yulma]";
+		mes "Eh, você não vai?";
+		mes "Eu estava esperando ansiosamente por" + strcharinfo(0) + "!";
+		close;
+	}
+	end;
+
+OnInit:
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(16524,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(16526,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "isbegin_quest(16528) == 2" );
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(16523,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(16525,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(16527,PLAYTIME) == 2" );
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 200 && (checkquest(16524,HUNTING) == -1 && checkquest(16523,PLAYTIME) == -1)" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 200 && (checkquest(16526,HUNTING) == -1 && checkquest(16525,PLAYTIME) == -1)" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 200 && (isbegin_quest(16528) == 0 && checkquest(16527,PLAYTIME) == -1)" );
+	end;
+}
+
+sp_rudus3,380,42,3	script	Pion#rudus4	4_M_REBELLION3,{
+	switch( isbegin_quest(16521) ) {
+	case 0:
+		emotion ET_SLEEPY;
+		mes "[Pion]";
+		mes "Zzz... Opa!";
+		mes "Com licença, senhor! Sem mais trabalho!";
+		next;
+		mes "[Pion]";
+		mes "Seup, Ha-am... Abaixo desta ladeira é uma área de controle de acesso.";
+		mes "Pessoas não têm permissão para entrar.";
+		next;
+		select("Eu não sou uma pessoa comum." );
+		mes "[Pion]";
+		mes "Sim? Ah... ah, não!" + strcharinfo(0) + " !";
+		mes "Isso... Ainda assim, não posso deixar você entrar por conta própria.";
+		close;
+	case 1:
+		emotion ET_SLEEPY;
+		mes "[Pion]";
+		mes "Zzz... Opa!";
+		mes "Com licença! Sem mais trabalho!";
+		next;
+		mes "[Pion]";
+		mes "Oops... ah, isso definitivamente não é saliva";
+		mes "É uma gota de suor que brilha com paixão e esforço.";
+		next;
+		mes "[Pion]";
+		mes "Hmm, hmmm. A entrada abaixo desta ladeira está restrita agora...";
+		mes "O que está acontecendo?";
+		next;
+		if (select( "Eu quero ir ao 4º andar de Rudus.", "Apontar a atitude de trabalho." ) == 2) {
+			mes "[Pion]";
+			mes "Oh, há um problema com sua atitude de trabalho?";
+			mes "Al-algumas pessoas podem dormir!!";
+			next;
+			mes "[Pion]";
+			mes "Eu só dormi um pouco!";
+			mes "Sério!";
+			close;
+		}
+		mes "[Pion]";
+		mes "Quarto andar? Eu estou no controle bem ali...";
+		mes "Ah, você veio ver a Yulma do Bullet Meow?";
+		next;
+		mes "[Pion]";
+		mes "Então você deve passar.";
+		mes "Se você quiser ver os espécimes no 4º andar e ajudar com um pedido de pesquisa, volte para a <NAVI>[Yulma]<INFO>pub_cat,94,43,0,101,0</INFO></NAVI> e pergunte.";
+		next;
+		mes "[Pion]";
+		mes "Vou levar você ao 4º andar.";
+		close2;
+		completequest 16521;
+		setquest 16522;
+		warp "sp_rudus4",370,156;
+		end;
+	case 2:
+		break;
+	}
+	emotion ET_SLEEPY;
+	mes "[Pion]";
+	mes "Zzz... Ahn! Shi, perdão!";
+	mes "Tem certeza de que quer descer ao 4º andar de Rudus?";
+	next;
+	if (select( "Mover-se", "Não se mover" ) == 2) {
+		mes "[Pion]";
+		mes "Entendo. Bocejo...";
+		close;
+	}
+	mes "[Pion]";
+	mes "Vou levar você. Tome cuidado!";
+	close2;
+	warp "sp_rudus4",370,156;
+	end;
+
+OnInit:
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "isbegin_quest(16521) == 1" );
+	end;
+}
+
+sp_rudus4,192,204,3	script	Secret Wing Researcher#rudu	4_SOIL,{
+	mes "[Secret Wing Researcher]";
+	mes "Bom. Trabalho de campo.";
+	mes "Você tem que ficar de olho em muitos monstros.";
+	next;
+	emotion ET_HUK;
+	mes "[Secret Wing Researcher]";
+	mes "...ahn!";
+	mes "Como você me reconheceu?";
+	next;
+	if (isbegin_quest(16528) == 1) {
+		mes "[Secret Wing Researcher]";
+		mes "Ah, olhe de novo," + strcharinfo(0) + ".";
+		mes "Recebi uma ligação. Você está aqui para renovar o chip?";
+		next;
+		mes "[Secret Wing Researcher]";
+		mes "Vejamos... Vamos pegar alguns chips.";
+		mes "Hmmm... Conectar com minha máquina... Dados vazios...";
+		next;
+		emotion ET_BEST;
+		mes "[Secret Wing Researcher]";
+		mes "Certo, é isso! Os dados estão limpos e muito bons. Vou colá-los novamente.";
+		next;
+		mes "[Secret Wing Researcher]";
+		mes "Como este também é um trabalho, <NAVI>[Yulma]<INFO>pub_cat,94,43,0,101,0</INFO></NAVI> lhe dará uma pequena gratificação quando você retornar.";
+		mes "Estou sempre em dívida com você. Bom trabalho!";
+		completequest 16528;
+		setquest 16540;
+		close;
+	}
+	emotion ET_KEK;
+	mes "[Secret Wing Researcher]";
+	mes "Maldito! Se você fingir que sabe, os monstros virão!";
+	mes "Vá embora!";
+	close;
+
+OnInit:
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "isbegin_quest(16528) == 1" );
+	end;
+}
+
+
+// nif_dun
+moc_para01,14,19,7	script	Old scholar#lv200	2_M_SAGE_OLD,{
+	if (BaseLevel < 200) {
+		mes "[Old scholar]";
+		mes "Eu gostaria de fazer mais pesquisas, mas se minha vida estiver realmente em perigo...";
+		next;
+		mes "[Old scholar]";
+		mes "Não tenho escolha a não ser contratar um aventureiro forte e sincero. Hmm...";
+		next;
+		mes "[Old scholar]";
+		mes "Acho que o nível 200 seria suficiente... É fácil falar, mas esse não é o tipo de pessoa que se encontra facilmente.";
+		close;
+	}
+	switch( isbegin_quest(8640) ) {
+	case 0:
+		if (isbegin_quest(8639) == 0) {
+			mes "[Old scholar]";
+			mes "Oh, oh céus, meu Deus. O aventureiro forte e sincero que eu estava procurando apareceu aqui.";
+			mes "Você gostaria de me ajudar com minha pesquisa?";
+			next;
+			.@s = select( "Ouvir o pedido", "Suspeito..." );
+			mes "[Old scholar]";
+			mes "Mesmo que eu olhe para você com meus olhos, reconheço suas habilidades rapidamente, por favor, faça algo...!";
+			if (.@s == 2)
+				close;
+			mes "...?";
+			mes "O quê? Você vai me ajudar?";
+			next;
+			mes "[Old scholar]";
+			mes "Não, é isso... Todos recusaram, então as palavras ficaram presas na minha garganta.";
+			mes "Obrigado pela sua cooperação.";
+			next;
+			select( "Você ainda está cooperando..." );
+			mes "[Old scholar]";
+			mes "Vamos lá, é isso. Claro que alguém tão talentoso quanto você pode ir para Niflheim.";
+			mes "Claro que não me restam muitos dias, não é o momento certo para eu ir e não conseguiria voltar a tempo.";
+			next;
+			mes "[Old scholar]";
+			mes "De acordo com fontes recentes... Nas profundezas da escuridão de Niflheim, os mortos realizam um banquete,";
+			mes "de uma forma que não podemos imaginar.";
+			mes "Mas não há onde ouvir mais sobre isso.";
+			next;
+			mes "[Old scholar]";
+			mes "Você descobrirá em breve de qualquer maneira, mas estou curioso agora.";
+			mes "Pode dar uma olhada? Vou lhe dar muitos exemplos.";
+			next;
+			if (select( "Isso é o suficiente. Posso voltar?", "E se eu não puder voltar?" ) == 2) {
+				mes "[Old scholar]";
+				mes "Você nem pensaria que não seria capaz de voltar no seu nível...";
+				mes "Se você ainda é tão cauteloso, tudo bem. Volte quando estiver pronto.";
+				close;
+			}
+			setquest 8639;
+			mes "[Garim Springfield]";
+			mes "Obrigado. Acontece que esqueci de me apresentar.";
+			mes "Meu nome é Garim Springfield.";
+			mes "Trabalhei no castelo de Sábio por muito tempo... Agora que estou aposentado, quero passar algum tempo de lazer aqui e também fazer pedidos...";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "Relaxe...";
+			next;
+			mes "[Garim Springfield]";
+			mes "Certo. Vale a pena.";
+			mes "Conceda um desejo a um velho ocioso.";
+			mes "Então esperarei por boas notícias.";
+			close;
+		}
+		mes "[Garim Springfield]";
+		mes "O que você está fazendo? Vá rápido.";
+		close;
+	case 1:
+		mes "[Garim Springfield]";
+		mes "Ahn? Você realmente visitou o salão de banquetes nas profundezas de Niflheim?";
+		mes "Você voltou vivo?";
+		mes "Certo então, me conte sua história.";
+		next;
+		mes "[Garim Springfield]";
+		mes "Hmm hmm... Entendo!";
+		mes "Estou preparado assim, então não terei medo se for mais tarde!";
+		next;
+		mes "[Garim Springfield]";
+		mes "A pesquisa durará para sempre...!";
+		completequest 8640;
+		close;
+	case 2:
+		mes "[Garim Springfield]";
+		mes "Senti como se pudesse pesquisar mesmo depois de morrer, então me senti melhor.";
+		close;
+	}
+	end;
+
+OnInit:
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "BaseLevel >= 200 && isbegin_quest(8639) == 0 && isbegin_quest(8640) == 0" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "isbegin_quest(8640) == 1" );
+	end;
+}
+
+niflheim,164,102,3	script	Tired looking dead#lv20	4_F_NFDEADMGCIAN,{
+	switch( isbegin_quest(8640) ) {
+	case 0:
+		switch( isbegin_quest(8639) ) {
+		case 0:
+			mes "[Tired looking dead]";
+			mes "Bocejo...";
+			mes "Não consigo dormir";
+			mes "Qual é o alvoroço de que você não consegue dormir nem depois de morto?";
+			mes "Vamos dormir um pouco...";
+			mes "Vou morrer por causa do barulho.";
+			close;
+		case 1:
+			mes "[Tired looking dead]";
+			mes "Bocejo...";
+			mes "Ahn? O quê? Eu não lido com mascates.";
+			next;
+			if (select( "Você está com uma aparência ruim", "Vá embora silenciosamente" ) == 2) {
+				mes "[Tired looking dead]";
+				mes "Ah, eu queria perguntar se você tinha pílulas para dormir... Mas estou morto... Você não vai me ouvir... Hmm.";
+				close;
+			}
+			mes "[Tired looking dead]";
+			mes "Uh, como você sabia?";
+			mes "Minha aparência deve estar muito ruim...";
+			mes "Você tem uma pílula para dormir?";
+			next;
+			select("Eu não sou um viciado" );
+			mes "[Tired looking dead]";
+			mes "Ah... sinto muito. Eu entendi errado. Todas as pessoas que chegaram até aqui eram crianças estranhas ou pessoas que vendiam drogas, então eu as expulsei.";
+			next;
+			mes "[Tired looking dead]";
+			mes "A propósito... como você sabia que estou cansada? Minha aparência está tão ruim assim?";
+			next;
+			mes "[Tired looking dead]";
+			mes "Na verdade, estou morta há algum tempo, mas só recentemente vim para Niflheim. Então decidi dormir aqui nesta casa...";
+			mes "Não consigo dormir à noite porque é muito barulhento na casa ao lado.";
+			next;
+			mes "[Tired looking dead]";
+			mes "Não, é a dor de não conseguir dormir porque o vizinho é barulhento, mesmo eu já estando morta...";
+			mes "Ah, não é na casa ao lado. Eles todos fugiram.";
+			mes "Existe um motivo para ser tão barato...";
+			next;
+			mes "[Tired looking dead]";
+			mes "Sim, <NAVI>[lá]<INFO>Niflheim,148,124,0,101,0</INFO></NAVI>";
+			mes "Os moradores loucos de lá... eles fazem um banquete todos os dias.";
+			next;
+			mes "[Tired looking dead]";
+			mes "Eu estou lá todo dia, todo dia!!";
+			next;
+			mes "[Tired looking dead]";
+			mes "Ha... eu sei, mesmo sendo todo dia, existe um horário definido.";
+			mes "A propósito... Se você fosse um bebedor que voltava para casa na hora certa quando vivo, você faria isso mesmo na morte?";
+			next;
+			mes "[Tired looking dead]";
+			mes "Eu estou... morta, então só quero dormir em paz...";
+			mes "Espero que eles voltem a si depois que o banquete terminar.";
+			next;
+			select( "O banquete é..." );
+			mes "[Tired looking dead]";
+			mes "Sim... você parece bem forte e tem álcool... eles estão mortos, então é mágica.";
+			mes "Se você puder silenciar aqueles que estão bêbados com poderes mágicos a noite toda, eu lhe recompensarei.";
+			mes "Sim, claro, todos os dias.";
+			next;
+			mes "[Milla]";
+			mes "Eu sou Milla. Agora sou residente de Niflheim.";
+			mes "Por favor, me ajude a dormir, meu caro.";
+			erasequest 8639;
+			setquest 8640;
+			close;
+		case 2:
+			end;
+		}
+		end;
+	case 1:
+	case 2:
+		mes "[Milla]";
+		mes "Sim, obrigada por voltar.";
+		mes "Ha-am...";
+		mes "Por mim e pelos meus vizinhos... por uma boa noite de sono.";
+		next;
+		if (select( "Ouvir o pedido.", "Rejeitar." ) == 2) {
+			mes "[Milla]";
+			mes "Você não pode fazer isso se estiver ocupado...";
+			mes "Ah, afinal, os vivos não ouvem esse som. Essa é a minha agonia, conhecida apenas pelos mortos...";
+			npctalk "Outro Morto: Barulhento! Vá dormir!", "#lv200althema", bc_self;
+			npctalk "Outro Morto: Ele realmente não consegue dormir!", "#lv200althema2", bc_self;
+			close;
+		}
+		mes "[Milla]";
+		mes "Amado vivo, obrigada por sua misericórdia.";
+		mes "É uma instalação luxuosa com um salão de banquetes e uma Casa de Ópera, mas cada um é um pouco diferente.";
+		mes "Pedirei esse tipo de habilidade baseada em sua bondade...";
+		next;
+		switch( select( "Ele parece fofo", "Isso não é um instrumento", "Tocar piano", "Caras de cabelo bagunçado", "Aqueles com bonecas", "Acordá-los", "Parar" ) ) {
+		case 1:
+			switch( checkquest(8642,PLAYTIME) ) {
+			case -1:
+				break;
+			case 0:
+			case 1:
+				mes "[Milla]";
+				mes "Acho que eles já tiveram o suficiente por hoje.";
+				mes "Espero que você possa me ajudar amanhã se tiver tempo.";
+				close;
+			case 2:
+				erasequest 8642;
+				break;
+			}
+			switch( checkquest(8641,HUNTING) ) {
+			case -1:
+				mes "[Milla]";
+				mes "Eles parecem fofos... mas são terrivelmente barulhentos.";
+				mes "^0000FF" + getmonsterinfo("GHOST_CUBE", MOB_NAME) + "^000000,";
+				mes "^0000FF" + getmonsterinfo("LUDE_GAL", MOB_NAME) + "^000000";
+				next;
+				mes "[Milla]";
+				mes "Eu gostaria que você pudesse derrotar 15" + getmonsterinfo("GHOST_CUBE", MOB_NAME) + "";
+				mes "e 15 de seus companheiros" + getmonsterinfo("LUDE_GAL", MOB_NAME) + ", que assombravam o salão de banquetes dos mortos,";
+				mes "e torná-los sagrados por um dia.";
+				next;
+				if (select( "Eu aceito", "Estou ocupado hoje" ) == 2) {
+					mes "[Milla]";
+					mes "Ummm...";
+					mes "Sim... Bem, eu não vou morrer só porque não consigo dormir...";
+					mes "Eu já estou morta";
+					close;
+				}
+				mes "[Milla]";
+				mes "Obrigada pelo seu coração bondoso.";
+				mes "Bendita seja a misericórdia dos vivos!";
+				setquest 8641;
+				close;
+			case 0:
+			case 1:
+				mes "[Milla]";
+				mes "Eu gostaria que você pudesse derrotar 15" + getmonsterinfo("GHOST_CUBE", MOB_NAME) + "";
+				mes "e 15 de seus companheiros" + getmonsterinfo("LUDE_GAL", MOB_NAME) + ", que assombravam o salão de banquetes dos mortos,";
+				mes "e torná-los sagrados por um dia.";
+				close;
+			case 2:
+				mes "[Milla]";
+				mes "Kya, você ouviu o grito deles até aqui?";
+				mes "Acho que posso dormir um pouco mais profundamente hoje graças a você...";
+				mes "Tenho que enfrentar essa confusão novamente amanhã.";
+				mes "Obrigada.";
+				erasequest 8641;
+				setquest 8642;
+				// getexp 15642570,10949790;	// pre-rebalance
+				getexp 20300909,14210636;	// rebalance (unknown jexp, 70% of baseexp)
+				close;
+			}
+			end;
+		case 2:
+			switch( checkquest(8645,PLAYTIME) ) {
+			case -1:
+				break;
+			case 0:
+			case 1:
+				mes "[Milla]";
+				mes "Acho que eles já tiveram o suficiente por hoje.";
+				mes "Espero que você possa me ajudar amanhã se tiver tempo.";
+				close;
+			case 2:
+				erasequest 8645;
+				break;
+			}
+			switch( checkquest(8644,HUNTING) ) {
+			case -1:
+				mes "[Milla]";
+				mes "É chamado de ^0000FF" + getmonsterinfo("BRUTAL_MURDERER", MOB_NAME) + "^000000.";
+				mes "Eles têm facas nas mãos...";
+				mes "É barulhento demais para bater em qualquer lugar!";
+				next;
+				mes "[Milla]";
+				mes "Eu gostaria que você pudesse derrotar 10" + getmonsterinfo("BRUTAL_MURDERER", MOB_NAME) + "";
+				mes "e 10 de seus companheiros" + getmonsterinfo("GAN_CEANN", MOB_NAME) + ", que assombravam o salão de banquetes dos mortos,";
+				mes "e torná-los sagrados por um dia.";
+				next;
+				if (select( "Eu aceito", "Estou ocupado hoje" ) == 2) {
+					mes "[Milla]";
+					mes "Ummm...";
+					mes "Sim... Bem, eu não vou morrer só porque não consigo dormir...";
+					mes "Eu já estou morta.";
+					close;
+				}
+				mes "[Milla]";
+				mes "Obrigada pelo seu coração bondoso.";
+				mes "Bendita seja a misericórdia dos vivos!";
+				setquest 8644;
+				close;
+			case 0:
+			case 1:
+				mes "[Milla]";
+				mes "Eu gostaria que você pudesse derrotar 10" + getmonsterinfo("BRUTAL_MURDERER", MOB_NAME) + "";
+				mes "e 10 de seus companheiros" + getmonsterinfo("GAN_CEANN", MOB_NAME) + ", que assombravam o salão de banquetes dos mortos,";
+				mes "e torná-los sagrados por um dia.";
+				close;
+			case 2:
+				mes "[Milla]";
+				mes "Kya, você ouviu o som de seus cutelos e capacetes voando até aqui?";
+				mes "Acho que posso dormir um pouco mais profundamente hoje graças a você...";
+				mes "Obrigada.";
+				erasequest 8644;
+				setquest 8645;
+				// getexp 10756120,7541880;	// pre-rebalance
+				getexp 14106860,9874802;	// rebalance (unknown jexp, 70% of baseexp)
+				close;
+			}
+			end;
+		case 3:
+			switch( checkquest(8648,PLAYTIME) ) {
+			case -1:
+				break;
+			case 0:
+			case 1:
+				mes "[Milla]";
+				mes "Acho que eles já tiveram o suficiente por hoje.";
+				mes "Espero que você possa me ajudar amanhã se tiver tempo.";
+				close;
+			case 2:
+				erasequest 8648;
+				break;
+			}
+			switch( isbegin_quest(8647) ) {
+			case 0:
+				mes "[Milla]";
+				mes "Se você for ao salão de banquetes dos mortos ali, encontrará um piano.";
+				mes "Ele realmente grita quando uma pessoa viva bate nele.";
+				mes "Seria divertido?";
+				next;
+				mes "[Milla]";
+				mes "Tocar o <NAVI>[piano]<INFO>nif_dun01,140,202,0,101,0</INFO></NAVI>";
+				mes "do salão de banquetes dos mortos.";
+				mes "Não existe pedido de música.";
+				next;
+				if (select( "Eu aceito", "Estou ocupado hoje" ) == 2) {
+					mes "[Milla]";
+					mes "Ummm...";
+					mes "Sim... Bem, eu não vou morrer só porque não consigo dormir...";
+					mes "Eu já estou morta";
+					close;
+				}
+				mes "[Milla]";
+				mes "Obrigada pelo seu coração bondoso.";
+				mes "Bendita seja a misericórdia dos vivos!";
+				setquest 8647;
+				close;
+			case 1:
+				mes "[Milla]";
+				mes "Tocar o <NAVI>[piano]<INFO>nif_dun01,140,202,0,101,0</INFO></NAVI>";
+				mes "do salão de banquetes dos mortos.";
+				mes "Não existe pedido de música.";
+				close;
+			case 2:
+				mes "[Milla]";
+				mes "Hahaha, ouviu isso? É como álcool... Não, é como se você bebesse magia e agisse como um falcão.";
+				mes "Acho que posso dormir um pouco mais tranquilo hoje, graças a você...";
+				mes "Obrigado.";
+				erasequest 8647;
+				erasequest 8649;
+				setquest 8648;
+				getexp 10000000,7500000;
+				close;
+			}
+			end;
+		case 4:
+			if (BaseLevel < 240) {
+				mes "[Milla]";
+				mes "Hmm... não.";
+				mes "Ainda é muito cedo para deixar isso com você...";
+				mes "Vou esperar até você alcançar o nível 240.";
+				mes "Eu tenho tempo.";
+				close;
+			}
+			switch( checkquest(8651,PLAYTIME) ) {
+			case -1:
+				break;
+			case 0:
+			case 1:
+				mes "[Milla]";
+				mes "Acho que eles já tiveram o suficiente por hoje.";
+				mes "Espero que você possa me ajudar amanhã, se tiver tempo.";
+				close;
+			case 2:
+				erasequest 8651;
+				break;
+			}
+			switch( isbegin_quest(8650) ) {
+			case 0:
+			case 1:
+				switch( checkquest(8650,HUNTING) ) {
+				case -1:
+					mes "[Milla]";
+					mes "Quero dizer, tem um pessoal chamado ^0000FF" + getmonsterinfo("DISGUISER", MOB_NAME) + "^000000.";
+					mes "O cabelo deles parece que foi atingido por uma bomba e eles parecem tão empolgados.";
+					mes "^0000FF" + getmonsterinfo("BLUEMOON_LOLI_RURI", MOB_NAME) + "^000000, não pode ser tão barulhento quando você se junta com os caras de cabelo de vassoura.";
+					next;
+					mes "[Milla]";
+					mes "Espero que você mostre o que é bom para";
+					mes "os 15 ^0000FF" + getmonsterinfo("DISGUISER", MOB_NAME) + "^000000 e os 15 ^0000FF" + getmonsterinfo("BLUEMOON_LOLI_RURI", MOB_NAME) + "^000000";
+					mes "que assombram a Ópera destruída.";
+					next;
+					if (select( "Eu aceito", "Estou ocupado hoje" ) == 2) {
+						mes "[Milla]";
+						mes "Ummm...";
+						mes "É... Bem, eu não vou morrer só porque não consigo dormir...";
+						mes "Eu já estou morto";
+						close;
+					}
+					mes "[Milla]";
+					mes "Obrigado pelo seu bom coração.";
+					mes "Bendita seja a misericórdia dos vivos!";
+					setquest 8650;
+					close;
+				case 0:
+				case 1:
+					mes "[Milla]";
+					mes "Espero que você mostre o que é bom para";
+					mes "os 15 ^0000FF" + getmonsterinfo("DISGUISER", MOB_NAME) + "^000000 e os 15 ^0000FF" + getmonsterinfo("BLUEMOON_LOLI_RURI", MOB_NAME) + "^000000";
+					mes "que assombram a Ópera destruída.";
+					close;
+				case 2:
+					mes "[Milla]";
+					mes "Huh, huh, consigo ouvir o barulho do cabelo-bomba daqui de cima.";
+					mes "Graças a você, vou dormir bem hoje.";
+					mes "Obrigado. Vejo você amanhã novamente.";
+					completequest 8650;
+					setquest 8651;
+					getexp 44984725,31489308;	// rebalance (unknown jexp, 70% of baseexp)
+					close;
+				}
+				end;
+			case 2:
+				switch( checkquest(8652,HUNTING) ) {
+				case -1:
+					mes "[Milla]";
+					mes "Espero que você mostre o que é bom para";
+					mes "os 15 ^0000FF" + getmonsterinfo("DISGUISER", MOB_NAME) + "^000000 e os 15 ^0000FF" + getmonsterinfo("BLUEMOON_LOLI_RURI", MOB_NAME) + "^000000";
+					mes "que assombram a Ópera destruída.";
+					next;
+					if (select( "Eu aceito", "Estou ocupado hoje" ) == 2) {
+						mes "[Milla]";
+						mes "Ummm...";
+						mes "É... Bem, eu não vou morrer só porque não consigo dormir...";
+						mes "Eu já estou morto";
+						close;
+					}
+					mes "[Milla]";
+					mes "Obrigado pelo seu bom coração.";
+					mes "Bendita seja a misericórdia dos vivos!";
+					setquest 8652;
+					close;
+				case 0:
+				case 1:
+					mes "[Milla]";
+					mes "Espero que você mostre o que é bom para";
+					mes "os 15 ^0000FF" + getmonsterinfo("DISGUISER", MOB_NAME) + "^000000 e os 15 ^0000FF" + getmonsterinfo("BLUEMOON_LOLI_RURI", MOB_NAME) + "^000000";
+					mes "que assombram a Ópera destruída.";
+					close;
+				case 2:
+					mes "[Milla]";
+					mes "Huh, huh, consigo ouvir o barulho do cabelo-bomba daqui de cima.";
+					mes "Graças a você, vou dormir bem hoje.";
+					mes "Obrigado. Vejo você amanhã novamente.";
+					erasequest 8652;
+					setquest 8651;
+					getexp 44984725,31489308;	// rebalance (unknown jexp, 70% of baseexp)
+					close;
+				}
+				end;
+			}
+			end;
+		case 5:
+			if (BaseLevel < 240) {
+				mes "[Milla]";
+				mes "Hmm... não.";
+				mes "Ainda é muito cedo para deixar isso com você...";
+				mes "Vou esperar até você alcançar o nível 240.";
+				mes "Eu tenho tempo.";
+				close;
+			}
+			switch( checkquest(8654,PLAYTIME) ) {
+			case -1:
+				break;
+			case 0:
+			case 1:
+				mes "[Milla]";
+				mes "Acho que eles já tiveram o suficiente por hoje.";
+				mes "Espero que você possa me ajudar amanhã, se tiver tempo.";
+				close;
+			case 2:
+				erasequest 8654;
+				break;
+			}
+			switch( isbegin_quest(8653) ) {
+			case 0:
+			case 1:
+				switch( checkquest(8653,HUNTING) ) {
+				case -1:
+					mes "[Milla]";
+					mes "Se você olhar para a Ópera destruída ali,";
+					mes "verá aqueles com bonecos. Tem o" + getmonsterinfo("GROTE", MOB_NAME) + "e o" + getmonsterinfo("PIERROTZOIST", MOB_NAME) + "^000000...";
+					mes "Todos os que estão com bonecos são muito barulhentos.";
+					next;
+					mes "[Milla]";
+					mes "Espero que você mostre o que é bom para";
+					mes "os 10 ^0000FF" + getmonsterinfo("GROTE", MOB_NAME) + "^000000 e os 10 ^0000FF" + getmonsterinfo("PIERROTZOIST", MOB_NAME) + "^000000";
+					mes "que assombram a Ópera destruída.";
+					next;
+					if (select( "Eu aceito", "Estou ocupado hoje" ) == 2) {
+						mes "[Milla]";
+						mes "Ummm...";
+						mes "É... Bem, eu não vou morrer só porque não consigo dormir...";
+						mes "Eu já estou morto";
+						close;
+					}
+					mes "[Milla]";
+					mes "Obrigado pelo seu bom coração.";
+					mes "Bendita seja a misericórdia dos vivos!";
+					setquest 8653;
+					close;
+				case 0:
+				case 1:
+					mes "[Milla]";
+					mes "Espero que você mostre o que é bom para";
+					mes "os 10 ^0000FF" + getmonsterinfo("GROTE", MOB_NAME) + "^000000 e os 10 ^0000FF" + getmonsterinfo("PIERROTZOIST", MOB_NAME) + "^000000";
+					mes "que assombram a Ópera destruída.";
+					close;
+				case 2:
+					mes "[Milla]";
+					mes "Kyak-kyak-kyak-kyak-kyak-kyak-kyak, o que você realmente fez?";
+					mes "Há pouco tempo, o" + getmonsterinfo("GROTE", MOB_NAME) + "e o" + getmonsterinfo("PIERROTZOIST", MOB_NAME) + "foram para casa dizendo que não fariam mais barulho.";
+					mes "Claro que não. Eles virão novamente amanhã.";
+					mes "Obrigado. Vejo você amanhã.";
+					completequest 8653;
+					setquest 8654;
+					getexp 29944101,20960871;	// rebalance (unknown jexp, 70% of baseexp)
+					close;
+				}
+				end;
+			case 2:
+				switch( checkquest(8655,HUNTING) ) {
+				case -1:
+					mes "[Milla]";
+					mes "Espero que você mostre o que é bom para";
+					mes "os 10 ^0000FF" + getmonsterinfo("GROTE", MOB_NAME) + "^000000 e os 10 ^0000FF" + getmonsterinfo("PIERROTZOIST", MOB_NAME) + "^000000";
+					mes "que assombram a Ópera destruída.";
+					next;
+					if (select( "Eu aceito", "Estou ocupado hoje" ) == 2) {
+						mes "[Milla]";
+						mes "Ummm...";
+						mes "É... Bem, eu não vou morrer só porque não consigo dormir...";
+						mes "Eu já estou morto";
+						close;
+					}
+					mes "[Milla]";
+					mes "Obrigado pelo seu bom coração.";
+					mes "Bendita seja a misericórdia dos vivos!";
+					setquest 8655;
+					close;
+				case 0:
+				case 1:
+					mes "[Milla]";
+					mes "Espero que você mostre o que é bom para";
+					mes "os 10 ^0000FF" + getmonsterinfo("GROTE", MOB_NAME) + "^000000 e os 10 ^0000FF" + getmonsterinfo("PIERROTZOIST", MOB_NAME) + "^000000";
+					mes "que assombram a Ópera destruída.";
+					close;
+				case 2:
+					mes "[Milla]";
+					mes "Kyak-kyak-kyak-kyak-kyak-kyak-kyak, o que você realmente fez?";
+					mes "Há pouco tempo, o" + getmonsterinfo("GROTE", MOB_NAME) + "e o" + getmonsterinfo("PIERROTZOIST", MOB_NAME) + "foram para casa dizendo que não fariam mais barulho.";
+					mes "Claro que não. Eles virão novamente amanhã.";
+					mes "Obrigado. Vejo você amanhã.";
+					erasequest 8655;
+					setquest 8654;
+					getexp 29944101,20960871;	// rebalance (unknown jexp, 70% of baseexp)
+					close;
+				}
+				end;
+			}
+			end;
+		case 6:
+			if (BaseLevel < 240) {
+				mes "[Milla]";
+				mes "Hmm... não.";
+				mes "Ainda é muito cedo para deixar isso com você...";
+				mes "Vou esperar até você alcançar o nível 240.";
+				mes "Eu tenho tempo.";
+				close;
+			}
+			switch( checkquest(8657,PLAYTIME) ) {
+			case -1:
+				break;
+			case 0:
+			case 1:
+				mes "[Milla]";
+				mes "Acho que eles já tiveram o suficiente por hoje.";
+				mes "Espero que você possa me ajudar amanhã, se tiver tempo.";
+				close;
+			case 2:
+				erasequest 8657;
+				break;
+			}
+			switch( isbegin_quest(8656) ) {
+			case 0:
+				mes "[Milla]";
+				mes "O destruído... não, não diga isso.";
+				mes "Se você for para a Ópera destruída, encontrará fantasmas nos quadros.";
+				mes "Mas eles nem sequer têm um corpo...";
+				mes "Roncando, minha querida.";
+				next;
+				mes "[Milla]";
+				mes "Um <NAVI>[fantasmas conversando]<INFO>nif_dun02,37,221,0,101,0</INFO></NAVI>";
+				mes "e um <NAVI>[ronco]<INFO>nif_dun02,249,221,0,101,0</INFO></NAVI>";
+				mes "dentro do salão de banquetes dos mortos, torça o nariz.";
+				mes "Você precisa acalmá-los.";
+				next;
+				if (select( "Eu aceito", "Estou ocupado hoje" ) == 2) {
+					mes "[Milla]";
+					mes "Ummm...";
+					mes "É... Bem, eu não vou morrer só porque não consigo dormir...";
+					mes "Eu já estou morto";
+					close;
+				}
+				mes "[Milla]";
+				mes "Obrigado pelo seu bom coração.";
+				mes "Bendita seja a misericórdia dos vivos!";
+				setquest 8656;
+				close;
+			case 1:
+				if (isbegin_quest(8658) == 0 || isbegin_quest(8659) == 0) {
+					mes "[Milla]";
+					mes "Um <NAVI>[fantasmas conversando]<INFO>nif_dun02,37,221,0,101,0</INFO></NAVI>";
+					mes "e um <NAVI>[ronco]<INFO>nif_dun02,249,221,0,101,0</INFO></NAVI>";
+					mes "dentro do salão de banquetes dos mortos, torça o nariz.";
+					mes "Você precisa acalmá-los.";
+					close;
+				}
+				mes "[Milla]";
+				mes "...Não consigo comer mais nada...";
+				mes "...hic.";
+				mes "Oh, você esteve lá? Eu adormeci sem perceber.";
+				mes "É muito irritante ouvir aquele ronco o tempo todo...";
+				next;
+				mes "[Milla]";
+				mes "Parece que os vivos não ouvem muito bem.";
+				mes "De qualquer forma, obrigado pelo dia de hoje.";
+				mes "O sono é precioso...";
+				mes "Durma o suficiente enquanto estiver vivo.";
+				erasequest 8656;
+				erasequest 8658;
+				erasequest 8659;
+				setquest 8657;
+				getexp 13000000,9100000;	// rebalance (unknown jexp, 70% of baseexp)
+				close;
+			case 2:
+				end;
+			}
+			end;
+		case 7:
+			mes "[Milla]";
+			mes "Você não pode fazer isso se estiver ocupado...";
+			mes "Ah, afinal, os vivos não ouvem esse som. Esta é a minha agonia, conhecida apenas pelos mortos...";
+			npctalk "Outro Morto: Barulhento! Vá dormir!", "#lv200althema", bc_self;
+			npctalk "Outro Morto: Ele realmente não consegue dormir!", "#lv200althema2", bc_self;
+			close;
+		}
+		end;
+	}
+	end;
+
+OnInit:
+	// prerequisite
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "isbegin_quest(8639) == 1" );
+
+	// daily
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(8641,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(8644,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "isbegin_quest(8647) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(8650,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(8652,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(8653,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(8655,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "isbegin_quest(8656) == 1 && isbegin_quest(8658) == 1 && isbegin_quest(8659) == 1" );
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8642,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8645,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8648,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8651,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8654,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8657,PLAYTIME) == 2" );
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 200 && (checkquest(8641,HUNTING) == -1 && checkquest(8642,PLAYTIME) == -1)" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 200 && (checkquest(8644,HUNTING) == -1 && checkquest(8645,PLAYTIME) == -1)" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 200 && (isbegin_quest(8647) == 0 && checkquest(8648,PLAYTIME) == -1)" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 240 && (checkquest(8650,HUNTING) == -1 && checkquest(8651,PLAYTIME) == -1)" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 240 && isbegin_quest(8650) == 2 && checkquest(8652,HUNTING) == -1 && checkquest(8651,PLAYTIME) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 240 && (checkquest(8653,HUNTING) == -1 && checkquest(8654,PLAYTIME) == -1)" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 240 && isbegin_quest(8653) == 2 && checkquest(8655,HUNTING) == -1 && checkquest(8654,PLAYTIME) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 240 && (isbegin_quest(8656) == 0 && checkquest(8657,PLAYTIME) == -1)" );
+	end;
+}
+
+niflheim,160,106,3	duplicate(dummy_npc)	#lv200althema	CLEAR_NPC
+niflheim,165,105,3	duplicate(dummy_npc)	#lv200althema2	CLEAR_NPC
+
+
+niflheim,143,125,6	script	Funny Gatekeeper's Friend#lv20	LUDE_GAL,{
+	npctalk "Amigo do Porteiro Engraçado: Cante~ A noite toda~ ou para sempre~", "", bc_self;
+	end;
+}
+
+niflheim,145,126,6	script	Angry Gatekeeper#lv200	GHOST_CUBE,{
+	npctalk "Porteiro Irritado: Kye-Look! Vivo! Brinque! Não precisa ir!", "", bc_self;
+	npctalk "Amigo do Porteiro Engraçado: Não precisa partir! Brinque conosco!", "Funny Gatekeeper's Friend#lv20", bc_self;
+	end;
+}
+
+nif_dun01,140,202,3	script	Piano#lv200	CLEAR_NPC,{
+	if (isbegin_quest(8647) == 1) {
+		mes "Eu não conseguia ouvir nada, mas os mortos ao meu redor parecem estar em alvoroço.";
+		mes "Vamos informar Milla.";
+		completequest 8647;
+		setquest 8649;
+		npctalk "Plim plim... Estalo!", "Piano#lv200", bc_self;
+		npctalk "Durma vivo! Kyaaak!", "Exciting Cello#lv200", bc_self;
+		npctalk "O homem vivo toca piano!", "Dancing Cello#lv200", bc_self;
+		npctalk "Oh meu Deus, ele realmente não sabe tocar...", "Quiet Cello#lv200", bc_self;
+		npctalk "Como pode ser isso...", "Stranger Cello#lv200", bc_self;
+		npctalk "Você arruinou a atmosfera!", "Happy Cello#lv200", bc_self;
+		npctalk "Piano Ooo!!!", "Serious Contrabass#lv2", bc_self;
+		npctalk "O piano está atordoado...", "Sleek Harp#lv200", bc_self;
+		close;
+	}
+	// note: no text
+	end;
+
+OnInit:
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "isbegin_quest(8647) == 1" );
+	end;
+}
+nif_dun01,133,198,3	duplicate(dummy_npc)	Exciting Cello#lv200	CLEAR_NPC
+nif_dun01,138,195,3	duplicate(dummy_npc)	Dancing Cello#lv200	CLEAR_NPC
+nif_dun01,153,195,3	duplicate(dummy_npc)	Quiet Cello#lv200	CLEAR_NPC
+nif_dun01,152,198,3	duplicate(dummy_npc)	Stranger Cello#lv200	CLEAR_NPC
+nif_dun01,157,198,3	duplicate(dummy_npc)	Happy Cello#lv200	CLEAR_NPC
+nif_dun01,156,202,3	duplicate(dummy_npc)	Serious Contrabass#lv2	CLEAR_NPC
+nif_dun01,133,201,3	duplicate(dummy_npc)	Sleek Harp#lv200	CLEAR_NPC
+
+nif_dun01,148,43,3	script	Helpful Gatekeeper#240	DISGUISER,{
+	if (BaseLevel < 240) {
+		npctalk "Porteiro Prestativo: Uh-huh-huh. Você não tem experiência suficiente para passar por aqui.", "", bc_self;
+		npctalk "Porteiro Silencioso: ...significa que você está com nível baixo.", "Silent Gatekeeper#240", bc_self;
+		end;
+	}
+	npctalk "Porteiro Prestativo: Uh-huh-huh. Montanha, suba. Não pode descer.", "", bc_self;
+	npctalk "Porteiro Silencioso: ...significa boas-vindas.", "Silent Gatekeeper#240", bc_self;
+	end;
+}
+
+nif_dun01,143,43,7	script	Silent Gatekeeper#240	GROTE,{
+	npctalk "Porteiro Silencioso: ...", "", bc_self;
+	end;
+}
+
+nif_dun02,37,221,3	script	Sleep Talking Ghost#lv240	CLEAR_NPC,3,3,{
+	if (isbegin_quest(8656) == 1) {
+		switch( isbegin_quest(8659) ) {
+		case 0:
+			setquest 8659;
+			mes "Eu torci o nariz do fantasma no quadro.";
+			mes "Não houve contato físico, mas o fantasma parou de falar.";
+			npctalk "????????!", "", bc_self;
+			if (isbegin_quest(8658) == 1)
+				mes "Vamos informar Milla.";
+			close;
+		case 1:
+			mes "O fantasma que estava falando não é visto, e outro fantasma está dormindo.";
+			close;
+		default:
+			end;
+		}
+	}
+	end;
+
+OnTouch:
+	if (isbegin_quest(8659) == 0) {
+		npctalk "Eu quero comer isso também... parece delicioso...", "", bc_self;
+		end;
+	}
+	end;
+
+OnInit:
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "isbegin_quest(8656) == 1 && isbegin_quest(8659) == 0" );
+	end;
+}
+
+nif_dun02,249,221,3	script	Snoring Ghost#lv240	CLEAR_NPC,3,3,{
+	if (isbegin_quest(8656) == 1) {
+		switch( isbegin_quest(8658) ) {
+		case 0:
+			setquest 8658;
+			mes "Eu torci o nariz do fantasma no quadro.";
+			mes "Não houve contato físico, mas o fantasma parou de roncar.";
+			npctalk "Nang!", "", bc_self;
+			if (isbegin_quest(8659) == 1)
+				mes "Vamos informar Milla.";
+			close;
+		case 1:
+			mes "O fantasma que roncava não é visto em lugar nenhum, e outro fantasma está dormindo.";
+			close;
+		default:
+			end;
+		}
+	}
+	end;
+
+OnTouch:
+	if (isbegin_quest(8658) == 0)
+		npctalk "Dorolong Dorolong...", "", bc_self;
+	end;
+
+OnInit:
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "isbegin_quest(8656) == 1 && isbegin_quest(8658) == 0" );
+	end;
+}
+
+
+// amicitia1
+ein_fild08,158,96,3	script	Lana#ami	4_M_ILYA,{
+	if (BaseLevel < 215) {
+		mes "[Lana]";
+		mes "Além daqui é perigoso, então o acesso é restrito, exceto para aventureiros acima de um certo nível.";
+		next;
+		mes "- Esta área pode ser acessada a partir do nível 215 ou superior -";
+		close;
+	}
+	mes "[Lana]";
+	mes "Você gostaria de ir para o primeiro andar do Laboratório Geral Amicitia?";
+	next;
+	if (select( "Ir", "Ficar" ) == 2) {
+		mes "[Lana]";
+		mes "Certo. Tenha uma boa aventura, então.";
+		close;
+	}
+	mes "[Lana]";
+	mes "Certo. Vou transferi-lo para o Laboratório Geral Amicitia.";
+	close2;
+	warp "amicitia1",242,244;
+	end;
+}
+
+pub_cat,86,33,5	script	Ansuriya#ami	4_F_REBELLION2,{
+	if (BaseLevel < 215) {
+		mes "[Ansuriya]";
+		mes "Oh, você é o herói da última operação.";
+		mes "É uma honra conhecê-lo em um lugar como este. Posso lhe pagar uma bebida?";
+		next;
+		mes "- Esta é uma missão que pode ser realizada no nível 215 ou superior -";
+		close;
+	}
+	if (isbegin_quest(16529) == 0) {
+		mes "[Ansuriya]";
+		mes "Oh, você é o herói da última operação.";
+		mes "É uma honra conhecê-lo em um lugar como este. Posso lhe pagar uma bebida?";
+		next;
+		mes "[Gerbena]";
+		mes "Uau," + strcharinfo(0) + "! Posso pegar um autógrafo?";
+		mes "É uma honra! Hehe~";
+		next;
+		mes "[Ansuriya]";
+		mes "Aqui, um copo de Tropical Sograt, por favor!";
+		mes "Oh, você está bem com Tropical Sograt?";
+		next;
+		mes "[Gerbena]";
+		mes "Eu gosto de leite com chocolate.";
+		next;
+		mes "[Ansuriya]";
+		mes "Você compra com o seu dinheiro.";
+		mes "A propósito, Gerbena, como está a equipe Amicitia?";
+		next;
+		emotion ET_PROFUSELY_SWAT, getnpcid(0,"Gerbena#ami");
+		mes "[Gerbena]";
+		mes "Bem, isso é... Eu terminei a organização por enquanto.";
+		mes "No entanto, é verdade que o número de rebeldes a serem destacados é um pouco curto, já que o número total de membros é pequeno.";
+		next;
+		mes "[Ansuriya]";
+		mes "Hmm, o que devo fazer? Gerbena. Você quer ir?";
+		next;
+		emotion ET_SWEAT, getnpcid(0,"Gerbena#ami");
+		mes "[Gerbena]";
+		mes "Ah, dê uma olhada. Minha cabeça está explodindo só com toda a equipe.";
+		next;
+		mes "[Ansuriya]";
+		mes "O que devo fazer? Precisamos de duas equipes por andar...";
+		next;
+		emotion ET_AHA, getnpcid(0,"Gerbena#ami");
+		mes "[Gerbena]";
+		mes "Você é um herói.";
+		mes "Pode nos ajudar?";
+		next;
+		emotion ET_QUESTION;
+		mes "[Ansuriya]";
+		mes "Gerbena, do que você está falando de repente!";
+		next;
+		mes "[Gerbena]";
+		mes "Não, o herói foi designado para uma missão em associação com Insurgente na última operação.";
+		mes "Então eu estava me perguntando se você poderia se candidatar novamente desta vez...";
+		next;
+		emotion ET_SURPRISE;
+		mes "[Ansuriya]";
+		mes "Uh! sim.";
+		mes "Aventureiro. O que você acha?";
+		next;
+		select( "Ouça o que está acontecendo..." );
+		mes "[Ansuriya]";
+		mes "Ah, sim. Esse é o pedido.";
+		mes "Nada mais, descobrimos um novo laboratório perto de Einbroch.";
+		next;
+		mes "[Ansuriya]";
+		mes "O nome é <FONT COLOR = 0000CD>Laboratório Geral Amicitia</FONT>. De acordo com os dados fornecidos pela Rekenber, dizem que é um laboratório irmão do Instituto Werner.";
+		next;
+		mes "[Ansuriya]";
+		mes "Parece que ele não conduzia experimentos muito ilegais e focava no estudo de cultura de quimeras como homunculus, mas dizem que foi abandonado após uma explosão em uma usina de energia mágica subterrânea.";
+		next;
+		mes "[Ansuriya]";
+		mes "Ele entrou sob investigação porque um dos administradores daquele laboratório abandonado era Werner.";
+		next;
+		mes "[Ansuriya]";
+		mes "Como resultado da investigação, as quimeras que estavam sendo cultivadas saíram de controle devido a um acidente com explosão, transformaram-se em monstros e foram deixadas sem vigilância.";
+		next;
+		mes "[Ansuriya]";
+		mes "Não consegui dizer se foi apenas negligência ou intencional.";
+		next;
+		mes "[Ansuriya]";
+		mes "Não fica longe da cidade, então a Insurgente cuidou de organizar isso por razões de segurança... Como você ouviu, estamos com problemas pela falta de pessoal.";
+		next;
+		mes "[Gerbena]";
+		mes "Com a sua ajuda, podemos tornar a limpeza mais fácil!";
+		next;
+		mes "[Ansuriya]";
+		mes "Certo. Você poderia me ajudar com a subjugação?";
+		next;
+		if (select( "Ajudar", "Não ajudar" ) == 2) {
+			mes "[Ansuriya]";
+			mes "Ah... Desculpe-me.";
+			mes "É o nosso trabalho e só estamos procurando por ajuda.";
+			next;
+			mes "[Ansuriya]";
+			mes "Você deve ter suas próprias coisas para fazer!";
+			mes "Nós tentaremos resolver isso sozinhos.";
+			close;
+		}
+		mes "[Gerbena]";
+		mes "É uma honra trabalhar com você!";
+		next;
+		mes "[Ansuriya]";
+		mes "Obrigado pela sua cooperação!";
+		mes "Vamos organizar o grupo novamente...";
+		next;
+		mes "[Ansuriya]";
+		mes "Você se sente à vontade para realizar a missão sozinho ou com a equipe de missão da Insurgente?";
+		next;
+		select( "Sinto-me à vontade sozinho" );
+		mes "[Ansuriya]";
+		mes "Se for assim, vamos combinar os grupos de missão da Insurgente em um só, e a missão solo do herói... resmunga resmunga.";
+		mes "Oh, por que sou o único pensando. Gerbena, ajude-me!";
+		next;
+		mes "[Gerbena]";
+		mes "Opa, sim!";
+		setquest 16529;
+		completequest 16529;
+		next;
+	}
+	mes "[Ansuriya]";
+	mes "Herói, estas são as coisas que gostaríamos de pedir a você em relação a Amicitia.";
+	mes "Com qual delas você gostaria de ajudar?";
+	next;
+	switch( select( "Terra e Fogo", "Água e Vento", "Vestígios de Werner", "Não ajudar" ) ) {
+	case 1:
+		switch( checkquest(16530,PLAYTIME) ) {
+		case -1:
+			break;
+		case 0:
+		case 1:
+			mes "[Ansuriya]";
+			mes "Agora, a unidade da Insurgente está no processo de acompanhamento.";
+			mes "Está tudo bem, herói, descansar um pouco mais.";
+			next;
+			mes "[Ansuriya]";
+			mes "Obrigado por ser tão ativo conosco.";
+			mes "Você pode voltar após o amanhecer?";
+			close;
+		case 2:
+			erasequest 16530;
+			break;
+		}
+		switch( checkquest(16531,HUNTING) ) {
+		case -1:
+			mes "[Ansuriya]";
+			mes "Eu gostaria de pedir que você cace <FONT COLOR = 0000CD>" + getmonsterinfo("CHIMERA_AMITERA", MOB_NAME) + "e" + getmonsterinfo("CHIMERA_FILLIA", MOB_NAME) + "</FONT> entre as quimeras em cultura.";
+			next;
+			mes "[Ansuriya]";
+			mes "Você será capaz de reconhecê-las imediatamente, já que as características de atributo de terra e fogo aparecem muito mais fortes do que as das entidades existentes.";
+			mes "Na verdade, é mais como um monstro do que um homunculus...";
+			next;
+			mes "[Ansuriya]";
+			mes "Apesar da destruição da instalação de cultura, o número de indivíduos continua a aumentar, então eu gostaria que você caçasse cerca de 15 espécimes de cada!";
+			next;
+			if (select( "Caçar", "Não caçar" ) == 2) {
+				mes "[Ansuriya]";
+				mes "Hum? Você mudou de ideia?";
+				next;
+				mes "[Ansuriya]";
+				mes "Bem, então! Temos que nos reorganizar! Ugh.";
+				mes "Herói, por que você não reconsidera com calma?";
+				close;
+			}
+			mes "[Ansuriya]";
+			mes "Muito obrigado pelo seu apoio. Os dois tipos de quimeras provavelmente estarão vagando pelo térreo do laboratório fechado Amicitia.";
+			next;
+			mes "[Ansuriya]";
+			mes "Por favor, não deixe as quimeras saírem do laboratório.";
+			setquest 16531;
+			close;
+		case 0:
+		case 1:
+			mes "[Ansuriya]";
+			mes "<FONT COLOR = 0000CD>" + getmonsterinfo("CHIMERA_AMITERA", MOB_NAME) + "e" + getmonsterinfo("CHIMERA_FILLIA", MOB_NAME) + "</FONT> estarão vagando pelo primeiro andar do laboratório fechado Amicitia.";
+			next;
+			mes "[Ansuriya]";
+			mes "Por favor, cace 15 de cada.";
+			close;
+		case 2:
+			mes "[Ansuriya]";
+			mes "Você esteve lá? Você completou todas as tarefas que mencionei.";
+			next;
+			mes "[Ansuriya]";
+			mes "As unidades da Insurgente também estão de serviço.";
+			mes "Graças ao herói que organizou isso um passo à frente, parece que ficou mais fácil entrar.";
+			next;
+			mes "[Ansuriya]";
+			mes "Como esperado de um herói. É raro encontrar alguém fora dos Insurgente que trabalhe com tanta sinceridade e limpeza.";
+			mes "Eu ficaria grato se você pudesse se juntar à missão amanhã também.";
+			erasequest 16531;
+			setquest 16530;
+			getexp 17726670,12408690;	// TODO: the amount has been changed with the monster update
+			close;
+		}
+		end;
+	case 2:
+		switch( checkquest(16532,PLAYTIME) ) {
+		case -1:
+			break;
+		case 0:
+		case 1:
+			mes "[Ansuriya]";
+			mes "Agora, a unidade da Insurgente está no processo de acompanhamento.";
+			mes "Está tudo bem, herói, descansar um pouco mais.";
+			next;
+			mes "[Ansuriya]";
+			mes "Obrigado por ser tão ativo conosco.";
+			mes "Você pode voltar após o amanhecer?";
+			close;
+		case 2:
+			erasequest 16532;
+			break;
+		}
+		switch( checkquest(16533,HUNTING) ) {
+		case -1:
+			mes "[Ansuriya]";
+			mes "Eu gostaria de pedir que você cace <FONT COLOR = 0000CD>" + getmonsterinfo("CHIMERA_LITUS", MOB_NAME) + "e" + getmonsterinfo("CHIMERA_VANILAQUS", MOB_NAME) + "</FONT> entre as quimeras que estavam sendo cultivadas.";
+			next;
+			mes "Não é difícil diferenciá-las, porque sofreram mutação para uma aparência que revela claramente os atributos de vento e água.";
+			next;
+			mes "[Ansuriya]";
+			mes "O número de indivíduos continua a aumentar sem a ajuda de uma instalação de cultura, então, por favor, cace 15 de cada.";
+			next;
+			if (select( "Caçar", "Não caçar" ) == 2) {
+				mes "[Ansuriya]";
+				mes "Hmm? Mudou de ideia?";
+				next;
+				emotion ET_KEK;
+				mes "[Ansuriya]";
+				mes "Bem, então! Precisamos nos reorganizar! Ugh.";
+				mes "Herói, por que não reconsidera calmamente?";
+				close;
+			}
+			mes "[Ansuriya]";
+			mes "Muito obrigado pelo seu apoio. Os dois tipos de quimeras estão ficando no primeiro andar do laboratório fechado Amicitia.";
+			next;
+			mes "[Ansuriya]";
+			mes "Por favor, não deixe as quimeras saírem do laboratório.";
+			setquest 16533;
+			close;
+		case 0:
+		case 1:
+			mes "[Ansuriya]";
+			mes "<FONT COLOR = 0000CD>" + getmonsterinfo("CHIMERA_LITUS", MOB_NAME) + "e" + getmonsterinfo("CHIMERA_VANILAQUS", MOB_NAME) + "</FONT> estão ficando no primeiro andar do laboratório fechado Amicitia.";
+			next;
+			mes "[Ansuriya]";
+			mes "Por favor, cace 15 de cada.";
+			close;
+		case 2:
+			mes "[Ansuriya]";
+			mes "Missão concluída, confirmado.";
+			mes "Agora, posicione as tropas da Insurgente.";
+			next;
+			mes "[Ansuriya]";
+			mes "Graças ao herói que se organizou com antecedência, seremos capazes de entrar facilmente..";
+			mes "Muito obrigado.";
+			next;
+			mes "[Ansuriya]";
+			mes "Trabalhar com alguém de fora da Insurgente, é a primeira vez que sinto uma sintonia tão boa.";
+			mes "Herói, gostaria de participar da missão amanhã também?";
+			setquest 16532;
+			erasequest 16533;
+			getexp 17724090,12406890;	// TODO: the amount has been changed with the monster update
+			close;
+		}
+		end;
+	case 3:
+		switch( checkquest(16534,PLAYTIME) ) {
+		case -1:
+			break;
+		case 0:
+		case 1:
+			mes "[Ansuriya]";
+			mes "Agora, a unidade da Insurgente está no processo de acompanhamento.";
+			mes "Tudo bem, herói, descanse um pouco mais.";
+			next;
+			mes "[Ansuriya]";
+			mes "Obrigado por ser tão ativo conosco.";
+			mes "Pode voltar depois do amanhecer?";
+			close;
+		case 2:
+			erasequest 16534;
+			break;
+		}
+		switch( isbegin_quest(16535) ) {
+		case 0:
+			mes "[Ansuriya]";
+			mes "Este é um trabalho de alta segurança, então só quero pedir este favor ao herói.";
+			next;
+			mes "[Ansuriya]";
+			mes "Eu não queria que passasse pela boca de muitas pessoas, então as unidades da Insurgente foram excluídas deste trabalho.";
+			next;
+			mes "[Ansuriya]";
+			mes "Nada mais do que encontrar <FONT COLOR = 0000CD>Vestígios de Werner</FONT> no 1º andar do laboratório abandonado Amicitia.";
+			next;
+			mes "[Ansuriya]";
+			mes "Que parte de Amicitia era gerenciada por Werner, que tipo de experimentos ele conduzia, etc...";
+			mes "Se algo tiver causado impacto no Instituto, por favor, venha até mim.";
+			next;
+			mes "[Ansuriya]";
+			mes "Documentos, arquivos, dados! Qualquer coisa serve.";
+			mes "Você gostaria de ir para mim?";
+			next;
+			if (select( "Eu irei", "Eu não irei" ) == 2) {
+				mes "[Ansuriya]";
+				mes "Tudo bem. Mas é frustrante...";
+				next;
+				mes "[Ansuriya]";
+				mes "Eu agradeceria se você pudesse manter este pedido em segredo.";
+				close;
+			}
+			mes "[Ansuriya]";
+			mes "Ok. Não será fácil encontrar... Quaisquer vestígios, então por favor, volte para mim com apenas um.";
+			mes "Então, gostaria de lhe agradecer.";
+			setquest 16535;
+			close;
+		case 1:
+			mes "[Ansuriya]";
+			mes "Não será fácil encontrar... Quaisquer vestígios, então por favor, volte para mim com apenas um.";
+			mes "Então, gostaria de lhe agradecer.";
+			close;
+		case 2:
+			mes "[Ansuriya]";
+			mes "Você encontrou algum vestígio?";
+			mes "Você veio ao lugar certo. Esta nota está na caligrafia de Werner.";
+			next;
+			mes "[Ansuriya]";
+			mes "Obrigado. Entregaremos isso aos agentes da ala secreta para investigação.";
+			mes "Então você deve ser recompensado pelo seu trabalho árduo.";
+			next;
+			mes "[Ansuriya]";
+			mes "Obrigado por voltar amanhã e trabalhar comigo.";
+			mes "Porque eu não posso deixar isso nas mãos de qualquer um.";
+			erasequest 16535;
+			erasequest 16545;
+			setquest 16534;
+			getexp 17000000,12000000;
+			close;
+		}
+		end;
+	case 4:
+		mes "[Ansuriya]";
+		mes "Hmm? Mudou de ideia?";
+		next;
+		mes "[Ansuriya]";
+		mes "Bem, então! Precisamos nos reorganizar! Ugh.";
+		mes "Herói, por que não reconsidera calmamente?";
+		close;
+	}
+	close;
+
+OnInit:
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(16531,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(16533,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "isbegin_quest(16535) == 2" );
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(16530,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(16532,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(16534,PLAYTIME) == 2" );
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 215 && (checkquest(16531,HUNTING) == -1 && checkquest(16530,PLAYTIME) == -1)" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 215 && (checkquest(16533,HUNTING) == -1 && checkquest(16532,PLAYTIME) == -1)" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 215 && (isbegin_quest(16535) == 0 && checkquest(16534,PLAYTIME) == -1)" );
+	end;
+}
+
+amicitia1,57,242,3	script	Something#ami1	4_GC109,{
+	if (isbegin_quest(16535) == 1) {
+		mes "[Something]";
+		mes "Há algo no chão. Devemos dar uma olhada mais de perto?";
+		next;
+		mes "[Something]";
+		mes "Memorando de pesquisa com caligrafia caprichada. A caligrafia de Werner é exatamente assim.";
+		next;
+		mes "[Something]";
+		mes "Vamos pegar e verificar.";
+		setquest 16545;
+		completequest 16535;
+		close2;
+		initnpctimer;
+		disablenpc();
+		end;
+	}
+	mes "[Something]";
+	mes "Algo está fora do lugar no chão.";
+	mes "Parece ser apenas lixo.";
+	close;
+
+OnTimer300000:	// unknown timer
+	stopnpctimer;
+	enablenpc();
+	end;
+}
+amicitia1,152,159,3	duplicate(Something#ami1)	Something#ami2	4_GC109
+amicitia1,262,139,3	duplicate(Something#ami1)	Something#ami3	4_GC109
+amicitia1,36,106,3	duplicate(Something#ami1)	Something#ami4	4_GC109
+amicitia1,244,49,3	duplicate(Something#ami1)	Something#ami5	4_GC109
+
+
+// amicitia2
+pub_cat,89,32,3	script	Gerbena#ami	4_M_REBELLION2,{
+	if (BaseLevel < 230) {
+		mes "[Gerbena]";
+		mes "Uau," + strcharinfo(0) + "! Pode me dar um autógrafo?";
+		mes "É uma honra! Hehe~";
+		next;
+		mes "- Esta é uma missão que pode ser realizada no nível 230 ou superior -";
+		close;
+	}
+	mes "[Gerbena]";
+	mes "Herói, havia uma sala de cultura intensiva de homúnculos no segundo andar do laboratório Amicitia.";
+	mes "Eles estavam criando quimeras mutantes mais poderosas.";
+	next;
+	mes "[Gerbena]";
+	mes "É lamentável, mas se eles forem liberados do laboratório, causarão mais danos do que você pode imaginar.";
+	mes "Pode me ajudar a eliminar essas quimeras?";
+	next;
+	switch( select( "Imitação e Real", "Mudança natural", "Não ajudar" ) ) {
+	case 1:
+		switch( checkquest(16536,PLAYTIME) ) {
+		case -1:
+			break;
+		case 0:
+		case 1:
+			mes "[Gerbena]";
+			mes "Você já esteve lá hoje? Se sim, que tal fazer uma pausa?";
+			mes "Se você sobrecarregar seu corpo, pode não se sair bem.";
+			next;
+			mes "[Gerbena]";
+			mes "Volte depois do amanhecer e trabalhe conosco!";
+			close;
+		case 2:
+			erasequest 16536;
+			break;
+		}
+		switch( checkquest(16537,HUNTING) ) {
+		case -1:
+			mes "[Gerbena]";
+			mes "Parte do trabalho que eles estavam fazendo na incubadora era a produção em massa de quimeras mutantes.";
+			next;
+			mes "[Gerbena]";
+			mes "Eles re-mutaram o homúnculo mutante e fortaleceram ainda mais sua agressividade.";
+			next;
+			mes "[Gerbena]";
+			mes "Por favor, cace 15 <FONT COLOR = 0000CD>" + getmonsterinfo("CHIMERA_NAPEO", MOB_NAME) + "e" + getmonsterinfo("CHIMERA_GALENSIS", MOB_NAME) + "</FONT> de cada.";
+			mes "Ambos são criaturas que imitam a forma humana, mas adicionam uma poderosa transformação das propriedades de quimera a isso.";
+			next;
+			mes "[Gerbena]";
+			mes "Já faz um bom tempo que o laboratório foi fechado e deixado sem supervisão.";
+			mes "Uma caçada rápida me deixaria mais confortável.";
+			next;
+			if (select( "Ajudar na caçada", "Não caçar" ) == 2) {
+				mes "[Gerbena]";
+				mes "Ah, você mudou de ideia!";
+				mes "Gerbena está com o coração partido!";
+				next;
+				mes "[Gerbena]";
+				mes "Mas foi um pedido unilateral nosso.";
+				mes "Mesmo se você recusar, não podemos fazer nada...";
+				close;
+			}
+			mes "[Gerbena]";
+			mes "É uma honra que você nos ajude!";
+			mes "Posso participar com você, herói?";
+			next;
+			mes "[Ansuriya]";
+			mes "Ele não gosta disso. Ele se sente mais confortável fazendo sozinho, acalme-se, Gerbena.";
+			next;
+			mes "[Gerbena]";
+			mes "Ugh! Por favor, cuide disso para mim!!";
+			setquest 16537;
+			close;
+		case 0:
+		case 1:
+			mes "[Gerbena]";
+			mes "Por favor, cace 15 <FONT COLOR = 0000CD>" + getmonsterinfo("CHIMERA_NAPEO", MOB_NAME) + "e" + getmonsterinfo("CHIMERA_GALENSIS", MOB_NAME) + "</FONT> de cada.";
+			mes "Ambos são criaturas que imitam a forma humana, mas adicionam uma poderosa transformação das propriedades de quimera a isso.";
+			close;
+		case 2:
+			mes "[Gerbena]";
+			mes "Agora as Forças de Ilusão estão posicionadas e continuam sua missão.";
+			mes "Graças ao herói, é fácil entrar e subjugar a Quimera.";
+			next;
+			mes "[Gerbena]";
+			mes "Ugh, eu também queria ver a batalha maravilhosa do herói pessoalmente...";
+			mes "Talvez algum dia eu tenha a chance de ver você?";
+			next;
+			mes "[Gerbena]";
+			mes "Se não se importar, por que não volta amanhã e trabalha conosco?";
+			erasequest 16537;
+			setquest 16536;
+			getexp 37253672,26077570;	// rebalance (unknown jexp, 70% of baseexp)
+			close;
+		}
+		end;
+	case 2:
+		switch( checkquest(16538,PLAYTIME) ) {
+		case -1:
+			break;
+		case 0:
+		case 1:
+			mes "[Gerbena]";
+			mes "Você já esteve lá hoje? Se sim, que tal fazer uma pausa?";
+			mes "Se você sobrecarregar seu corpo, pode não ter um bom desempenho.";
+			next;
+			mes "[Gerbena]";
+			mes "Volte após o amanhecer e trabalhe conosco!";
+			close;
+		case 2:
+			erasequest 16538;
+			break;
+		}
+		switch( checkquest(16539,HUNTING) ) {
+		case -1:
+			mes "[Gerbena]";
+			mes "Entre os homúnculos na câmara de cultura intensiva, há a Quimera Mutante Lavaeter e a Quimera Mutante Fulgor.";
+			next;
+			mes "[Gerbena]";
+			mes "Parece similar aos homúnculos Dieter e Bayeri existentes, mas eles são muito diferentes.";
+			mes "É diferente de um homúnculo por se reproduzir sozinho e decidir sem um dono.";
+			next;
+			mes "[Gerbena]";
+			mes "Você não pode resgatá-los ou fazer qualquer coisa. Todos, cada um deles, deve ser eliminado.";
+			next;
+			mes "[Gerbena]";
+			mes "Então, herói, você gostaria de nos ajudar a caçar 15 <FONT COLOR = 0000CD>" + getmonsterinfo("CHIMERA_LAVA", MOB_NAME) + "e" + getmonsterinfo("CHIMERA_FULGOR", MOB_NAME) + "</FONT> de cada?";
+			next;
+			if (select( "Ajudar na caçada", "Não caçar" ) == 2) {
+				mes "[Gerbena]";
+				mes "Ah, você mudou de ideia!";
+				mes "Gerbena está com o coração partido!";
+				next;
+				mes "[Gerbena]";
+				mes "Mas foi um pedido unilateral nosso.";
+				mes "Mesmo se você recusar, não podemos fazer nada...";
+				close;
+			}
+			mes "[Gerbena]";
+			mes "É uma honra que você nos ajude!";
+			mes "Posso participar com você, herói?";
+			next;
+			mes "[Ansuriya]";
+			mes "Ele disse que não gosta disso. Ele se sente mais confortável fazendo sozinho, acalme-se, Gerbena.";
+			next;
+			mes "[Gerbena]";
+			mes "Ugh! Por favor, cuide disso para mim!!";
+			setquest 16539;
+			close;
+		case 0:
+		case 1:
+			mes "[Gerbena]";
+			mes "Herói, você pode caçar 15 <FONT COLOR = 0000CD>" + getmonsterinfo("CHIMERA_LAVA", MOB_NAME) + "e" + getmonsterinfo("CHIMERA_FULGOR", MOB_NAME) + "</FONT> de cada?";
+			mes "Você não pode resgatá-los ou fazer qualquer coisa. Todos, cada um deles, deve ser eliminado.";
+			close;
+		case 2:
+			mes "[Gerbena]";
+			mes "Sim! Missão concluída, confirmado. Agora, as tropas de Ilusão estão dentro!";
+			mes "Graças a você, eles serão capazes de entrar facilmente e subjugar a Quimera.";
+			next;
+			mes "[Gerbena]";
+			mes "Ugh, eu também queria ver a bela batalha do herói pessoalmente...";
+			mes "Talvez algum dia eu tenha a chance de ver você?";
+			next;
+			mes "[Gerbena]";
+			mes "Se não se importar, por que não volta amanhã e trabalha conosco?";
+			erasequest 16539;
+			setquest 16538;
+			getexp 37325968,26128177;	// rebalance (unknown jexp, 70% of baseexp)
+			close;
+		}
+		end;
+	case 3:
+		mes "[Gerbena]";
+		mes "Ah, você mudou de ideia!";
+		mes "Gerbena está com o coração partido!";
+		next;
+		mes "[Gerbena]";
+		mes "Mas foi um pedido unilateral nosso.";
+		mes "Mesmo se você recusar, não podemos fazer nada...";
+		close;
+	}
+	end;
+
+OnInit:
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(16537,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(16539,HUNTING) == 2" );
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(16536,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(16538,PLAYTIME) == 2" );
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 230 && (checkquest(16537,HUNTING) == -1 && checkquest(16536,PLAYTIME) == -1)" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 230 && (checkquest(16539,HUNTING) == -1 && checkquest(16538,PLAYTIME) == -1)" );
+	end;
+}

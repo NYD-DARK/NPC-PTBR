@@ -1,0 +1,280 @@
+//===== rAthena Script =======================================
+//= Training Zone
+//===== Description: =========================================
+//= NPCs related to the training zone.
+//===== Changelog: ===========================================
+//= 1.0 Initial Release [Atemo]
+//============================================================
+
+// Storage
+tra_fild01,204,110,2	script	Training Ground Warehouse Soldier#fild01_1	8W_SOLDIER,{
+	mes "[Training Ground Warehouse Soldier]";
+	mes "Você gostaria de usar o Armazém? É necessário pagar 1000 Zeny para usar o Armazém do campo de treinamento. Por favor, selecione o Armazém que deseja usar.";
+	next;
+	// switch( select( "¢º Armazém 1", "¢º Storage 2", "¢º Storage 3", "¢º Armazém da Guilda", "¢º Cancelar" ) ) {
+	switch( select( "¢º Armazém 1", "", "", "¢º Armazém da Guilda", "¢º Cancelar" ) ) {
+	case 1:
+		.@storage_num = 1;
+		break;
+	case 2:
+		.@storage_num = 2;
+		break;
+	case 3:
+		.@storage_num = 3;
+		break;
+	case 4:
+		// copied from npc/re/merchants/guild_warehouse.txt
+		.@guildid = getcharid( 2 );
+
+		if( .@guildid == 0 ){
+			mes "[Training Ground Warehouse Soldier]";
+			mes "O armazém da guilda só está disponível para membros da guilda.";
+			close;
+		}
+
+		if( getgdskilllv( .@guildid, "GD_GUILD_STORAGE" ) == 0 || !guild_has_permission( GUILD_PERM_STORAGE ) ){
+			mes "[Training Ground Warehouse Soldier]";
+			mes "Parece que ainda não é possível para sua guilda usar o armazém da guilda ou você não possui permissões de acesso ao armazém.";
+			mes "Por favor, volte após verificar a habilidade da guilda e a permissão de acesso ao armazém.";
+			close;
+		}
+
+		if( Zeny < 1000 ){
+			mes "[Training Ground Warehouse Soldier]";
+			mes "Receio que você não tenha dinheiro suficiente para pagar a taxa.";
+			mes "A taxa é de 1000 Zeny.";
+			close;
+		}
+
+		mes "[Training Ground Warehouse Soldier]";
+		mes "Vou abrir o armazém da guilda para você então. Tenha um momento memorável!";
+		close2;
+
+		if( Zeny < 1000 ){
+			// Cheat prevention
+			end;
+		}
+
+		if( guildopenstorage() == GSTORAGE_OPEN ){
+			Zeny -= 1000;
+			end;
+		}else{
+			mes "[Training Ground Warehouse Soldier]";
+			mes "Receio que outra pessoa esteja usando o armazém agora.";
+			mes "Por favor, tente novamente em instantes.";
+			close;
+		}
+	case 5:
+		end;
+	}
+	// TODO (custom text)
+	if (!callfunc("F_CanOpenStorage")) {
+		mes "[Training Ground Warehouse Soldier]";
+		mes "Desculpe, mas você";
+		mes "precisa da habilidade";
+		mes "Básica nível 6 de Aprendiz para";
+		mes "usar o serviço de Armazém.";
+		close2;
+		cutin "",255;
+		end;
+	}
+
+	if (Zeny < 1000) {
+		mes "[Training Ground Warehouse Soldier]";
+		mes "^4d4dffÉ necessário pagar 1000 Zeny para usar o Armazém do campo de treinamento.^000000";
+		close;
+	}
+	Zeny -= 1000;
+	openstorage; // TODO: open correct storage 1-3
+	end;
+}
+tra_fild01,15,110,6	duplicate(Training Ground Warehouse Soldier#fild01_1)	Training Ground Warehouse Soldier#fild01_2	8W_SOLDIER
+tra_fild01,113,32,0	duplicate(Training Ground Warehouse Soldier#fild01_1)	Training Ground Warehouse Soldier#fild01_3	8W_SOLDIER
+tra_fild01,111,100,4	duplicate(Training Ground Warehouse Soldier#fild01_1)	Training Ground Warehouse Soldier#fild01_4	8W_SOLDIER
+
+tra_fild02,204,110,2	duplicate(Training Ground Warehouse Soldier#fild01_1)	Training Ground Warehouse Soldier#fild02_1	8W_SOLDIER
+tra_fild02,15,110,6	duplicate(Training Ground Warehouse Soldier#fild01_1)	Training Ground Warehouse Soldier#fild02_2	8W_SOLDIER
+tra_fild02,113,32,0	duplicate(Training Ground Warehouse Soldier#fild01_1)	Training Ground Warehouse Soldier#fild02_3	8W_SOLDIER
+tra_fild02,111,100,4	duplicate(Training Ground Warehouse Soldier#fild01_1)	Training Ground Warehouse Soldier#fild02_4	8W_SOLDIER
+
+tra_fild03,204,110,2	duplicate(Training Ground Warehouse Soldier#fild01_1)	Training Ground Warehouse Soldier#fild03_1	8W_SOLDIER
+tra_fild03,15,110,6	duplicate(Training Ground Warehouse Soldier#fild01_1)	Training Ground Warehouse Soldier#fild03_2	8W_SOLDIER
+tra_fild03,113,32,0	duplicate(Training Ground Warehouse Soldier#fild01_1)	Training Ground Warehouse Soldier#fild03_3	8W_SOLDIER
+tra_fild03,111,100,4	duplicate(Training Ground Warehouse Soldier#fild01_1)	Training Ground Warehouse Soldier#fild03_4	8W_SOLDIER
+
+
+// Misc NPCs
+
+// Cleaner
+tra_fild01,142,113,6	script	Cleaning Robot#fild01	EP17_2_OMEGA_CLEANER,{
+OnStart:
+	.@num = atoi( charat(strnpcinfo(2), 5) );
+
+	if (.is_moving[.@num])
+		end;
+	.is_moving[.@num] = true;
+	stopnpctimer;
+
+	setarray .@emotions[0], ET_SWEAT, ET_PROFUSELY_SWEAT, ET_HUNGRY, ET_OHNO;
+	.@r = rand( getarraysize(.@emotions) );
+	emotion .@emotions[.@r];
+
+	setarray .@speed[0], 300, 400, 500, 600;
+	.@r = rand( getarraysize(.@speed) );
+	npcspeed .@speed[.@r];
+
+	getmapxy .@map$,.@x,.@y, BL_NPC;
+	switch( .@num ) {
+	case 1:
+		if (.@x <= 126)
+			.sens[.@num] = 1;
+		else if (.@x >= 198)
+			.sens[.@num] = -1;
+		.@x += 8 * .sens[.@num];
+		break;
+	case 2:
+		if (.@x <= 21)
+			.sens[.@num] = 1;
+		else if (.@x >= 85)
+			.sens[.@num] = -1;
+		.@x += 8 * .sens[.@num];
+		break;
+	case 3:
+		if (.@y <= 33)
+			.sens[.@num] = 1;
+		else if (.@y >= 89)
+			.sens[.@num] = -1;
+		.@y += 8 * .sens[.@num];
+		break;
+	}
+	unitwalk getnpcid(0),.@x,.@y, strnpcinfo(0) + "::OnMoveEnd";
+	end;
+OnMoveEnd:
+	.@num = atoi( charat(strnpcinfo(2), 5) );
+	.is_moving[.@num] = false;
+	initnpctimer;
+	end;
+OnTimer30000:
+	donpcevent strnpcinfo(0) + "::OnStart";
+	end;
+
+OnInit:
+	.@num = atoi( charat(strnpcinfo(2), 5) );
+	.sens[.@num] = 1;
+	initnpctimer;
+	end;
+}
+tra_fild02,53,113,2	duplicate(Cleaning Robot#fild01)	Cleaning Robot#fild02	EP17_2_OMEGA_CLEANER
+tra_fild03,110,57,4	duplicate(Cleaning Robot#fild01)	Cleaning Robot#fild03	EP17_2_OMEGA_CLEANER
+
+
+// Chitchat
+tra_fild01,122,75,6	script	Neighborhood Grandmother#npc02	4_F_JPNOBA,{
+	mes "[Neighborhood Grandmother]";
+	mes "Hohoho- Ver os jovens suando e trabalhando duro me deixa um pouco energizado.";
+	next;
+	mes "[Neighborhood Grandmother]";
+	mes "Ah, a propósito. Você sabia disso?";
+	next;
+	mes "[Neighborhood Grandmother]";
+	mes "Bonecos no campo de treinamento que são fortes contra ataques físicos têm um ícone de espada acima de suas cabeças, e bonecos que são fortes contra ataques mágicos têm um ícone de cajado acima de suas cabeças.";
+	next;
+	mes "[Neighborhood Grandmother]";
+	mes "Se você souber disso, será capaz de bater neles com mais força, certo?";
+	close;
+}
+
+tra_fild01,34,102,3	script	Cat#npc03	4_CAT_REST,{
+	npctalk "Miau-", "", bc_self;
+	end;
+}
+
+tra_fild01,34,120,3	script	Fress#npc05	4_M_SITDOWN,{
+	mes "[Fress]";
+	mes "Se você quiser ir para Prontera, pode sair através dos guardas localizados por toda a área ou através dos portais de teletransporte às 3 e 9 horas. Sério mesmo.";
+	close;
+}
+
+tra_fild01,128,142,7	script	Nine Oranges#npc04	4_F_ROGUE,{
+	mes "[Nine Oranges]";
+	mes "Lembre-se! Uma vez que você escolheu um nome, é difícil mudar, então escolha com sabedoria.";
+	next;
+	mes "[Nine Oranges]";
+	mes "A propósito, onde está o Boneco Morto-Vivo?";
+	next;
+	mes "[Nine Oranges]";
+	mes "Meu amigo disse que ele tem um ícone de osso acima da cabeça...? Você tem que ver por si mesmo primeiro.";
+	close;
+}
+
+tra_fild01,97,64,3	script	Village#npc01	4_M_CHN8GUEK,{
+	mes "[Village ]";
+	mes "Oi! O clima está muito agradável, não está? Eu vim conferir os novos campos de treinamento.";
+	next;
+	mes "[Village ]";
+	mes "Os antigos campos de treinamento não eram ruins, mas na verdade ocupavam um espaço que os novatos usavam há muito tempo, então havia alguns inconvenientes.";
+	next;
+	mes "[Village ]";
+	mes "Mas eles estão construindo um campo de treinamento novo, espaçoso e legal. Parece que eles estão bem financeiramente ultimamente!";
+	close;
+}
+
+tra_fild02,101,90,5	script	Jar Cat#npc09	4_CAT_SAILOR5,{
+	mes "[Jar Cat]";
+	mes "É sua primeira vez no campo de treinamento? Vou explicar, como um veterano.";
+	next;
+	mes "[Jar Cat]";
+	mes "Existem três campos de treinamento: o campo de treinamento básico, o campo de treinamento 1/10 e o campo de treinamento 1/100. Vou deixar as diferenças entre cada campo de treinamento para você descobrir sozinho.";
+	next;
+	mes "[Jar Cat]";
+	mes "Ah, verdade! Para ir para outro campo de treinamento, você pode usar os portais de teletransporte às 3 e 9 horas. Lembre-se!";
+	close;
+}
+
+tra_fild02,166,46,3	script	Little One#npc06	4_M_KID2,{
+	mes "[Little One]";
+	mes "O papai me contou! Os Bonecos com ícones de cajado acima de suas cabeças são fortes contra magia!";
+	next;
+	mes "[Little One]";
+	mes "Então... se você conseguir derrotar esses Bonecos com magia, você é realmente forte, não é?!";
+	close;
+}
+
+tra_fild02,129,93,6	script	Kekekekereurur#npc10	4_GEFFEN_02,{
+	mes "[Kekekekereurur]";
+	mes "Dizem que treinar com os Bonecos com ícones de gato acima deles ajudará você a lutar contra Doram no PvP.";
+	next;
+	mes "[Kekekekereurur]";
+	mes "Eu definitivamente não estou praticando aqui depois de apanhar de um Doram que passava. Lembre-se!";
+	close;
+}
+
+tra_fild03,98,46,7	script	Lumberjack#npc13	4_M_NOV_HUNT,{
+	mes "[Lumberjack]";
+	mes "Whoosh- Cha-Whoosh- Cha-";
+	close;
+}
+
+tra_fild03,53,140,5	script	Dong#npc15	4_M_CACTUSMAN1,{
+	mes "[Dong]";
+	mes "Aaaah- Pare! Pare! Eu não sou um monstro. Não me ataque.";
+	next;
+	mes "[Dong]";
+	mes "Ufa- Obrigado. Algumas pessoas frequentemente me confundem com o monstro Mukka, mas eu sou um cacto de um lugar chamado RockRidge.";
+	next;
+	mes "[Dong]";
+	mes "Se você visitar RockRidge, poderá conhecer nossos Cactos vivos e respirantes. Venha visitar. Hahaha.";
+	close;
+}
+
+tra_fild03,92,108,7	script	Cat#npc12	4_CAT_REST,{
+	npctalk "Gororong-", "", bc_self;
+	end;
+}
+
+tra_fild03,180,102,4	script	Coco#npc14	4_COCO,{
+	emotion ET_QUESTION;
+	mes "[Coco]";
+	mes "?";
+	close;
+}

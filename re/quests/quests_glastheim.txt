@@ -1,0 +1,82 @@
+//===== rAthena Script =======================================
+//= NPCs related to Glastheim (Nightmare)
+//===== By: ==================================================
+//= Ridley8819
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Additional Comments: =================================
+//= 1.0 Initial release [Ridley8819]
+//= 1.1 Dialogue cleanup [Aleos]
+//============================================================
+
+glast_01,195,273,3	script	Hugin's follower#1	2_F_MAGICMASTER,{
+	mes "[Hugin's Follower]";
+	mes "Eu não consigo me mover entre o tempo e as dimensões como o mestre Hugin, mas posso fingir que consigo.";
+	next;
+	mes "[Hugin's Follower]";
+	mes "O que está fazendo com que este Glast Heim esteja imbuído com uma força sombria tão poderosa?";
+	next;
+	if( select( "Não me importo:Isso é interessante, por favor, conte-me mais" ) == 2 ){
+		mes "[Hugin's Follower]";
+		mes "Graças a Hugin, encontrei o caminho para acessar este Old Glast Heim, que está imbuído por forças sombrias tão poderosas.";
+		next;
+		mes "[Hugin's Follower]";
+		mes "O que me diz? Você quer explorar lá?";
+		next;
+		if( select( "Sem exploração para mim:Eu realmente quero explorar!" ) == 2 ){
+			mes "[Hugin's Follower]";
+			mes "Claro, mas este não é um serviço gratuito! Preciso ganhar algo em troca. Hoho...";
+			next;
+			mes "[Hugin's Follower]";
+			mes "Posso te enviar para dois lugares. Para qual lugar você gostaria que eu te enviasse?";
+			next;
+			switch( select( "Cancelar:Cemitério do Mosteiro (Nível 100~130) - 5000z:Corredor do 2º andar (Acima do Nível 140) - 10000z" ) ){
+				case 1:
+					mes "[Hugin's Follower]";
+					mes "Tudo bem, por favor, volte sempre que mudar de ideia. Acho que você terá muito o que conversar comigo...";
+					close;
+				case 2:
+					.@map$ = "gl_chyard_";
+					.@x = 148;
+					.@y = 144;
+					.@zeny = 5000;
+					break;
+				case 3:
+					.@map$ = "gl_cas02_";
+					.@x = 104;
+					.@y = 31;
+					.@zeny = 10000;
+					break;
+			}
+			if( Zeny < .@zeny ){
+				mes "[Hugin's Follower]";
+				mes "O quê? Você esperava este serviço de graça?";
+				close;
+			}
+			Zeny -= .@zeny;
+			warp .@map$, .@x, .@y;
+			end;
+		}
+	}
+	mes "[Hugin's Follower]";
+	mes "Bem, se você não está interessado nisso, esqueça.";
+	close;
+}
+
+gl_chyard_,148,149,4	script	Hugin's Follower#n_gh1	123,{
+	mes "[Hugin's Follower]";
+	mes "Você quer retornar?";
+	mes "Ok, vamos sair daqui.";
+	next;
+	if( select( "Eu não pretendia falar com você:Por favor, tire-me daqui" ) == 1 ){
+		mes "[Hugin's Follower]";
+		mes "Tudo bem, é só me avisar quando quiser sair.";
+		close;
+	}
+	warp "glast_01", 210, 269;
+	end;
+}
+
+gl_cas02_,104,36,4	duplicate(Hugin's Follower#n_gh1)	Hugin's Follower#n_gh2	123

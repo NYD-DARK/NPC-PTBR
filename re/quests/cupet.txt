@@ -1,0 +1,243 @@
+//===== rAthena Script =======================================
+//= Cute Pet Manager
+//===== By: ==================================================
+//= Z3R0
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Exchanges Hunted Items for Tames
+//===== Additional Comments: =================================
+//= 1.0 First / Optimized Version
+//= 1.1 Little clean-up & added a delitem. [Capuche]
+//============================================================
+
+// 1st NPC
+-	script	CPM1	-1,{
+	
+	set .@npc$, "[Cute Pet Manager]";
+	
+	setarray .@tame_id[0],619,620,622,623,624,627,628,629,630;
+	setarray .@tame_amount[0],3,3,3,3,3,3,3,3,3;
+	setarray .@hunt_id[0],909,909,705,916,935,919,919,940,921;
+	setarray .@hunt_amount[0],500,600,500,500,500,500,600,500,500;
+	setarray .@mob_id[0],1002,1113,1063,1049,1011,1167,1107,1052,1014;
+	set .@tame_gets, 3;
+
+	if (cpm_one == .@tame_gets) {
+		mes "[Cute Pet Manager]";
+		mes "Você já trocou";
+		mes .@tame_amount + "vezes por um item de domar.";
+		mes "Você não pode mais trocar.";
+		next;
+		
+		mes "[Cute Pet Manager]";
+		mes "Além de mim, existem outros";
+		mes "Gerentes de Bichinhos. Se você deseja";
+		mes "domar outros bichinhos, sugiro";
+		mes "que vá procurá-los.";
+		close;
+	}
+	
+	callfunc "cute_pet_manager",.@tame_id,.@tame_amount,.@hunt_id,.@hunt_amount,.@mob_id,cpm_one,.@tame_gets,.@hunt_id2,.@hunt_amount2;
+
+}
+
+// 2nd NPC
+-	script	CPM2	-1,{
+	
+	set .@npc$, "[Cute Pet Manager]";
+	
+	setarray .@tame_id[0],621,625,632,631,633,634,635,636,659,637,639,640;
+	setarray .@tame_amount[0],2,2,2,2,2,2,2,2,2,2,2,2;
+	setarray .@hunt_id[0],938,935,925,7033,945,942,931,901,1094,1021,936,1035;
+	setarray .@hunt_amount[0],500,600,500,300,500,500,500,500,500,500,500,500;
+	setarray .@mob_id[0],1031,1042,1019,1077,1056,1057,1023,1026,1188,1110,1029;
+	set .@tame_gets, 2;
+
+	if (cpm_two == .@tame_gets) {
+		mes "[Cute Pet Manager]";
+		mes "Você já trocou";
+		mes .@tame_amount + "vezes por um item de domar.";
+		mes "Você não pode mais trocar.";
+		next;
+		
+		mes "[Cute Pet Manager]";
+		mes "Além de mim, existem outros";
+		mes "Gerentes de Bichinhos. Se você deseja";
+		mes "domar outros bichinhos, sugiro";
+		mes "que vá procurá-los.";
+		close;
+	}
+	
+	callfunc "cute_pet_manager",.@tame_id,.@tame_amount,.@hunt_id,.@hunt_amount,.@mob_id,cpm_two,.@tame_gets,.@hunt_id2,.@hunt_amount2;
+
+}
+
+// 3rd NPC
+-	script	CPM3	-1,{
+	
+	set .@npc$, "[Cute Pet Manager]";
+	
+	setarray .@tame_id[0],638,626,641,661,660,642;
+	setarray .@tame_amount[0],1,1,1,1,1,1;
+	setarray .@hunt_id[0],1020,943,1038,7047,1970,923;
+	setarray .@hunt_amount[0],600,600,600,500,1,100;
+	setarray .@hunt_id2[0],0,0,0,0,7017,0;
+	setarray .@hunt_amount2[0],0,0,0,0,20,0;
+	setarray .@mob_id[0],1170,1035,1109,1275,1200,1101;
+	set .@tame_gets, 1;
+
+	if (cpm_three == .@tame_gets) {
+		mes "[Cute Pet Manager]";
+		mes "Você já trocou";
+		mes .@tame_amount + "vezes por um item de domar.";
+		mes "Você não pode mais trocar.";
+		next;
+		
+		mes "[Cute Pet Manager]";
+		mes "Além de mim, existem outros";
+		mes "Gerentes de Bichinhos. Se você deseja";
+		mes "domar outros bichinhos, sugiro";
+		mes "que vá procurá-los.";
+		close;
+	}
+	
+	callfunc "cute_pet_manager",.@tame_id,.@tame_amount,.@hunt_id,.@hunt_amount,.@mob_id,cpm_three,.@tame_gets,.@hunt_id2,.@hunt_amount2;
+
+}
+
+function	script	cute_pet_manager	{
+	// getarg(0) -> .@tame_id Array
+	// getarg(1) -> .@tame_amount Array
+	// getarg(2) -> .@hunt_id Array
+	// getarg(3) -> .@hunt_amount Array
+	// getarg(4) -> .@mob_id Array
+	// getarg(5) ->  Attempt Variable
+	// getarg(6) -> .@tame_gets Variable
+	// getarg(7) -> .@hunt_id2 Array
+	// getarg(8) -> .@hunt_amount2 Array
+
+	mes "[Cute Pet Manager]";
+	mes "Olá~! Eu sou um Gerente de Bichinhos";
+	mes "responsável pelas relações públicas";
+	mes "do novo sistema aprimorado de Bichinhos.";
+	next;
+	
+	mes "[Cute Pet Manager]";
+	mes "Se você tiver alguma dúvida sobre";
+	mes "o sistema de Bichinhos, estou aqui para te guiar.";
+	mes "Diga-me qual item de domar";
+	mes "você deseja,";
+	mes "e eu lhe direi qual monstro";
+	mes "você pode domar com esse item.";
+	next;
+	
+	mes "[Cute Pet Manager]";
+	mes "Também explicarei quais materiais";
+	mes "você precisa trazer para";
+	mes "conseguir o item de domar.";
+	next;
+	
+	mes "[Cute Pet Manager]";
+	mes "Se você já trouxe os materiais";
+	mes "para trocar pelo item de domar,";
+	mes "eu posso trocá-los por itens de domar imediatamente.";
+	next;
+	
+	mes "[Cute Pet Manager]";
+	mes "No entanto, existe um limite";
+	mes "para a troca de itens de domar.";
+	mes "Você só pode obter itens de domar";
+	mes getarg(6) + "vezes. Então, por favor, certifique-se";
+	mes "de quantas vezes você já trocou.";
+	next;
+	
+	mes "[Cute Pet Manager]";
+	mes "Então, qual item de domar você deseja?";
+	mes "Por favor, escolha um da lista.";
+	next;
+	
+	// Create Menu System
+	set .@size, getarraysize(getarg(0));
+	for (set .@a, 0; .@a < .@size; set .@a, .@a + 1)
+		set .@menu$, .@menu$ + (.@menu$ == "" ? "" : ":") + getitemname(getelementofarray(getarg(0), .@a));
+	
+	// Query Player Choice
+	set .@choice, select(.@menu$) - 1;
+
+	// Store Variables (Less Lookup)
+	set .@tame_id, getelementofarray(getarg(0), .@choice);
+	set .@tame_amount, getelementofarray(getarg(1), .@choice);
+	set .@hunt_id, getelementofarray(getarg(2), .@choice);
+	set .@hunt_amount, getelementofarray(getarg(3), .@choice);
+	set .@mob_id, getelementofarray(getarg(4), .@choice);
+	set .@hunt_id2, getelementofarray(getarg(7), .@choice);
+	set .@hunt_amount2, getelementofarray(getarg(8), .@choice);
+
+	// dispbottom "Tame ID: " + .@tame_id;
+	// dispbottom "Tame Amount: " + .@tame_amount;
+	// dispbottom "Hunt ID: " + .@hunt_id;
+	// dispbottom "Hunt Name: " + getitemname(.@hunt_id);
+	// dispbottom "Hunt Amount: " + .@hunt_amount;
+	// dispbottom "Mob ID: " + .@mob_id;
+	if (.@hunt_id2) { 
+		// dispbottom "Hunt ID2: " + .@hunt_id2;
+		// dispbottom "Hunt Amount2: " + .@hunt_amount2;
+		set .@hunt2_count, countitem(.@hunt_id2);
+	}
+	if (countitem(.@hunt_id) >= .@hunt_amount && countitem(6083) > 0 && .@hunt2_count >= .@hunt_amount2) {
+		mes "[Cute Pet Manager]";
+		mes "Ah, você reuniu todos os itens";
+		mes "com seus amigos. Agora você pode";
+		mes "trocar por um" + getitemname(.@tame_id) + ".";
+		mes "Você deseja trocar comigo?";
+		next;
+		if  (select("Trocar:Don't Trocar") == 2) { 
+			mes "[Cute Pet Manager]";
+			mes "Não quer? Você voltará novamente.";
+			close;
+		}
+		delitem .@hunt_id, .@hunt_amount;
+		delitem 6083, 1;
+		if (.@hunt_id2)
+			delitem .@hunt_id2, .@hunt_amount2;
+		set getarg(5), getarg(5) + 1;
+		getitem .@tame_id, .@tame_amount;
+		
+		mes "[Cute Pet Manager]";
+		mes "Escolha sábia.";
+		mes "Espero que você e seu bichinho se deem bem.";
+		close;
+	} else {
+		mes "[Cute Pet Manager]";
+		mes "Você escolheu" + getitemname(.@tame_id) + ".";
+		mes "Você pode usá-lo para domar";
+		mes "^FF0000" + getmonsterinfo(.@mob_id, MOB_NAME) + "^000000 monstros.";
+		next;
+		mes "[Cute Pet Manager]";
+		mes "Traga ^FF0000" + .@hunt_amount + " " + getitemname(.@hunt_id) + "^000000" + (.@hunt_id2 ? ", ^FF0000" + .@hunt_amount2 + " " + getitemname(.@hunt_id2) : "") + "^000000 e ^FF00001 Cápsula de Boneca^000000";
+		mes "e então você poderá trocá-los";
+		mes "por um" + getitemname(.@tame_id) + ".";
+		close;
+	}
+}
+
+// NPC Duplicates
+prontera,67,212,5	duplicate(CPM1)	Cute Pet Manager#1	4_M_ALCHE_C
+prontera,242,92,3	duplicate(CPM2)	Cute Pet Manager#2	4_M_ALCHE_C
+prontera,179,92,3	duplicate(CPM3)	Cute Pet Manager#3	4_M_ALCHE_C
+
+geffen,180,125,5	duplicate(CPM1)	Cute Pet Manager#4	4_M_ALCHE_C
+geffen,152,66,3	duplicate(CPM2)	Cute Pet Manager#5	4_M_ALCHE_C
+geffen,197,95,3	duplicate(CPM3)	Cute Pet Manager#6	4_M_ALCHE_C
+
+morocc,115,83,5	duplicate(CPM1)	Cute Pet Manager#7	4_M_ALCHE_C
+morocc,218,130,3	duplicate(CPM2)	Cute Pet Manager#8	4_M_ALCHE_C
+morocc,236,225,3	duplicate(CPM3)	Cute Pet Manager#9	4_M_ALCHE_C
+
+payon,109,278,5	duplicate(CPM1)	Cute Pet Manager#10	4_M_ALCHE_C
+payon,157,124,3	duplicate(CPM2)	Cute Pet Manager#11	4_M_ALCHE_C
+payon,85,237,3	duplicate(CPM3)	Cute Pet Manager#12	4_M_ALCHE_C

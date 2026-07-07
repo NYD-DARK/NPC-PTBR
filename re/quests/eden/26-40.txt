@@ -1,0 +1,676 @@
+//===== rAthena Script =======================================
+//= Eden Group Quests - Mission [26 - 40]
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Repetable Quests for Players between Baselevel 26 - 40.
+//===== Additional Comments: =================================
+//= 1.0 First Version.
+//= 1.1 Some little optimization here and there. [Masao]
+//= 1.2 Optimized. [Euphy]
+//= 1.3 Added support to Para_Team_Mark_ in Eden Group. [Ragno]
+//= 1.4 Added use of F_HasEdenGroupMark function. [Ragno]
+//============================================================
+
+moc_para01,38,38,3	script	Mission [26 - 40]	857,{
+	if (!callfunc("F_HasEdenGroupMark")) {
+		mes "Você não é um membro qualificado. Você não pode usar o quadro de avisos.";
+		close;
+	}
+	mes "[Quadro de Missões Nv. 26 ~ 40]";
+	mes "- Muitas missões estão -";
+	mes "- no quadro de avisos. -";
+	next;
+	if ((BaseLevel < 26) || (BaseLevel > 40)) {
+		mes "Seu nível não é qualificado. Você não pode usar o quadro de avisos.";
+		close;
+	}
+	switch(select("Missão de Caça:Missão de Entrega:Missão de Coleta:Missão de Escolta")) {
+	case 1:
+		mes "[Hunting Mission Board]";
+		mes "- Detalhes da Missão de Caça -";
+		mes "- estão no quadro. -";
+		next;
+		switch(select("Caçar Esporo Venenoso:Caçar Smokie:Caçar Salgueiro Ancião (Acima do Nv. 30):Caçar Coco (Acima do Nv. 35):Caçar Sapo de Thara (Acima do Nv. 38)")) {
+			case 1: callsub L_Quest,8266,0,"Caçar Esporo Venenoso","Sponiac","Geffen","Hunt 10 Poison Spores";
+			case 2: callsub L_Quest,8267,0,"Caçar Smokie","Sponiac","Geffen","Hunt 10 Smokies";
+			case 3: callsub L_Quest,8268,30,"Hunting Elder Willow","Sponiac","Geffen","Hunt 10 Elder Willows";
+			case 4: callsub L_Quest,8269,35,"Hunting Coco","Sponiac","Geffen","Hunt 10 Cocos";
+			case 5: callsub L_Quest,8270,38,"Hunting Thara Frog","Sponiac","Geffen","Hunt 10 Thara Frogs";
+		}
+	case 2:
+		mes "[Delivery Mission Board]";
+		mes "- Detalhes da Missão de Entrega -";
+		mes "- estão no quadro. -";
+		next;
+		switch(select("Entregar um Inseticida:Entregar Mel:Entregar Cobertor (Acima do Nv. 35)")) {
+			case 1: callsub L_Quest,8271,0,"Entregar um Inseticida","Dieshin Man","Morocc Ruins","Get an 'Insecticide' from Dieshin Man and deliver it south east of Payon";
+			case 2: callsub L_Quest,8272,0,"Entregar Mel","Dieshin Man","Morocc Ruins","Get 'Honey' from Dieshin Man and deliver it west of St. Capitolina Abbey";
+			case 3: callsub L_Quest,8273,35,"Deliver Blanket","Dieshin Man","Morocc Ruins","Get Blankets from Dieshin Man and deliver to the field south of Lutie";
+		}
+	case 3:
+		mes "[Gathering Mission Board]";
+		mes "- Detalhes da Missão de Coleta -";
+		mes "- estão no quadro. -";
+		next;
+		switch(select("Coletar Ossos:Coletar Peles de Animal:Coletar Cascas (Acima do Nv. 30):Coletar Caudas (Acima do Nv. 32):Coletar Biscoitos (Acima do Nv. 35):Coletar Bigodes (Acima do Nv. 35)")) {
+			case 1: callsub L_Quest,8274,0,"Coletar Ossos","Dashia","Payon","Gather '10 Skel-Bones' and give them to Dashia";
+			case 2: callsub L_Quest,8275,0,"Coletar Peles de Animal","Dashia","Payon","Gather '10 Bear's Footskins' and '5 Animal Skins' and give them to Dashia";
+			case 3: callsub L_Quest,8276,30,"Gather Peelings","Dashia","Payon","Gather '20 Worm Peelings' and '20 Garlets' and give them to Dashia";
+			case 4: callsub L_Quest,8277,32,"Gather Tails","Dashia","Payon","Gather '10 Yoyo Tails', '10 Acorns' and '10 Raccon Leafs' and give them to Dashia";
+			case 5: callsub L_Quest,8278,35,"Gather Cookies","Dashia","Payon","Gather '5 Well-baked Cookies' and '1 Piece of Cake' and give them to Dashia";
+			case 6: callsub L_Quest,8279,35,"Gather Mustaches","Dashia","Payon","Gather '5 Mole Whiskers' and '3 Mole Claws' and give them to Dashia";
+		}
+	case 4:
+		mes "[Escort Mission Board]";
+		mes "Não há Missões de Escolta registradas no quadro no momento.";
+		close;
+	}
+	end;
+L_Quest:
+	//QuestID,ReqLvl,Quest,Client,Loc,Desc
+	.@string$ = getarg(2);
+	if (BaseLevel < getarg(1,26)) {
+		mes "Seu nível não atende aos requisitos. Você não pode aceitar a missão '"+ .@string$ +"'.";
+		close;
+	}
+	mes "["+ .@string$ +" !!]";
+	mes "Cliente :"+getarg(3);
+	mes "Localização do Cliente :"+getarg(4);
+	mes "Missão Solicitada :"+getarg(5);
+	mes " ";
+	mes "Você deseja aceitar esta missão?";
+	next;
+	if(select("Não, não vou aceitar.:Sim, eu aceito.") == 1) {
+		mes "Você recusou a missão"+ .@string$ +".";
+		close;
+	}
+	if (checkquest(getarg(0)) > -1) mes "Você já está realizando esta missão.";
+	else {
+		setquest getarg(0);
+		mes "Você aceitou a missão"+ .@string$ +".";
+	}
+	mes "Você pode obter uma recompensa com o cliente após terminar a missão.";
+	next;
+	mes "Para mais detalhes, pressione 'Alt + U' para obter mais informações na Janela de Missões.";
+	close;
+}
+
+geffen,103,42,5	script	Sponiac	99,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 3500) {
+		mes "[Sponiac]";
+		mes "Por que você está carregando tantos itens?";
+		mes "Você está em um curso de treinamento ou algo assim?";
+		close;
+	}
+	mes "[Sponiac]";
+	mes "Lu~lu~lu~lu~";
+	mes "Lu~ Huh?";
+	next;
+	mes "[Sponiac]";
+	mes "Uau, você deve ser um iniciante, não é?";
+	mes "Que rosto inocente! Ha~ hahaha.";
+	emotion ET_KIK;
+	next;
+	mes "[Sponiac]";
+	mes "Por que você não vai caçar lá fora em vez de ficar andando por aí e perdendo seu tempo?";
+	next;
+	if(select("Estou prestes a sair agora.:Eu tenho uma Missão de Caça.") == 1) {
+		mes "[Sponiac]";
+		mes "Ah, bem. Então, resolva sozinho.";
+		mes "Tchau~ tchau.";
+		close;
+	}
+	mes "[Sponiac]";
+	mes "Oh, você é do Grupo Éden?";
+	mes "Qual missão você tem?";
+	next;
+	switch(select("Caçar Esporo Venenoso:Caçar Smokie:Caçar Salgueiro Ancião:Caçar Coco:Caçar Sapo de Thara")) {
+		case 1: callsub L_Quest,8266,"Caçar Esporo Venenoso",1000,0,100,"You can find Poison Spores on the Geffen Dungeon 1F or northeast of Prontera. There are other spots but I'll leave it up to you to find out.";
+		case 2: callsub L_Quest,8267,"Caçar Smokie",1000,0,100,"You can find Smokies northeast and northwest of Geffen. Oh, also the field east of Ayothaya is good spot to find them.";
+		case 3: callsub L_Quest,8268,"Caçar Salgueiro Ancião",1000,100,110,"You can find Elder Willows northeast of Geffen, east of payon and southwest of Prontera.";
+		case 4: callsub L_Quest,8269,"Caçar Coco",1000,200,150,"You can find Cocos around the east of Payon, southwest of Prontera and the field east of Ayothaya.";
+		case 5: callsub L_Quest,8270,"Caçar Sapo de Thara",1500,300,200,"You can find Thara Frogs in the Cave east of Comodo or on Turtle Island.";
+	}
+	end;
+L_Quest:
+	//QuestID,Quest,BExp,JExp,PotionAmt,Desc
+	.@quest_id = getarg(0);
+	if (checkquest(.@quest_id) == 1) {
+		if (checkquest(.@quest_id,HUNTING) == 2) {
+			mes "[Sponiac]";
+			mes getarg(1)+"!";
+			mes "Uau, eu não esperava que você fosse fazer essa missão. Eu estava prestes a desistir. Mas você fez um bom trabalho. Eu agradeço!";
+			next;
+			mes "[Sponiac]";
+			mes "Bem, eu solicitei a missão e você fez um excelente trabalho.";
+			mes "Vou lhe dar uma recompensa, como prometi.";
+			next;
+			mes "[Sponiac]";
+			mes "Aqui está. Muito obrigado. Que Deus te abençoe!";
+			getitem 569,getarg(4); //Novice_Potion
+			getexp getarg(2),getarg(3);
+			erasequest .@quest_id;
+			close;
+		}
+		mes "[Sponiac]";
+		mes "Oh, você tem razão.";
+		next;
+		mes "[Sponiac]";
+		mes "Mas você ainda não completou a missão. Por que veio até mim agora? Você não completou a missão!";
+		mes "Eu lhe darei uma recompensa se você completar a missão. Ok? Estamos entendidos?";
+		next;
+		mes "[Sponiac]";
+		mes getarg(5);
+		mes "Você pode verificar o mapa do mundo pressionando a tecla 'ctrl + ~'.";
+		next;
+		mes "[Sponiac]";
+		mes "De qualquer forma, estarei aqui esperando por você. Por favor, volte quando terminar a missão!";
+		close;
+	}
+	mes "[Sponiac]";
+	mes "Huh? Tem certeza? Algo está errado...";
+	next;
+	mes "[Sponiac]";
+	mes "É estranho.";
+	mes "Por favor, verifique sua Janela de Missões pressionando 'alt + u'.";
+	close;
+}
+
+moc_ruins,173,55,3	script	Dieshin Man	89,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 3500) {
+		mes "[Dieshin Man]";
+		mes "Por que você está carregando tantos itens?";
+		mes "Você está em um curso de treinamento ou algo assim?";
+		close;
+	}
+	mes "[Dieshin Man]";
+	mes "Hu hu~~ nós somos entregadores~";
+	mes "Somos mais rápidos que qualquer voo~!";
+	next;
+	mes "[Dieshin Man]";
+	mes "Bem-vindo~ bem-vindo!";
+	mes "Somos a empresa de entregas mais rápida, a Corporação Dieshin.";
+	next;
+	mes "[Dieshin Man]";
+	mes "Como posso ajudar?";
+	next;
+	if(select("Não preciso de ajuda.:Eu tenho uma Missão de Entrega.") == 1) {
+		mes "[Dieshin Man]";
+		mes "Ah, bem. Então, resolva sozinho. Tchau~!";
+		close;
+	}
+	mes "[Dieshin Man]";
+	mes "Ah, você é do Grupo do Éden?";
+	mes "Qual missão você tem?";
+	next;
+	switch(select("Entregar um Inseticida.:Entregar Mel.:Entregar Cobertores.")) {
+		case 1: callsub L_Quest,8271;
+		case 2: callsub L_Quest,8272;
+		case 3: callsub L_Quest,8273;
+	}
+	end;
+L_Quest:
+	if (checkquest(getarg(0)) != 1) {
+		mes "[Dieshin Man]";
+		mes "Hã? Tem certeza? Tem algo errado...";
+		next;
+		mes "[Dieshin Man]";
+		mes "Que estranho.";
+		mes "Por favor, verifique sua Janela de Missões pressionando 'alt + u'.";
+		close;
+	}
+	if (countitem(6218) > 0) {
+		mes "[Dieshin Man]";
+		mes "Espere, mas você já tem uma caixa de entrega.";
+		next;
+		mes "[Dieshin Man]";
+		mes "Não podemos permitir que você entregue duas caixas de uma vez. Então, por favor, termine sua entrega primeiro.";
+		next;
+		mes "[Dieshin Man]";
+		mes "Se você esqueceu onde entregar, por favor, verifique a Janela de Missões pressionando 'alt + u'.";
+		close;
+	}
+	switch(getarg(0)) {
+	case 8271:
+		mes "[Dieshin Man]";
+		mes "Ah, entendi!";
+		mes "O inseticida? Deve ser o Zoólogo no sudeste de payon que encomendou o Inseticida.";
+		break;
+	case 8272:
+		mes "[Dieshin Man]";
+		mes "Ah, entendi!";
+		mes "Mel? Deve ser o Entomologista a oeste da Abadia de Santa Capitolina, que fica a nordeste de Prontera, que encomendou o Mel.";
+		break;
+	case 8273:
+		mes "[Dieshin Man]";
+		mes "Ah, é verdade!";
+		mes "Os cobertores! Deve ser o biólogo no sul do campo de Lutie que encomendou os cobertores.";
+		next;
+		mes "[Dieshin Man]";
+		mes "Você pode ir para Lutie pedindo ao Sr. Claus na parte nordeste de Al De Baran.";
+		break;
+	}
+	next;
+	mes "[Dieshin Man]";
+	mes "O motivo da cooperação da Dieshin é oferecer a entrega mais rápida e confiável. Então, por favor, entregue agora sem demora.";
+	next;
+	mes "[Dieshin Man]";
+	mes "Se você esqueceu onde fazer a entrega, por favor, verifique a Janela de Missões pressionando 'alt + u'.";
+	getitem 6218,1; //Disin_Delivery_Box
+	close;
+}
+
+pay_fild07,83,89,7	script	Zoologist	89,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 3500) {
+		mes "[Zoologist]";
+		mes "Por que você está carregando tantos itens?";
+		mes "Você está em um curso de treinamento ou algo assim?";
+		close;
+	}
+	mes "[Zoologist]";
+	mes "Você já ouviu falar de um monstro chamado Pé Grande?";
+	mes "Ele se parece com um urso de pelo vermelho e tem uma cicatriz em forma de 'X' no ombro.";
+	next;
+	mes "[Zoologist]";
+	mes "De acordo com pesquisas recentes, moscas e monstros Pé Grande têm uma relação simbiótica.";
+	next;
+	mes "[Zoologist]";
+	mes "Estou estudando isso no momento e tentando provar a teoria. Então, planejo matar as moscas ao redor do Pé Grande e observar sua reação.";
+	next;
+	if(select("...Não estou interessado.:Aqui está o Inseticida.") == 1) {
+		mes "[Zoologist]";
+		mes "Ah, preciso de um Inseticida para continuar o estudo.";
+		close;
+	}
+	if (checkquest(8271) != 1) {
+		mes "[Zoologist]";
+		mes "Hã?";
+		mes "Você não é o entregador da Dieshin?";
+		next;
+		mes "[Zoologist]";
+		mes "Estou aguardando uma entrega especial.";
+		close;
+	}
+	if (countitem(6218) > 0) {
+		mes "[Zoologist]";
+		mes "Oh, sim! Essa mesma!";
+		next;
+		mes "[Zoologist]";
+		mes "Esse é o Inseticida que eu encomendei! Você foi enviado pela Dieshin, certo?";
+		next;
+		mes "[Zoologist]";
+		mes "Estou esperando por isso!";
+		mes "Entregue para mim!";
+		next;
+		mes "[Zoologist]";
+		mes "Chegou muito mais rápido do que eu pensava. Quero testar imediatamente!";
+		next;
+		mes "[Zoologist]";
+		mes "Muito bem. Bom trabalho! Muito obrigado! Aqui está um pequeno presente para você.";
+		delitem 6218,1; //Disin_Delivery_Box
+		erasequest 8271;
+		getitem 569,100; //Novice_Potion
+		getexp 1000,0;
+		close;
+	}
+	mes "[Zoologist]";
+	mes "Agradeço sua gentileza.";
+	mes "Mas o que você trouxe?";
+	next;
+	mes "[Zoologist]";
+	mes "Hmm, eu achava que a Dieshin era rápida e precisa, mas você me trouxe uma caixa vazia. Que decepção.";
+	next;
+	mes "[Zoologist]";
+	mes "Por favor, traga meu pedido. A Dieshin lhe dará meu produto.";
+	close;
+}
+
+prt_fild03,30,254,3	script	Entomologist	83,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 3500) {
+		mes "[Entomologist]";
+		mes "Por que você está carregando tantos itens?";
+		mes "Você está em um curso de treinamento ou algo assim?";
+		close;
+	}
+	mes "[Entomologist]";
+	mes "Você já ouviu falar sobre o monstro Chifre?";
+	mes "Ele tem formato de inseto, pele preta lisa e um chifre gigante na cabeça.";
+	next;
+	mes "[Entomologist]";
+	mes "Pesquisas recentes mostraram que esse monstro pode ser domado e treinado com Mel.";
+	next;
+	mes "[Entomologist]";
+	mes "Estou estudando isso no momento e tentando provar a teoria. Então, planejo colocar uma armadilha de Mel nos locais por onde ele costuma passar e observar sua reação.";
+	next;
+	if(select("...Não estou interessado.:Aqui está o Mel.") == 1) {
+		mes "[Entomologist]";
+		mes "Ah, preciso de Mel para continuar o estudo.";
+		close;
+	}
+	if (checkquest(8272) != 1) {
+		mes "[Entomologist]";
+		mes "Hã?";
+		mes "Você não é o entregador da Dieshin?";
+		next;
+		mes "[Entomologist]";
+		mes "Estou aguardando uma entrega especial.";
+		close;
+	}
+	if (countitem(6218) > 0) {
+		mes "[Entomologist]";
+		mes "Oh, sim! Essa mesma!";
+		next;
+		mes "[Entomologist]";
+		mes "Esse é o Mel que eu encomendei! Você foi enviado pela Dieshin, certo?";
+		next;
+		mes "[Entomologist]";
+		mes "Estou esperando por isso!";
+		mes "Entregue para mim!";
+		next;
+		mes "[Entomologist]";
+		mes "Chegou bem mais rápido do que eu pensava. Quero testar isso agora mesmo!";
+		next;
+		mes "[Entomologist]";
+		mes "Muito bem. Bom trabalho! Muito obrigado! Aqui está um pequeno presente para você.";
+		delitem 6218,1; //Disin_Delivery_Box
+		erasequest 8272;
+		getitem 569,100; //Novice_Potion
+		getexp 1000,0;
+		close;
+	}
+	mes "[Entomologist]";
+	mes "Agradeço pela sua gentileza.";
+	mes "Mas, o que você trouxe?";
+	next;
+	mes "[Entomologist]";
+	mes "Hmm, eu pensei que Dieshin fosse rápido e preciso, mas você me trouxe uma caixa vazia. Que decepção.";
+	next;
+	mes "[Entomologist]";
+	mes "Por favor, traga meu pedido. Dieshin lhe dará meu produto.";
+	close;
+}
+
+xmas_fild01,92,57,3	script	Biologist	97,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 3500) {
+		mes "[Biologist]";
+		mes "Por que você está carregando tantos itens?";
+		mes "Você está em um treinamento ou algo assim?";
+		close;
+	}
+	mes "[Biologist]";
+	mes "Você já ouviu falar do monstro Marin?";
+	mes "Ele parece um poring comum, mas tem características únicas.";
+	next;
+	mes "[Biologist]";
+	mes "Porings roubam itens se os virem no chão. No entanto, o Marin não tem interesse em itens deixados no chão. Então eu estava me perguntando, por que o Marin não presta atenção em coletar itens, embora eles sejam o mesmo tipo de monstro que os Porings.";
+	next;
+	mes "[Biologist]";
+	mes "Mas, este lugar é incrivelmente frio.";
+	next;
+	if(select("...Não estou interessado.:Aqui estão os cobertores.") == 1) {
+		mes "[Biologist]";
+		mes "Huh, tanto faz. Mas tome cuidado! É muito escorregadio aqui.";
+		close;
+	}
+	if (checkquest(8273) != 1) {
+		mes "[Biologist]";
+		mes "Huh?";
+		mes "Você não é o entregador de Dieshin?";
+		next;
+		mes "[Biologist]";
+		mes "Estou esperando por uma entrega especial.";
+		close;
+	}
+	if (countitem(6218) > 0) {
+		mes "[Biologist]";
+		mes "Ah, sim! Essa mesma!";
+		next;
+		mes "[Biologist]";
+		mes "Aqueles são os cobertores que eu pedi! Você foi enviado por Dieshin, certo?";
+		next;
+		mes "[Biologist]";
+		mes "Eu estava esperando por isso!";
+		mes "Dê para mim!";
+		next;
+		mes "[Biologist]";
+		mes "Chegou bem mais rápido do que eu pensava. Quero testá-los agora mesmo!";
+		next;
+		mes "[Biologist]";
+		mes "Muito bem. Bom trabalho! Muito obrigado! Aqui está um pequeno presente para você.";
+		delitem 6218,1; //Disin_Delivery_Box
+		erasequest 8273;
+		getitem 569,100; //Novice_Potion
+		getexp 1000,0;
+		close;
+	}
+	mes "[Biologist]";
+	mes "Agradeço pela sua gentileza.";
+	mes "Mas, o que você trouxe?";
+	next;
+	mes "[Biologist]";
+	mes "Hmm, eu pensei que Dieshin fosse rápido e preciso, mas você me trouxe uma caixa vazia. Que decepção.";
+	next;
+	mes "[Biologist]";
+	mes "Por favor, traga meu pedido. Dieshin lhe dará meu produto.";
+	close;
+}
+
+payon,179,66,3	script	Dashia	931,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 3500) {
+		mes "[Dashia]";
+		mes "Por que você está carregando tantos itens?";
+		mes "Você está em um treinamento ou algo assim?";
+		close;
+	}
+	mes "[Dashia]";
+	mes "Aqui está um pouco de cabelo~ um relógio quebrado~!";
+	next;
+	mes "[Dashia]";
+	mes "Relógio quebrado..? Hu hu..";
+	next;
+	mes "[Dashia]";
+	mes "Ei~! Cara! Você parece um aventureiro muito rico.";
+	next;
+	if(select("Eu sou um aventureiro pobre.:Tenho uma missão de coleta.") == 1) {
+		mes "[Dashia]";
+		mes "Sério? Hmm, ah, entendi. Você não parece sofisticado.";
+		next;
+		mes "[Dashia]";
+		mes "Você é um aventureiro pobre~! Boa sorte!";
+		close;
+	}
+	mes "[Dashia]";
+	mes "Oh, você é do Grupo Eden?";
+	mes "Que missão você tem?";
+	next;
+	switch(select("Coletar Ossos:Coletar Pele Animal:Coletar Cascas:Coletar Caudas:Coletar Biscoitos:Coletar Bigodes")) {
+	case 1:
+		callsub L_Quest,8274;
+		if (countitem(932) > 9) {
+			callsub L_Reward;
+			delitem 932,10; //Skel_Bone
+			getitem 569,100; //Novice_Potion
+			getexp 1000,100;
+			erasequest 8274;
+			close;
+		}
+		mes "[Dashia]";
+		mes "Percebo que você tem uma missão de coleta.";
+		mes "Mas, onde estão os Ossos de Esqueleto?";
+		next;
+		mes "[Dashia]";
+		mes "Você ainda não terminou a missão. Por que voltou aqui?";
+		next;
+		mes "[Dashia]";
+		mes "Você não tem 'Ossos de Esqueleto' suficientes... Você pode encontrá-los ao caçar Esqueletos.";
+		next;
+		mes "[Dashia]";
+		mes "Para encontrar Esqueletos, é melhor verificar o 1º andar da Masmorra de payon, que fica na Vila dos Arqueiro, ao norte de payon.";
+		break;
+	case 2:
+		callsub L_Quest,8275;
+		if ((countitem(948) > 9) && (countitem(919) > 4)) {
+			callsub L_Reward;
+			getitem 569,100; //Novice_Potion
+			delitem 948,10; //Bear's_Foot
+			delitem 919,5; //Animal's_Skin
+			getexp 1000,100;
+			erasequest 8275;
+			close;
+		}
+		mes "[Dashia]";
+		mes "Percebo que você tem uma missão de coleta.";
+		mes "Mas, onde estão as Peles de Pé de Urso e as Peles Animais?";
+		next;
+		mes "[Dashia]";
+		mes "Você ainda não terminou a missão. Por que voltou aqui?";
+		next;
+		mes "[Dashia]";
+		mes "Você precisa trazer '10 Peles de Pé de Urso' e '5 Peles Animais'!";
+		mes "Você pode encontrar Pele de Pé de Urso em Pé-Grande e Pele Animal em Animais.";
+		next;
+		mes "[Dashia]";
+		mes "Pé-Grande fica ao redor do norte do campo de Geffen ou a sudeste do campo de payon.";
+		break;
+	case 3:
+		callsub L_Quest,8276;
+		if ((countitem(955) > 19) && (countitem(910) > 19)) {
+			callsub L_Reward;
+			delitem 955,20; //Worm_Peelings
+			delitem 910,20; //Garlet
+			getitem 569,100; //Novice_Potion
+			getexp 1000,100;
+			erasequest 8276;
+			close;
+		}
+		mes "[Dashia]";
+		mes "Percebo que você tem uma missão de coleta.";
+		mes "Mas, onde estão as Cascas de Verme e Garlets?";
+		next;
+		mes "[Dashia]";
+		mes "Você precisa trazer '20 Cascas de Verme' e '20 Garlets' para completar a missão.";
+		next;
+		mes "[Dashia]";
+		mes "Você pode obter esses itens de 'Piere', 'Andre', 'Deniro', 'Vitata', 'Gatuno Bug', 'Female Gatuno Bug' e 'Male Gatuno Bug'.";
+		next;
+		mes "[Dashia]";
+		mes "'Piere', 'Andre', 'Deniro' e 'Vitata' estão no Ant Hell, que fica localizado perto da Fortaleza de Saint Darmain, a sudoeste de Morocc.";
+		next;
+		mes "[Dashia]";
+		mes "'Gatuno Bug', 'Female Gatuno Bug' e 'Male Gatuno Bug' estão no Esgoto de Prontera. Para chegar lá, você precisa ser um voluntário da força punitiva do Esgoto de Prontera.";
+		break;
+	case 4:
+		callsub L_Quest,8277;
+		if ((countitem(942) > 9) && (countitem(1026) > 9) && (countitem(945) > 9)) {
+			callsub L_Reward;
+			delitem 942,10; //Yoyo_Tail
+			delitem 1026,10; //Acorn
+			delitem 945,10; //Raccoon_Leaf
+			getitem 569,150; //Novice_Potion
+			getexp 1000,200;
+			erasequest 8277;
+			close;
+		}
+		mes "[Dashia]";
+		mes "Vejo que você tem uma missão de coleta.";
+		mes "Mas, onde estão as Caudas de Yoyo, Bolotas e Folhas de Guaxinim?";
+		next;
+		mes "[Dashia]";
+		mes "Você ainda não completou a missão. Por que voltou aqui?";
+		mes "Você precisa trazer '10 Caudas de Yoyo', '10 Bolotas' e '10 Folhas de Guaxinim' para completar a missão.";
+		next;
+		mes "[Dashia]";
+		mes "Você pode conseguir Caudas de Yoyo de 'Yoyos', Bolotas de 'Cocos' e Folhas de Guaxinim de 'Smokies'.";
+		next;
+		mes "[Dashia]";
+		mes "Você pode encontrá-los facilmente pelos campos, mas o campo ao leste de Ayothaya é o melhor local para caçar os 3 monstros.";
+		next;
+		mes "[Dashia]";
+		mes "Para chegar a Ayothaya, é melhor ir até 'Aibakthing' em Alberta e pagar a passagem.";
+		break;
+	case 5:
+		callsub L_Quest,8278;
+		if ((countitem(538) > 4) && (countitem(539) > 0)) {
+			callsub L_Reward;
+			delitem 538,5; //Well_Baked_Cookie
+			delitem 539,1; //Piece_Of_Cake
+			getitem 569,150; //Novice_Potion
+			getexp 1000,200;
+			erasequest 8278;
+			close;
+		}
+		mes "[Dashia]";
+		mes "Vejo que você tem uma missão de coleta.";
+		mes "Mas, onde estão os Biscoitos Bem Assados e o Pedaço de Bolo?";
+		next;
+		mes "[Dashia]";
+		mes "Você ainda não completou a missão. Por que voltou aqui?";
+		mes "Você precisa trazer '5 Biscoitos Bem Assados' e '1 Pedaço de Bolo' para completar a missão.";
+		next;
+		mes "[Dashia]";
+		mes "Você pode conseguir Biscoitos Bem Assados de 'Cookies' que vestem camisas vermelhas ou verdes.";
+		mes "Para conseguir o Pedaço de Bolo, você deve procurar por 'Mystcases'.";
+		next;
+		mes "[Dashia]";
+		mes "Ambos os monstros podem ser encontrados no Armazém da Fábrica de Brinquedos ou na Sala de Monitoramento. Para chegar lá, fale com o Sr. Claus na parte nordeste de Al De Baran.";
+		break;
+	case 6:
+		callsub L_Quest,8279;
+		if ((countitem(1017) > 4) && (countitem(1018) > 2)) {
+			callsub L_Reward;
+			delitem 1017,5; //Moustache_Of_Mole
+			delitem 1018,3; //Nail_Of_Mole
+			getitem 569,150; //Novice_Potion
+			getexp 1000,200;
+			erasequest 8279;
+			close;
+		}
+		mes "[Dashia]";
+		mes "Vejo que você tem uma missão de coleta.";
+		mes "Mas, onde estão os Bigodes de Toupeira e as Garras de Toupeira?";
+		next;
+		mes "[Dashia]";
+		mes "Você ainda não completou a missão. Por que voltou aqui?";
+		mes "Você precisa trazer '5 Bigodes de Toupeira' e '3 Garras de Toupeira' para completar a missão.";
+		next;
+		mes "[Dashia]";
+		mes "Você pode obter esses itens de 'Martins'.";
+		mes "Martins podem ser encontrados no Fosso dos Mortos de Mjolnir, mas o segundo andar é perigoso, então tome cuidado!";
+		next;
+		mes "[Dashia]";
+		mes "Para chegar lá, peça a uma funcionária Kafra em Geffen; elas podem teletransportá-lo para lá.";
+		break;
+	}
+	next;
+	mes "[Dashia]";
+	mes "De qualquer forma, estarei aqui esperando por você. Por favor, volte quando terminar a missão!";
+	close;
+L_Quest:
+	if (checkquest(getarg(0)) != 1) {
+		mes "[Dashia]";
+		mes "Hã? Tem certeza? Algo está errado...";
+		next;
+		mes "[Dashia]";
+		mes "É estranho.";
+		mes "Por favor, verifique sua Janela de Missões pressionando 'alt + u'.";
+		close;
+	}
+	return;
+L_Reward:
+	mes "[Dashia]";
+	mes "Uau~ você fez um excelente trabalho!";
+	next;
+	mes "[Dashia]";
+	mes "Muito obrigado. Que Deus te abençoe!";
+	emotion ET_SMILE;
+	next;
+	mes "[Dashia]";
+	mes "Ha~! Ha~!";
+	mes "Vou lhe dar uma recompensa, conforme prometido.";
+	return;
+}

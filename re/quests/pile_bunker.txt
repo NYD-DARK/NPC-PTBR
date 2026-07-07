@@ -1,0 +1,124 @@
+//===== rAthena Script ======================================= 
+//= Pile Bunker Quest
+//===== By: ================================================== 
+//= JayPee Mateo
+//===== Current Version: ===================================== 
+//= 2.2
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= 1.0 A Pile Bunker quest based on iRO WiKi. [JayPee Mateo]
+//= 2.0 Rewrited the Script a little so it looks a bit better. [Masao]
+//= 2.1 Switched to official script, coded by Gennosuke Kouga. [Euphy]
+//= 2.2 Updated to match the official script. [Euphy]
+//============================================================ 
+
+// Main NPC :: mech_book
+//============================================================
+yuno,179,174,4	script	Gomer	851,{
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 1000) {
+		mes "[Gomer]";
+		mes "Você está carregando muita coisa. Deixe parte da sua bagagem e volte aqui.";
+		close;
+	}
+	if (countitem(1549)) {
+		mes "[Gomer]";
+		mes "E então, como o Pilebuncker está funcionando para você?";
+		close;
+	}
+	if (Class != Job_Mechanic && Class != Job_Mechanic_T && Class != Job_Baby_Mechanic) {
+		mes "[Gomer]";
+		mes "Eu sou um Mecânico aposentado e não acho que eu tenha qualquer negócio com você.";
+		close;
+	}
+	mes "[Gomer]";
+	mes "E daí? Como é a sensação de estar em um Madogear?";
+	mes "É algo que não é permitido para aqueles que falharam em buscar seu próprio caminho.";
+	next;
+	mes "[Gomer]";
+	mes "Eu? Eu me aposentei há muito tempo. Porque sofri um acidente... me machuquei gravemente e não poderei pilotar novamente. Estou chateado com isso.";
+	next;
+	mes "[Gomer]";
+	mes "Então decidi ficar aqui forjando engrenagens para Madogear.";
+	mes "Huh? Não estou dizendo que tenho reclamações sobre este trabalho.";
+	next;
+	mes "[Gomer]";
+	mes "Ser forçado a fazer algo que você não gosta, não há nada mais miserável do que isso.";
+	next;
+	mes "[Gomer]";
+	mes "Existem pessoas que são felizes apenas sendo um apoio, sabe, como ser a parede para alguém se encostar.";
+	next;
+	mes "[Gomer]";
+	mes "Isso me faz sentir bem e estou prestes a fazer uma nova engrenagem. Quero que você me ajude. O que me diz?";
+	next;
+	switch(select("Não estou interessado.:O que você vai fazer?:Onde você consegue os materiais?:Eu trouxe os materiais.")) {
+	case 1:
+		mes "[Gomer]";
+		mes "Não há nada que eu possa fazer";
+		mes "quanto a isso então.";
+		mes "Até a próxima!";
+		close;
+	case 2:
+		mes "[Gomer]";
+		mes "Hum, um bastão de metal enorme que poderia esmagar um oponente com um golpe só!";
+		next;
+		mes "[Gomer]";
+		mes "Não parece sofisticado, mas projetei um dispositivo com mola para atacar com grande força.";
+		next;
+		mes "[Gomer]";
+		mes "É oculto, então quando você encontrar uma chance, um disparo poderia colocar o oponente em condição crítica!";
+		mes "Mal posso esperar para vê-lo em ação!";
+		next;
+		mes "[Gomer]";
+		mes "Se você pudesse imaginar quão bom esse tipo de arma pode ser, eu farei isso se tornar realidade.";
+		next;
+		mes "[Gomer]";
+		mes "Traga-me 200 Aços, 30 Tubos Flexíveis e 1 Brocca. Eu poderia fazer o que acabei de descrever com esses materiais.";
+		close;
+	case 3:
+		mes "[Gomer]";
+		mes "Você deve conseguir aço de muitos monstros como Kobolds.";
+		next;
+		mes "[Gomer]";
+		mes "Tubos Flexíveis são mais raros, derrubados por Metalings ao redor de Einbroch e Lighthalzen.";
+		next;
+		mes "[Gomer]";
+		mes "Por último, encontrar uma Brocca é muito difícil, mas você deve ser capaz de dar um jeito. Haha, vá buscar!";
+		close;
+	case 4:
+		if (countitem(999) < 200 || countitem(7325) < 30 || countitem(1415) < 1) {
+			mes "[Gomer]";
+			mes "Você não trouxe todos os materiais que eu pedi.";
+			next;
+			mes "[Gomer]";
+			mes "Tenho o hábito de desistir do que estou fazendo e tentar criar coisas novas quando a inspiração surge.";
+			mes "É melhor você se apressar!";
+			close;
+		} else {
+			mes "[Gomer]";
+			mes "Oh, eu estava esperando. Você não veio na hora, então fiquei pensando se tinha esquecido. Por favor, espere aí um pouco.";
+			specialeffect EF_REPAIRWEAPON;
+			next;
+			mes "[Gomer]";
+			mes "Está pronto. O que acha? Nada mal, hein? Embora eu mesmo tenha feito, devo dizer que ficou muito bem feito.";
+			next;
+			mes "[Gomer]";
+			mes "A combinação de peso, volume e olhe para sua cor e brilho. Isso conquista meu coração!";
+			next;
+			mes "[Gomer]";
+			mes "...........";
+			next;
+			mes "[Gomer]";
+			mes "Uh, com um pouco de melhoria, poderia ser produzido em massa e entregue. Tenho certeza de que posso fazer mais dessas, então vou te dar esta.";
+			next;
+			mes "[Gomer]";
+			mes "Ah, e acontece que eu não precisava de todo aquele Aço afinal. Então tome, leve a maior parte de volta.";
+			delitem 999,50; //Steel
+			delitem 7325,30; //Tube
+			delitem 1415,1; //Skewer
+			getitem 1549,1; //Pilebuncker
+			getitem 1360,1; //Two_Handed_Axe
+			close;
+		}
+	}
+}
