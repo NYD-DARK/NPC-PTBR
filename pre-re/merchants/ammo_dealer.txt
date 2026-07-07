@@ -1,0 +1,120 @@
+//===== rAthena Script =======================================
+//= Bullet Dealers
+//===== Description: =========================================
+//= Bullet trader.
+//===== Changelogs: ==========================================
+//= 1.0 First version [Playtester]
+//= 1.1 Converted from Aegis [Paradox924X]
+//= 1.2 More optimized conversion [Legionaire]
+//= 1.2a Removed .GATs [Lupus]
+//= 1.3 Fixed [Playtester] Optimized. Got rid of @vars [Lupus]
+//= 1.4 Updated to match AEGIS script. [Kisuka]
+//= 1.5 Updated to match AEGIS script again. [Masao]
+//= 1.6 Moved Izlude duplicate to pre-re/re paths. [Euphy]
+//= 2.0 Clean-up. [Capuche]
+//= 2.1 Fixes Issue #1482, where Rebellion jobs cannot use this npc. [Limestone]
+//============================================================
+
+alberta,118,160,3	script	Bullet Dealer Tony#alb::bdt	4_M_04,{
+	mes "[Tony]";
+	if (BaseClass == Job_Gunslinger) {
+		mes "Eu sou o Tony, o Mercador de Balas.";
+		mes "Venha até mim sempre que estiver";
+		mes "com pouca munição. É só me trazer";
+		mes "os materiais e eu farei";
+		mes "as balas que você precisa.";
+		next;
+		switch(select("Esfera Venenosa:Esfera de Fogo:Esfera de Raio:Esfera de Cegueira:Esfera Congelante:Cancelar")) {
+		case 1: callsub S_BulletTrade,937,10,13205;// <item required>, <amount req>, <bullet id>
+		case 2: callsub S_BulletTrade,7097,2,13203;
+		case 3: callsub S_BulletTrade,7053,3,13204;
+		case 4: callsub S_BulletTrade,1024,5,13206;
+		case 5: callsub S_BulletTrade,7054,2,13207;
+		case 6:
+			mes "[Tony]";
+			mes "Mudou de ideia?";
+			mes "Bem, se precisar de qualquer";
+			mes "bala, estarei bem aqui.";
+			mes "Volte sempre que achar que";
+			mes "vai precisar de mais";
+			mes "munição, Justiceiro.";
+			close;
+		}
+	}
+	mes "Ei, eu sou o Tony. Estou encarregado";
+	mes "de distribuir e fabricar";
+	mes "balas para os Gunslingers.";
+	mes "É simplesmente como nossa guilda";
+	mes "gosta de fazer";
+	mes "as coisas.";
+	next;
+	mes "[Tony]";
+	mes "Sinto muito se você veio";
+	mes "aqui para comprar balas.";
+	mes "Só posso fazer negócios com";
+	mes "Gunslingers formados.";
+	close;
+
+S_BulletTrade:
+	.@required_id = getarg(0);
+	.@required_amount = getarg(1);
+	.@bullet_id = getarg(2);
+
+	mes "[Tony]";
+	mes "Para cada conjunto de";
+	mes callfunc("F_InsertPlural",30,getitemname(.@bullet_id))+",";
+	mes "você deve me dar";
+	mes "1 Emveretarcon,";
+	mes "1 Phracon, e";
+	mes callfunc("F_InsertPlural",.@required_amount,getitemname(.@required_id))+".";
+	next;
+	mes "[Tony]";
+	mes "Lembre-se de que posso dar";
+	mes "no máximo 500 conjuntos de";
+	mes "30 balas por vez. Por favor,";
+	mes "insira o número de conjuntos de balas";
+	mes "que você deseja. Se quiser";
+	mes "cancelar, insira ''0.''";
+	next;
+	input .@amount;
+	mes "[Tony]";
+	if (.@amount < 1 || .@amount > 500) {
+		mes "Ei, eu não posso te dar";
+		mes "tantas balas assim. Não";
+		mes "esqueça de inserir um número";
+		mes "que não seja maior que 500";
+		mes "se quiser trocar seus";
+		mes "itens por algumas balas.";
+	}
+	else if (countitem(1010) >= .@amount && countitem(1011) >= .@amount && countitem(.@required_id) >= (.@amount*.@required_amount)) {
+		if (checkweight(.@bullet_id,.@amount * 30) == 0) {
+			mes "Eh? Seu inventário não";
+			mes "tem espaço suficiente para";
+			mes "tantas balas. Volte mais tarde,";
+			mes "depois de liberar mais espaço.";
+			mes "Tente colocar alguns dos seus";
+			mes "itens no Armazém da Kafra.";
+		} else {
+			mes "Ótimo, tudo parece";
+			mes "estar em ordem. Deixe-me pegar";
+			mes "esses materiais, aqui estão";
+			mes "suas balas. É um prazer";
+			mes "fazer negócios com você~";
+			delitem 1010,.@amount; //Phracon
+			delitem 1011,.@amount; //Emveretarcon
+			delitem .@required_id,.@amount * .@required_amount;
+			getitem .@bullet_id,.@amount * 30;
+		}
+	} else {
+		mes "Huh. Parece que você";
+		mes "não tem materiais suficientes";
+		mes "para tantas balas. Bem,";
+		mes "não tem problema. Apenas volte";
+		mes "depois de reunir tudo";
+		mes "o que precisa, ok?";
+	}
+	close;
+}
+
+que_ng,187,156,3	duplicate(bdt)	Bullet Dealer Tony#ng	86
+izlude,171,133,3	duplicate(bdt)	Bullet Dealer Tony#iz	86

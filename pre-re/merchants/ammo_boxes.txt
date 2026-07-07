@@ -1,0 +1,128 @@
+//===== rAthena Script =======================================
+//= Magazine Dealers
+//===== Description: =========================================
+//= Turns bullets into magazines/packs.
+//===== Changelogs: ==========================================
+//= 1.0 First version. [SinSloth]
+//= 1.1 Optimized version - Reduced to only one function [SinSloth]
+//= 1.2 Optimized^2, corrected npc's name [ultramage]
+//= 1.2a Optimized. Please, ommit extra NPC names [Lupus]
+//= 1.3 Updated to match AEGIS script. [Kisuka]
+//= 1.4 Updated to match AEGIS script again. [Masao]
+//= 1.5 Moved Izlude duplicate to pre-re/re paths. [Euphy]
+//= 2.0 Clean-up. [Capuche]
+//= 2.1 Fixes Issue #1482, where Rebellion jobs cannot use this npc. [Limestone]
+//============================================================
+
+que_ng,187,149,3	script	Magazine Dealer Kenny::mdk	4_M_01,{
+	mes "[Kenny]";
+	if (BaseClass == Job_Gunslinger) {
+		mes "Bem-vindo à minha Loja de Carregadores.";
+		mes "Como você deve saber, grandes quantidades";
+		mes "de balas podem ser carregadas com mais";
+		mes "facilidade quando estão em Carregadores. Agora, posso lhe interessar por";
+		mes "algo em particular?";
+		next;
+		switch(select("Pacote de Esfera de Vento:Pacote de Esfera de Sombra:Pacote de Esfera de Veneno:Pacote de Esfera de Água:Pacote de Esfera de Fogo:Cartucho:Blood Cartucho:Silver Cartucho:Cancelar")) {
+		case 1: callsub S_Casing,13204,12144;// <bullet id>, <pack id>
+		case 2: callsub S_Casing,13206,12145;
+		case 3: callsub S_Casing,13205,12146;
+		case 4: callsub S_Casing,13207,12147;
+		case 5: callsub S_Casing,13203,12148;
+		case 6: callsub S_Casing,13200,12149;
+		case 7: callsub S_Casing,13202,12150;
+		case 8: callsub S_Casing,13201,12151;
+		case 9:
+			mes "[Kenny]";
+			mes "Bem, se algum dia você achar";
+			mes "que tem balas demais,";
+			mes "venha me procurar.";
+			mes "É uma ótima ideia armazenar";
+			mes "balas em meus Carregadores.";
+			close;
+		}
+	}
+	mes "Bem-vindo à minha loja.";
+	mes "Aqui, eu forneço Carregadores";
+	mes "e Cartuchos para Justiceiros.";
+	mes "Desculpe, mas não parece que";
+	mes "meus serviços seriam de alguma";
+	mes "utilidade para você, aventureiro.";
+	next;
+	mes "[Kenny]";
+	mes "Ei, mas se você conhecer";
+	mes "algum Justiceiro, envie-o";
+	mes "para mim. Nunca se tem balas";
+	mes "demais.";
+	close;
+
+S_Casing:
+	.@bullet_id = getarg(0);
+	.@pack_id = getarg(1);
+
+	mes "[Kenny]";
+	mes "Agora, você pode trocar";
+	mes callfunc("F_InsertPlural",500,getitemname(.@bullet_id));
+	mes "e 500 zenys por 1"+getitemname(.@pack_id)+", então certifique-se de";
+	mes "que você tem balas suficientes";
+	mes "e zenys para esta troca.";
+	next;
+	mes "[Kenny]";
+	mes "Você pode trocar"+callfunc("F_InsertPlural",500,getitemname(.@bullet_id))+"e 500 zenys";
+	mes "por 1"+getitemname(.@pack_id)+".";
+	next;
+	mes "[Kenny]";
+	mes "Lembre-se que eu não posso lhe dar";
+	mes "mais do que 50 Carregadores";
+	mes "por vez. Agora, por favor, digite";
+	mes "o número de Carregadores que você";
+	mes "deseja receber. Se quiser cancelar, digite \"0\".";
+	next;
+	input .@amount;
+	mes "[Kenny]";
+	if (.@amount > 50 || .@amount == 0) {
+		mes "Ei, eu não posso lhe dar";
+		mes "tantos Carregadores assim.";
+		mes "Por favor, tente novamente e";
+		mes "digite um número não";
+		mes "maior que 50.";
+	}
+	else if (countitem(.@bullet_id) >= (500*.@amount)) {
+		if (Zeny >= (500*.@amount)) {
+			if (checkweight(.@pack_id,.@amount) == 0) {
+				mes "Ei, você está com um monte";
+				mes "de tralhas lotando o seu";
+				mes "Inventário. Libere algum";
+				mes "espaço e depois volte aqui";
+				mes "para trocar suas balas por";
+				mes "alguns Carregadores, ok?";
+			} else {
+				mes "Certo, aqui estão";
+				mes "os seus Carregadores. Obrigado";
+				mes "por visitar minha loja, e";
+				mes "espero que você use todas";
+				mes "as suas munições com sabedoria.";
+				Zeny = Zeny -500*.@amount;
+				delitem .@bullet_id,(500*.@amount);
+				getitem .@pack_id,.@amount;
+			}
+		} else {
+			mes "Desculpe, mas você não";
+			mes "tem zenys suficientes para";
+			mes "esta troca de Carregadores.";
+			mes "Volte à minha loja";
+			mes "depois que tiver economizado";
+			mes "um pouco mais de dinheiro.";
+		}
+	} else {
+		mes "Desculpe, mas você não";
+		mes "tem balas suficientes para";
+		mes "esta troca de Carregadores.";
+		mes "Talvez você deva conferir";
+		mes "novamente seu Inventário e,";
+		mes "então, voltar aqui mais tarde.";
+	}
+	close;
+}
+
+izlude,171,127,3	duplicate(mdk)	Magazine Dealer Kenny#iz	4_M_01

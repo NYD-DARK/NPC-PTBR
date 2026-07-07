@@ -1,0 +1,144 @@
+//===== rAthena Script =======================================
+//= Hypnotist
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Permenent first class, base level 40 and under skill resetter.
+//= First Class characters and expanded classes only.
+//= Baby Classes and First Class trans can't use this service.
+//===== Additional Comments: =================================
+//= 1.0 First version. [L0ne_W0lf]
+//============================================================
+
+prontera,146,232,4	script	Hypnotist#2	124,{
+	mes "[Hypnotist]";
+	mes "Saudações, aventureiro.";
+	mes "Sou um membro da Academia";
+	mes "de Hipnotistas enviado a Prontera";
+	mes "para oferecer serviços de Redefinição de Habilidades";
+	mes "para certas classes de Primeira Classe por um preço muito bom: de graça!";
+	next;
+	mes "[Hypnotist]";
+	mes "Embora eu ofereça redefinições";
+	mes "de habilidades ilimitadas por";
+	mes "enquanto, tenho duas condições";
+	mes "que devem ser atendidas. Primeiro,";
+	mes "você deve estar abaixo do ^FF0000Nível de Classe 40^000000.";
+	next;
+	mes "[Hypnotist]";
+	mes "Segundo, você deve ter uma";
+	mes "Classe ^FF0000Espadachim, Noviço, Mago,";
+	mes "Gatuno, Arqueiro, Mercador,";
+	mes "Taekwon, Taekwon, Justiceiro e Ninja^000000";
+	mes "para se qualificar.";
+	mes "Agora, você tem alguma dúvida?";
+	next;
+	switch(select("Redefinição de Habilidades?:Eu quero uma Redefinição de Habilidades:Nada")) {
+
+	case 1:
+		mes "[Hypnotist]";
+		mes "A Redefinição de Habilidades permite que";
+		mes "os aventureiros redistribuam seus";
+		mes "Pontos de Habilidade se não estiverem";
+		mes "satisfeitos com suas habilidades atuais.";
+		next;
+		mes "[Hypnotist]";
+		mes "Antes de prosseguir com";
+		mes "uma Redefinição de Habilidades,";
+		mes "você deve reduzir todo o peso";
+		mes "de todos os itens carregados pelo";
+		mes "seu personagem para 0. Você pode colocar";
+		mes "itens extras no Armazém da Kafra.";
+		next;
+		mes "[Hypnotist]";
+		mes "Ah, também é importante";
+		mes "remover seu ^FF0000Carrinho^000000";
+		mes "se você tiver um equipado.";
+		mes "Caso contrário, a hipnose não";
+		mes "funcionará, ou poderá sair pela culatra...";
+		close;
+
+	case 2:
+		mes "[Hypnotist]";
+		mes "Você tem certeza de que";
+		mes "deseja prosseguir com";
+		mes "meu serviço de ^FF0000Redefinição de Habilidades^000000?";
+		next;
+		if (select("Sim:Cancelar") == 1) {
+			if (BaseLevel > 40) {
+				mes "[Hypnotist]";
+				mes "Sinto muito, mas personagens";
+				mes "com Nível de Base superior";
+				mes "a 40 não são elegíveis para o";
+				mes "serviço de Redefinição de Habilidades que ofereço.";
+				close;
+			}
+			if ((Class > 0 && Class < 7 && Upper == 0) || (Class == Job_Gunslinger) || (Class == Job_Ninja) || (Class == Job_Taekwon)) {
+				if (checkcart()) {
+					mes "[Hypnotist]";
+					mes "Oh! Por favor, remova seu";
+					mes "Carrinho antes de prosseguir";
+					mes "com o serviço de Redefinição de Habilidades.";
+					mes "Obrigado pela colaboração~";
+					close;
+				}
+				if (Weight) {
+					mes "[Hypnotist]";
+					mes "Se você está aqui para meu serviço de";
+					mes "Redefinição de Habilidades, por favor,";
+					mes "lembre-se de que não pode";
+					mes "redefinir suas habilidades até que o";
+					mes "^FF0000peso dos itens em seu inventário";
+					mes "seja reduzido para 0^000000.";
+					next;
+					mes "[Hypnotist]";
+					mes "Por que você não coloca suas";
+					mes "coisas no Armazém da Kafra";
+					mes "por enquanto? Dessa forma, você pode";
+					mes "manter todos os seus bens em segurança.";
+					close;
+				}
+				mes "[Hypnotist]";
+				mes "Obrigado por utilizar";
+				mes "meus serviços de Redistribuição";
+				mes "de Habilidades. Ah, e boa";
+				mes "sorte em suas viagens,";
+				mes "aventureiro.";
+				ResetSkill;
+				close;
+			}
+			mes "[Hypnotist]";
+			mes "Sinto muito, mas sua";
+			mes "Classe não se qualifica";
+			mes "para o serviço de Redefinição";
+			mes "de Habilidades que eu ofereço.";
+			mes "Só posso oferecer o serviço para";
+			mes "as seguintes Classes...";
+			next;
+			mes "[Hypnotist]";
+			mes "^FF0000Espadachim, Noviço,";
+			mes "Mago, Gatuno, Arqueiro,";
+			mes "Mercador, Taekwon";
+			mes "Taekwon, Justiceiro e Ninja^000000.";
+			close;
+		}
+		mes "[Hypnotist]";
+		mes "Obrigado, e boa";
+		mes "sorte em suas aventuras.";
+		mes "Viaje com segurança~";
+		close;
+
+	case 3:
+		mes "[Hypnotist]";
+		mes "Obrigado, e boa";
+		mes "sorte em suas aventuras.";
+		mes "Viaje com segurança~";
+		close;
+	}
+
+}

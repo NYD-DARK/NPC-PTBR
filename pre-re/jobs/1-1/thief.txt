@@ -1,0 +1,539 @@
+//===== rAthena Script =======================================
+//= Thief Job Quest
+//===== By: ==================================================
+//= rAthena Dev Team
+//===== Current Version: =====================================
+//= 1.8
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Job quest for Thief classes
+//===== Additional Comments: =================================
+//= 1.0 Fully working.
+//= 1.1 Added instant job change for High Novice [Lupus]
+//= 1.3 Added Baby Class support [Lupus]
+//= 1.4 Optimised and moved first checker to Jfunc1-1 [massdriller]
+//=     Fixed possible EXP abuse [Lupus]
+//= 1.5 Now saves/restores all quest skills [Lupus]
+//= 1.6 Merged back JFunc [Lupus] 1.6a typos
+//= 1.7 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//=     No longer uses function "F_ToHigh"
+//= 1.8 Added Quest Log commands. [L0ne_W0lf]
+//============================================================
+
+moc_prydb1,39,129,2	script	Thief Guide	69,{
+	if (Upper == 1) {
+		if (ADVJOB == Job_Assassin_Cross || ADVJOB == Job_Stalker) {
+			if (Class == Job_Novice_High) {
+				mes "[Thief Guide]";
+				mes "Hein? Eu te conheço? É estranho, parece que você me é familiar. Você não tem um gêmeo, tem?";
+				next;
+				if (!callfunc("F_CanChangeJob")) {
+					mes "[Thief Guide]";
+					mes "O quê, você quer ser um Gatuno? Sinto muito, mas parece que você precisa de mais treinamento.";
+					next;
+					mes "[Thief Guide]";
+					mes "Leve o tempo que precisar e aprenda todas as Habilidades Básicas, ok? Bem, nos vemos mais tarde~!";
+					close;
+				}
+				mes "[Thief Guide]";
+				mes "Bem, tive a sensação de que você já passou por uma vida inteira de lutas, então estou promovendo você a Gatuno agora mesmo. É melhor eu dar aos durões o que eles querem...";
+				next;
+				skill "NV_TRICKDEAD",0,SKILL_PERM;
+				jobchange Job_Thief_High;
+				skill "TF_SPRINKLESAND",1,SKILL_PERM;
+				skill "TF_BACKSLIDING",1,SKILL_PERM;
+				skill "TF_PICKSTONE",1,SKILL_PERM;
+				skill "TF_THROWSTONE",1,SKILL_PERM;
+				mes "[Thief Guide]";
+				mes "Já que você se tornou um Gatuno, viva como um Gatuno. Agora, vai fundo! Próximo~";
+				close;
+			}
+			else {
+				mes "[Thief Guide]";
+				if (Sex == SEX_MALE)
+					mes "Ei, cara.";
+				else
+					mes "Ei, gata~";
+				close;
+			}
+		}
+		else {
+			mes "[Thief Guide]";
+			if (Sex == SEX_MALE)
+				mes "Ei, cara.";
+			else
+				mes "Ei, gata.";
+			mes "...Ei! Você tem cara de bonzinho demais para querer ser um Gatuno!! Agora vaza, estou ocupado. Próximo!";
+			close;
+		}
+	}
+	if (BaseJob == Job_Thief) {
+		mes "[Thief Guide]";
+		mes "Se tiver algum problema, sinta-se à vontade para falar comigo a qualquer momento, certo?";
+		close;
+	}
+	else if (BaseJob != Job_Novice && BaseJob != Job_Thief) {
+		mes "[Thief Guide]";
+		mes "Que diabos...?";
+		switch(Class) {
+		case 1:
+			mes "Hum.";
+			mes "Essa é,";
+			mes "uma espada grande.";
+			next;
+			mes "[Thief Guide]";
+			mes "Então...";
+			mes "Tentando compensar";
+			mes "por alguma coisa,";
+			mes "...amigão?";
+			break;
+		case 2:
+			mes "O que um Mago está fazendo aqui? Não deveria estar fazendo truques de cartas em outro lugar? Bem, é um país livre...";
+			next;
+			mes "[Thief Guide]";
+			mes "Ah, espere,";
+			mes "não é...";
+			mes "Cai fora daqui!";
+			break;
+		case 3:
+			mes "Cara, vocês,";
+			mes "Archers, não deveriam";
+			mes "estar brincando na floresta";
+			mes "ou algo assim?";
+			break;
+		case 4:
+			mes "Você sabe que todos nós roubamos para viver, certo? O que você está fazendo em um lugar desses, Noviço?";
+			break;
+		case 5:
+			mes "Você é um Mercador,";
+			mes "certo? Por que você";
+			mes "está entrando em um covil";
+			mes "de Thieves?!";
+			next;
+			mes "[Thief Guide]";
+			mes "Parece até que está";
+			mes "implorando para sermos roubados!";
+			mes "Vamos, apresse-se e";
+			mes "suma daqui~";
+			break;
+		case 8:
+			mes "Ai meu Deus...";
+			mes "Estou morrendo?";
+			next;
+			mes "[Thief Guide]";
+			mes "Por que mais um Sacerdote viria aqui? Acho melhor começar a confessar todos os meus pecados.";
+			close;
+		case 12:
+			mes "Você não costumava ser um de nós?! Cara, você mudou. Você parece bem perigoso agora...";
+			close;
+		case 17:
+			mes "Cara, você ficou muito legal de repente! Você deve ter habilidades com as quais eu só posso sonhar!";
+			close;
+		}
+		next;
+		mes "[Thief Guide]";
+		mes "*Suspiro* Olha, realmente não há necessidade de você ficar nesse tipo de lugar. Você deveria ir para onde deveria estar.";
+		close;
+	}
+	if (job_thief_q == 3 && countitem(1069) > 0 || countitem(1070) > 0) {
+		mes "[Thief Guide]";
+		mes "Hmmm?";
+		mes "Você coletou Cogumelos para";
+		mes "o teste de Gatuno, certo?";
+		next;
+		mes "[Thief Guide]";
+		mes "Aqui, fale com o outro cara bem ao meu lado. É ele quem cuida de verificar seus Cogumelos.";
+		close;
+	}
+	else if (job_thief_q == 3) {
+		mes "[Thief Guide]";
+		mes "Então, como foi a";
+		mes "Fazenda de Cogumelos?";
+		mes "Se divertiu?";
+		next;
+		if (select("Sim, foi legal.:Foi horrível.") == 1) {
+			mes "[Thief Guide]";
+			mes "Heh heh! Essa é uma boa atitude. Em nossa profissão, você tem que gostar de sujar as mãos, de um jeito ou de outro.";
+			close;
+		}
+		mes "[Thief Guide]";
+		mes "É? Eu também já passei por isso, então entendo por que aquele lugar não é para qualquer um. Ainda assim, ser um Gatuno não é só glamour e vida noturna agitada.";
+		close;
+	}
+	if (job_thief_q == 2) {
+		mes "[Thief Guide]";
+		mes "Ei, o que você está fazendo aqui? Não deveria estar colhendo Cogumelos? Ou precisa que eu explique de novo?";
+		next;
+		if  (select("Sim.:Não, tudo bem.") == 1) {
+			mes "[Thief Guide]";
+			mes "*Suspiro* Bem, sempre tem um na turma. Certo, ouça com atenção.";
+			next;
+			mes "[Thief Guide]";
+			mes "Certo, para o seu teste, você precisa roubar Cogumelos de uma fazenda. Não se preocupe, o dono da fazenda merece ser roubado.";
+			next;
+			mes "[Thief Guide]";
+			mes "Enfim, você precisa coletar dois tipos de Cogumelos: ^0000FFCogumelo de Rede Laranja^000000 e ^0000FFCogumelo Gosmento Laranja^000000.";
+			next;
+			mes "[Thief Guide]";
+			mes "Tenha cuidado, pois há monstros na fazenda para proteger os Cogumelos. Então isso não será um passeio no parque.";
+			next;
+			mes "[Thief Guide]";
+			mes "Quando você voltar aqui após coletar os Cogumelos, você será avaliado pelos itens que recolheu.";
+			next;
+			mes "[Thief Guide]";
+			mes "Cada Cogumelo de Rede Laranja vale 3 pontos, e você ganha 1 ponto por cada Cogumelo Gosmento Laranja. Você precisa de um total de 25 pontos para passar no teste.";
+			next;
+			mes "[Thief Guide]";
+			mes "Saia e continue seguindo em frente em direção ao Campo Oriental das Pirâmides. Lá você verá um de nossos camaradas entre duas colunas.";
+			next;
+			mes "[Thief Guide]";
+			mes "Fale com aquele cara, e ele o levará para a fazenda pelos fundos.";
+			next;
+			mes "[Thief Guide]";
+			mes "Naquele campo, acho que as coordenadas dele são '^FF0000141, 125^000000.' Basta digitar ^3355FF/where^000000 no lado direito da sua caixa de chat para verificar suas coordenadas atuais.";
+			close;
+		}
+		mes "[Thief Guide]";
+		mes "Hum. Por um segundo, pensei que você tivesse algo realmente importante para me contar.";
+		close;
+	}
+	mes "[Thief Guide]";
+	if (job_thief_q == 0) {
+		mes "O que te traz";
+		mes "a este buraco?";
+	}
+	else {
+		mes "Ah...";
+		mes "Você voltou.";
+		mes "Tem certeza de que está";
+		mes "pronto para tentar de novo?";
+	}
+	next;
+	if (select("Ei, eu vim aqui para ser um Gatuno!:Não, só estou dando uma olhada.") == 1) {
+		if (job_thief_q == 0) {
+			mes "[Thief Guide]";
+			mes "Heh, gosto da sua confiança. Ainda assim, você sabe que ser um Gatuno não é tão fácil quanto parece.";
+			next;
+			mes "[Thief Guide]";
+			mes "Ainda assim...";
+			mes "Você realmente";
+			mes "quer ser";
+			mes "um Gatuno?";
+			next;
+			switch(select("Sim.:Não, só estou perdendo o seu tempo.:Por que você se tornou um Gatuno?")) {
+			case 1:
+				mes "[Thief Guide]";
+				mes "Sério...";
+				break;
+			case 2:
+				mes "[Thief Guide]";
+				mes "Sim...";
+				mes "Eu entendo.";
+				break;
+			case 3:
+				mes "[Thief Guide]";
+				mes "Eu...?";
+				mes "Eu não tive escolha na época. Era roubar ou passar fome. Mas não é como se eu precisasse te contar a história da minha vida.";
+				break;
+			}
+			next;
+			mes "[Thief Guide]";
+			mes "Então, você quer";
+			mes "se candidatar para ser";
+			mes "um Gatuno ou não?";
+			next;
+			switch(select("Sim, eu quero.:Estou com medo demais para ser um Gatuno!")) {
+			case 1:
+				mes "[Thief Guide]";
+				mes "Certo, me diga";
+				mes "o seu nome.";
+				next;
+				mes "[Thief Guide]";
+				mes "" + strcharinfo(0) + "?";
+				mes "Que tipo de nome é" + strcharinfo(0) + "? De qualquer forma, me dê um segundo.";
+				set job_thief_q,1;
+				next;
+				mes "[Thief Guide]";
+				mes "Certo, seu registro foi processado. Ok, você pode começar o seu teste se estiver pronto.";
+				next;
+				switch(select("Sim, estou pronto.:Não, ainda não estou pronto.")) {
+				case 1:
+					break;
+				case 2:
+					mes "[Thief Guide]";
+					mes "Não está pronto?";
+					mes "Como você";
+					mes "pode não estar pronto?!";
+					close;
+				}
+				break;
+			case 2:
+				mes "[Thief Guide]";
+				mes "Com medo demais?!?";
+				mes "Hahahahahahah!";
+				mes "Ah, por favor...!";
+				mes "Isso é hilário!";
+				close;
+			}
+		}
+		else {
+			mes "[Thief Guide]";
+			mes "Ok...";
+			mes "Me dê";
+			mes "um segundo.";
+			next;
+		}
+		mes "[Thief Guide]";
+		mes "Seu nome é...";
+		mes strcharinfo(0) + "? Hum, onde está? Ah, aqui está. Vamos ver...";
+		next;
+		mes "[Thief Guide]";
+		if (!callfunc("F_CanChangeJob")) {
+			mes "Não é uma gracinha? Vejo que é ambicioso, mas precisa aprender todas as Habilidades Básicas antes de poder se tornar um Gatuno.";
+			close;
+		}
+		mes "Certo. Analisei sua Ficha Criminal e você parece ter um histórico bem interessante. Talvez você tenha o que é preciso para ser um Gatuno.";
+		next;
+		mes "[Thief Guide]";
+		mes "Como me sinto inspirado, decreto agora que você passou nesta entrevista. Bom trabalho!";
+		set job_thief_q,2;
+		setquest 1013;
+		next;
+		mes "[Thief Guide]";
+		mes "Agora, suas habilidades reais precisarão ser testadas. Você sabe algo sobre o teste?";
+		next;
+		switch(select("Sim, eu sei.:Desculpe, não sei.")) {
+		case 1:
+			mes "[Thief Guide]";
+			mes "Ah, é? Bem, isso facilita bastante as coisas.";
+			break;
+		case 2:
+			mes "[Thief Guide]";
+			mes "Certo, então deixe-me te informar. Ouça com atenção. Este teste decide se você é digno de se tornar um Gatuno.";
+			next;
+			mes "[Thief Guide]";
+			mes "Você vai se infiltrar na Fazenda do Shibu. Ele é o pior Mercador, em termos de caráter, em Morocc.";
+			next;
+			mes "[Thief Guide]";
+			mes "Certo, para o seu teste, você precisa roubar Cogumelos da fazenda dele. Não se preocupe, aquele cara merece ser roubado.";
+			next;
+			mes "[Thief Guide]";
+			mes "De qualquer forma, você precisa coletar dois tipos de Cogumelos: ^0000FFCogumelo Laranja Redes^000000 e ^0000FFCogumelo Laranja Viscoso^000000.";
+			next;
+			mes "[Thief Guide]";
+			mes "Tenha cuidado, já que há monstros na fazenda que estão lá para proteger os Cogumelos. Então não será um passeio no parque.";
+			next;
+			mes "[Thief Guide]";
+			mes "Quando você voltar aqui após coletar os Cogumelos, você será avaliado com base no que coletou.";
+			next;
+			mes "[Thief Guide]";
+			mes "Cada Cogumelo Laranja Redes te dá 3 pontos, e você recebe 1 ponto por cada Cogumelo Laranja Viscoso. Você precisa de um total de 25 pontos para passar no teste.";
+			next;
+			mes "[Thief Guide]";
+			mes "Saia e continue seguindo em frente em direção ao Campo Oriental das Pirâmides. Lá você verá um de nossos camaradas entre duas colunas.";
+			next;
+			mes "[Thief Guide]";
+			mes "Fale com aquele cara e ele te levará para a fazenda pela porta dos fundos.";
+			next;
+			mes "[Thief Guide]";
+			mes "Naquele campo, acho que as coordenadas dele são '^FF0000141, 125^000000.' Apenas digite ^3355FF/where^000000 no lado direito da sua caixa de chat para verificar suas coordenadas atuais.";
+		}
+		next;
+		mes "[Thief Guide]";
+		mes "Não se esqueça de planejar e se preparar antes de entrar na Fazenda de Cogumelos. Mova-se o mais rápido que puder e tente não ser morto, certo?";
+		close;
+	}
+	close;
+}
+
+moc_prydb1,42,133,2	script	Comrade	118,{
+	if (BaseJob == Job_Thief) {
+		mes "[Brad]";
+		mes "Não temos nenhum evento especial no momento. Volte em outra ocasião quando houver novidades, certo?";
+		close;
+	}
+	else if (BaseJob != Job_Novice && BaseJob != Job_Thief) {
+		mes "[Comrade]";
+		mes "Hum...";
+		mes "Você não tem jeito";
+		mes "de Gatuno.";
+		next;
+		mes "[Comrade]";
+		mes "O que diabos você";
+		mes "está fazendo aqui, afinal?";
+		close;
+	}
+	if (job_thief_q == 0 || job_thief_q == 1) {
+		mes "[Comrade]";
+		mes "Qual é o problema? Se você quer ser um Gatuno, fale com a garota ao meu lado.";
+		close;
+	}
+	else if (job_thief_q == 2) {
+		mes "[Comrade]";
+		mes "Você passou na entrevista?";
+		mes "Então o que está esperando?";
+		close;
+	}
+	else if (job_thief_q == 3) {
+		mes "[Comrade]";
+		mes "Ah, o guia me falou sobre você. Então, deixe-me verificar seus cogumelos...";
+		if (countitem(1069) == 0 && countitem(1070) == 0) {
+			next;
+			mes "[Comrade]";
+			mes "Que diabos...";
+			mes "Você não tem nenhum Cogumelo! Volte e pegue-os. Caso contrário, você não passará no teste e não se tornará um Gatuno!";
+			close;
+		}
+		next;
+		set .@thief_item1,countitem(1069) * 3;
+		set .@thief_item2,countitem(1070);
+		set .@total_thief,.@thief_item1 + .@thief_item2;
+		set .@money_thief,((.@thief_item1 * 5) + (.@thief_item2 * 2)) + 200;
+		mes "[Comrade]";
+		if (countitem(1069) != 0) {
+			mes "Primeiro, deixe-me verificar os Cogumelos Laranja de Rede que você conseguiu.";
+			mes "Humm," + countitem(1069) + "deles.";
+		}
+		if (countitem(1070) != 0)
+			mes "Agora vou verificar seus Cogumelos Laranja Gosmentos. Isso é" + countitem(1070) + "que você coletou.";
+		next;
+		mes "[Comrade]";
+		mes "Então isso";
+		mes "traria seu total para...";
+		next;
+		mes "[Comrade]";
+		mes "Hmmm." + .@total_thief + "graus, multiplicado pela velocidade da luz, dividido pela integral de pi vezes a altura mais o valor absoluto da política...";
+		next;
+		mes "[Comrade]";
+		mes "Ok!";
+		mes "Entendi.";
+		next;
+		mes "[Comrade]";
+		if (.@total_thief > 25) {
+			mes "Você conseguiu mais";
+			mes "de 25 pontos!";
+			mes "Impressionante!";
+		}
+		else if (.@total_thief == 25) {
+			mes "Exatamente 25 pontos!";
+			mes "Você conseguiu! Mandou bem!";
+		}
+		else {
+			mes "Definitivamente menos do que os 25 pontos necessários para passar. Vá lá fora e me traga mais Cogumelos!";
+			close;
+		}
+		next;
+		mes "[Comrade]";
+		mes strcharinfo(0) + "...";
+		mes "Você passou no teste oficial de Gatuno. Agora você é um de nós.";
+		if (countitem(1069) != 0) delitem 1069,countitem(1069); //Mushroom_Of_Thief_1
+		if (countitem(1070) != 0) delitem 1070,countitem(1070); //Mushroom_Of_Thief_2
+		callfunc "Job_Change",Job_Thief;
+		callfunc "F_ClearJobVar";
+		completequest 1013;
+		next;
+		mes "[Comrade]";
+		mes "Parabéns por se tornar um Gatuno! De agora em diante, seja um representante honrado da Guilda dos Gatuno.";
+		next;
+		mes "[Comrade]";
+		mes "Se você trouxer desonra para nossa guilda, você será eliminado. Espero que traga orgulho aos nossos camaradas.";
+		next;
+		mes "[Brad]";
+		mes "*Ahem* Bem-vindo à Guilda, camarada! Sou Brad e sou o responsável pelos recursos humanos aqui.";
+		next;
+		mes "[Brad]";
+		mes "Aqui está um pequeno subsídio para um iniciante como você. Gaste onde quiser. Muito bem, nos vemos por aí~";
+		set Zeny, Zeny+.@money_thief;
+		close;
+	}
+}
+
+moc_ruins,141,125,3	script	Mr. Irrelevant	83,{
+	if (BaseJob == Job_Thief) {
+		mes "[Mr. Irrelevant]";
+		mes "Ah, vejo que agora você é um Gatuno. Eu sempre soube que você se juntaria a nós.";
+		next;
+		mes "[Mr. Irrelevant]";
+		mes "Roubar de uma fazenda de cogumelos é fácil demais para você agora. Você deveria desenvolver suas habilidades e dominar nossa arte.";
+		close;
+	}
+	else if (BaseJob != Job_Novice && BaseJob != Job_Thief) {
+		mes "[Mr. Irrelevant]";
+		switch(rand(4)) {
+		case 1:
+			mes "Eu beberia algo forte agora.";
+			close;
+		case 2:
+			mes "Me passa seu dinheiro.";
+			next;
+			mes "[Mr. Irrelevant]";
+			mes "Brincadeira, estou fora do expediente.";
+			close;
+		case 3:
+			mes "QUEM VOCÊ ESTÁ CHAMANDO DE PSICOPATA?!?!";
+			close;
+		case 4:
+			mes "Não tenho nada a dizer a você. Você se importaria de me deixar em paz?";
+			close;
+		default:
+			mes "Hoje parece um bom dia para ir às pirâmides e caçar com alguns dos meus amigos.";
+			close;
+		}
+	}
+	if (job_thief_q == 3) {
+		mes "[Mr. Irrelevant]";
+		mes "Hahahahaha~!";
+		mes "Você ainda não";
+		mes "passou no teste?";
+		mes "Tudo bem, vou deixar você entrar...";
+		close2;
+		switch(rand(5)) {
+		case 1: warp "job_thief1",228,106; end;
+		case 2: warp "job_thief1",38,50; end;
+		case 3: warp "job_thief1",66,331; end;
+		case 4: warp "job_thief1",196,331; end;
+		default: warp "job_thief1",309,234; end;
+		}
+	}
+	else if (job_thief_q == 2) {
+		mes "[Mr. Irrelevant]";
+		mes "Hmm...";
+		mes "Você veio fazer o teste, certo? Posso ver em seus olhos que você sabe de algo.";
+		next;
+		mes "[Mr. Irrelevant]";
+		mes "Seu nome é" + strcharinfo(0) + "? Ah, está na lista. Tudo bem, vou deixar você entrar na Fazenda de Cogumelos, mas não posso garantir sua segurança...";
+		close2;
+		set job_thief_q,3;
+		switch(rand(5)) {
+		case 1: warp "job_thief1",228,106; end;
+		case 2: warp "job_thief1",38,50; end;
+		case 3: warp "job_thief1",66,331; end;
+		case 4: warp "job_thief1",196,331; end;
+		default: warp "job_thief1",309,234; end;
+		}
+	}
+	else if (job_thief_q == 1) {
+		mes "[Mr. Irrelevant]";
+		mes "Há um cheiro estranho vindo de... você. Por que será?";
+		close;
+	}
+	mes "[Mr. Irrelevant]";
+	mes "Ei Aprendiz! Por que você não se junta às fileiras da Guilda dos Gatuno? Vocês, novatos, são sempre bem-vindos para se juntar a nós e à nossa causa egoísta.";
+	next;
+	mes "[Mr. Irrelevant]";
+	mes "Você pode obter mais informações na Sala Subterrânea no 1º subsolo da Pirâmide.";
+	close;
+}
+
+// Monsters
+//============================================================
+job_thief1,0,0	monster	Orange Mushroom	1182,180
+job_thief1,0,0	monster	Fabre	1184,50
+job_thief1,0,0	monster	Chonchon	1183,50
+job_thief1,0,0	monster	Spore	1014,30
+
+//============================================================
+// mapflag
+//============================================================
