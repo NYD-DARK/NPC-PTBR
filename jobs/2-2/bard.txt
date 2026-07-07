@@ -1,0 +1,953 @@
+//===== rAthena Script ======================================= 
+//= Bard Job Quest
+//===== By: ==================================================
+//= Muad_Dib(The Prometheus Project), Lupus, Samuray22
+//===== Current Version: ===================================== 
+//= 2.6
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job quest for Bard class
+//===== Additional Comments: =================================
+//= 2.1b Updated to the Official One. [Samuray22]
+//= 2.2 Fixed BUG when baby classes weren't able to get a job,
+//=	- fixed bug with final prize [Lupus] HAVE TO CHANE ALL ITEMS to numeric IDs
+//= 2.3 Updated NPC dialogs and cutins using Aegis 10.3 files. [L0ne_W0lf]
+//=	- Fixed error with the present checking. (Lupus beat me to committing)
+//=	- Changed the reward checking to use callsub (fixed the flow of the script)
+//=	- Optimized and changed the flow of things slightly.
+//=	- Temporary character variables "@" are now ".@"
+//=	- Fixed some indentation.
+//=	- Changed item names to item IDs
+//= 2.4 Fixed hang up on bard quest. ($kiN.) [L0ne_W0lf]
+//= 2.5 Added Quest Log commands. [Kisuka]
+//= 2.6 Removed the need for use of 'goto.' [L0ne_W0lf]
+//============================================================
+
+// Ayealo
+//============================================================
+comodo,226,123,5	script	Wandering Bard	741,{
+	if(Upper == 1) {
+		mes "[Lalo]";
+		mes "Aqueles que estão destinados a se tornarem deuses";
+		mes "são tantos nesta era,";
+		mes "mas nunca percebem seu destino enquanto vivos.";
+		mes "Eles acabam se tornando meros homens comuns...";
+		next;
+		mes "[Lalo]";
+		mes "Vento e Nuvens, por favor, enviem esta mensagem a eles,";
+		mes "que buscam comida, vestimenta, abrigo e riqueza.";
+		mes "Digam-lhes que estão desperdiçando seu tempo...";
+		mes "Digam-lhes que esquecem o objetivo mais importante da vida...";
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	else if(BaseJob != Job_Archer) {
+		if(BaseJob == Job_Bard) {
+			mes "[Lalo]";
+			mes "Ah, ei! Como vai sua cantoria ultimamente?";
+			mes "Fico imaginando se sua voz melhorou.";
+			next;
+			mes "[Lalo]";
+			mes "Você não se esquece de espalhar boas novas em cada cidade, né?";
+			mes "E não se esqueça de aprender novas canções também...";
+			next;
+			mes "[Lalo]";
+			mes "Nunca se esqueça de ter uma atitude positiva e do significado da alegria.";
+			mes "Nossas canções devem levar felicidade e alegria a todos.";
+		}
+		else if(Class == Job_Novice) {
+			cutin "job_bard_aiolo01",2;
+			mes "[Lalo]";
+			mes "A tristeza que domina meu coração..";
+			mes "Não encontrará morada..";
+			mes "Será esse o motivo dos meus problemas?";
+			mes "É por isso que sou fraco?";
+			mes "Deve ser por isso que não consigo te esquecer...";
+			next;
+			mes "[Lalo]";
+			mes "Ah, desculpe. Não vi você porque estava concentrado escrevendo algumas letras.";
+			mes "Quer ouvir minhas canções? Devo cantar uma música para você?";
+			next;
+			mes "[Lalo]";
+			mes "Heh... tente pedir a outra pessoa.";
+			mes "Estou tentando compor uma canção nova.";
+		}
+		else {
+			cutin "job_bard_aiolo01",2;
+			mes "[Lalo]";
+			mes "Lalala, lalala. Bela Comodo.";
+			mes "Sempre cheia de momentos felizes~";
+			next;
+			mes "[Lalo]";
+			if (Sex == SEX_MALE) {
+				mes "Esqueça as suas preocupações~";
+				mes "E aproveite tudo~";
+			}
+			else mes "Bela moça, vamos dançar~";
+			mes "A juventude nunca se repete~";
+		}
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	else if(BARD_Q == 0) {
+		cutin "job_bard_aiolo01",2;
+		mes "[Lalo]";
+		if (Sex == SEX_MALE) mes "Oi! Encantador(a) Arqueiro.";
+		else mes "Olá! Linda senhorita Arqueiro.";
+		mes "Como um Musa como eu pode te ajudar?";
+		next;
+		switch(select("Você tem uma voz bonita.:Poderia cantar para mim, por favor?:Nada.")) {
+		case 1:
+			mes "[Lalo]";
+			mes "Hahaha! Com certeza!";
+			mes "Se você cantar com o coração feliz, sua voz sempre melhora.";
+			next;
+			mes "[Lalo]";
+			mes "Mas, para os Bardos, a voz é a vida.";
+			mes "Às vezes sua voz pode falhar, então você deve ser cuidadoso.";
+			break;
+
+		case 2:
+			mes "[Lalo]";
+			mes "Uma canção... vejamos.";
+			mes "Ok, tenho uma aqui...";
+			next;
+			mes "[Lalo]";
+			mes "Eu vou cantar... Tambores de Guerra.";
+			mes "*ehem...*cof...engasga..mememememe...";
+			mes "1, 2, 3, 4...";
+			next;
+			mes "^000088O som de cavalos galopando no horizonte";
+			mes "A poeira que cobre o sol distante";
+			mes "Quando milhares de olhos se abrem no céu noturno";
+			mes "O fogo do castelo queimará com poder.^000000";
+			next;
+			mes "^000088Eu posso ouvir.. as batidas do meu coração.";
+			mes "Eu posso sentir.. o sangue correndo pelas minhas Veins.";
+			mes ".. e o peso da minha armadura.";
+			mes "Eu posso ver.. meus inimigos.^000000";
+			next;
+			mes "^000088Mais alto, mais alto, mais alto..";
+			mes "Dê força aos guerreiros!";
+			mes "Mais alto, mais alto, mais alto..";
+			mes "Este dia nunca mais voltará!^000000";
+			next;
+			mes "^000088Balance o céu e ruga pela terra.";
+			mes "Faça meu coração bater forte novamente!";
+			mes "Deixe as trombetas soarem e as muralhas do castelo vibrarem.";
+			mes "Este momento nunca mais voltará!^000000";
+			next;
+			mes "[Lalo]";
+			mes "Hmm... essa é sempre uma boa música para cantar.";
+			mes "O que achou? Não acha que é uma bela canção?";
+			next;
+			if (select("Sim, foi muito bonita.:Não, nem tanto...") == 1) {
+				mes "[Lalo]";
+				mes "Obrigado! Se você gostou da minha música, fico feliz também.";
+				next;
+				if (Sex == SEX_MALE && JobLevel > 39) {
+					mes "[Lalo]";
+					mes "Seria legal se mais pessoas andassem por aí cantando...";
+					mes "Bem, está tudo bem como está agora... hmmhmm.";
+					set BARD_Q,1;
+					setquest 3000;
+					close2;
+					cutin "job_bard_aiolo01",255;
+					end;
+				}
+				mes "[Lalo]";
+				mes "Se você quiser ouvir minha música novamente, é só pedir.";
+				close2;
+				cutin "job_bard_aiolo01",255;
+				end;
+			}
+			cutin "job_bard_aiolo02",2;
+			mes "[Lalo]";
+			mes "Hmm... Será que perdi o jeito? Terei que me esforçar mais.";
+			mes "De qualquer forma.. Obrigado por ouvir.";
+			break;
+
+		case 3:
+			cutin "job_bard_aiolo02",2;
+			mes "[Lalo]";
+			mes "Ei, não pedir uma música quando se encontra um Bardo não é muito educado.";
+			mes "Bem... não posso fazer nada, já que você parece estar com pressa.";
+			next;
+			mes "[Lalo]";
+			mes "Caçar é bom... mas você não pode esquecer de relaxar de vez em quando.";
+			mes "A juventude é curta e não volta depois que passa..";
+			break;
+		}
+		close2;
+		cutin "job_bard_aiolo02",255;
+		end;
+	}
+	else if(BARD_Q == 1) {
+		cutin "job_bard_aiolo01",2;
+		mes "[Lalo]";
+		mes "Olá, colega Arqueiro.";
+		mes "Como um Musa como eu pode te ajudar?";
+		next;
+		switch(select("Você tem uma voz bonita.:Poderia cantar para mim, por favor?:Nada.")) {
+		case 1:
+			mes "[Lalo]";
+			mes "Hoho, sua voz é bem bonita também?";
+			mes "Já pensou em cantar?";
+			next;
+			if (select("Com certeza!:Acho que não conseguiria...") == 1) {
+				mes "[Lalo]";
+				mes "Haha, boa atitude. Você precisa ser assim para se tornar um Bardo.";
+				mes "Vou te ajudar a se tornar um Bardo então.";
+				next;
+				mes "[Lalo]";
+				mes "Mas antes disso... você acha que pode me trazer uma Flor?";
+				mes "Preciso sentir o perfume de uma Flor para ter vontade de ensinar.";
+				next;
+				mes "[Lalo]";
+				mes "Não importa realmente qual Flor, mas tente trazer uma que eu goste.";
+				mes "E não compre qualquer Flor aleatória, ok?";
+				set BARD_Q,2;
+				changequest 3000,3001;
+				close2;
+				cutin "job_bard_aiolo01",255;
+				end;
+			}
+			mes "[Lalo]";
+			mes "Haha, que pessoa tímida.";
+			mes "Não pense tão pouco de si mesmo(a).";
+			next;
+			mes "[Lalo]";
+			mes "Você tem muito talento.";
+			mes "Volte se mudar de ideia.";
+			break;
+
+		case 2:
+			mes "[Lalo]";
+			mes "Hmm... parece que você tem talento para cantar?";
+			mes "Não peça apenas músicas.. cantar para os outros é bem divertido também.";
+			next;
+			mes "[Lalo]";
+			mes "Tente aproveitar sua vida como Bardo.";
+			mes "Você vai de cidade em cidade, cantando para as pessoas. Não soa maravilhoso?";
+			break;
+
+		case 3:
+			mes "[Lalo]";
+			mes "Hmm... Não tenho certeza do que é o quê, mas aproveite a vida.";
+			mes "Você parece tenso demais.";
+			next;
+			mes "[Lalo]";
+			mes "Bem então~ Divirta-se muito~";
+			break;
+		}
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	else if(BARD_Q == 2) {
+		cutin "job_bard_aiolo01",2;
+		mes "[Lalo]";
+		mes "Bem-vindo(a)! Amigo(a) Arqueiro.";
+		mes "Você trouxe uma Flor? Deixe-me ver.";
+		next;
+		mes "[Lalo]";
+		//Good Flowers
+		if (countitem(629) > 0) {
+			mes "Ooh! É uma Flor Cantante!";
+			mes "Ela está cheia das minhas memórias...";
+			next;
+			delitem 629,1; //Singing Flower
+			mes "[Lalo]";
+			mes "Meu amigo Tchaikovsky costumava gostar dela.";
+			mes "Imagino o que ele está fazendo agora...";
+		}
+		else if(countitem(703) > 0) {
+			mes "Aah... a adorável Hinelle...";
+			mes "Não tem perfume, mas é uma flor muito delicada e bonita.";
+			next;
+			delitem 703,1; //Hinalle
+			mes "[Lalo]";
+			mes "As folhas me deram força quando eu costumava cair.";
+			mes "Eu gosto muito desta flor, obrigado.";
+		}
+		else if(countitem(704) > 0) {
+			mes "Aloe... Esta é uma flor rara.";
+			mes "Como você a conseguiu? Bastante habilidoso, hein?";
+			next;
+			delitem 704,1; //Aloe
+			mes "[Lalo]";
+			mes "As folhas são boas e Aloe Vera também é uma delícia...";
+			mes "mas ela é definitivamente mais bonita quando é uma flor.";
+		}
+		else if(countitem(708) > 0) {
+			mes "Ment... Você pode esquecer todos os seus problemas com uma destas.";
+			mes "É muito bom vê-la depois de tanto tempo!";
+			next;
+			delitem 708,1; //Ment
+			mes "[Lalo]";
+			mes "Ouvi dizer que você pode fazer Anodyne com ela...";
+			mes "Mas seria um pequeno desperdício... obrigado!";
+		}
+		else if(countitem(709) > 0) {
+			mes "Ooh, não é um Izidor?";
+			mes "É uma flor perigosa, porém bonita...";
+			next;
+			delitem 709,1; //Izidor
+			mes "[Lalo]";
+			mes "O roxo profundo encanta a pessoa...";
+			mes "Obrigado, eu gosto muito desta flor.";
+		}
+		else if(countitem(748) > 0) {
+			mes "Ooh, uma Rosa Eterna. A flor forte que não murcha.";
+			mes "Ótima para dar a uma namorada.";
+			next;
+			delitem 748,1; //Witherless_Rose
+			mes "[Lalo]";
+			mes "Imagino se seria adequado para um Musa como eu aceitá-la.";
+			mes "Haha, deve ser ok... certo?";
+		}
+		else if(countitem(749) > 0 ) {
+			mes "Rosa Congelada... você não pode chamar isso de flor, na verdade,";
+			mes "Mas ainda assim é bonita... uma rosa cristalina.";
+			next;
+			delitem 749,1; //Frozen_Rose
+			mes "[Lalo]";
+			mes "Você pode chamá-la de flor, mesmo que não tenha mais perfume.";
+			mes "Então eu aceitarei isso com prazer.";
+		}
+		else if(countitem(710) > 0) {
+			mes "Oh, não é uma Flor da Ilusão!?";
+			mes "Uau, como você conseguiu uma flor tão rara!!";
+			next;
+			delitem 710,1; //Illusion_Flower
+			mes "[Lalo]";
+			mes "Muito obrigado, aah... sinto como se o paraíso estivesse diante dos meus olhos.";
+			mes "Que sensação maravilhosa! Estou muito feliz!";
+		}
+		//Bad Flowers
+		else if(countitem(712) > 0) {
+			cutin "job_bard_aiolo02",2;
+			mes "Eh? Esta é apenas uma flor comum.";
+			mes "Eu gosto dela... mas não é o bastante.";
+			next;
+			mes "[Lalo]";
+			mes "Você pode conseguir esta flor com a garota em Prontera.";
+			mes "Por favor, traga-me uma flor diferente.";
+			close2;
+			cutin "job_bard_aiolo02",255;
+			end;
+		}
+		else if(countitem(744) > 0) {
+			mes "Ah não, você trouxe um Buquê?";
+			mes "Você não pode me trazer algo assim.";
+			next;
+			mes "[Lalo]";
+			mes "Vá dar isso a um Sábio que esteja se formando ou algo assim.";
+			mes "Já que é ótimo como esse tipo de presente... Traga uma flor diferente.";
+			close2;
+			cutin "job_bard_aiolo01",255;
+			end;
+		}
+		else if(countitem(745) > 0) {
+			cutin "job_bard_aiolo02",2;
+			mes "Ei, ei... você foi a um casamento ou algo do tipo?";
+			mes "O que você espera que um cara faça com um Buquê de Casamento?";
+			next;
+			mes "[Lalo]";
+			mes "Não serve para mim. Vá dar a uma dama ou algo assim.";
+			mes "Este não é o tipo de flor que eu queria.";
+			close2;
+			cutin "job_bard_aiolo02",255;
+			end;
+		}
+		else if(countitem(2207) > 0) {
+			mes "Mmm... uma Flor Chique.";
+			mes "É legal... mas não é boa o suficiente.";
+			next;
+			mes "[Lalo]";
+			mes "Eu gosto de flores que têm perfume e são bonitas.";
+			mes "Não gosto de flores falsas que se usa na cabeça.";
+			close2;
+			cutin "job_bard_aiolo01",255;
+			end;
+		}
+		else if(countitem(1032) > 0) {
+			cutin "job_bard_aiolo02",2;
+			mes "...Agh, por que você trouxe uma coisa tão horrível?";
+			mes "Você está pensando no que faz?";
+			next;
+			mes "[Lalo]";
+			mes "Se você estava tentando ser engraçado, foi uma boa tentativa...";
+			mes "mas traga uma flor normal agora.";
+			close2;
+			cutin "job_bard_aiolo02",255;
+			end;
+		}
+		else {
+			cutin "job_bard_aiolo02",2;
+			mes "Hmm? O quê... você não trouxe nada.";
+			mes "Eu não pedi para você trazer uma flor?";
+			next;
+			mes "[Lalo]";
+			mes "Bem... se você quer aprender por conta própria, que assim seja.";
+			mes "Qualquer um pode simplesmente sair por aí e cantar.";
+			close2;
+			cutin "job_bard_aiolo02",255;
+			end;
+		}
+		next;
+		cutin "job_bard_aiolo01",2;
+		mes "[Lalo]";
+		mes "Como prometi, vou ajudar você a se tornar um Bardo.";
+		mes "Mas não é fácil, meu amigo. Haha!";
+		next;
+		mes "[Lalo]";
+		mes "É importante conhecer muitas pessoas para aprender a cantar.";
+		mes "Você também deve se manter a par de tudo o que acontece nas diferentes vilas...";
+		next;
+		mes "[Lalo]";
+		mes "Existe um boneco de neve falante em uma cidade chamada Lutie.";
+		mes "Vá até lá e traga um presente de volta.";
+		next;
+		set BARD_Q,3;
+		changequest 3001,3002;
+		set xmas_npc,1;
+		mes "[Lalo]";
+		mes "Se você ficar amigo de ^008800Jack Frost^000000, você receberá algo.";
+		mes "E aproveite também para conversar com os habitantes da cidade...";
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	else if ((BARD_Q >= 3) || (BARD_Q <= 5)) {
+		if (BARD_Q == 3) {
+			if(xmas_npc > 10) { //this var is set in LUTIE.TXT
+				cutin "job_bard_aiolo01",2;
+				mes "[Lalo]";
+				mes "Como foi a viagem? Você conheceu muitas pessoas?";
+				mes "Você deveria ter sido capaz de aprender algo mais importante do que um presente.";
+				next;
+				mes "[Lalo]";
+				mes "Então, quer tentar cantar...?";
+				mes "Eu vou cantar uma melodia curta...";
+				mes "e você tenta depois.";
+				if(checkquest(3003) == -1) {
+					changequest 3002,3003;
+				}
+				next;
+				mes "[Lalo]";
+				mes "Lá vou eu.";
+				mes "Ehem *limpa a garganta*";
+				mes "1, 2, 3, 4";
+				next;
+			}
+			else {
+				cutin "job_bard_aiolo01",2;
+				set xmas_npc,1;
+				mes "[Lalo]";
+				mes "Eh, você ainda não se tornou amigo dele?";
+				mes "Conversar não será o suficiente.";
+				next;
+				mes "[Lalo]";
+				mes "Se você ficar amigo de ^008800Jack Frost^000000, você receberá algo.";
+				mes "E converse com as pessoas da vila também...";
+				close2;
+				cutin "job_bard_aiolo01",255;
+				end;
+			}
+		}
+		else if (BARD_Q == 4) {
+			cutin "job_bard_aiolo01",2;
+			mes "[Lalo]";
+			mes "Hmm... desta vez você pode fazer melhor, certo?";
+			mes "Vamos tentar de novo, você consegue.";
+			next;
+			mes "[Lalo]";
+			mes "Vou cantar uma parte...";
+			mes "e você tenta depois.";
+			next;
+			mes "[Lalo]";
+			mes "Lá vamos nós.";
+			mes "*Ehem*";
+			mes "1, 2, 3, 4";
+			next;
+		}
+		if (BARD_Q != 5) {
+			set .@bard_s, rand(1,5);
+			if (.@bard_s == 1) {
+				mes "^3377FFHavia um homem^000000";
+				mes "que diziam ser imortal.";
+				mes "Seu nome era Jichfreid,";
+				mes "Filho do herói Jichmunt.";
+				mes "O gigante maligno Papner,";
+				mes "Transformou-se em dragão e o comeu.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "There was a man") 
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFHavia um homem";
+				mes "que diziam ser imortal.^000000";
+				mes "Seu nome era Jichfreid,";
+				mes "Filho do herói Jichmunt.";
+				mes "O gigante maligno Papner,";
+				mes "Transformou-se em dragão e o comeu.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "que diziam ser imortal.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFHavia um homem";
+				mes "que diziam ser imortal.";
+				mes "Seu nome era Jichfreid,^000000";
+				mes "Filho do herói Jichmunt.";
+				mes "O gigante maligno Papner,";
+				mes "Transformou-se em dragão e o comeu.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Seu nome era Jichfreid,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFHavia um homem";
+				mes "que diziam ser imortal.";
+				mes "Seu nome era Jichfreid,";
+				mes "Filho do herói Jichmunt.^000000";
+				mes "O gigante maligno Papner,";
+				mes "Transformou-se em dragão e o comeu.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Filho do herói Jichmunt.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFHavia um homem";
+				mes "que diziam ser imortal.";
+				mes "Seu nome era Jichfreid,";
+				mes "Filho do herói Jichmunt.";
+				mes "O gigante maligno Papner,^000000";
+				mes "Transformou-se em dragão e o comeu.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "O gigante maligno Papner,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFHavia um homem";
+				mes "que diziam ser imortal.";
+				mes "Seu nome era Jichfreid,";
+				mes "Filho do herói Jichmunt.";
+				mes "O gigante maligno Papner,";
+				mes "Transformou-se em dragão e o comeu.^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Turned into a dragon and ate him.")
+					set .@w_point,.@w_point+1;
+			}
+			else if (.@bard_s == 2) {
+				mes "^3377FFUm Mercador sem dinheiro ou equipamento,^000000";
+				mes "um Mercador que não conseguia vender nada.";
+				mes "Mas ele era orgulhoso demais para mendigar.";
+				mes "Então ele juntou algum dinheiro vendendo itens.";
+				mes "No começo, ele só vendia Poções Vermelhas.";
+				mes "Alguns dizem que ele vendia Batatas Doces também.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "A Merchant without money or equipment,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFUm Mercador sem dinheiro ou equipamento,";
+				mes "um Mercador que não conseguia vender nada.^000000";
+				mes "Mas ele era orgulhoso demais para mendigar.";
+				mes "Então ele juntou algum dinheiro vendendo itens.";
+				mes "No começo, ele só vendia Poções Vermelhas.";
+				mes "Alguns dizem que ele vendia Batatas Doces também.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "um Mercador que não conseguia vender nada.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFUm Mercador sem dinheiro ou equipamento,";
+				mes "um Mercador que não conseguia vender nada.";
+				mes "Mas ele tinha orgulho demais para pedir esmolas.^000000";
+				mes "Então, ele juntou algum dinheiro vendendo itens.";
+				mes "No início, ele só vendia Poções Vermelhas.";
+				mes "Alguns dizem que ele também vendia Batatas Doces.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Mas ele tinha orgulho demais para pedir esmolas.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFUm Mercador sem dinheiro ou equipamento,";
+				mes "um Mercador que não conseguia vender nada.";
+				mes "Mas ele tinha orgulho demais para pedir esmolas.";
+				mes "Então, ele juntou algum dinheiro vendendo itens.^000000";
+				mes "No início, ele só vendia Poções Vermelhas.";
+				mes "Alguns dizem que ele também vendia Batatas Doces.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Então, ele juntou algum dinheiro vendendo itens.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFUm Mercador sem dinheiro ou equipamento,";
+				mes "um Mercador que não conseguia vender nada.";
+				mes "Mas ele tinha orgulho demais para pedir esmolas.";
+				mes "Então, ele juntou algum dinheiro vendendo itens.";
+				mes "No início, ele só vendia Poções Vermelhas.^000000";
+				mes "Alguns dizem que ele também vendia Batatas Doces.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "No início, ele só vendia Poções Vermelhas.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFUm Mercador sem dinheiro ou equipamento,";
+				mes "um Mercador que não conseguia vender nada.";
+				mes "Mas ele tinha orgulho demais para pedir esmolas.";
+				mes "Então, ele juntou algum dinheiro vendendo itens.";
+				mes "No início, ele só vendia Poções Vermelhas.";
+				mes "Alguns dizem que ele também vendia Batatas Doces.^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Some say he sold Sweet Potatoes, too.")
+					set .@w_point,.@w_point+1;
+			}
+			else if (.@bard_s == 3) {
+				mes "^3377FFTodos os Deuses nunca envelhecem.^000000";
+				mes "A sempre Bela Deusa Idun,";
+				mes "Bela e graciosa Deusa Idun,";
+				mes "Nora de Odin e esposa de Bragi.";
+				mes "Suas maçãs doces em sua cesta,";
+				mes "Tudo graças às suas maçãs doces.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "All Gods never age.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFTodos os Deuses nunca envelhecem.";
+				mes "A sempre Bela Deusa Idun,^000000";
+				mes "Bela e graciosa Deusa Idun,";
+				mes "Nora de Odin e esposa de Bragi.";
+				mes "Suas maçãs doces em sua cesta,";
+				mes "Tudo graças às suas maçãs doces.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "A sempre Bela Deusa Idun,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFTodos os Deuses nunca envelhecem.";
+				mes "A sempre Bela Deusa Idun,";
+				mes "Bela e graciosa Deusa Idun,^000000";
+				mes "Nora de Odin e esposa de Bragi.";
+				mes "Suas maçãs doces em sua cesta,";
+				mes "Tudo graças às suas maçãs doces.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Bela e graciosa Deusa Idun,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFTodos os Deuses nunca envelhecem.";
+				mes "A sempre Bela Deusa Idun,";
+				mes "Bela e graciosa Deusa Idun,";
+				mes "Nora de Odin e esposa de Bragi.^000000";
+				mes "Suas maçãs doces em sua cesta,";
+				mes "Tudo graças às suas maçãs doces.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Nora de Odin e esposa de Bragi.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFTodos os Deuses nunca envelhecem.";
+				mes "A sempre Bela Deusa Idun,";
+				mes "Bela e graciosa Deusa Idun,";
+				mes "Nora de Odin e esposa de Bragi.";
+				mes "Suas maçãs doces em sua cesta,^000000";
+				mes "Tudo graças às suas maçãs doces.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Suas maçãs doces em sua cesta,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFTodos os Deuses nunca envelhecem.";
+				mes "A sempre Bela Deusa Idun,";
+				mes "Bela e graciosa Deusa Idun,";
+				mes "Nora de Odin e esposa de Bragi.";
+				mes "Suas maçãs doces em sua cesta,";
+				mes "Tudo graças às suas maçãs doces.^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "All thanks to her sweet apples.")
+					set .@w_point,.@w_point+1;
+			}
+			else if (.@bard_s == 4) {
+				mes "^3377FFBragi, Bragi,^000000";
+				mes "Para sempre chamem o nome do poeta.";
+				mes "Minhas canções são seu sopro,";
+				mes "Minha mente é sua vontade,";
+				mes "Todos os poetas errantes são seu povo,";
+				mes "E todo o louvor irá para ele.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Bragi, Bragi,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFBragi, Bragi,";
+				mes "Eternamente chamem o nome dos poetas.^000000";
+				mes "Minhas canções são seu sopro,";
+				mes "Minha mente é sua vontade,";
+				mes "Todos os poetas errantes são seu povo,";
+				mes "E todo louvor irá para ele.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Eternamente clamem pelo nome do poeta.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFBragi, Bragi,";
+				mes "Eternamente clamem pelo nome do poeta.";
+				mes "Minhas canções são o seu fôlego,^000000";
+				mes "Minha mente é a sua vontade,";
+				mes "Todos os poetas errantes são seu povo,";
+				mes "E todo louvor será dedicado a ele.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Minhas canções são seu fôlego,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFBragi, Bragi,";
+				mes "Sempre chamem o nome dos poetas.";
+				mes "Minhas canções são seu fôlego,";
+				mes "Minha mente é sua vontade,^000000";
+				mes "Todos os poetas errantes são seu povo,";
+				mes "E todo louvor irá para ele.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Minha mente é sua vontade,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFBragi, Bragi,";
+				mes "Eternamente clamem pelo nome do poeta.";
+				mes "Minhas canções são seu sopro,";
+				mes "Minha mente é sua vontade,";
+				mes "Todos os poetas errantes são seu povo,^000000";
+				mes "E todo o louvor irá para ele.";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Todos os poetas errantes são seu povo,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFBragi, Bragi,";
+				mes "Eternamente clamem pelo nome do poeta.";
+				mes "Minhas canções são seu fôlego,";
+				mes "Minha mente é sua vontade,";
+				mes "Todos os poetas errantes são seu povo,";
+				mes "E todo o louvor a ele será dado.^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "And all praise shall go to him.")
+					set .@w_point,.@w_point+1;
+			}
+			else {
+				mes "^3377FFMais alto, mais alto, mais alto.^000000";
+				mes "Dê força aos guerreiros!";
+				mes "Sacuda o céu e ruge pela terra.";
+				mes "Faça meu coração bater forte novamente!";
+				mes "Deixe as paredes do castelo ecoarem.";
+				mes "Este dia nunca mais voltará!";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Louder, louder, louder.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFMais alto, mais alto, mais alto.";
+				mes "Dê força aos guerreiros!^000000";
+				mes "Sacuda o céu e ruge pela terra.";
+				mes "Faça meu coração bater forte novamente!";
+				mes "Deixe as paredes do castelo ecoarem.";
+				mes "Este dia nunca mais voltará!";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Dê força aos guerreiros!")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFMais alto, mais alto, mais alto.";
+				mes "Dê força aos guerreiros!";
+				mes "Sacuda o céu e ruge pela terra.^000000";
+				mes "Faça meu coração bater forte novamente!";
+				mes "Deixe as paredes do castelo ecoarem.";
+				mes "Este dia nunca mais voltará!";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Sacuda o céu e ruge pela terra.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFMais alto, mais alto, mais alto.";
+				mes "Dê força aos guerreiros!";
+				mes "Sacuda o céu e ruge pela terra.";
+				mes "Faça meu coração bater forte novamente!^000000";
+				mes "Deixe as paredes do castelo ecoarem.";
+				mes "Este dia nunca mais voltará!";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Faça meu coração bater forte novamente!")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFMais alto, mais alto, mais alto.";
+				mes "Dê força aos guerreiros!";
+				mes "Sacuda o céu e ruge pela terra.";
+				mes "Faça meu coração bater forte novamente!";
+				mes "Deixe as paredes do castelo ecoarem.^000000";
+				mes "Este dia nunca mais voltará!";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Deixe as paredes do castelo ecoarem.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFMais alto, mais alto, mais alto.";
+				mes "Dê força aos guerreiros!";
+				mes "Sacuda o céu e ruge pela terra.";
+				mes "Faça meu coração bater forte novamente!";
+				mes "Deixe as paredes do castelo ecoarem.";
+				mes "Este dia nunca mais voltará!^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "This day will never come again!")
+					set .@w_point,.@w_point+1;
+			}
+
+			if (.@w_point) {
+				cutin "job_bard_aiolo02",2;
+				mes "[Lalo]";
+				mes "Ei, você errou a letra!";
+				mes "Você não consegue nem cantar junto..?";
+				next;
+				mes "[Lalo]";
+				mes "Sua pronúncia é muito confusa.";
+				mes "Faça um trabalho melhor da próxima vez.";
+				close2;
+				cutin "job_bard_aiolo02",255;
+				end;
+			}
+			mes "[Lalo]";
+			mes "..........";
+			next;
+			set BARD_Q,5;
+			mes "[Lalo]";
+			mes "Maravilhoso! Terminou de primeira!";
+			mes "Você pode se tornar um grande Bardo.";
+			next;
+			mes "[Lalo]";
+			mes "Mmm... Então você não se tornará um Bardo.";
+			mes "Mas eu quero te dar uma lembrança...";
+			next;
+			mes "[Lalo]";
+			mes "Você quer mudar de classe agora?";
+			mes "Ou você quer um presente?";
+			next;
+			set .@selection,select("Apenas mude minha classe, por favor.:Eu ficaria grato por um presente.");
+		}
+		if ((.@selection == 1) || (BARD_Q == 5)) {
+			if(SkillPoint) {
+				cutin "job_bard_aiolo01",2;
+				mes "[Lalo]";
+				mes "Ah... Está tudo ótimo, mas você ainda tem alguns pontos de habilidade restantes.";
+				mes "Vá aprender o resto das habilidades e volte.";
+				next;
+				mes "[Lalo]";
+				mes "E eu vou te dar um pequeno presente...";
+				mes "Então traga alguns troncos.";
+				mes "Não importa o tipo, desde que sejam 60 do mesmo tipo...";
+				close2;
+				cutin "job_bard_aiolo01",255;
+				end;
+			}
+			else {
+				switch(BARD_Q) {
+				case 5:
+					if(countitem(1019) > 59) callsub S_ChangeJob,1019,1901;
+					else if(countitem(1068) > 59) callsub S_ChangeJob,1068,1903;
+					else if(countitem(1067) > 59) callsub S_ChangeJob,1067,1903;
+					else if(countitem(1066) > 59) {
+						if(JobLevel > 49) callsub S_ChangeJob,1066,1910;
+						else callsub S_ChangeJob,1066,1905;
+					}
+					cutin "job_bard_aiolo01",2;
+					mes "[Lalo]";
+					mes "Mmm? Parece que você ainda não preparou todos os troncos?";
+					mes "Você quer apenas mudar de classe mesmo assim?";
+					next;
+					if (select("Sim, apenas mude logo minha classe.:Não, vou prepará-los.") == 2)
+						break;
+				default:
+					completequest 3003;
+					callfunc "Job_Change",Job_Bard;
+					callfunc "F_ClearJobVar";		//clears all job variables for the current player
+					mes "[Lalo]";
+					mes "Muito bem! Espero que você cante músicas felizes e agradáveis.";
+					mes "Viva como o vento e as nuvens!";
+					next;
+					mes "[Lalo]";
+					mes "Nos vemos na próxima vez!";
+					close2;
+					cutin "job_bard_aiolo01",255;
+					end;
+				}
+			}
+		}
+		changequest 3003,3004;
+		mes "[Lalo]";
+		mes "Hmm... muito bem, traga alguns troncos.";
+		mes "Não importa o tipo, desde que sejam 60 do mesmo tipo...";
+		next;
+		mes "[Lalo]";
+		mes "Vou te dar um presente assim que você os trouxer.";
+		mes "Tenha uma boa viagem.";
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	cutin "job_bard_aiolo01",2;
+	mes "[Lalo]";
+	mes "Uhu~ uhu~ uhu~";
+	close2;
+	cutin "job_bard_aiolo01",255;
+	end;
+
+S_ChangeJob:
+	completequest 3004;
+	callfunc "Job_Change",Job_Bard;
+	callfunc "F_ClearJobVar";
+	mes "[Lalo]";
+	mes "Bom trabalho. Vou fazer uma lembrança de mudança de classe para você com isso.";
+	mes "Espere só um momento.";
+	next;
+	mes "[Lalo]";
+	mes "^3355FFRaspando Raspando Tang Tang^000000";
+	mes "^3355FFSqueak Squeak Arranhando Arranhando^000000";
+	delitem getarg(0),60;
+	getitem getarg(1),1;
+	next;
+	mes "[Lalo]";
+	mes "Aqui está, uma lembrança. É útil quando você canta.";
+	mes "Espero que você cante músicas alegres.";
+	next;
+	mes "[Lalo]";
+	mes "Até a próxima!";
+	close2;
+	cutin "job_bard_aiolo01",255;
+	end;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 07/06/05 : Added 1st Version. [Muad_Dib]
+//= Converted to rAthena format by Dr.Evil
+//= Info about gifts and other info --> http://www.ragnainfo.net/forums/viewtopic.php?t=51467&start=0 
+//= 1.1 Optimized, changed some stuff, fixed some bugs [Lupus]
+//= 1.1a minor song test fix [Lupus]
+//= 1.2 Fixed wrong item ID, added missing commands [Lupus]
+//= 1.3 Updated flower sub-quest according to official [Lupus]
+//= 1.4 Changed priority for the gifts. Now you can win the 1st
+//=     prize, too. Added Izidor flower [Lupus]
+//= 2.0 Changed numbers to constants. [Vicious]
+//============================================================ 

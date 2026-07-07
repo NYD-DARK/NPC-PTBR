@@ -1,0 +1,428 @@
+//===== rAthena Script ======================================= 
+//= Gunslinger Job Quest
+//===== By: ================================================== 
+//= erKURITA, RockmanEXE, Kisuka
+//===== Current Version: ===================================== 
+//= 2.2
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Gunslinger Job Change Quest
+//===== Additional Comments: ================================= 
+//= 1.0 Made the NPC [erKURITA]
+//= 1.5 Couple fixes to the npc, aswell as adding the missing
+//=     3 green herbs. [erKURITA]
+//= 1.6 job number->const, commonized variable name,
+//=     optimized [Lupus]
+//= 1.7 Now uses only ONE variable GUNS_Q [Lupus]
+//= 1.7a Grammar fixes, few spelling fixes, etc [CBMaster]
+//= 1.7b Parenthesis fixes [KarLaeda]
+//= 1.8 Fixed the reward you can get [Playtester]
+//= 1.9 Removed some 'clever' script constructs [ultramage]
+//= 2.0 Updated to official version - Thanks to Omega for
+//=     his first try [SinSloth] 1.10b - removed .GATs [Lupus]
+//= 2.1 Wise Bull Horn now deletes all items. Thanks to yyCC. [L0ne_W0lf]
+//= 2.1a Corrected a Typo error ";;". [Samuray22]
+//= 2.1b Corrected some typos errors. (bugreport:1549) [Samuray22]
+//= 2.1c Fixed some missing/messed up item checks. (bugreport:2693) [Kisuka]
+//= 2.2 Updated to match AEGIS script and Added Quest Log commands. [Kisuka]
+//============================================================ 
+
+que_ng,152,167,3	script	Master Miller	901,{
+	if (Upper == 2) {
+		mes "[Master Miller]";
+		mes "Bem, mas você não é uma";
+		mes "criança adorável~";
+		mes "Onde está sua mamãe?";
+		mes "Este lugar é perigoso, então";
+		mes "por favor vá para casa logo, está bem?";
+		close;
+	}
+	if (Class == Job_Novice) {
+		if (!callfunc("F_CanChangeJob")) {
+			mes "[Master Miller]";
+			mes "Interessado em se tornar";
+			mes "um Justiceiro, eh? Você tem";
+			mes "potencial, mas ainda não tem";
+			mes "experiência suficiente.";
+			mes "Apenas treine um pouco mais,";
+			mes "e depois volte, entendeu?";
+			close;
+		}
+		if (GUNS_Q == 0) {
+			mes "[Master Miller]";
+			mes "Sou Miller, um instrutor";
+			mes "de Justiceiro em tempo integral, e";
+			mes "guardião em tempo integral da Lady";
+			mes "Selena. Agora, o que você";
+			mes "precisa? Se não for importante, não tenho tempo para você.";
+			next;
+			if(select("Nada.:Quero me tornar um Justiceiro.") == 1) {
+				mes "[Master Miller]";
+				mes "Não desperdice meu tempo.";
+				mes "Se você realmente quer se tornar";
+				mes "um Justiceiro, então volte";
+				mes "e fale comigo.";
+				close;
+			}
+			mes "[Master Miller]";
+			mes "Hm. Você é bem jovem, mas";
+			mes "seus olhos me dizem que você é";
+			mes "bastante ambicioso. Você precisará passar pela nossa entrevista e curso";
+			mes "educacional para se tornar um Justiceiro. Quer se candidatar à vaga?";
+			next;
+			if(select("Me dê um tempo para pensar.:Claro!") == 1) {
+				mes "[Master Miller]";
+				mes "Compreensível.";
+				mes "Se você decidir que";
+				mes "quer se tornar";
+				mes "um Justiceiro, então me";
+				mes "avise imediatamente.";
+				mes "Vou te colocar no caminho certo.";
+				close;
+			}
+			mes "[Master Miller]";
+			mes "Ótimo, ótimo. Tudo bem então,";
+			mes "vamos começar. Leve esta";
+			mes "carta ao Sr. Chifre de Touro Sábio";
+			mes "em payon. Ele é um xamã";
+			mes "que julgará se você se qualifica";
+			mes "ou não para ser um Justiceiro.";
+			set GUNS_Q,1;
+			setquest 6020;
+			close;
+		}
+		else if (GUNS_Q == 1) {
+			mes "[Master Miller]";
+			mes "Leve aquela carta de";
+			mes "apresentação que escrevi";
+			mes "para você ao Sr. Chifre de Touro Sábio";
+			mes "em payon. Ele testará";
+			mes "você para ver se você realmente";
+			mes "tem o perfil de um Justiceiro.";
+			close;
+		}
+		else if (GUNS_Q == 2) {
+			mes "[Master Miller]";
+			mes "Hmm... Chifre de Touro Sábio";
+			mes "pediu para você coletar os";
+			mes "itens necessários para fazer o";
+			mes "comprovante? Hm. Imagino que";
+			mes "isso faça parte do teste de qualificação dele.";
+			close;
+		}
+		else if (GUNS_Q == 3) {
+			mes "[Master Miller]";
+			mes "Chifre de Touro Sábio pediu";
+			mes "para você trazer a ele um pouco";
+			mes "de Leite? Ele deve ter gostado";
+			mes "muito de você se já está pedindo";
+			mes "favores. Boa sorte, amigo.";
+			close;
+		}
+		else if (GUNS_Q == 4) {
+			mes "[Master Miller]";
+			mes "Espero ouvir boas";
+			mes "notícias suas em breve. Você";
+			mes "sabe, não tenho dúvidas de que";
+			mes "você se tornará um Justiceiro.";
+			close;
+		}
+		else if (GUNS_Q == 5) {
+			if (SkillPoint != 0) {
+				mes "[Master Miller]";
+				mes "Ei, você ainda tem";
+				mes "Pontos de Habilidade. É melhor";
+				mes "gastá-los todos antes de vir";
+				mes "falar comigo novamente.";
+				close;
+			}
+			mes "[Master Miller]";
+			mes "Oh, você trouxe um";
+			mes "comprovante do Chifre de Touro Sábio?";
+			mes "Faz tempo que ele não dá";
+			mes "um para ninguém, então";
+			mes "estou muito orgulhoso de você!";
+			next;
+			mes "[Master Miller]";
+			mes "Se o Chifre de Touro Sábio aprova,";
+			mes "então não tenho motivos para";
+			mes "rejeitá-lo. Tudo bem então, vou";
+			mes "promovê-lo a Justiceiro.";
+			mes "Mas primeiro, deixe-me explicar";
+			mes "nosso trabalho em mais detalhes.";
+			next;
+			mes "[Master Miller]";
+			mes "Como um Justiceiro, você deve";
+			mes "manter sua arma com você o";
+			mes "tempo todo. A guilda de";
+			mes "Justiceiro mantém um registro de cada Arma";
+			mes "e Bala, então você só pode obtê-los";
+			mes "com nossos membros da guilda.";
+			next;
+			mes "[Master Miller]";
+			mes "Não se preocupe, os membros da";
+			mes "guilda Justiceiro podem ser encontrados";
+			mes "quase em qualquer lugar hoje em dia. De qualquer forma,";
+			mes "tem que ser assim por ordem da nossa líder de guilda, Lady Selena.";
+			next;
+			mes "[Master Miller]";
+			mes "Você pode ter a chance de";
+			mes "encontrá-la um dia desses.";
+			mes "Enfim, saiba que temos";
+			mes "que regular as vendas de Armas e Balas para mantê-las longe de pessoas";
+			mes "más ou irresponsáveis.";
+			next;
+			mes "[Master Miller]";
+			mes "De qualquer forma, é sempre";
+			mes "um prazer para mim conversar";
+			mes "com outro Justiceiro, então";
+			mes "vamos manter contato. Que o";
+			mes "poder da terra proteja";
+			mes "você em todas as suas aventuras~";
+			callfunc "Job_Change",Job_Gunslinger;
+			set GUNS_Q,6;
+			completequest 6024;
+			if (checkre(0)) {
+				getitem 13180,1;		// Novice_Rifle
+				getitem 12149,2;		// Bullet_Case
+				getitem 12151,1;		// Bullet_Case_Silver
+			} else {
+				if (rand(2))
+					getitem 13100,1;	// Six_Shooter
+				else
+					getitem 13150,1;	// Branch
+			}
+			close;
+		}
+	} else {
+		if (Class == Job_Gunslinger) {
+			mes "[Master Miller]";
+			mes "Oh! Quanto tempo,";
+			mes "amigo. Como você tem passado?";
+			mes "Espero que tenha mantido";
+			mes "sua arma bem cuidada.";
+			mes "Cuide dela, e ela cuidará";
+			mes "de você. Lembre-se disso.";
+			close;
+		} else {
+			mes "[Master Miller]";
+			mes "Se você não tem";
+			mes "nenhum assunto comigo,";
+			mes "então por favor siga seu caminho.";
+			close;
+		}
+	}
+}
+
+payon,184,65,3	script	Wise Bull Horn	866,{
+	if (GUNS_Q == 1) {
+		mes "[Wise Bull Horn]";
+		mes "Olá, jovem lobo.";
+		mes "Que assunto lhe";
+		mes "trouxe até mim?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "O Sr. Miller me enviou para";
+		mes "entregar esta carta a você.";
+		mes "Na verdade, estou interessado em";
+		mes "me tornar um Justiceiro...";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "Miller, você disse?";
+		mes "Hm, a Raposa Negra não";
+		mes "dá apresentações para ninguém";
+		mes "que ele não acredite que se tornará";
+		mes "um bom Justiceiro. Sim, acho que";
+		mes "sei por que ele te enviou a mim.";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "Posso ver em seus olhos:";
+		mes "você tem um coração caloroso e um";
+		mes "forte senso de responsabilidade.";
+		mes "Tudo o que você precisa é da bênção";
+		mes "da Terra para protegê-lo";
+		mes "como um Justiceiro.";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "Posso fazer um comprovante que";
+		mes "demonstrará seu desejo";
+		mes "de se tornar um guerreiro da";
+		mes "terra para você apresentar aos";
+		mes "instrutores de Justiceiro.";
+		mes "Vou precisar destes itens...";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "^3355FF1 Tronco^000000,";
+		mes "^3355FF3 Pelos^000000,";
+		mes "^3355FF3 Zargons^000000,";
+		mes "^3355FF10 Cascas^000000,";
+		mes "^3355FF3 Ervas Verdes^000000, e";
+		mes "^3355FF3 Cascas Arco-íris^000000.";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "Depois que eu completar o";
+		mes "comprovante, você poderá levá-lo";
+		mes "à Raposa Negra, e ele";
+		mes "o ajudará a alcançar";
+		mes "seu objetivo de se tornar";
+		mes "um Justiceiro.";
+		set GUNS_Q,2;
+		changequest 6020,6021;
+		close;
+	}
+	else if (GUNS_Q == 2) {
+		if (countitem(912) < 3 || countitem(914) < 3 || countitem(1019) < 1 || countitem(935) < 10 || countitem(511) < 3 || countitem(1013) < 3) {
+			mes "[Wise Bull Horn]";
+			mes "Posso fazer um comprovante que";
+			mes "demonstrará seu desejo";
+			mes "de se tornar um guerreiro da";
+			mes "terra para você apresentar aos";
+			mes "instrutores de Justiceiro.";
+			mes "Vou precisar destes itens...";
+			next;
+			mes "[Wise Bull Horn]";
+			mes "^3355FF1 Tronco^000000,";
+			mes "^3355FF3 Pelos^000000,";
+			mes "^3355FF3 Zargons^000000,";
+			mes "^3355FF10 Cascos^000000,";
+			mes "^3355FF3 Ervas Verdes^000000, e";
+			mes "^3355FF3 Cascos Arco-íris^000000.";
+			next;
+			mes "[Wise Bull Horn]";
+			mes "Depois que eu completar o";
+			mes "comprovante, você poderá levá-lo";
+			mes "à Raposa Negra, e ele";
+			mes "o ajudará a alcançar";
+			mes "seu objetivo de se tornar";
+			mes "um Justiceiro.";
+			close;
+		}
+		delitem 912,3; // Zargon
+		delitem 914,3; // Fluff
+		delitem 1019,1; // Wooden_Block
+		delitem 935,10; // Shell
+		delitem 511,3; // Green_Herb
+		delitem 1013,3; // Colorful_Shell
+		set GUNS_Q,3;
+		changequest 6021,6022;
+		mes "[Wise Bull Horn]";
+		mes "Ah, você retornou";
+		mes "com tudo o que preciso.";
+		mes "Por favor, me dê um tempo";
+		mes "para fazer o comprovante. Se você";
+		mes "voltar em breve,";
+		mes "eu já terei terminado.";
+		close;
+	}
+	else if (GUNS_Q == 3) {
+		mes "[Wise Bull Horn]";
+		mes "Oh, você chegou na";
+		mes "hora certa. Faz tempo";
+		mes "desde que fiz um desses comprovantes, então posso estar um pouco";
+		mes "enferrujado. Ainda assim, isso me faz lembrar dos dias da minha juventude.";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "Estou servindo nesta";
+		mes "posição de escolher merecedores";
+		mes "de comprovantes de Justiceiro";
+		mes "há algumas décadas.";
+		mes "Mas antes disso, eu era um";
+		mes "jovem aventureiro assim como você.";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "Parece que foi apenas";
+		mes "ontem que segurei meu próprio";
+		mes "pequeno comprovante de Justiceiro,";
+		mes "um guerreiro da terra. Foi quando";
+		mes "conheci o pai da Selena...";
+		mes "Como o tempo passa tão rápido?";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "Ah... eu realmente aprecio";
+		mes "a Selena e a Raposa Negra por toda";
+		mes "a sua ajuda no recrutamento";
+		mes "de jovens Gunslingers. Estou muito";
+		mes "velho agora, e não posso fazer tudo sozinho. *Suspiro...* É a vida.";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "Antes de partir, posso";
+		mes "lhe pedir um pequeno favor?";
+		mes "Estou com sede, e gostaria de";
+		mes "um copo de Leite gelado. Você";
+		mes "poderia me trazer um pouco?";
+		set GUNS_Q,4;
+		changequest 6022,6023;
+		close;
+	}
+	else if (GUNS_Q == 4) {
+		if (countitem(519) < 1) {
+			mes "[Wise Bull Horn]";
+			mes "Sou um velho que em breve";
+			mes "estará reunido com a mãe";
+			mes "terra. Você faria a este velho";
+			mes "Justiceiro o favor de me trazer";
+			mes "um copo de Leite gelado, por favor?";
+			close;
+		}
+		delitem 519,1; // Milk
+		set GUNS_Q,5;
+		changequest 6023,6024;
+		mes "[Wise Bull Horn]";
+		mes "Oh, obrigado pela sua!";
+		mes "generosidade--vejo que";
+		mes "você me trouxe um pouco de";
+		mes "Leite. Ahhhh, delicioso~";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "Admiro a paciência,";
+		mes "a gentileza e a bondade";
+		mes "que você demonstrou ao trazer";
+		mes "isto para mim. Sim, essas são características que queremos que todo Justiceiro tenha.";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "Agora, por favor, leve este comprovante";
+		mes "ao Miller, a Raposa Negra, com";
+		mes "minha total aprovação.";
+		mes "Espero que você use sua";
+		mes "arma para defender a justiça como";
+		mes "um nobre guerreiro da terra.";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "Eeh~Yeah~Eeh~Hooom";
+		mes "Eeh~Yeah~Eeh~Hooom";
+		mes "Maaaaarrraaa Neeey~";
+		mes "Yippee Yippee Yai Yocaiyay~";
+		close;
+	}
+	else if (GUNS_Q == 5) {
+		mes "[Wise Bull Horn]";
+		mes "Por favor, leve este comprovante";
+		mes "ao Miller, a Raposa Negra, com";
+		mes "minha total aprovação.";
+		mes "Espero que você use sua";
+		mes "arma para defender a justiça como";
+		mes "um nobre guerreiro da terra.";
+		next;
+		mes "[Wise Bull Horn]";
+		mes "Eeh~Yeah~Eeh~Hooom";
+		mes "Eeh~Yeah~Eeh~Hooom";
+		mes "Maaaaarrraaa Neeey~";
+		mes "Yippee Yippee Yai Yocaiyay~";
+		close;
+	}
+	else if (GUNS_Q == 6) {
+		mes "[Wise Bull Horn]";
+		mes "Ah, quanto tempo.";
+		mes "Espero que você se torne";
+		mes "uma fera inteligente e use";
+		mes "seus poderes como um Justiceiro para proteger o que é bom e justo.";
+		close;
+	}
+	else {
+		mes "[Wise Bull Horn]";
+		mes "Zzzzzz~";
+		mes "^333333*Ufa*^000000";
+		close;
+	}
+}

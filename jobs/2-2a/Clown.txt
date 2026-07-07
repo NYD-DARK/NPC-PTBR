@@ -1,0 +1,83 @@
+//===== rAthena Script ======================================= 
+//= Advance Class jobchanger after kRO Normals.
+//===== By: ==================================================
+//= Nana
+//= finished, optimized and tested by Lupus
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Advance Class jobchanger after kRO Normals.
+//===== Additional Comments: ================================= 
+//= 1.1 Made all into functions, additional checks, etc. [Lupus]
+//= 1.2 Made numbers into constants. [Vicious]
+//= 1.3 Now saves/restores all the quest skills [Lupus]
+//= 1.3a Corrected a Little Typo error. [Samuray22]
+//=     Thanks to Myllena.
+//============================================================ 
+
+valkyrie,53,54,3	script	Minstrel#Valkyrie	741,{
+	if (ADVJOB == 0 || Upper != 1) {
+		set .@karma_d,rand(1,10);
+		if (.@karma_d > 4) {
+			mes "[Minstrel]";
+			mes "Meus parabéns.";
+			mes "Honra aos guerreiros!";
+			close;
+		}
+		mes "[Minstrel]";
+		mes "Você quer";
+		mes "cantar uma música comigo?";
+		mes "Sha la la la la~";
+		close;
+	}
+	else if (ADVJOB == Job_Clown && Class == Job_Archer_High && JobLevel > 39) {
+		mes "[Minstrel]";
+		mes "O mundo monótono";
+		mes "dos mortais precisa";
+		mes "de mais canções alegres.";
+		mes "Você as levará até eles";
+		mes "e mudará o rumo da";
+		mes "batalha contra o mal?";
+		next;
+		mes "[Minstrel]";
+		mes "Você fará isso";
+		mes "por Midgard...";
+		mes "Como um Trovador?";
+		next;
+		if (select("Não.:Sim.") == 1) {
+			mes "[Minstrel]";
+			mes "Quando estiver pronto,";
+			mes "sinta-se à vontade para voltar.";
+			mes "Honra aos guerreiros!";
+			close;
+		}
+		if (SkillPoint) {
+			mes "[Minstrel]";
+			mes "Ainda é possível que você aprenda mais habilidades. Por favor, use";
+			mes "todos os seus pontos de habilidade restantes antes de voltar a mim.";
+			close;
+		}
+		jobchange Job_Clown;
+		set ADVJOB,0;
+		mes "[Minstrel]";
+		mes "Meus parabéns!";
+		mes "Como um Trovador, suas";
+		mes "canções trarão";
+		mes "esperança aos seus aliados, e";
+		mes "desespero aos seus inimigos.";
+		close;
+	}
+	mes "[Minstrel]";
+	mes "Bem-vindo";
+	mes "a Valhalla,";
+	mes "o Salão da Honra.";
+	next;
+	mes "[Minstrel]";
+	mes "Por favor, fique";
+	mes "à vontade";
+	mes "enquanto estiver aqui.";
+	mes "Honra aos guerreiros!";
+	close;
+}

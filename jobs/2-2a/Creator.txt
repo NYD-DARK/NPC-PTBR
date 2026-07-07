@@ -1,0 +1,139 @@
+//===== rAthena Script ======================================= 
+//= Advance Class jobchanger after kRO Normals.
+//===== By: ==================================================
+//= Nana
+//= finished, optimized and tested by Lupus
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Advance Class jobchanger after kRO Normals.
+//===== Additional Comments: ================================= 
+//= 1.1 Made all into functions, additional checks, etc. [Lupus]
+//= 1.2 Made numbers into constants. [Vicious]
+//= 1.3 Now saves/restores all the quest skills [Lupus]
+//= 1.4 Creators did not get their homunculus skills [Lemongrass]
+//============================================================ 
+
+valkyrie,53,50,3	script	Biochemist#Valkyrie	122,{
+	if (Class == Job_Creator && bioeth == 13 && getskilllv("AM_BIOETHICS") == 0) {
+		mes "[Biochemist]";
+		mes "Ah, você veio para";
+		mes "recuperar as memórias";
+		mes "que perdeu? Sim, você";
+		mes "deve estar aqui pelos";
+		mes "segredos da vida que";
+		mes "já foram seus...";
+		next;
+		if (select("Sim:Não") == 1) {
+			mes "[Biochemist]";
+			mes "Feche seus olhos e";
+			mes "acalme sua mente.";
+			mes "Voltaremos ao seu";
+			mes "passado para coletar";
+			mes "os fragmentos de suas";
+			mes "memórias perdidas.";
+			next;
+			mes "[Biochemist]";
+			mes "Quando abrir seus olhos,";
+			mes "você se lembrará claramente";
+			mes "do segredo da vida. Você";
+			mes "também lembrará do peso da";
+			mes "responsabilidade ao usar esses";
+			mes "segredos para os fins certos...";
+			next;
+			skill "AM_BIOETHICS",1,SKILL_PERM;
+			mes "[Biochemist]";
+			mes "Abra seus olhos...";
+			mes "Agora que você se";
+			mes "lembrou de como";
+			mes "criar vida artificial, eu só";
+			mes "peço que trate todas as suas";
+			mes "criações com respeito.";
+			close;
+		}
+		mes "[Biochemist]";
+		mes "Se desejar";
+		mes "recuperar suas";
+		mes "memórias perdidas, por favor,";
+		mes "volte a me procurar.";
+		mes "O segredo para criar";
+		mes "vida não é algo trivial...";
+		close;
+	}
+	else if (ADVJOB == 0 || Upper != 1) {
+		set .@karma_d,rand(1,10);
+		if (.@karma_d > 4) {
+			mes "[Biochemist]";
+			mes "Parabéns.";
+			mes "Honra aos guerreiros!";
+			close;
+		}
+		mes "[Biochemist]";
+		mes "É estranho que";
+		mes "alguém como eu esteja aqui.";
+		mes "Mas mesmo alguém versado";
+		mes "nos caminhos da ciência";
+		mes "pode conseguir ser um herói.";
+		next;
+		mes "[Biochemist]";
+		mes "Neste caso,";
+		mes "não foram necessariamente";
+		mes "os meios que usei, mas";
+		mes "os fins pelos quais";
+		mes "lutei que me garantiram";
+		mes "um lugar em Valhalla...";
+		close;
+	}
+	else if (ADVJOB == Job_Creator && Class == Job_Merchant_High && JobLevel > 39) {
+		mes "[Biochemist]";
+		mes "Sim...";
+		mes "Já era hora.";
+		mes "Precisamos de mais gênios";
+		mes "como você em Midgard.";
+		next;
+		mes "[Biochemist]";
+		mes "Você gostaria de";
+		mes "se tornar um Bioquímico?";
+		next;
+		if (select("Não.:Sim.") == 1) {
+			mes "[Biochemist]";
+			mes "Quando estiver pronto,";
+			mes "sinta-se à vontade para voltar.";
+			mes "Honra aos guerreiros!";
+			close;
+		}
+		if (SkillPoint) {
+			mes "[Biochemist]";
+			mes "Ainda é possível aprender mais habilidades. Por favor, use";
+			mes "todos os seus Pontos de Habilidade restantes antes de voltar.";
+			close;
+		}
+		jobchange Job_Creator;
+		if (bioeth == 13)
+			skill "AM_BIOETHICS",1,SKILL_PERM;
+		set ADVJOB,0;
+		mes "[Biochemist]";
+		mes "Parabéns!";
+		mes "Como um Bioquímico,";
+		mes "espero que use seu";
+		mes "vasto conhecimento para";
+		mes "os propósitos corretos.";
+		close;
+	}
+	else {
+		mes "[Biochemist]";
+		mes "Bem-vindo";
+		mes "a Valhalla,";
+		mes "o Salão da Honra.";
+		next;
+		mes "[Biochemist]";
+		mes "Por favor, fique";
+		mes "à vontade";
+		mes "enquanto estiver aqui.";
+		mes "Honra aos guerreiros!";
+		close;
+	}
+}
+

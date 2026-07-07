@@ -1,0 +1,837 @@
+//===== rAthena Script =======================================
+//= Easter Event (2008)
+//===== By: ==================================================
+//= Kisuka
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= iRO Easter Event. (2008)
+//= Create Holy Eggs
+//= Help a suspicious man.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Kisuka]
+//= 1.1 Corrected a small bug. [L0ne_W0lf]
+//============================================================
+
+// Prontera
+prontera,111,99,5	script	Egg Salesman#prt::EggVendor	98,{
+	mes "[Egg Salesman]";
+	mes "^FF0000Ovos de Galinha^000000! Venha e";
+	mes "compre quantos Ovos de Galinha";
+	mes "você quiser, quando você";
+	mes "quiser! Ei, amigo, quer";
+	mes "dar uma olhada nos Ovos de";
+	mes "Galinha que estou vendendo?";
+	next;
+	while(1) {
+		switch(select("O que você está fazendo?:Por que Ovos de Galinha?:Claro, vou comprar alguns.:Deixa pra lá.")) {
+		case 1:
+			mes "[Egg Salesman]";
+			mes "Como assim...? Estou";
+			mes "vendendo Ovos de Galinha!";
+			mes "Durante este período de";
+			mes "evento especial, estou vendendo";
+			mes "quantos Ovos de Galinha você";
+			mes "quiser por apenas 500 zenys cada!";
+			next;
+			mes "[Egg Salesman]";
+			mes "Meninos, meninas, amigos,";
+			mes "família, idosos, jovens,";
+			mes "hum, talvez não a maioria dos";
+			mes "vegetarianos ou adeptos da alimentação crua,";
+			mes "mas quase todo mundo gosta de ovos!";
+			next;
+			mes "[Egg Salesman]";
+			mes "Você consegue imaginar um mundo";
+			mes "sem ovos? Não haveria pães,";
+			mes "doces, bolos ou cobertura...";
+			mes "Sorvete seria muito mais";
+			mes "aguado... As pegadinhas não";
+			mes "seriam tão divertidas...";
+			next;
+			break;
+		case 2:
+			mes "[Egg Salesman]";
+			mes "Não tenho bem certeza do porquê, mas";
+			mes "Ovos de Galinha são populares";
+			mes "nesta época do ano.";
+			mes "Eles são produtos muito procurados";
+			mes "agora, e pretendo lucrar com isso!";
+			next;
+			break;
+		case 3:
+			mes "[Egg Salesman]";
+			mes "Ótimo! Quantos você quer?";
+			mes "Lembre-se de que cada";
+			mes "Ovo de Galinha custa 500 zenys.";
+			mes "Lembre-se de que você nem sempre";
+			mes "poderá comprar Ovos de Galinha";
+			mes "tão facilmente!";
+			next;
+			while(1) {
+				input .@input;
+				if (.@input == 0) {
+					mes "[Egg Salesman]";
+					mes "Ei, se você não";
+					mes "vai comprar nada,";
+					mes "então poderia sair";
+					mes "da frente para que eu";
+					mes "possa atender meus clientes?";
+					close;
+				}
+				else if (.@input < 0 || .@input > 1000) {
+					mes "[Egg Salesman]";
+					mes "Ei, você se importa de me dar";
+					mes "um número real? Eu também";
+					mes "não posso te vender mais que";
+					mes "1.000 Ovos de Galinha de uma vez,";
+					mes "sabe. Vamos, me diga quantos";
+					mes "você quer de verdade agora.";
+					next;
+				}
+				else {
+					set .@egg_zeny,.@input*500;
+					if (Zeny < .@egg_zeny) {
+						mes "[Egg Salesman]";
+						mes "Você não tem zenys suficientes.";
+						next;
+						mes "[Egg Salesman]";
+						mes "Sem descontos, vá conseguir zenys suficientes.";
+						close;
+					}
+					else {
+						if (checkweight(7605,.@input) == 0) {
+							mes "[Egg Salesman]";
+							mes "Ei, eu sei que você realmente";
+							mes "quer comprar alguns Ovos de";
+							mes "Galinha, mas você não vai conseguir";
+							mes "carregar tudo isso agora. Por que";
+							mes "você não libera um pouco de espaço";
+							mes "no seu inventário primeiro?";
+							close;
+						}
+						else {
+							mes "[Egg Salesman]";
+							mes "Aqui estão seus Ovos de Galinha!";
+							mes "Acho que há algum festival";
+							mes "acontecendo onde você vai precisar";
+							mes "deles, mas não sei de nada";
+							mes "sobre isso. Bem, divirta-se,";
+							mes "e nos vemos de novo!";
+							set Zeny, Zeny-.@egg_zeny;
+							getitem 7605,.@input; //Chicken_Egg
+							close;
+						}
+					}
+				}
+			}
+		case 4:
+			mes "[Egg Salesman]";
+			mes "Não tem interesse em comprar";
+			mes "Ovos de Galinha, hein? Bem,";
+			mes "está correndo um boato de que";
+			mes "há algum tipo de festival onde";
+			mes "eles serão úteis...";
+			mes "Você realmente pode deixar passar?";
+			close;
+		}
+	}
+}
+
+prontera,113,98,0	script	Dowdy Matron#prt::EggMatron	701,{
+	mes "[Dowdy Matron]";
+	mes "Este festival vai ser";
+	mes "tão divertido! Ooh!";
+	mes "Eu deveria comprar alguns Ovos de";
+	mes "Galinha para fazer decorações.";
+	next;
+	mes "[Dowdy Matron]";
+	mes "Por falar nisso,";
+	mes "ouvi dizer que a freira que";
+	mes "pode fazer Ovos Sagrados está de volta";
+	mes "em Prontera. Embora, eu ache";
+	mes "que ela esteja usando Ovos de Galinha";
+	mes "em vez de Ovos comuns para fazê-los.";
+	close;
+}
+
+prontera,108,96,5	script	Cantankerous Geezer#prt::EggGeezer	709,{
+	mes "[Cantankerous Geezer]";
+	mes "Ei, você sabe como os Ovos";
+	mes "de Galinha ficaram tão";
+	mes "caros? Quero dizer, 500 zenys";
+	mes "é muito! Acho que é porque";
+	mes "um cara em Morocc está tentando";
+	mes "acumular uma tonelada de Ovos Sagrados!";
+	next;
+	mes "[Cantankerous Geezer]";
+	mes "Não sei o que ele está";
+	mes "oferecendo por esses Ovos";
+	mes "Sagrados, mas aventureiros estão";
+	mes "indo até ele com Ovos Sagrados";
+	mes "aos montes. Fico pensando no que";
+	mes "ele está dando a eles em troca?";
+	close2;
+	if (easter2008 < 1) {
+		set easter2008,1;
+	}
+	end;
+}
+
+// Payon
+payon,172,173,5	duplicate(EggVendor)	Egg Salesman#pay	98
+payon,175,171,1	duplicate(EggMatron)	Dowdy Matron#pay	701
+payon,170,171,5	duplicate(EggGeezer)	Cantankerous Geezer#pay	709
+
+// Geffen
+geffen,136,64,5	duplicate(EggVendor)	Egg Salesman#gef	98
+geffen,138,63,1	duplicate(EggMatron)	Dowdy Matron#gef	701
+geffen,133,63,5	duplicate(EggGeezer)	Cantankerous Geezer#gef	709
+
+// Al De Baran
+aldebaran,133,119,5	duplicate(EggVendor)	Egg Salesman#alde	98
+aldebaran,135,117,1	duplicate(EggMatron)	Dowdy Matron#ald	701
+aldebaran,132,116,5	duplicate(EggGeezer)	Cantankerous Geezer#ald	709
+
+// Alberta
+alberta,90,55,5	duplicate(EggVendor)	Egg Salesman#alb	98
+alberta,92,53,1	duplicate(EggMatron)	Dowdy Matron#alb	701
+alberta,88,52,5	duplicate(EggGeezer)	Cantankerous Geezer#alb	709
+
+// Create Holy Eggs
+prontera,230,312,3	script	Nerlen#es07	79,{
+	mes "[Nerlen]";
+	mes "Olá! Se quiser,";
+	mes "posso pegar seus Ovos de";
+	mes "Galinha e transformá-los";
+	mes "em Ovos Sagrados. É algo";
+	mes "que faço pelos outros em celebração";
+	mes "desta temporada sagrada.";
+	next;
+	mes "[Nerlen]";
+	mes "Ovos Sagrados representam";
+	mes "o renascimento e, apropriadamente,";
+	mes "podem ser usados para restaurar";
+	mes "a vida de seus amigos.";
+	mes "Gostaria que eu fizesse";
+	mes "alguns para você?";
+	next;
+	switch(select("O que preciso para fazer Ovos Sagrados?:Quero fazer Ovos Sagrados.:Talvez na próxima.")) {
+	case 1:
+		mes "[Nerlen]";
+		mes "Para cada Ovo Sagrado";
+		mes "que você quiser que eu";
+		mes "faça, você precisará";
+		mes "me trazer...";
+		next;
+		mes "[Nerlen]";
+		mes "^4D4DFF1 Erva Branca^000000,";
+		mes "^4D4DFF1 Erva Verde^000000,";
+		mes "^4D4DFF1 Erva Amarela^000000,";
+		mes "^4D4DFF1 Água Benta^000000, e";
+		mes "^4D4DFF1 Ovo de Galinha^000000.";
+		close;
+	case 2:
+		mes "[Nerlen]";
+		mes "Certo, quantos";
+		mes "Ovos Sagrados você";
+		mes "gostaria que eu fizesse?";
+		mes "Só posso fazer até";
+		mes "10 Ovos Sagrados de uma vez.";
+		mes "Digite ''0'' para cancelar.";
+		next;
+		while(1) {
+			input .@input;
+			if (.@input == 0) {
+				mes "[Nerlen]";
+				mes "Oh, você mudou de";
+				mes "ideia? Sinta-se à vontade para me visitar";
+				mes "sempre que quiser que eu";
+				mes "faça alguns Ovos Sagrados~";
+				close;
+			}
+			else if (.@input < 0 || .@input > 10) {
+				mes "[Nerlen]";
+				mes "Desculpe, mas só posso";
+				mes "fazer até 10 Ovos Sagrados";
+				mes "de uma vez. Se você quiser";
+				mes "cancelar, apenas digite ''0''.";
+				next;
+			}
+			else {
+				if ((countitem(509) < .@input) || (countitem(511) < .@input) || (countitem(508) < .@input) || (countitem(523) < .@input) || (countitem(7605) < .@input)) {
+					mes "[Nerlen]";
+					mes "Desculpe, mas você não";
+					mes "tem itens suficientes para fazer";
+					mes "Ovos Sagrados. Você precisa do";
+					mes "seguinte para que eu possa criar";
+					mes "cada Ovo Sagrado para você.";
+					next;
+					mes "[Nerlen]";
+					mes "^4D4DFF1 Erva Branca^000000,";
+					mes "^4D4DFF1 Erva Verde^000000,";
+					mes "^4D4DFF1 Erva Amarela^000000,";
+					mes "^4D4DFF1 Água Benta^000000, e";
+					mes "^4D4DFF1 Ovo de Galinha^000000.";
+					close;
+				}
+				else {
+					break;
+				}
+			}
+		}
+		if (checkweight(12019,.@input) == 0) {
+			mes "[Nerlen]";
+			mes "Desculpe, mas você";
+			mes "não conseguirá carregar";
+			mes "tantos Ovos Sagrados agora...";
+			mes "É melhor liberar mais";
+			mes "espaço no seu inventário primeiro.";
+			close;
+		}
+		else {
+			delitem 509,.@input; //White_Herb
+			delitem 511,.@input; //Green_Herb
+			delitem 508,.@input; //Yellow_Herb
+			delitem 523,.@input; //Holy_Water
+			delitem 7605,.@input; //Egg
+			getitem 12019,.@input; //Holy_Egg
+			mes "[Nerlen]";
+			mes "Obrigado!";
+			mes "Espero que você aproveite";
+			mes "esses Ovos Sagrados~";
+			mes "Espero que você esteja com o amor de Deus.";
+			close;
+		}
+	case 3:
+		mes "[Nerlen]";
+		mes "Certo, eu entendo.";
+		mes "Que Deus te abençoe.";
+		close;
+	}
+}
+
+// Easter Quest
+morocc,131,26,5	script	Secret Corps#egg	880,{
+	if (easter2008 == 1) {
+		mes "[Corps Member]";
+		mes "Como você está?";
+		mes "Morte... É inevitável.";
+		mes "Até você morrerá um dia. Mas...";
+		next;
+		if (countitem(12019) > 0) {
+			mes "[Corps Member]";
+			mes "Oh, sim. É isso.";
+			mes "Você tem. O ovo que";
+			mes "você segura tem um poder secreto.";
+			mes "Eu acho que... Sim. Alguém";
+			mes "como você entenderia";
+			mes "nós, se encaixaria bem em nosso grupo.";
+			next;
+			mes "[Corps Member]";
+			mes "Por que você";
+			mes "não... Se junta a nós?";
+			next;
+			switch(select("Para quê?:Hum... Mas vocês são suspeitos!")) {
+			case 1:
+				mes "[Corps Member]";
+				mes "Vejo que despertei seu";
+				mes "interesse! Bem, se você";
+				mes "gostaria de se juntar a nós e aprender";
+				mes "mais, então por que não";
+				mes "me traz 10 Ovos Sagrados?";
+				mes "Essa é minha condição.";
+				set easter2008,2;
+				close;
+			case 2:
+				mes "[Corps Member]";
+				mes "Sério? Bem, suponho";
+				mes "que não posso evitar. Deixe-me";
+				mes "garantir que nossa";
+				mes "organização trabalha";
+				mes "para o bem maior.";
+				close;
+			}
+		}
+		else {
+			mes "[Corps Member]";
+			mes "Todos nós deveríamos aproveitar";
+			mes "a vida enquanto ainda podemos.";
+			mes "Quem sabe? Talvez";
+			mes "existam outras vidas";
+			mes "para viver depois desta.";
+			mes "Talvez, talvez...";
+			close;
+		}
+	}
+	else if (easter2008 == 2) {
+		mes "[Corps Member]";
+		mes "Ah, você retornou.";
+		mes "Você ainda deseja";
+		mes "se juntar às nossas fileiras? Se sim,";
+		mes "espero que tenha trazido os";
+		mes "10 Ovos Sagrados que exijo.";
+		next;
+		switch(select("Entregar Ovos Sagrados:Don't Entregar Ovos Sagrados")) {
+		case 1:
+			mes "[Corps Member]";
+			mes "Então você deseja";
+			mes "entrar para a nossa organização.";
+			mes "Primeiro, deixe-me verificar se você";
+			mes "trouxe os Ovos Sagrados...";
+			next;
+			if (countitem(12019) > 9) {
+				mes "[Corps Member]";
+				mes "Muito bem. Em troca";
+				mes "destes Ovos Sagrados, deixe-me";
+				mes "lhe dar um pequeno presente";
+				mes "por se juntar a nós. Agora, posso";
+				mes "lhe contar sobre o que fazemos.";
+				delitem 12019,10; //Holy_Egg
+				set easter2008,3;
+				getitem 644,2; //Gift_Box
+				next;
+				mes "[Corps Member]";
+				mes "^333333*Tosse, tosse*^000000";
+				mes "Com licença, eu estou com--";
+				mes "^333333*Tosse!*^000000 Um... Um pouco de";
+				mes "dor de garganta. Me dê um segundo...";
+				close;
+			}
+			else {
+				mes "[Corps Member]";
+				mes "Hm. Você não tem Ovos Sagrados";
+				mes "suficientes para atender à condição";
+				mes "que eu estabeleci. Será que você";
+				mes "os deixou no seu Armazém?";
+				close;
+			}
+		case 2:
+			mes "[Corps Member]";
+			mes "Hm? Acho que não posso";
+			mes "culpá-lo por ser um pouco";
+			mes "desconfiado de nós. Deixe-me";
+			mes "garantir que a nossa é";
+			mes "uma missão de santidade.";
+			close;
+		}
+	}
+	else if (easter2008 == 3) {
+		mes "[Corps Member]";
+		mes "Nós somos uma organização";
+		mes "que se dedica a...";
+		mes "Ressuscitar heróis mortos!";
+		next;
+		mes "[Corps Member]";
+		mes "Esses Ovos Sagrados que você";
+		mes "trouxe possuem o poder de";
+		mes "restaurar a vida aos mortos.";
+		mes "Em grandes quantidades...";
+		mes "Eles podem até reviver";
+		mes "antigos heróis caídos!";
+		next;
+		mes "[Corps Member]";
+		mes "Quando você me trouxer";
+		mes "33 Ovos Sagrados, eu irei";
+		mes "encantá-los para que você";
+		mes "possa usá-los nas áreas onde";
+		mes "antigos heróis morreram.";
+		next;
+		mes "[Corps Member]";
+		mes "Vá e me traga";
+		mes "33 Ovos Sagrados! Ficarei";
+		mes "aqui esperando o seu retorno...";
+		set easter2008,4;
+		close;
+	}
+	else if (easter2008 == 4) {
+		mes "[Corps Member]";
+		mes "Ah, você retornou.";
+		mes "Agora, você me trouxe";
+		mes "33 Ovos Sagrados para sua tarefa?";
+		next;
+		switch(select("Entregar Ovos Sagrados:Don't Entregar Ovos Sagrados")) {
+		case 1:
+			if (countitem(12019) > 32) {
+				mes "[Corps Member]";
+				mes "Ah, estes servirão!";
+				mes "Agora, anote o destino";
+				mes "que descreverei enquanto";
+				mes "infundo estes Ovos Sagrados";
+				mes "com magia adicional.";
+				next;
+				if (BaseLevel < 41) {
+					mes "[Corps Member]";
+					mes "Você deve ir até a";
+					mes "entrada da masmorra payon,";
+					mes "onde um herói ágil caiu.";
+					mes "Sacrifique os Ovos Sagrados lá,";
+					mes "e depois volte para mim. Agora...";
+					mes "Vá, e traga-o de volta à vida!";
+					set easter2008,5;
+					close;
+				}
+				else if ((BaseLevel > 40) && (BaseLevel < 61)) {
+					mes "[Corps Member]";
+					mes "Vá até o 3º nível da";
+					mes "masmorra de Izlude... Um herói";
+					mes "que buscava sabedoria pereceu";
+					mes "na entrada do 4º";
+					mes "nível. Sacrifique os Ovos Sagrados";
+					mes "lá, e traga-o de volta à vida!";
+					set easter2008,6;
+					close;
+				}
+				else if ((BaseLevel > 60) && (BaseLevel < 81)) {
+					mes "[Corps Member]";
+					mes "Vá até a masmorra da mina";
+					mes "abandonada, onde um bravo herói";
+					mes "morreu protegendo seus companheiros.";
+					mes "Sacrifique os Ovos Sagrados assim";
+					mes "que chegar ao 3º andar.";
+					mes "Vá, e traga-o de volta à vida!";
+					set easter2008,7;
+					close;
+				}
+				else {
+					mes "[Corps Member]";
+					mes "Vá para Glast Heim e";
+					mes "sacrifique os Ovos Sagrados";
+					mes "assim que entrar no";
+					mes "2º andar. Um herói pereceu";
+					mes "lá, mas você deve trazê-lo";
+					mes "de volta aos vivos!";
+					set easter2008,8;
+					close;
+				}
+			}
+			else {
+				mes "[Corps Member]";
+				mes "Hm? Estes não são";
+				mes "33 Ovos Sagrados. Você";
+				mes "deixou alguns no seu Armazém?";
+				close;
+			}
+		case 2:
+			mes "[Corps Member]";
+			mes "Você não entende";
+			mes "a retidão da";
+			mes "nossa causa? Trazer heróis";
+			mes "caídos de volta trará paz às";
+			mes "nossas terras muito mais rápido!";
+			close;
+		}
+	}
+	else if (easter2008 >= 5 && easter2008 <= 8) {
+		mes "[Corps Member]";
+		mes "Você esqueceu";
+		mes "para onde deve ir?";
+		mes "Deixe-me lembrá-lo";
+		mes "para que você não";
+		mes "perca o seu caminho...";
+		next;
+		mes "[Corps Member]";
+		switch(easter2008) {
+		case 5:
+			mes "[Corps Member]";
+			mes "Você deve ir até a";
+			mes "entrada da masmorra payon,";
+			mes "onde um herói ágil caiu.";
+			mes "Sacrifique os Ovos Sagrados lá,";
+			mes "e depois volte para mim. Agora...";
+			mes "Vá, e traga-o de volta à vida!";
+			close;
+		case 6:
+			mes "[Corps Member]";
+			mes "Vá até o 3º nível da";
+			mes "masmorra de Izlude... Um herói";
+			mes "que buscava sabedoria pereceu";
+			mes "na entrada do 4º";
+			mes "nível. Sacrifique os Ovos Sagrados";
+			mes "lá, e traga-o de volta à vida!";
+			close;
+		case 7:
+			mes "[Corps Member]";
+			mes "Vá até a masmorra da mina";
+			mes "abandonada, onde um bravo herói";
+			mes "morreu protegendo seus companheiros.";
+			mes "Sacrifique os Ovos Sagrados assim";
+			mes "que chegar ao 3º andar.";
+			mes "Vá, e traga-o de volta à vida!";
+			close;
+		case 8:
+			mes "Vá para Glast Heim e";
+			mes "sacrifique os Ovos Sagrados";
+			mes "assim que entrar no";
+			mes "2º andar. Um herói pereceu";
+			mes "lá, mas você deve trazê-lo";
+			mes "de volta aos vivos!";
+			close;
+		}
+	}
+	else if (easter2008 == 9) {
+		mes "[Corps Member]";
+		mes "Ah, espero que você tenha";
+		mes "voltado com boas notícias.";
+		mes "Então, funcionou?";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "Na verdade...";
+		mes "Nada aconteceu....";
+		next;
+		mes "[Corps Member]";
+		mes "O quê? Não pode ser.";
+		mes "A magia... Ela deveria";
+		mes "ter sido poderosa o suficiente...";
+		mes "Bem, é uma pena que nós";
+		mes "falhamos. Mesmo assim, sou grato";
+		mes "por toda sua ajuda até agora...";
+		next;
+		mes "[Corps Member]";
+		mes "Vamos investigar o que";
+		mes "pode ter dado errado,";
+		mes "e tentaremos novamente no próximo ano.";
+		mes "Adeus, meu amigo, e espero";
+		mes "que você nos ajude novamente.";
+		set easter2008,10;
+		if (BaseLevel < 41) {
+			getexp 5000,0;
+			getexp 5000,0;
+		}
+		else if ((BaseLevel > 40) && (BaseLevel < 61)) {
+			getexp 50000,0;
+			getexp 50000,0;
+		}
+		else if ((BaseLevel > 60) && (BaseLevel < 81)) {
+			getexp 500000,0;
+		}
+		else if ((BaseLevel > 80) && (BaseLevel < 99)) {
+			getexp 1000000,0;
+		}
+		else {
+			if (Upper == 2) {
+				getexp 0,10000000;
+			}
+			else {
+				getexp 2000000,0;
+			}
+		}
+		close;
+	}
+	else {
+		mes "[Corps Member]";
+		mes "Psiu! Não conte a ninguém";
+		mes "que estou aqui.";
+		close;
+	}
+}
+
+pay_dun00,22,127,0	script	Trace#egg1	844,{
+	if (easter2008 == 5) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "Bem...";
+		mes "Este é o lugar";
+		mes "que o Membro do Corpo";
+		mes "queria que eu encontrasse...";
+		mes "Hora de usar todos";
+		mes "esses Ovos Sagrados.";
+		next;
+		if (countitem(12019) > 32) {
+			mes "[" + strcharinfo(0) + "]";
+			mes "Aqui vamos nós...";
+			mes "Isso realmente trará";
+			mes "este antigo herói";
+			mes "de volta à vida? Estou...";
+			mes "Estou um pouco assustado!";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "...............................";
+			mes "...............................";
+			mes "...............................";
+			mes "...............................";
+			mes "...............................";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "^333333*Ufa!*^000000 Nada aconteceu!";
+			mes "Acho melhor eu voltar para";
+			mes "aquele Membro do Corpo e avisá-lo";
+			mes "de que não funcionou.";
+			close2;
+			delitem 12019,33; //Holy_Egg
+			set easter2008,9;
+			end;
+		}
+		else {
+			mes "[" + strcharinfo(0) + "]";
+			mes "Huh? Onde eu coloquei";
+			mes "aqueles 33 Ovos Sagrados";
+			mes "que eu precisava para isso?";
+			close;
+		}
+	}
+	else {
+		mes "[" + strcharinfo(0) + "]";
+		mes "Havia algo";
+		mes "aqui, mas não consigo";
+		mes "dizer com certeza o que era...";
+		close;
+	}
+}
+
+iz_dun02,340,346,0	script	Trace#egg	844,{
+	if (easter2008 == 6) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "Bem...";
+		mes "Este é o lugar";
+		mes "que o Membro do Corpo";
+		mes "queria que eu encontrasse...";
+		mes "Hora de usar todos";
+		mes "esses Ovos Sagrados.";
+		next;
+		if (countitem(12019) > 32) {
+			mes "[" + strcharinfo(0) + "]";
+			mes "Aqui vamos nós...";
+			mes "Isso realmente trará";
+			mes "este antigo herói";
+			mes "de volta à vida? Estou...";
+			mes "Estou um pouco assustado!";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "...............................";
+			mes "...............................";
+			mes "...............................";
+			mes "...............................";
+			mes "...............................";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "^333333*Ufa!*^000000 Nada aconteceu!";
+			mes "Acho melhor eu voltar para";
+			mes "aquele Membro do Corpo e avisá-lo";
+			mes "de que não funcionou.";
+			close2;
+			delitem 12019,33; //Holy_Egg
+			set easter2008,9;
+			end;
+		}
+		else {
+			mes "[" + strcharinfo(0) + "]";
+			mes "Huh? Onde eu coloquei";
+			mes "aqueles 33 Ovos Sagrados";
+			mes "que eu precisava para isso?";
+			close;
+		}
+	}
+	else {
+		mes "[" + strcharinfo(0) + "]";
+		mes "Havia algo";
+		mes "aqui, mas não consigo";
+		mes "dizer com certeza o que era...";
+		close;
+	}
+}
+
+mjo_dun03,308,256,0	script	Trace#egg2	844,{
+	if (easter2008 == 7) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "Bem...";
+		mes "Este é o lugar";
+		mes "que o Membro do Corpo";
+		mes "queria que eu encontrasse...";
+		mes "Hora de usar todos";
+		mes "esses Ovos Sagrados.";
+		next;
+		if (countitem(12019) > 32) {
+			mes "[" + strcharinfo(0) + "]";
+			mes "Lá vamos nós...";
+			mes "Será que isso vai realmente";
+			mes "trazer este herói antigo";
+			mes "de volta à vida? Estou...";
+			mes "Estou com um pouco de medo!";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "...............................";
+			mes "...............................";
+			mes "...............................";
+			mes "...............................";
+			mes "...............................";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "^333333*Ufa!*^000000 Nada aconteceu!";
+			mes "Acho melhor voltar até";
+			mes "aquele Membro do Corpo e avisá-lo";
+			mes "de que não funcionou.";
+			close2;
+			delitem 12019,33; //Holy_Egg
+			set easter2008,9;
+			end;
+		}
+		else {
+			mes "[" + strcharinfo(0) + "]";
+			mes "Hã? Onde foi que eu coloquei";
+			mes "aqueles 33 Ovos Sagrados";
+			mes "de que eu precisava para isso?";
+			close;
+		}
+	}
+	else {
+		mes "[" + strcharinfo(0) + "]";
+		mes "Havia algo";
+		mes "aqui, mas não consigo dizer";
+		mes "ao certo o que era...";
+		close;
+	}
+}
+
+gl_prison,157,176,0	script	Trace#egg3	844,{
+	if (easter2008 == 8) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "Bem...";
+		mes "Este é o local";
+		mes "que o Membro do Corpo";
+		mes "queria que eu encontrasse...";
+		mes "Hora de usar todos";
+		mes "estes Ovos Sagrados.";
+		next;
+		if (countitem(12019) > 32) {
+			mes "[" + strcharinfo(0) + "]";
+			mes "Lá vamos nós...";
+			mes "Será que isso vai realmente";
+			mes "trazer este herói antigo";
+			mes "de volta à vida? Estou...";
+			mes "Estou com um pouco de medo!";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "...............................";
+			mes "...............................";
+			mes "...............................";
+			mes "...............................";
+			mes "...............................";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "^333333*Ufa!*^000000 Nada aconteceu!";
+			mes "Acho melhor voltar até";
+			mes "aquele Membro do Corpo e avisá-lo";
+			mes "de que não funcionou.";
+			close2;
+			delitem 12019,33; //Holy_Egg
+			set easter2008,9;
+			end;
+		}
+		else {
+			mes "[" + strcharinfo(0) + "]";
+			mes "Hã? Onde foi que eu coloquei";
+			mes "aqueles 33 Ovos Sagrados";
+			mes "de que eu precisava para isso?";
+			close;
+		}
+	}
+	else {
+		mes "[" + strcharinfo(0) + "]";
+		mes "Havia algo";
+		mes "aqui, mas não consigo dizer";
+		mes "ao certo o que era...";
+		close;
+	}
+}

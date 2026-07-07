@@ -1,0 +1,86 @@
+//===== rAthena Script ======================================= 
+//= Advance Class jobchanger after kRO Normals.
+//===== By: ==================================================
+//= Nana
+//= finished, optimized and tested by Lupus
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Advance Class jobchanger after kRO Normals.
+//===== Additional Comments: ================================= 
+//= 1.1 Made all into functions, additional checks, etc. [Lupus]
+//= 1.2 Made numbers into constants. [Vicious]
+//= 1.3 Now saves/restores all the quest skills [Lupus]
+//============================================================ 
+
+valkyrie,44,47,5	script	High Wizard#Valkyrie	735,{
+	if (ADVJOB == 0 ||  Upper != 1) {
+		set .@karma_d,rand(1,10);
+		if (.@karma_d > 4) {
+			mes "[High Wizard]";
+			mes "Parabéns.";
+			mes "Honra aos guerreiros!";
+			close;
+		}
+		mes "[High Wizard]";
+		mes "Nós, High_Wizards, temos";
+		mes "a responsabilidade de";
+		mes "usar nossa magia destrutiva";
+		mes "para os propósitos certos.";
+		next;
+		mes "[High Wizard]";
+		mes "Uma vida inteira de treinamento";
+		mes "é necessária antes de se tornar";
+		mes "um Arquimago. Você consegue imaginar";
+		mes "o que aconteceria se nosso poder";
+		mes "caísse em mãos erradas?!";
+		close;
+	}
+	else if (ADVJOB == Job_High_Wizard && Class == Job_Mage_High && JobLevel > 39) {
+		mes "[High Wizard]";
+		mes "Chegou a hora.";
+		mes "E Midgard precisa";
+		mes "daqueles que podem";
+		mes "manejar a magia mais forte...";
+		next;
+		mes "[High Wizard]";
+		mes "Você gostaria de";
+		mes "se tornar um Arquimago?";
+		next;
+		if (select("Não.:Sim.") == 1) {
+			mes "[High Wizard]";
+			mes "Quando estiver pronto,";
+			mes "sinta-se à vontade para voltar.";
+			mes "Honra aos guerreiros!";
+			close;
+		}
+		if (SkillPoint) {
+			mes "[High Wizard]";
+			mes "Ainda é possível que você aprenda mais habilidades. Por favor, use";
+			mes "todos os seus Pontos de Habilidade restantes antes de voltar para mim.";
+			close;
+		}
+		jobchange Job_high_Wizard;
+		set ADVJOB,0;
+		mes "[High Wizard]";
+		mes "Parabéns.";
+		mes "Como um Arquimago,";
+		mes "espero que você use";
+		mes "seus poderes para trazer";
+		mes "paz aos oprimidos.";
+		close;
+	}
+	mes "[High Wizard]";
+	mes "Bem-vindo";
+	mes "a Valhalla,";
+	mes "o Salão da Honra.";
+	next;
+	mes "[High Wizard]";
+	mes "Por favor, fique";
+	mes "à vontade";
+	mes "enquanto estiver aqui.";
+	mes "Honra aos guerreiros!";
+	close;
+}

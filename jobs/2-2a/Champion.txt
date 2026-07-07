@@ -1,0 +1,87 @@
+//===== rAthena Script ======================================= 
+//= Advance Class jobchanger after kRO Normals.
+//===== By: ==================================================
+//= Nana
+//= finished, optimized and tested by Lupus
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Advance Class jobchanger after kRO Normals.
+//===== Additional Comments: ================================= 
+//= 1.1 Made all into functions, additional checks, etc. [Lupus]
+//= 1.2 Made numbers into constants. [Vicious]
+//= 1.3 Now saves/restores all the quest skills [Lupus]
+//============================================================ 
+
+valkyrie,53,42,3	script	Champion#Valkyrie	52,{
+	if (ADVJOB == 0 || Upper != 1) {
+		set .@karma_d,rand(1,10);
+		if (.@karma_d > 4) {
+			mes "[Champion]";
+			mes "Parabéns.";
+			mes "Honra aos guerreiros!";
+			close;
+		}
+		mes "[Champion]";
+		mes "Habilidade.";
+		mes "Velocidade.";
+		mes "Força.";
+		mes "Agilidade.";
+		next;
+		mes "[Champion]";
+		mes "Um Mestre pode";
+		mes "se beneficiar de todas";
+		mes "essas coisas. Mas";
+		mes "alguém só pode dominar";
+		mes "tanto assim na vida...";
+		close;
+	}
+	else if (ADVJOB == Job_Champion && Class == Job_Acolyte_High && JobLevel > 39) {
+		mes "[Champion]";
+		mes "É hora.";
+		mes "Hora de grandes heróis";
+		mes "se levantarem contra as";
+		mes "forças do mal que assolam";
+		mes "o mundo de Midgard!";
+		next;
+		mes "[Champion]";
+		mes "Você gostaria";
+		mes "de se tornar um Mestre?";
+		next;
+		if (select("Não.:Sim.") == 1) {
+			mes "[Champion]";
+			mes "Quando estiver pronto,";
+			mes "sinta-se à vontade para voltar.";
+			mes "Honra aos guerreiros!";
+			close;
+		}
+		if (SkillPoint) {
+			mes "[Champion]";
+			mes "Ainda é possível que você aprenda mais habilidades. Por favor, use";
+			mes "todos os seus Pontos de Habilidade restantes antes de retornar a mim.";
+			close;
+		}
+		jobchange Job_Champion;
+		set ADVJOB,0;
+		mes "[Champion]";
+		mes "Parabéns!";
+		mes "Viva como um Mestre,";
+		mes "e traga luz ao";
+		mes "mundo através da";
+		mes "força dos seus punhos.";
+		close;
+	}
+	mes "[Champion]";
+	mes "Bem-vindo";
+	mes "a Valhalla,";
+	mes "o Salão da Honra.";
+	next;
+	mes "[Champion]";
+	mes "Por favor, fique";
+	mes "à vontade";
+	mes "enquanto estiver aqui.";
+	mes "Honra aos guerreiros!";
+	close;
+}

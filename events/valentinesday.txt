@@ -1,0 +1,131 @@
+//===== rAthena Script =======================================
+//= Valentine Event Script
+//===== By: ==================================================
+//= Muad_Dib (Prometheus Project)
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Valentine's Day Event
+//===== Additional Comments: =================================
+//= 07/06/05 : Added 1st Version. [Muad_Dib]
+//= 08/28/05 : Ver. 1.01 Added a missing close; [Muad_Dib]
+//= Converted to rAthena format by Dr.Evil
+//= 1.1 Cleaning. [Euphy]
+//============================================================
+
+// Stephen - Valentine Event Chocolate seller
+//============================================================
+alberta,26,243,4	script	Stephen	58,{
+	mes "[Stephen]";
+	mes "Adivinha o que eu tenho?";
+	mes "Uma guloseima saborosa difícil de encontrar em Midgard....";
+	next;
+	mes "[Stephen]";
+	mes "Chocolate!";
+	mes "Isso mesmo, você não ama chocolate...? Eu amo.";
+	mes "E você está com sorte, porque estou vendendo eles por apenas 5.000 zenys cada!";
+	next;
+	if(select("Eu quero um pouco de chocolate!:Não, obrigado.")==2) {
+		mes "[Stephen]";
+		mes "Você não quer nenhum chocolate?";
+		mes "Estou te avisando! Você vai se arrepender!";
+		mes "É melhor pegar um pouco agora... você nunca mais encontrará um chocolate como este!";
+		mes "Pense bem e me visite novamente algum dia.";
+		close; }
+	mes "[Stephen]";
+	mes "Hah!";
+	mes "Eu sabia!";
+	mes "Mas não posso lhe vender mais do que 5 de uma vez... porém, se você realmente precisar de mais...";
+	mes "você pode voltar novamente.";
+	mes "Então, quantos você quer?";
+	next;
+	input .@i;
+	if (.@i <= 0) close;
+	mes "[Stephen]";
+	if (.@i > 5)  {
+		mes "Sinto muito, mas não posso te dar essa quantidade.";
+		close; }
+	if (Zeny < .@i*5000) {
+		mes "Sinto muito, mas parece que você não tem dinheiro suficiente para comprar de mim.";
+		close; }
+	set Zeny, Zeny - .@i*5000;
+	getitem 558,.@i;
+	mes "Aqui está!";
+	mes "Você pode dar isso a alguém como presente, ou aproveitar você mesmo!";
+	mes "Mmm... chocolate doce...";
+	mes "Venha me visitar sempre...!";
+	close;
+}
+
+// Jainie -- Gives information about Valentine Event
+//============================================================
+alberta,29,243,4	script	Jainie	53,{
+	mes "[Jainie]";
+	mes "Sabe de uma coisa? O chocolate que meu namorado vende é feito por mim!";
+	mes "Eu mesma os fiz.";
+	next;
+	mes "[Jainie]";
+	mes "Sabe... em certos países, existe a tradição de presentear chocolates para uma pessoa que você ama...";
+	mes "Eles chamam de ^3355FFDia dos Namorados^000000.";
+	next;
+	mes "[Jainie]";
+	mes "Então eu dei a ele meu delicioso chocolate...";
+	mes "E depois ele me fez cozinhar muito mais...";
+	mes "E agora ele está vendendo para todo mundo.";
+	mes "Acho que ele realmente gostou.";
+	mes "Mas eu me sinto bem quando as pessoas compram algo que eu fiz.";
+	next;
+	mes "[Jainie]";
+	mes "Seria ótimo se você comprasse alguns também...";
+	mes "Vou continuar fazendo chocolates por um tempo, então...";
+	close;
+}
+
+// Carl Orleans -- Valentine Event Chocolate maker
+//============================================================
+prt_castle,54,34,4	script	Carl Orleans	47,{
+	mes "[Carl Orleans]";
+	mes "Sim?";
+	next;
+	if(select("Eu quero um pouco de chocolate feito à mão...:Estou perdido, desculpe incomodá-lo.")==2) {
+		mes "[Carl Orleans]";
+		mes "Oh... bem, se você quer que eu faça um pouco do meu Chocolate Feito à Mão especial....";
+		mes "Você precisará me dar pelo menos ^0000FF 3 Chocolates^000000.";
+		next;
+		mes "[Carl Orleans]";
+		mes "É isso mesmo, apenas ^0000FF 3 Chocolates^000000";
+		mes "Traga-os para mim e você receberá o que veio buscar.";
+		next;
+		mes "[Carl Orleans]";
+		mes "Até logo.";
+		close; }
+	mes "[Carl Orleans]";
+	mes "Bem, eu talvez possa atender às suas necessidades...";
+	next;
+	mes "[Carl Orleans]";
+	if (countitem(558) < 3) {
+		mes "Sinto muito, você não tem Barras de Chocolate suficientes para fazer isso.";
+		close; }
+	delitem 558,3;
+	mes "Vejo que você conseguiu 3 pedaços de chocolate puro.";
+	mes "Dê-os para mim...";
+	next;
+	mes "[Carl Orleans]";
+	mes "Ok, agora eu só vou criar meus chocolates especiais feitos à mão se você prometer usá-los com sabedoria.";
+	next;
+	mes "[Carl Orleans]";
+	mes "....Hmmmmmm.....";
+	mes "Bem...";
+	next;
+	mes "[Carl Orleans]";
+	getitem 559,1;
+	mes "Aqui está.";
+	mes "Espero que você dê a alguém especial, porque é um chocolate especial.";
+	mes "Como você sabe... apenas eu posso criar isso.";
+	next;
+	mes "[Carl Orleans]";
+	mes "Aproveite.";
+	close;
+}

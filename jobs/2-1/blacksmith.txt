@@ -1,0 +1,1644 @@
+//===== rAthena Script =======================================
+//= Blacksmith Job Quest
+//===== By: ==================================================
+//= EREMES THE CANIVALIZER(Aegis)
+//= Translated by: yoshiki.
+//= Converted by: Komurka.
+//= Optimized and further edited by kobra_k88.
+//= Further bugfixed and tested by Lupus
+//===== Current Version: =====================================
+//= 2.9
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Job Change quest for Blacksmith class.
+//===== Additional Comments: =================================
+//= Changed some npc names to the iRO names. Changed some variable
+//= names and labels. Edited some text.[kobra_k88]
+//= Removed "if (JobLevel > 48) goto higher". It was a left over line.
+//= Thx to "Decker".[kobra_k88]
+//= Fixed some typos, thanks to Riotblade [celest]
+//= 1.3-1.5 Added Baby Class support [Lupus]
+//= 1.6 Added a func which prevent advanced classes passing
+//=     2nd Job Quests again. It also guides adv classes where
+//=     to go. [Lupus]
+//= 1.7 item quantity/ids typos fix
+//= 1.8 Moved the Quest to Einbroch [Poki#3]
+//= 2.0 Changed numbers to constants. [Vicious]
+//= 2.1 Removed Duplicates [Silent]
+//= 2.2 Merged Jfunc, changed job numbers to constants [Lupus]
+//= 2.3 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//= 2.4 Several bugfixes with the help of Barron-Monster. [L0ne_W0lf]
+//= 2.4a Changed a BaseJob to baseclass. [L0ne_W0lf]
+//= 2.4b Further bug fixes with teh hel of Barron-Monster. [L0ne_W0lf]
+//= 2.4c More fixes courtosy of Micktu. [L0ne_W0lf]
+//= 2.4d Fixed an incorrect answer in the quiz. (Trojal) [L0ne_W0lf]
+//= 2.4e Touched up a few issues as pointed out by Ultramage. [L0ne_W0lf]
+//= 2.5 Krongast is in Lighthalzen. (DarkValmir) [L0ne_W0lf]
+//= 2.6 Fixed 4 bugs [Lupus]
+//= 2.6a Typo fix [Yommy]
+//= 2.7 Added Quest Log commands. [Kisuka]
+//= 2.8 Removed the need for use of 'goto.' [L0ne_W0lf]
+//= 2.9 Updated with some extra conditions. [Euphy]
+//==============================================================
+
+ein_in01,18,28,4	script	Guildsman#BLS	731,{
+	if (Upper == 1) {
+		mes "[Altiregen]";
+		mes "Ei, ei. Não tenho tempo para bate-papo, sou um cara bem ocupado. Tem todos esses Mercadores trabalhando duro para se tornarem Ferreiros.";
+		next;
+		mes "[Altiregen]";
+		mes "Espere um minuto, acho que já nos vimos antes.";
+		mes "Humm...";
+		next;
+		mes "[Altiregen]";
+		mes "Você é quem quebrou minha arma e fugiu? Ou é quem me torturou para que eu forjasse uma arma para você? Por que não consigo me lembrar?";
+		next;
+		mes "[Altiregen]";
+		mes ".......";
+		mes "Não consigo me lembrar de quem você é de jeito nenhum. Isso é um deja vu?";
+		next;
+		mes "[Altiregen]";
+		mes "Argh!! Isso está realmente me incomodando! Mas, ainda assim, sinto que há algo de especial em você. Ah, bem, tanto faz. Tenha um bom dia~";
+		close;
+	}
+	mes "[Altiregen]";
+	mes "Bem-vindo!";
+	mes "Nós somos os Trabalhadores do Aço,";
+	mes "a guilda dos Ferreiro.";
+	next;
+	mes "[Altiregen]";
+	mes "Nós derramamos o fervor";
+	mes "e a paixão de nossas almas em";
+	mes "nosso ofício. Nossas habilidades de derreter metal em novas armas";
+	mes "e ferramentas são verdadeiramente uma forma de arte!";
+	if (BaseClass >= Job_Thief) close;	// Custom expanded class check.
+	next;
+
+	// Third class check - precedes other BaseClass dialogue.
+	if (Class >= Job_Rune_Knight && Class <= Job_Baby_Mechanic2) {
+		mes "[Altiregen]";
+		mes "Você... parece um estranho. Mas, de alguma forma, parece que você tem relação com nossa guilda. Haha~";
+		mes "Estou certo?";
+		close;
+	}
+
+	if (BaseClass == Job_Novice) {
+		mes "[Altiregen]";
+		if (Sex == SEX_FEMALE) {
+			mes "Oh~";
+			mes "que moça";
+			mes "muito bonita!";
+		}
+		mes "Você tem interesse em";
+		mes "se tornar uma Ferreiro?";
+		next;
+		mes "[Altiregen]";
+		mes "Primeiro, você deve se tornar um Mercador antes de poder se tornar um Ferreiro. Vá para a cidade de Alberta para aprender o ofício de Mercador.";
+		close;
+	}
+	else if (BaseClass == Job_Swordman) {
+		mes "[Altiregen]";
+		mes "Oh, está interessado em forjar uma arma? Lamento decepcioná-lo, mas na verdade tenho muitos negócios para cuidar.";
+		close;
+	}
+	else if (BaseClass == Job_Archer) {
+		mes "[Altiregen]";
+		mes "Oh...";
+		mes "Não temos muito a lhe oferecer aqui. E você realmente não pode ajudar em nada a menos que saiba como fabricar coisas...";
+		close;
+	}
+	else if (BaseClass == Job_Mage) {
+		mes "[Altiregen]";
+		mes "Oh? O que um usuário de magia está fazendo aqui? Estou surpreso. Normalmente, esse tipo de trabalho bruto não é para o seu tipo intelectual.";
+		close;
+	}
+	else if (BaseClass == Job_Acolyte) {
+		mes "[Altiregen]";
+		mes "Oh! Estou certo ao presumir que você é um membro do Clero? Você poderia me abençoar antes de ir embora, por favor!";
+		close;
+	}
+	else if (BaseClass == Job_Thief) {
+		mes "[Altiregen]";
+		mes "Sinto muito...";
+		mes "Mas realmente não há nada para você roubar aqui. Bem, existem as Adagas que guardamos nos fundos, mas...";
+		close;
+	}
+	else if (BaseJob == Job_Alchemist) {
+		mes "[Altiregen]";
+		mes "Então, como vão os negócios da farmácia ultimamente?";
+		mes "Bem, meu negócio de forja não parece crescer mais.";
+		close;
+	}
+	else if (BaseJob == Job_Blacksmith) {
+		mes "[Altiregen]";
+		mes "Oh! Quanto tempo sem nos vermos.";
+		mes "Você veio comprar suprimentos do Christopher? Ultimamente, estou preso atrás desta mesa. Meu corpo está coçando para bater na velha bigorna.";
+		close;
+	}
+	else if (BaseJob == Job_Merchant) {
+		if (SkillPoint) {
+			mes "[Altiregen]";
+			mes "Você não pode mudar para a classe de Ferreiro sem primeiro usar todos os seus pontos de habilidade. Por favor, volte depois de usar seus pontos de habilidade com sabedoria.";
+			close;
+		}
+		if (BSMITH_Q == 0) {
+			mes "[Altiregen]";
+			mes "Por que você não para de lutar";
+			mes "para ganhar zeny como um Mercador e";
+			mes "se junta à classe de elite Ferreiro?";
+			mes "Se estiver interessado, preencha esta inscrição com seu nome";
+			mes "e Nível de Classe.";
+			next;
+			switch(select("Preencher inscrição.:Quais são os requisitos?:Humm, preciso pensar sobre isso.")) {
+			case 1:
+				if (SkillPoint) {
+					mes "[Altiregen]";
+					mes "Você não pode mudar para a classe de Ferreiro sem primeiro usar todos os seus pontos de habilidade. Por favor, volte depois de usar seus pontos de habilidade com sabedoria.";
+					close;
+				}
+				else if (JobLevel > 39 && BSMITH_Q == 0) {
+					mes "[Altiregen]";
+					mes "Hmmm...";
+					mes "Parece que você";
+					mes "atingiu o nível de classe";
+					mes "necessário.";
+					next;
+					mes "[Altiregen]";
+					mes "Veja, nós não aceitamos qualquer um em nossa guilda. Primeiro, aceitamos apenas Mercadores experientes com um desejo verdadeiro de se tornarem grandes Ferreiros. Vejamos...";
+					next;
+					mes "^3355FF*Folheando papéis*^000000";
+					next;
+					mes "[Altiregen]";
+					mes "Hmmm...";
+					mes "Um dos nossos Ferreiros em Einbech, ^8E6B23Geschupenschte^000000, nos enviou uma mensagem dizendo que está precisando de ajuda. Seu primeiro teste de caráter será ajudá-lo.";
+					next;
+					set BSMITH_Q,1;
+					setquest 2000;
+					mes "[Altiregen]";
+					mes "Tenha cuidado";
+					mes "e boa sorte!";
+					close;
+				}
+				else if (JobLevel < 40) {
+					mes "[Altiregen]";
+					mes "Hmmm, parece que você não tem experiência como Mercador. Exigimos que você tenha pelo menos Nível de Classe 40, sabe.";
+					next;
+					mes "[Altiregen]";
+					mes "Sinto-me mal em dispensá-lo depois de você ter vindo de tão longe, mas regras são regras. Sinto muito por decepcioná-lo, mas daremos as boas-vindas a você quando estiver pronto.";
+					close;
+				}
+			case 2:
+				mes "[Altiregen]";
+				mes "Você quer saber nossos requisitos? Primeiro, você precisa ter Nível de Classe 40 ou superior como Mercador. Segundo, você precisa passar em um teste que será aplicado pela guilda dos Ferreiro.";
+				next;
+				mes "[Altiregen]";
+				mes "O teste pode consistir em tarefas difíceis, mas definitivamente não é impossível. Você precisará entregar certos itens em diferentes áreas ao redor do mundo";
+				mes "para concluir o teste.";
+				close;
+			case 3:
+				mes "[Altiregen]";
+				mes "Hmmm...";
+				mes "Bem, espero";
+				mes "vê-lo novamente.";
+				close;
+			}
+		}
+		else if (BSMITH_Q > 0  && BSMITH_Q < 8) {
+			mes "[Altiregen]";
+			mes "Você ainda não foi embora?";
+			mes "Vá para Einbech e encontre ^8E6B23Geschupenschte^000000. Termine de ajudá-lo e, quando terminar, volte para mim.";
+			close;
+		}
+		else if (BSMITH_Q > 8 && BSMITH_Q < 15) {
+			mes "[Altiregen]";
+			mes "O trabalho que você fez para ^8E6B23Geschupenschte^000000 foi do seu agrado? Ele é conhecido por ser bem exigente...";
+			close;
+		}
+		else if (BSMITH_Q == 15) {
+			mes "[Altiregen]";
+			mes "Ótimo trabalho!!";
+			mes "Você passou";
+			mes "no primeiro teste...";
+			next;
+			mes "[Altiregen]";
+			mes "Hm? Você parece surpreso.";
+			mes "Acho que você não sabia que existe mais de um teste.";
+			mes "Haha, mas não se preocupe, você não terá que viajar tão longe.";
+			mes "Por favor, fale com o membro da guilda dentro do prédio para obter mais detalhes sobre seu próximo teste.";
+			next;
+			if (select("Eu quero mudar de classe logo! Mas... ah, bem.:Grrr! Já chega!") == 1) {
+				set BSMITH_Q,16;
+				changequest 2013,2014;
+				mes "[Altiregen]";
+				mes "Sinto muito, mas tenho certeza de que você entende, certo? Nós não podemos simplesmente aceitar qualquer um em";
+				mes "nossa guilda!";
+				next;
+				mes "[Altiregen]";
+				mes "Se não mantivermos nossos padrões,";
+				mes "não seremos capazes de manter a respeitabilidade da guilda dos Ferreiro!";
+				mes "Não podemos envergonhar nossa guilda dessa maneira! *Ahem* De qualquer forma, fale com o membro da guilda dentro do prédio agora.";
+				close;
+			}
+			mes "[Altiregen]";
+			mes "Você está dizendo que vai";
+			mes "desistir do processo de inscrição? Isso é um insulto à nossa guilda!";
+			mes "Saia daqui! Com esse tipo de atitude, pode esquecer de se tornar um membro da guilda dos Ferreiro!";
+			next;
+			mes "[Altiregen]";
+			mes "Você não tem espírito!";
+			mes "Se não consegue suportar isso, nunca será um Ferreiro!";
+			close;
+		}
+		else if (BSMITH_Q == 16) {
+			mes "[Altiregen]";
+			mes "Hum? Você ainda não falou com o membro da guilda?";
+			mes "Se ainda não o fez, sugiro que faça o quanto antes.";
+			close;
+		}
+		else if (BSMITH_Q == 17 && countitem(1005) > 0 && JobLevel > 39) {
+			mes "[Altiregen]";
+			if (ismounting()) {
+				mes "Você está montado em um mascote, por isso não pode mudar de classe.";
+				mes "Por favor, desmonte do seu mascote e tente novamente!";
+				close;
+			}
+			mes "Excelente, posso notar pelo brilho em seus olhos que você teve sucesso. Agora posso lhe conceder o dom da forja, a arte do Ferreiro.";
+			if (checkquest(2015) != -1) {
+				changequest 2015,2016;
+			}
+			next;
+			set .@joblvl,JobLevel;
+			callfunc "Job_Change",Job_Blacksmith;
+			callfunc "F_ClearJobVar";		// clears all job variables for the current player
+			mes "[Altiregen]";
+			mes "Lembre-se sempre de que somos criadores e artistas dos metais. Tenha cuidado para não cair nas armadilhas do egoísmo";
+			mes "e da ganância.";
+			next;
+			delitem 1005,1; //Hammer_Of_Blacksmith
+			completequest 2016;
+			mes "[Altiregen]";
+			mes "Aqui está um pequeno";
+			mes "presente para marcar o";
+			mes "início de sua";
+			mes "vida como um Ferreiro.";
+			mes "Parabéns!!!";
+			if (.@joblvl > 48)
+				getitem 999,30; //Steel
+			else 
+				getitem 999,5; //Steel
+			close;
+		}
+	}
+}
+
+ein_in01,201,27,3	script	Guildsman#alberta	63,{
+	mes "[Geschupenschte]";
+	mes "Olá!";
+	mes "Eu sou ^8E6B23Geschupenschte^000000,";
+	mes "um Ferreiro de profissão.";
+	mes "Prazer em conhecê-lo!";
+	next;
+	if (BaseJob == Job_Merchant) {
+		mes "[Geschupenschte]";
+		mes "Oh ho ho!";
+		mes "Você é um Mercador!";
+		mes "Excelente! Eu estava";
+		mes "precisando de um pouco de ajuda!";
+		next;
+		if (BSMITH_Q == 0) {
+			mes "[Geschupenschte]";
+			mes "Mas, é claro,";
+			mes "eu não iria incomodá-lo";
+			mes "se você estiver ocupado. Siga";
+			mes "seu caminho se precisar~";
+			next;
+			mes "[Geschupenschte]";
+			mes "Afinal...";
+			mes "eu deveria saber";
+			mes "como é";
+			mes "estar ocupado~";
+			close;
+		}
+		else if ((BSMITH_Q == 1) || (BSMITH_Q == 2)) {
+			if (BSMITH_Q == 1) {
+				mes "[Geschupenschte]";
+				mes "Estou correto em assumir que você é o ajudante enviado pela guilda dos Ferreiro? Não existem muitas pessoas confiáveis que eu possa contratar para me ajudar, então estou sempre";
+				mes "com falta de ajuda.";
+				next;
+				mes "[Geschupenschte]";
+				mes "Hmm, de qualquer forma,";
+				mes "você é o ajudante que foi enviado, certo? Ok, eu tenho algum trabalho para você que deve ser resolvido";
+				mes "imediatamente!";
+				next;
+				mes "[Geschupenschte]";
+				mes "Algum tempo atrás, eu tinha um garoto trabalhando para mim que não tinha experiência e comprou os suprimentos errados! Foi terrível...";
+				next;
+				mes "[Geschupenschte]";
+				mes "Qualquer um odiaria perder dinheiro por causa de um erro tolo como aquele. No entanto, tenho um trabalho um pouco mais difícil para você.";
+				next;
+				mes "[Geschupenschte]";
+				mes "Contudo, quero ter certeza de que você tem algum conhecimento básico como Mercador. Gostaria de lhe fazer algumas perguntas, se não se importar.";
+				next;
+				set .@selection,select("Sim.:Hum, posso ter um tempo para me preparar?");
+			}
+			else if (BSMITH_Q == 2) {
+				mes "[Geschupenschte]";
+				mes "Então, você";
+				mes "estudou um pouco";
+				mes "mais desta vez?";
+				next;
+				mes "[Geschupenschte]";
+				mes "Admito que é um pouco irracional esperar que alguém obtenha uma pontuação perfeita logo na primeira vez, então darei a você";
+				mes "uma folga...";
+				next;
+				mes "[Geschupenschte]";
+				mes "Você pode errar";
+				mes "um problema!";
+				mes "Muito bem, vamos começar";
+				mes "com as perguntas~";
+				next;
+			}
+			if (.@selection != 2) {
+				if (rand(2)) {
+					mes "[Geschupenschte]";
+					mes "1. Qual das regiões abaixo está combinada incorretamente";
+					mes "com seu item especial?";
+					next;
+					if (select("Morocc - Roupas de Gatuno:Alberta - Machado de Duas Mãos:Comodo - Poção de Fúria:Alberta - Maça Espada") == 4)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "2. Qual status pode";
+					mes "ser infligido com a";
+					mes "habilidade ^8E6B23Hammer Fall^000000?";
+					next;
+					if (select("Atordoar:Cegueira:Silêncio:Sono") == 1)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "3. Qual das habilidades a seguir não pode ser realizada";
+					mes "por um Mercador?";
+					next;
+					if (select("Vender:Desconto:Super Preço:Aumentar Agilidade") == 4)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "4. Onde você pode encontrar uma loja";
+					mes "que vende Gemas Azuis?";
+					next;
+					if (select("Alberta:Morocc:Geffen:Prontera") == 3)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "5. Onde o";
+					mes "Mercador de Ferramentas";
+					mes "está localizado em Geffen?";
+					next;
+					if (select("Direção das 8 horas a partir da praça da cidade:Direção das 11 horas a partir da praça da cidade:Direção das 6 horas a partir da praça da cidade:Direção das 5 horas a partir da praça da cidade") == 1)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "6. Qual arma";
+					mes "não pode ser usada";
+					mes "por um Mercador?";
+					next;
+					if (select("Estilete:Sabre com Anel:Corrente:Bíblia") == 4)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "7. Qual das seguintes opções";
+					mes "tem a maior taxa de defesa?";
+					next;
+					if (select("Calcinha:Casaco de Pele:Armadura de Madeira:Túnica de Seda") == 2)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "8. Para armas de nível 3,";
+					mes "qual é o limite ^8E6B23Seguro^000000";
+					mes "para aprimorar?";
+					next;
+					if (select("até + 3:até + 4:até + 5:até + 6") == 3)
+						set .@black_q,.@black_q+10;
+					mes "9. Que item";
+					mes "pode ser feito usando";
+					mes "o item ^8E6B23Troncos^000000?";
+					next;
+					if (select("Sakkat:Bandana Fantasma:Chapéu de Cabra Majestoso:Chifres de Antílope") == 1)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "10. A parte mais importante";
+					mes "de ser um Mercador é...?";
+					next;
+					select("Crédito:Integridade:Dinheiro:Retórica");
+					set .@black_q,.@black_q+10;
+				}
+				else {
+					mes "[Geschupenschte]";
+					mes "1. Dentre as cidades a seguir, qual não está combinada corretamente com sua especialidade?";
+					next;
+					if (select("Al De Baran - Folha de Yggdrasil:Alberta - Martelo:Comodo - Poção de Fúria:Al De Baran - Martelo") == 4)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "2. Quanto vale";
+					mes "um Jellopy?";
+					next;
+					if (select("1 Zenny:2 Zenny:3 Zenny:4 Zenny") == 3)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "3. O que é necessário";
+					mes "para um Mercador usar";
+					mes "a habilidade ^8E6B23Vending^000000?";
+					next;
+					if (select("Deve ter um Carrinho.:Deve ter itens para vender.:Deve estar usando uma arma.:Deve estar usando uma armadura.") == 1)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "4. Onde você pode";
+					mes "mudar de classe para";
+					mes "se tornar um Mercador?";
+					next;
+					if (select("Alberta:Morocc:Geffen:Prontera") == 1)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "5. Onde fica o";
+					mes "Comerciante de Armas";
+					mes "em Morocc?";
+					next;
+					if (select("7 horas a partir do centro da cidade:11 horas a partir do centro da cidade:6 horas a partir do centro da cidade:5 horas a partir do centro da cidade") == 4)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "6. Qual arma";
+					mes "um Mercador";
+					mes "não pode usar?";
+					next;
+					if (select("Adaga Principal:Claymore:Mangual:Machado de Duas Mãos") == 2)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "7. Qual dos itens a seguir";
+					mes "tem a maior taxa de defesa?";
+					next;
+					if (select("Roupa de Baixo (Panties):Casaco de Pele (Mink Coat):Traje de Madeira (Wooden Mail):Veste de Seda (Silk Robe)") == 2)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "8. Para armas de nível 3,";
+					mes "qual é o limite ^8E6B23Seguro^000000";
+					mes "para aprimoramento?";
+					next;
+					if (select("até +3:até +4:até +5:até +6") == 3)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "9. Qual monstro";
+					mes "NÃO derruba Minério de Ferro?";
+					next;
+					if (select("Chon Chon:Chon Chon de Aço:Zerom:Anolian") == 4)
+						set .@black_q,.@black_q+10;
+					mes "[Geschupenschte]";
+					mes "10. O que é mais";
+					mes "importante para um Mercador?";
+					next;
+					select("Retórica:Crédito:Dinheiro:Experiência");
+					set .@black_q,.@black_q+10;
+				}
+				mes "[Geschupenschte]";
+				mes "Hum. Você fez um bom trabalho!";
+				next;
+				mes "[Geschupenschte]";
+				mes "Vamos ver... sua pontuação é..." + .@black_q + "pontos.";
+				if (.@black_q == 100) {
+					set BSMITH_Q,3;
+					if (checkquest(2001) != -1) {
+						changequest 2001,2002;
+					} else {
+						changequest 2000,2002;
+					}
+					mes "Oh ho ho~";
+					mes "Você não terá";
+					mes "nenhum problema";
+					mes "com essa pontuação!";
+					next;
+					mes "[Geschupenschte]";
+					mes "Vou confiar um trabalho a você!";
+					mes "Dê-me um pouco de tempo para fazer os preparativos necessários.";
+					mes "Quando você voltar, estarei pronto!";
+					close;
+				}
+				set BSMITH_Q,2;
+				if (checkquest(2001) == -1) {
+					changequest 2000,2001;
+				}
+				mes ".............";
+				next;
+				mes "[Geschupenschte]";
+				if (BSMITH_Q == 2) {
+					mes "Como devo dizer isso?";
+					mes "Como você falhou de novo?!";
+					mes "Se você planeja realizar seus deveres desta maneira, não posso confiar nenhum tipo de trabalho a você...";
+					close;
+				}
+				mes "Hum...";
+				mes "Dói-me dizer isso, mas parece que você precisa estudar um pouco mais. Você nunca poderá ser";
+				mes "um Ferreiro com";
+				mes "esta pontuação!";
+				close;
+			}
+			mes "[Geschupenschte]";
+			mes "Ah, claro que não me importo se você voltar um pouco mais tarde. Estar preparado evita desastres";
+			mes "mais tarde, afinal. Não há mal nenhum em";
+			mes "ser cuidadoso~";
+			close;
+		}
+		/*
+		else if (BSMITH_Q == 2) {
+			mes "[Geschupenschte]";
+			mes "Então, você";
+			mes "estudou um pouco";
+			mes "mais desta vez?";
+			next;
+			mes "[Geschupenschte]";
+			mes "Admito que é muito irracional esperar que alguém obtenha a pontuação perfeita na primeira vez, então vou te dar";
+			mes "uma pequena pausa...";
+			next;
+			mes "[Geschupenschte]";
+			mes "Você pode errar";
+			mes "uma questão!";
+			mes "Muito bem, vamos começar";
+			mes "com as perguntas~";
+			next;
+			goto L_AskQuestions;
+		}
+		*/
+		else if (BSMITH_Q == 3) {
+			mes "[Geschupenschte]";
+			mes "Hum...";
+			mes "Agora, onde estavam";
+			mes "aqueles formulários de pedido...";
+			next;
+			mes "^3355FF*Embaralhando papéis*";
+			mes "*Sussurro de papéis*^000000";
+			next;
+			mes "[Geschupenschte]";
+			mes "Oh! Aqui está!";
+			mes "Este é o pedido que";
+			mes "estava mais";
+			mes "atrasado...";
+			mes "Heh heh~";
+			next;
+			mes "[Geschupenschte]";
+			mes "Bem, para fazer";
+			mes "isso você precisará de...";
+			next;
+			switch(rand(1,5)) {
+			//Steel, Rotten_Bandage, Blue_Gemstone, Arc_Wand
+			case 1: setarray .@items[0], 999,1, 930,1, 717,2, 1610,1, 4; changequest 2002,2003; break;
+			//Sparkling_Dust, Skel_Bone, Zargon, Gladius
+			case 2: setarray .@items[0], 1001,2, 932,1, 912,1, 1219,1, 5; changequest 2002,2004; break;
+			//Coal, Shell, Boody_Red, Tsurugi
+			case 3: setarray .@items[0], 1003,1, 935,2, 990,2, 1119,1, 6; changequest 2002,2005; break;
+			//Iron_Ore, Eye_Bandage, Blue_Gemstone, Arbalest
+			case 4: setarray .@items[0], 1002,1, 2212,1, 717,2, 1713,1, 7; changequest 2002,2006; break;
+			//Iron, Green_Herb, Animal's_Skin, Ring_Pommel_Saber
+			default: setarray .@items[0], 998,1, 511,1, 919,2, 1122,1, 8; changequest 2002,2007; break;
+			}
+			set BSMITH_Q,.@items[8];
+			mes "[Geschupenschte]";
+			mes "^8E6B23"+.@items[1]+" "+getitemname(.@items[0])+"^000000,";
+			mes "^8E6B23"+.@items[3]+" "+getitemname(.@items[2])+"^000000,";
+			mes "^8E6B23"+.@items[5]+" "+getitemname(.@items[4])+"^000000, e";
+			mes "^8E6B23"+.@items[7]+" "+getitemname(.@items[6])+"^000000, do tipo";
+			mes "que você pode comprar";
+			mes "em uma loja de NPC.";
+			next;
+			mes "[Geschupenschte]";
+			mes "Coletar esses itens será seu teste. Coincidentemente, também é uma boa maneira de eu economizar dinheiro. Vou repetir o que você precisará trazer para mim...";
+			next;
+			mes "[Geschupenschte]";
+			mes "Ok~";
+			mes "Boa sorte";
+			mes "no seu primeiro trabalho!";
+			close;
+		}
+		else if (BSMITH_Q > 3 && BSMITH_Q < 9) {
+			switch(BSMITH_Q) {
+			case 4: setarray .@items[0], 999,1, 930,1, 717,2, 1610,1, 9; break;
+			case 5: setarray .@items[0], 1001,2, 932,1, 912,1, 1219,1, 10; break;
+			case 6: setarray .@items[0], 1003,1, 935,2, 990,2, 1119,1, 11; break;
+			case 7: setarray .@items[0], 1002,1, 2212,1, 717,2, 1713,1, 12; break;
+			case 8: setarray .@items[0], 998,1, 511,1, 919,2, 1122,1, 13; break;
+			}
+			mes "[Geschupenschte]";
+			mes "Ah, você voltou!";
+			mes "Você trouxe";
+			mes "tudo o que";
+			mes "eu pedi?";
+			next;
+			if (countitem(.@items[0]) >= .@items[1] && countitem(.@items[2]) >= .@items[3] && countitem(.@items[4]) >= .@items[5] && countitem(.@items[6]) >= .@items[7]) {
+				mes "[Geschupenschte]";
+				mes "Espere...";
+				mes "Eu não pedi";
+				mes "para você trazer 3 Aços?";
+				next;
+				mes "[Geschupenschte]";
+				mes "Oh, acho que eram";
+				mes "dois, afinal. Vamos ver...";
+				mes "Sim, você pegou tudo!";
+				mes "Agora, dê-me um segundo.";
+				next;
+				mes "[Geschupenschte]";
+				mes "Oh, você deve se certificar de que não está carregando ^FF0000mais de um"+getitemname(.@items[6])+"^000000, você deveria ter apenas um"+getitemname(.@items[6])+"que comprou em uma loja de NPC no seu inventário.";
+				next;
+				if (select("Oh, você poderia me dar um segundo?:Oh, eu trouxe o que você pediu.") == 1) {
+					mes "[Geschupenschte]";
+					mes "Hmmm, seria";
+					mes "uma boa ideia colocar o";
+					mes "resto dos seus itens";
+					mes "no Armazém da Kafra.";
+					close;
+				}
+				mes "[Geschupenschte]";
+				mes "Certo.";
+				mes "Ótimo~!!";
+				next;
+				mes "[Geschupenschte]";
+				mes "^3355FF*Clang...!*^000000";
+				next;
+				mes "[Geschupenschte]";
+				mes "^3355FF*Crac! Crac!*^000000";
+				next;
+				delitem .@items[0],.@items[1];
+				delitem .@items[2],.@items[3];
+				delitem .@items[4],.@items[5];
+				delitem .@items[6],.@items[7];
+				set BSMITH_Q,.@items[8];
+				mes "[Geschupenschte]";
+				mes "Uauuu~~~";
+				mes "Tudo pronto...";
+				switch(BSMITH_Q) {
+				case 9:
+					mes "Ok, agora leve isso para ^8E6B23Baisulist^000000 em Geffen no Reino de Rune-Midgarts. Simplesmente entregue e me traga o recibo.";
+					getitem 1610,1; //Arc_Wand
+					if (checkquest(2003) != -1) {
+						changequest 2003,2008;
+					}
+					next;
+					mes "[Geschupenschte]";
+					mes "Hum...?";
+					mes "Por que está com essa cara?";
+					mes "Este não é um";
+					mes "Cajado Arcano comum! Olhe de perto";
+					mes "no cabo...";
+					next;
+					mes "^3355FFO cabo diz:";
+					mes "'Super Cajado Arcano";
+					mes "de Geschupenschte";
+					mes "Marca 2.' Ele parece";
+					mes "ter uma sensação";
+					mes "completamente diferente.^000000";
+					next;
+					mes "[Geschupenschte]";
+					mes "De qualquer forma, leve isto";
+					mes "para ^8E6B23Baisulist^000000 em Geffen no Reino de Rune-Midgarts,";
+					break;
+				case 10:
+					mes "Ok, agora leve isso para ^8E6B23Wickebine^000000 em Morocc no Reino de Rune-Midgarts. Simplesmente entregue e me traga o recibo.";
+					getitem 1219,1; //Gladius
+					if (checkquest(2004) != -1) {
+						changequest 2004,2009;
+					}
+					next;
+					mes "[Geschupenschte]";
+					mes "Hum...?";
+					mes "Por que está com essa cara?";
+					mes "Este não é um";
+					mes "Gladius comum! Olhe de perto";
+					mes "no cabo...";
+					next;
+					mes "^3355FFO cabo diz:";
+					mes "'Super Gladius";
+					mes "de Geschupenschte";
+					mes "Marca 2.' Realmente parece";
+					mes "ter uma sensação";
+					mes "completamente diferente.^000000";
+					next;
+					mes "[Geschupenschte]";
+					mes "De qualquer forma, leve isto";
+					mes "para ^8E6B23Wickebine^000000 em Morocc no Reino de Rune-Midgarts,";
+					break;
+				case 11:
+					mes "Ok, agora leve isso para ^8E6B23Krongast^000000 em Lighthalzen. Simplesmente entregue e me traga o recibo.";
+					getitem 1119,1; //Tsurugi
+					if (checkquest(2005) != -1) {
+						changequest 2005,2010;
+					}
+					next;
+					mes "[Geschupenschte]";
+					mes "Hum...?";
+					mes "Por que está com essa cara?";
+					mes "Este não é um";
+					mes "Tsurugi comum! Olhe de perto";
+					mes "na lâmina...";
+					next;
+					mes "^3355FFA lâmina diz:";
+					mes "'Tsurugi de Corte Fino";
+					mes "de Geschupenschte";
+					mes "Especial.'";
+					mes "Parece ter uma sensação";
+					mes "completamente diferente";
+					mes "de Tsurugis normais...^000000";
+					next;
+					mes "[Geschupenschte]";
+					mes "De qualquer forma, leve isto";
+					mes "para ^8E6B23Krongast^000000 em Lighthalzen";
+					break;
+				case 12:
+					mes "Ok, agora leve isso para ^8E6B23Talpiz^000000 em payon no Reino de Rune-Midgarts. Simplesmente entregue e me traga o recibo.";
+					getitem 1713,1; //Arbalest
+					if (checkquest(2006) != -1) {
+						changequest 2006,2011;
+					}
+					next;
+					mes "[Geschupenschte]";
+					mes "Hum...?";
+					mes "Por que está com essa cara?";
+					mes "Este não é um";
+					mes "Arbalest comum! Olhe de perto";
+					mes "no arco...";
+					next;
+					mes "^3355FFO arco diz:";
+					mes "Arbalest Edição de Luxo";
+					mes "de Geschupenschte.";
+					mes "Parece muito mais luxuoso";
+					mes "que Arbalests comuns.^000000";
+					next;
+					mes "[Geschupenschte]";
+					mes "De qualquer forma, leve isto";
+					mes "para ^8E6B23Talpiz^000000 em payon no Reino de Rune-Midgarts,";
+					break;
+				case 13:
+					mes "Ok, agora leve isso para ^8E6B23Bismarc^000000 em Hugel. Simplesmente entregue e me traga o recibo.";
+					getitem 1122,1; //Ring_Pommel_Saber
+					if (checkquest(2007) != -1) {
+						changequest 2007,2012;
+					}
+					next;
+					mes "[Geschupenschte]";
+					mes "Hum...?";
+					mes "Por que está com essa cara?";
+					mes "Este não é um";
+					mes "Sabre Comum!";
+					mes "Olhe de perto";
+					mes "no cabo...";
+					next;
+					mes "^3355FFO cabo diz:";
+					mes "'Sabre de Pomo de";
+					mes "Anel com Ervas Verdes";
+					mes "de Geschupenschte";
+					mes "Versão 2.' Ele parece";
+					mes "ter uma sensação";
+					mes "completamente diferente.^000000";
+					next;
+					mes "[Geschupenschte]";
+					mes "O poder das Ervas Verdes, impregnado nesta espada, pode ser muito útil! Você pode salvar alguém de morrer lentamente por veneno esfaqueando-o rapidamente com esta arma!";
+					next;
+					mes "[Geschupenschte]";
+					mes "De qualquer forma, leve isto";
+					mes "para ^8E6B23Bismarc^000000 em Hugel";
+				}
+				mes "e não se esqueça";
+				mes "do recibo!";
+				close;
+			}
+			else {
+				mes "[Geschupenschte]";
+				mes "Você ainda não";
+				mes "trouxe todos os itens.";
+				mes "Precisa que eu te lembre";
+				mes "ou algo assim? Traga-me...";
+				next;
+				mes "[Geschupenschte]";
+				mes "^8E6B23"+.@items[1]+" "+getitemname(.@items[0])+"^000000,";
+				mes "^8E6B23"+.@items[3]+" "+getitemname(.@items[2])+"^000000,";
+				mes "^8E6B23"+.@items[5]+" "+getitemname(.@items[4])+"^000000, e";
+				mes "^8E6B23"+.@items[7]+" "+getitemname(.@items[6])+"^000000, do tipo";
+				mes "que você pode comprar";
+				mes "em uma loja de NPC.";
+				next;
+				mes "[Geschupenschte]";
+				mes "Agora, certifique-se de ter";
+				mes "tudo o que preciso quando";
+				mes "você voltar. Lembre-se,";
+				mes "isto é um teste! Você não pode";
+				mes "ser um Ferreiro se";
+				mes "for preguiçoso!";
+				close;
+			}
+		}
+		else if (BSMITH_Q > 8 && BSMITH_Q < 14) {
+			mes "[Geschupenschte]";
+			mes "O que você ainda";
+			mes "está fazendo aqui?";
+			mes "Apresse-se e entregue";
+			mes "o pacote~!";
+			mes "Esqueceu";
+			mes "para onde ir?";
+			next;
+			mes "[Geschupenschte]";
+			if (BSMITH_Q == 9) {
+				mes "Em Geffen, na posição";
+				mes "de 11 horas a partir do centro da cidade, você encontrará ^8E6B23Baisulist^000000. E não se esqueça do recibo.";
+			}
+			else if (BSMITH_Q == 10) {
+				mes "Encontre o vendedor de Maças";
+				mes "^8E6B23Wickebine^000000 em Morocc. E não se esqueça do recibo.";
+			}
+			else if (BSMITH_Q == 11) {
+				mes "Em Lighthalzen, na posição de 6 horas a partir do centro da cidade, você encontrará ^8E6B23Krongast^000000 perto da loja de armas. E não se esqueça do recibo.";
+			}
+			else if (BSMITH_Q == 12) {
+				mes "Em payon, na posição de 5 horas a partir do centro da cidade, você encontrará ^8E6B23Talpiz^000000. E não se esqueça do recibo.";
+			}
+			else {
+				mes "Em Hugel, na posição de 1 hora a partir do centro da cidade, você encontrará ^8E6B23Bismarc^000000 perto do Dirigível. E não se esqueça do recibo.";
+			}
+			close;
+		}
+		else if (BSMITH_Q == 14) {
+			mes "[Geschupenschte]";
+			mes "Hmmm...?";
+			mes "Você";
+			mes "completou";
+			mes "a entrega?";
+			mes "Deixe-me ver esse recibo~";
+			next;
+			if (select("Sim, senhor, aqui está.:Recibo? Eu, hum, tenho ele em algum lugar.") == 1) {
+				if (countitem(1073) > 0) {
+					set BSMITH_Q,15;
+					delitem 1073,1; //Merchant_Voucher_1
+					if (checkquest(2008) != -1) {
+						changequest 2008,2013;
+					}
+					else if (checkquest(2009) != -1) {
+						changequest 2009,2013;
+					}
+					else if (checkquest(2010) != -1) {
+						changequest 2010,2013;
+					}
+					else if (checkquest(2011) != -1) {
+						changequest 2011,2013;
+					}
+					else {
+						changequest 2012,2013;
+					}
+					mes "[Geschupenschte]";
+					mes "Oh ho ho~";
+					mes "Ótimo!";
+					mes "Você é realmente";
+					mes "um grande Mercador!";
+					next;
+					mes "[Geschupenschte]";
+					mes "Bom trabalho!";
+					mes "Retorne para ^8E6B23Altiregen^000000 em Einbroch, o rapaz que você conheceu quando se candidatou ao trabalho de Ferreiro.";
+					next;
+					mes "[Geschupenschte]";
+					mes "Tenho fé de que você";
+					mes "será um grande Ferreiro!";
+					close;
+				}
+				set BSMITH_Q,3;
+				mes "[Geschupenschte]";
+				mes "Você quer dizer...";
+				mes "Você não conseguiu";
+				mes "um recibo?";
+				mes "O quê...?";
+				next;
+				mes "[Geschupenschte]";
+				mes "Um recibo é";
+				mes "o melhor amigo de um Mercador!";
+				mes "É essencial para o seu trabalho!";
+				mes "Você terá que começar seu";
+				mes "teste tudo de novo!";
+				close;
+			}
+			mes "[Geschupenschte]";
+			mes "Volte quando";
+			mes "encontrar o recibo~";
+			mes "Você não esqueceu";
+			mes "de pegar um recibo.";
+			mes "Certo...?";
+			close;
+		}
+		else if (BSMITH_Q == 15) {
+			mes "[Geschupenschte]";
+			mes "Muito obrigado";
+			mes "pela";
+			mes "sua ajuda.";
+			mes "Retorne para Einbroch";
+			mes "e veja o ^8E6B23Altiregen^000000!";
+			close;
+		}
+		mes "[Geschupenschte]";
+		mes "Hum...?";
+		mes "Você já terminou";
+		mes "seu teste aqui comigo!";
+		mes "E, surpreendentemente, não";
+		mes "preciso de mais ajuda hoje.";
+		close;
+	}
+	else {
+		mes "[Geschupenschte]";
+		mes "Ser";
+		mes "um Ferreiro";
+		mes "é realmente ótimo!";
+		mes "Você não acha?";
+		mes "Mwahahahahah!!";
+		close;
+	}
+}
+
+geffen,46,164,1	script	Baisulist#BLS	69,{
+	if (BSMITH_Q == 9 && countitem(1610) > 0) {
+		mes "[Baisulist]";
+		mes "Ah, olá!";
+		mes "Você veio";
+		mes "para entregar meu";
+		mes "Cajado Arcano?";
+		next;
+		mes "[Baisulist]";
+		mes "Tem certeza de que é isso que eu pedi, né? Quero dizer, se tiver sido usado,";
+		mes "eu não quero.";
+		next;
+		if (select("Opa, esse é um dos itens que eu uso...:Tenho certeza! É novinho em folha!") == 1) {
+			mes "[Baisulist]";
+			mes "Bem...";
+			mes "Acho que posso";
+			mes "esperar um pouco mais.";
+			mes "Por favor, apresse-se";
+			mes "com a minha entrega~";
+			close;
+		}
+		mes "[Baisulist]";
+		mes "Você tem";
+		mes "certeza absoluta?";
+		set BSMITH_Q,14;
+		delitem 1610,1; //Arc_Wand
+		next;
+		mes "[Baisulist]";
+		mes "Muito obrigado por viajar até aqui. Aquele Geschupenschte, por favor, dê um tapa nele por mim quando o encontrar por ter demorado tanto com este pedido...";
+		next;
+		mes "[Baisulist]";
+		mes "Por favor, espere";
+		mes "um segundo, deixe-me";
+		mes "lhe dar um recibo~";
+		next;
+		getitem 1073,1; //Merchant_Voucher_1
+		mes "[Baisulist]";
+		mes "Aqui está.";
+		mes "Muito obrigado!";
+		mes "Oh, e boa sorte~";
+		mapannounce "geffen","Ei," +strcharinfo(0)+ ", thank you so much for the delivery~",bc_map;
+		close;
+	}
+	else if (BSMITH_Q == 14) {
+		mes "[Baisulist]";
+		mes "Muito obrigado";
+		mes "pela";
+		mes "entrega~";
+		close;
+	}
+	else {
+		mes "[Baisulist]";
+		mes "Oh...";
+		mes "Faz um bom tempo";
+		mes "desde que estive";
+		mes "em Alberta.";
+		next;
+		mes "[Baisulist]";
+		mes "Encomendei algo";
+		mes "de lá faz um tempo,";
+		mes "mas ainda não recebi";
+		mes "minha entrega...";
+		next;
+		mes "[Baisulist]";
+		mes "Eu me pergunto...";
+		mes "Será que a Guilda dos Ferreiro";
+		mes "está com falta de pessoal? Não consigo pensar em outro motivo para o atraso...";
+		next;
+		mes "[Baisulist]";
+		mes "Quando receberei";
+		mes "meu Arc Wand especial?";
+		close;
+	}
+}
+
+morocc,27,112,4	script	Wickebine#BLS	725,{
+	if (BSMITH_Q == 10 && countitem(1219) > 0) {
+		cutin "Job_Black_hucke01",2;
+		mes "[Wickebine]";
+		mes "...!";
+		mes "Está aqui!";
+		next;
+		mes "[Wickebine]";
+		mes "Isso é o que eu pedi, certo?";
+		mes "Não quero nenhuma Gladius usada ou velha que você possa ter!";
+		next;
+		if (select("Opa, não essa.:Garanto-lhe que é nova.") == 1) {
+			cutin "Job_Black_hucke03",2;
+			mes "[Wickebine]";
+			mes "Ooooh...!";
+			mes "Depressa";
+			mes "com a minha gladius~";
+			next;
+			mes "- Ela parece estar chateada. -";
+			close2;
+			cutin "Job_Black_hucke03",255;
+			end;
+		}
+		cutin "Job_Black_hucke02",2;
+		mes "[Wickebine]";
+		mes "Hah hah hah!";
+		mes "Finalmente! Agora...";
+		mes "Deixe-me dar";
+		mes "uma olhada!";
+		next;
+		mes "- Ela parece muito feliz. -";
+		next;
+		set BSMITH_Q,14;
+		delitem 1219,1; //Gladius
+		cutin "Job_Black_hucke01",2;
+		mes "[Wickebine]";
+		mes "Você é da";
+		mes "Guilda dos Ferreiro de Einbroch?";
+		mes "Entregue esta mensagem ao Geschupenschte!";
+		next;
+		cutin "Job_Black_hucke03",2;
+		mes "[Wickebine]";
+		mes "'^660000Você está atrasado!";
+		mes "Você sabe há quanto tempo";
+		mes "eu estou esperando?!^000000'";
+		next;
+		cutin "Job_Black_hucke02",2;
+		mes "[Wickebine]";
+		mes "Mas, este também é";
+		mes "um item criado com maestria.";
+		mes "Diga a ele que estou satisfeita com a qualidade do trabalho.";
+		next;
+		getitem 1073,1; //Merchant_Voucher_1
+		emotion ET_THROB;
+		mes "[Wickebine]";
+		mes "Aqui está o recibo.";
+		mes "Acho que você fez";
+		mes "um bom trabalho.";
+		mapannounce "morocc","Obrigado pela entrega," + strcharinfo(0) + "~!",bc_map;
+		close2;
+		cutin "Job_Black_hucke02",255;
+		end;
+	}
+	else if (BSMITH_Q == 14) {
+		emotion ET_THROB;
+		cutin "Job_Black_hucke02",2;
+		mes "[Wickebine]";
+		mes "Obrigado pela entrega.";
+		close2;
+		cutin "Job_Black_hucke02",255;
+		end;
+	}
+	else {
+		cutin "Job_Black_hucke03",2;
+		mes "[Wickebine]";
+		mes "...";
+		next;
+		mes "[Wickebine]";
+		mes "...";
+		mes "......";
+		next;
+		mes "[Wickebine]";
+		mes "Eles estão atrasados.";
+		mes "Eles estão atrasados,";
+		mes "eles estão atrasados,";
+		mes "eles estão atrasados~!";
+		next;
+		mes "[Wickebine]";
+		mes "Quanto tempo leva para algo ser enviado pelo Geschupenschte? Normalmente, a Guilda dos Ferreiro de Geffen é bem pontual...";
+		next;
+		emotion ET_THROB;
+		mes "[Wickebine]";
+		mes "Ooohh...";
+		mes "Isso é muito";
+		mes "frustrante...";
+		close2;
+		cutin "Job_Black_hucke03",255;
+		end;
+	}
+}
+
+lighthalzen,209,80,4	script	Krongast#BLS	734,{
+	if (BSMITH_Q == 11 && countitem(1119) > 0) {
+		mes "[Krongast]";
+		mes "Ohhhhhh~";
+		mes "É aqui?";
+		mes "Muito bom.";
+		mes "Deixe-me dar uma olhada.";
+		next;
+		mes "[Krongast]";
+		mes "Então você tem certeza de que este é o item";
+		mes "que eu pedi, né? Eu não o quereria se tivesse sido usado.";
+		next;
+		if (select("Opa, este aqui foi usado!:Acabou de ser feito, então é novo.") == 1) {
+			mes "[Krongast]";
+			mes "Hmmm!";
+			mes "Por favor, entregue";
+			mes "a sword certa!";
+			mes "Eu já esperei";
+			mes "tempo demais...";
+			close;
+		}
+		mes "[Krongast]";
+		mes "Você conferiu duas vezes?";
+		mes "Tudo bem então, eu vou levar!";
+		next;
+		set BSMITH_Q,14;
+		delitem 1119,1; //Tsurugi
+		mes "[Krongast]";
+		mes "Oh ho...";
+		mes "Isto é bom.";
+		mes "Muito melhor do que";
+		mes "eu esperava.";
+		next;
+		mes "[Krongast]";
+		mes "Com esta espada...";
+		mes "Meus movimentos especiais serão ainda mais poderosos! Talvez eu até consiga aperfeiçoar minhas técnicas de ataque rápido! Eu adorei!";
+		next;
+		mes "[Krongast]";
+		mes "Tudo bem, então.";
+		mes "Deixe-me lhe dar";
+		mes "um recibo.";
+		next;
+		getitem 1073,1; //Merchant_Voucher_1
+		mes "[Krongast]";
+		mes "Aqui está";
+		mes "seu recibo.";
+		mes "Obrigado por";
+		mes "fazer negócios!";
+		mapannounce "lighthalzen",strcharinfo(0)+"... Obrigado pela entrega.",bc_map;
+		close;
+	}
+	else if (BSMITH_Q == 14) {
+		mes "[Krongast]";
+		mes "Obrigado";
+		mes "pela entrega.";
+		close;
+	}
+	else {
+		mes "[Krongast]";
+		mes "...";
+		next;
+		mes "[Krongast]";
+		mes "...";
+		mes "......";
+		next;
+		mes "[Krongast]";
+		mes "Quando a espada que";
+		mes "eu encomendei finalmente chegará?";
+		mes "Eu preciso experimentar minha habilidade suprema, ^2F4F4FFine Edge^000000 com ela.";
+		next;
+		mes "[Krongast]";
+		mes "Ahhhhhhh!";
+		mes "Eu preciso";
+		mes "ter aquela espada!";
+		close;
+	}
+}
+
+payon,214,79,4	script	Talpiz#BLS	59,{
+	if (BSMITH_Q == 12 && countitem(1713) > 0) {
+		mes "[Talpiz]";
+		mes "Oh~";
+		mes "Finalmente chegou?";
+		mes "O pacote que eu encomendei?";
+		next;
+		mes "[Talpiz]";
+		mes "Hum, isso é o que eu pedi, certo? Não quero uma Arbalest que já tenha sido usada antes.";
+		next;
+		if (select("Opa, essa é usada.:Tenho certeza de que é nova.") == 1) {
+			mes "[Talpiz]";
+			mes "Hmmmm.";
+			mes "Por favor, apresse-se";
+			mes "e traga o";
+			mes "item correto.";
+			mes "Já esperei";
+			mes "tempo demais...";
+			close;
+		}
+		mes "[Talpiz]";
+		mes "Então, tem certeza?";
+		mes "Deixe-me dar uma olhada...";
+		next;
+		set BSMITH_Q,14;
+		delitem 1713,1; //Arbalest
+		mes "[Talpiz]";
+		mes "*assobio*";
+		mes "Muito bom!!";
+		next;
+		mes "[Talpiz]";
+		mes "Este é um item personalizado feito com verdadeira qualidade. Adorei que existe um estojo para um tapa-olho! Eu realmente, realmente adoro isso~";
+		next;
+		mes "[Talpiz]";
+		mes "Obrigado!";
+		mes "Por algo dessa qualidade,";
+		mes "posso até vender por um preço alto mesmo depois de ter usado!";
+		next;
+		getitem 1073,1; //Merchant_Voucher_1
+		mes "[Talpiz]";
+		mes "Aqui!";
+		mes "Por favor, pegue";
+		mes "seu recibo.";
+		mes "Agradeço muito";
+		mes "pelo seu trabalho árduo.";
+		mapannounce "payon","Obrigado," +strcharinfo(0)+ ", you really delivered. Everytime I look at this, I love it even more~",bc_map;
+		close;
+	}
+	else if (BSMITH_Q == 14) {
+		mes "[Talpiz]";
+		mes "Sério,";
+		mes "não consigo dizer o";
+		mes "suficiente. Este é um";
+		mes "trabalho de primeira qualidade~!";
+		close;
+	}
+	else {
+		mes "[Talpiz]";
+		mes "Eh...";
+		mes "Quando o meu";
+		mes "pedido chegará?";
+		next;
+		mes "[Talpiz]";
+		mes "Uma Arbalest feita sob medida";
+		mes "com um estojo de qualidade para guardar seus tapa-olhos. Só uma pessoa pode fazer algo assim...";
+		next;
+		mes "[Talpiz]";
+		mes "Ahhhhhh...";
+		mes "A espera";
+		mes "é insuportável!";
+		close;
+	}
+}
+
+hugel,168,183,1	script	Bismarc#BLS	118,{
+	if (BSMITH_Q == 13 && countitem(1122) > 0) {
+		mes "[Bismarc]";
+		mes "Meu Deus...";
+		mes "Você enviou";
+		mes "um anjo...?";
+		mes "É esse o Ring Pommel Saber";
+		mes "que eu pedi? É minha única esperança...";
+		next;
+		mes "[Bismarc]";
+		mes "^666666*Huuuk*^000000 Este é o que eu pedi, certo? Eu precisei de um feito especialmente";
+		mes "para parar este veneno...";
+		next;
+		if (select("Opa, este é o meu próprio Ring Pommel Saber.:Tenho certeza de que é este.") == 1) {
+			mes "[Bismarc]";
+			mes "N-Nãooo...";
+			mes "Depressa...!";
+			mes "Eu preciso daquela";
+			mes "espada pelo seu";
+			mes "an...tí...d-doto!";
+			next;
+			mes "^3355FFParece que";
+			mes "ele está morrendo lentamente...!";
+			mes "É melhor você se apressar.^000000";
+			close;
+		}
+		mes "[Bismarc]";
+		mes "^666666*Ghklk*^000000";
+		mes "Me dê isso...!";
+		mes "Por favooooor!";
+		next;
+		set BSMITH_Q,14;
+		delitem 1122,1; //Ring_Pommel_Saber
+		mes "^3355FFBismarc esfaqueia";
+		mes "a si mesmo, repetidamente,";
+		mes "com o Ring Pommel Saber";
+		mes "que foi imbuído com";
+		mes "o poder de Ervas Verdes.^000000";
+		next;
+		mes "[Bismarc]";
+		mes "^666666*Ghyklk*^000000";
+		mes "*Ofegante*";
+		next;
+		mes "[Bismarc]";
+		mes "Por favor...";
+		mes "Ajude-me a levantar.";
+		mes "O veneno ainda";
+		mes "está correndo";
+		mes "pelo meu corpo...";
+		next;
+		mes "[Bismarc]";
+		mes "Ai, NÃO!!";
+		mes "ESTÁ QUEIMANDO!";
+		next;
+		mes "[Bismarc]";
+		mes "*Ofegante*";
+		mes "*Ufa* Tudo bem,";
+		mes "posso sentir o";
+		mes "antídoto funcionando agora.";
+		mes "Era exatamente o que eu precisava.";
+		next;
+		getitem 1073,1; //Merchant_Voucher_1
+		mes "[Bismarc]";
+		mes "Aqui está";
+		mes "seu recibo.";
+		mes "P-pegue...!";
+		mes "É seu!";
+		mapannounce "hugel","Obrigado," +strcharinfo(0)+ ", for the delivery. You saved my life...",bc_map;
+		close;
+	}
+	else if (BSMITH_Q == 14) {
+		mes "[Bismarc]";
+		mes "Obrigado.";
+		mes "Você salvou";
+		mes "minha vida...";
+		close;
+	}
+	else {
+		mes "[Bismarc]";
+		mes "^666666*Ghyklk*^000000";
+		mes "^666666*Huk Hukk*^000000";
+		mes "Quando o meu";
+		mes "p-pedido vai chegar...?";
+		next;
+		mes "[Bismarc]";
+		mes "O veneno no";
+		mes "meu corpo... a dor...";
+		mes "excruciante... S-senhor...";
+		next;
+		mes "[Bismarc]";
+		mes "Quando o";
+		mes "antídoto vai";
+		mes "chegar aqui?!";
+		close;
+	}
+}
+
+ein_in01,24,41,5	script	Blacksmith Guildsman#moc	726,{
+	if (BSMITH_Q == 16) {
+		emotion ET_SCRATCH;
+		mes "[Mitehmaeeuh]";
+		mes "Oh... então você é quem quer ser um Ferreiro?";
+		mes "Legal, heh heh.";
+		mes "Como você percebeu em seus testes anteriores, você não será promovido de Mercador para Ferreiro imediatamente.";
+		next;
+		mes "[Mitehmaeeuh]";
+		mes "O quanto você realmente entende sobre forja? Está pronto para que eu lhe faça algumas perguntas?";
+		next;
+		if (select("Sim:Não, ainda não~") == 1) {
+			mes "[Mitehmaeeuh]";
+			mes "Muito bem...";
+			mes "Meu teste é simples.";
+			mes "Farei cinco perguntas.";
+			mes "Se você errar demais,";
+			mes "você reprovará. E eu não";
+			mes "vou te dizer o que você errou.";
+			next;
+			set .@blackss_te,0;
+			mes "[Mitehmaeeuh]";
+			mes "Por favor, escute";
+			mes "e responda com cuidado...";
+			next;
+			switch(rand(1,3)) {
+			case 1:
+				mes "[Mitehmaeeuh]";
+				mes "1. Qual habilidade";
+				mes "é necessária para aprender";
+				mes "a habilidade ^8E6B23Desconto^000000?";
+				next;
+				if (select("Carrinho Puxar Nível 3:Avaliar Item:Mammonita Nível 10:Aumentar Capacidade de Carga Nível 3") == 4)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[Mitehmaeeuh]";
+				mes "2. Quando você ataca";
+				mes "com ^8E6B23Martelo de Thor^000000,";
+				mes "qual efeito de status você";
+				mes "pode causar nos inimigos?";
+				next;
+				if (select("Atordoamento:Cegueira:Caos:Silêncio") == 1)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[Mitehmaeeuh]";
+				mes "3. Quanto de Zenny é gasto";
+				mes "ao atacar com a";
+				mes "habilidade Mammonita no máximo?";
+				mes "(Mammonita Nível 10)";
+				next;
+				if (select("900 Zenys:1000 Zenys:2000 Zenys:100.000 Zenys") == 2)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[Mitehmaeeuh]";
+				mes "4. Qual é a taxa";
+				mes "de desconto quando";
+				mes "a habilidade ^8E6B23Desconto^000000";
+				mes "está no nível máximo?";
+				next;
+				if (select("21 %:22 %:23 %:24 %") == 4)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[Mitehmaeeuh]";
+				mes "5. Qual é a porcentagem";
+				mes "máxima que você pode";
+				mes "cobrar a mais em itens vendidos";
+				mes "para NPCs após maximizar a";
+				mes "habilidade ^8E6B23Supervisionar^000000?";
+				next;
+				if (select("21 %:22 %:23 %:24 %") == 3)
+					set .@blackss_te,.@blackss_te+20;
+				break;
+			case 2:
+				mes "[Mitehmaeeuh]";
+				mes "1. Qual dos";
+				mes "seguintes monstros";
+				mes "derruba Aço?";
+				next;
+				if (select("Zerom:Chon Chon:Esqueleto Operário:Requiem") == 3)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[Mitehmaeeuh]";
+				mes "2. Qual das seguintes";
+				mes "pedras pode ser feita";
+				mes "a partir de Sangue Escarlate?";
+				next;
+				if (select("Coração Incandescente:Vento Bruto:Grande Natureza:Gelo Místico") == 1)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[Mitehmaeeuh]";
+				mes "3. Qual das seguintes";
+				mes "pedras você tem em maior";
+				mes "quantidade no seu Armazém Kafra?";
+				next;
+				select("Vento Verdante:Sangue Escarlate:Vida Verdejante:Cristal Azul");
+					set .@blackss_te,.@blackss_te+20;
+				mes "[Mitehmaeeuh]";
+				mes "4. Em geral,";
+				mes "qual das seguintes";
+				mes "propriedades recebe";
+				mes "mais dano de uma arma";
+				mes "de propriedade Vento?";
+				next;
+				if (select("Propriedade Fogo:Propriedade Água:Propriedade Terra:Propriedade Vento") == 2)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[Mitehmaeeuh]";
+				mes "5. Quantos Minérios de Ferro";
+				mes "são necessários para fazer";
+				mes "1 Aço?";
+				next;
+				if (select("5 Minérios de Ferro:4 Minérios de Ferro:3 Minérios de Ferro:6 Minérios de Ferro") == 1)
+					set .@blackss_te,.@blackss_te+20;
+				break;
+			case 3:
+				mes "[Mitehmaeeuh]";
+				mes "1. O que você costuma";
+				mes "fazer quando encontra alguém";
+				mes "aleatoriamente na rua?";
+				next;
+				switch(select("Pergunto do que precisam.:Tenho uma breve conversa.:Ignoro.:Dou itens e saio correndo.")) {
+				case 1:
+				case 2:
+					set .@blackss_te,.@blackss_te+20;
+					break;
+				default:
+					break;
+				}
+				mes "[Mitehmaeeuh]";
+				mes "2. Em qual vilarejo";
+				mes "você pode aprender as";
+				mes "habilidades ^8E6B23Fúria do Furacão^000000 e";
+				mes "^8E6B23Trocar Carrinho^000000?";
+				next;
+				if (select("Al De Baran:Alberta:Morocc:Izlude") == 2)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[Mitehmaeeuh]";
+				mes "3. A partir do centro de Einbroch,";
+				mes "em qual direção fica a guilda dos Ferreiro?";
+				next;
+				if (select("11 horas:5 horas:7 horas:12 horas") == 2)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[Mitehmaeeuh]";
+				mes "4. Em qual cidade";
+				mes "você pode encontrar o";
+				mes "maior número de Mercadores?";
+				next;
+				if (select("Prontera:Morocc:Alberta:Einbroch") == 4)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[Mitehmaeeuh]";
+				mes "5. Qual dos";
+				mes "seguintes atributos";
+				mes "afeta sua habilidade";
+				mes "como um Ferreiro?";
+				next;
+				if (select("FOR:DES:AGI:VIT") == 2)
+					set .@blackss_te,.@blackss_te+20;
+				break;
+			}
+			mes "[Mitehmaeeuh]";
+			mes "Ah...";
+			mes "Você completou";
+			mes "o questionário. Vamos ver...";
+			next;
+			mes "[Mitehmaeeuh]";
+			mes "Você marcou";
+			mes ""+ .@blackss_te +"pontos...";
+			if (.@blackss_te > 70) {
+				mes "Muito bom!";
+				mes "Parabéns!";
+				mes "Você acabou de passar!";
+				next;
+				mes "[Mitehmaeeuh]";
+				mes "No entanto, não deixe seu sucesso inicial te tornar arrogante. A vida de um Ferreiro não é um passeio no parque. Como prova de que você passou no teste, dou a você este Martelo de Ferreiro.";
+				set BSMITH_Q,17;
+				getitem 1005,1; //Hammer_Of_Blacksmith
+				changequest 2014,2015;
+				next;
+				mes "[Mitehmaeeuh]";
+				mes "Pegue este Martelo";
+				mes "de Ferreiro e volte para Altiregen. Tudo bem? Desejo a você a melhor das sortes!";
+				close;
+			}
+			mes "Você falhou! É melhor estudar antes de voltar aqui.";
+			next;
+			mes "[Mitehmaeeuh]";
+			mes "Com o seu conhecimento, ou a falta dele, você acabará se machucando ao segurar um martelo!";
+			close;
+		}
+		mes "[Mitehmaeeuh]";
+		mes "Tudo bem, então.";
+		mes "Por favor, prepare-se";
+		mes "e volte quando estiver";
+		mes "pronto...";
+		close;
+	}
+	else if (BSMITH_Q == 17) {
+		emotion ET_SCRATCH;
+		mes "[Mitehmaeeuh]";
+		mes "Sim, você acabou de passar no teste da classe Ferreiro~";
+		next;
+		mes "[Mitehmaeeuh]";
+		mes "Por que você não volta a falar com o Sr. Altiregen?";
+		next;
+		mes "[Mitehmaeeuh]";
+		mes "Não se esqueça de levar o Martelo de Ferreiro com você!";
+		next;
+		mes "[Mitehmaeeuh]";
+		mes "Ah, e certifique-se de não ter pontos de habilidade sobrando antes de mudar sua classe~";
+		close;
+	}
+	else {
+		emotion ET_SCRATCH;
+		mes "[Mitehmaeeuh]";
+		mes "Eu tive que lidar com o calor quando estava em Morocc,";
+		mes "e agora tenho que lidar com a fumaça nesta Einbroch!";
+		next;
+		mes "[Mitehmaeeuh]";
+		mes "Mas, devo admitir que este é o lugar perfeito para os Mercadores, pois temos uma abundância de suprimentos de materiais de criação, além de equipamentos altamente desenvolvidos.";
+		next;
+		mes "[Mitehmaeeuh]";
+		mes "Nós, os Mercadores, fazemos o nosso melhor para forjar as melhores armas de todas.";
+		next;
+		mes "[Mitehmaeeuh]";
+		mes "Nós juramos nossa honra por isso!";
+		close;
+	}
+}
+
+geffen_in,109,170,3	script	Blacksmith Guildsman#gef	726,{
+	mes "[Blacksmith Guildsman]";
+	mes "Bom dia, você está aqui para visitar a guilda dos Ferreiro?";
+	next;
+	mes "[Blacksmith Guildsman]";
+	mes "Agradeço por ter vindo de tão longe para visitar nossa guilda. No entanto, lamento informar que a guilda dos Ferreiro foi";
+	mes "transferida para ^3131FF'Einbroch' na República de Schwarzwald^000000.";
+	next;
+	mes "[Blacksmith Guildsman]";
+	mes "Você pode viajar para a República de Schwarzwald usando o Dirigível.";
+	mes "Posso fornecer um serviço de teletransporte para Izlude, onde você pode usar o Dirigível.";
+	mes "Gostaria de ir para Izlude agora mesmo?";
+	next;
+	switch(select("Como ir para Einbroch:Sim!:Não, obrigado.")) {
+	case 1:
+		mes "[Blacksmith Guildsman]";
+		mes "Opa, você ainda não usou o Dirigível?";
+		next;
+		mes "[Blacksmith Guildsman]";
+		mes "Ao contrário do Reino de Rune-Midgarts, a República de Schwarzwald utiliza 'o Dirigível' em vez de serviços de teletransporte para se mover entre as cidades.";
+		next;
+		mes "[Blacksmith Guildsman]";
+		mes "Em ^3131FF'Izlude'^000000, você pode usar ^3131FF'o Dirigível internacional'^000000 que viaja entre ^3131FFIzlude e Juno na República de Schwarzwald^000000.";
+		next;
+		mes "[Blacksmith Guildsman]";
+		mes "Pegue o Dirigível e vá para Juno. Então, de Juno, você precisa pegar ^3131FFo Dirigível doméstico^000000 para ir para Einbroch.";
+		mes "Lembre-se, você ^3131FFnão deve sair do aeroporto^000000 durante a transferência do Dirigível internacional para o doméstico.";
+		next;
+		mes "[Blacksmith Guildsman]";
+		mes "Pode parecer complicado, mas você entenderá quando estiver no aeroporto.";
+		mes "Quando chegar à guilda dos Ferreiro, por favor, envie lembranças aos meus colegas!";
+		close;
+	case 2:
+		if (Zeny < 600) {
+			mes "[Blacksmith Guildsman]";
+			mes "Desculpe-me, mas você não tem dinheiro suficiente.";
+			close;
+		}
+		set Zeny, Zeny-600;
+		warp "izlude",94,103;
+		end;
+	case 3:
+		mes "[Blacksmith Guildsman]";
+		mes "Cuide-se!";
+		close;
+	}
+}

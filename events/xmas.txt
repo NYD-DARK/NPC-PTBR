@@ -1,0 +1,360 @@
+//===== rAthena Script =======================================
+//= X-mas Event
+//===== By: ==================================================
+//= rAthena Dev Team
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Beat up Antonios and grab his socks.  Get at least 3 and
+//= give them to Santa Claus Claus in exchange for a present.
+//= Includes X-mas mobs.
+//= This npc will disable, the current Santa Claus npc.
+//===== Additional Comments: =================================
+//= Fixed the spawns [shadowlady]
+//= 1.1 Added Xmas Jakk, fixed 2 exploits, fixed reward Box ID [Lupus]
+//= 1.2 Added monsters to the newer fields, thanks to Muad_Dib [MasterOfMuppets]
+//= 1.2a Fixed a major problem with the monster spawns, thanks to Playtester [MasterOfMuppets]
+//= 1.2b Fixed a minor problem with the mosnter spawns, thanks to Playtester [Kayla]
+//= 1.3 Added Christmas Orc to the places where other orcs spawn [MasterOfMuppets]
+//= Added Christmas goblins to yuno_fild09, thanks to Playtester for pointing it out
+//= 1.4 Added a fix to make Lutie & Bard quests passable during this event [Lupus]
+//============================================================
+
+xmas_in,100,96,4	script	Father Christmas::Santa2	718,{
+	mes "[Santa Claus]";
+	if(xmas_npc==0) set xmas_npc, 1; // For Lutie & Bard quest
+	if(#event_xmas > 0 && #event_xmas < 30 ) goto L_Start;
+	mes "Feliz Natal!";
+	if(Class==0 || #event_xmas>=30 ) close; //anti exploit protection
+	mes "Eu tenho um presente para você! Ho Ho Ho!";
+	getitem rand(664,667),1; //gives one of 4 gift boxes
+	set #event_xmas,#event_xmas+1;
+	close;
+
+L_Start:
+	mes "Estou com um pequeno problema...";
+	mes "Você se importa em ouvir?";
+	next;
+	menu "Ouvir o Papai Noel.",M_0, "Dar prova ao Papai Noel.",M_1, "Cancelar.",M_End;
+
+	M_0:
+		mes "[Santa Claus]";
+		mes "Meu problema é este.";
+		mes "Parece haver um homem por aí";
+		mes "que está se passando por mim e espalhando";
+		mes "terror por toda a terra.";
+		next;
+		mes "[Santa Claus]";
+		mes "Como o Grinch das lendas, ele está pegando";
+		mes "todos os brinquedos das crianças e guardando";
+		mes "para si mesmo.";
+		next;
+		mes "[Santa Claus]";
+		mes "Estou muito ocupado criando minha leva de";
+		mes "brinquedos para o próximo ano, então não posso";
+		mes "sair e encontrá-lo eu mesmo.";
+		mes "Então, eu gostaria que você fosse lá e";
+		mes "destruísse esse homem para mim.";
+		next;
+		mes "[Santa Claus]";
+		mes "Ele tem em sua posse um dos meus";
+		mes "sacos mágicos, no entanto, então ele vai";
+		mes "escapar para outro lugar cada";
+		mes "vez que você o atacar.";
+		next;
+		mes "[Santa Claus]";
+		mes "Entretanto,";
+		mes "Na pressa, ele tende a deixar cair coisas.";
+		mes "Se por acaso ele deixar cair uma de suas Meias";
+		mes "Furadas que ele usa para roubar os";
+		mes "brinquedos das pobres crianças, pegue-a.";
+		next;
+		mes "[Santa Claus]";
+		mes "Se você coletar 3 delas, eu lhe darei";
+		mes "uma caixa misteriosa protótipo que";
+		mes "eu tenho guardado pelo";
+		mes "laboratório. Ela cospe presentes aleatórios";
+		mes "e me economiza um monte de trabalho.";
+		close;
+	M_1:
+		mes "[Santa Claus]";
+		if(countitem(7034) < 3) goto L_NotEnuf;
+		delitem 7034,3;
+		mes "Parece que você tem feito um";
+		mes "bom trabalho derrubando aqueles";
+		mes "Papais Noéis falsos. Continue assim!";
+		next;
+		getitem 644,1; //Gift Box Prototype
+		set #event_xmas,#event_xmas+1;
+		mes "[Santa Claus]";
+		mes "Aí está a sua recompensa.";
+		mes "Se conseguir mais 3, eu lhe darei outra.";
+		mes "Espero que você consiga um bom item.";
+		close;
+	
+		L_NotEnuf:
+			mes "Você não tem meias suficientes como prova.";
+			mes "Vá derrubar aqueles Papais Noéis malignos";
+			mes "e consiga mais para mim e eu o recompensarei.";
+			close;
+	M_End:
+		mes "[Santa Claus]";
+		mes "Entendo. Bem, pelo menos";
+		mes "nos encontraremos novamente na manhã de Natal.";
+		close;
+
+OnInit:
+	disablenpc "Santa Claus";
+	end;
+}
+
+// Xmas Goblin Spawns
+//============================================================
+prt_fild11,0,0	monster	Christmas Goblin	1245,5
+gef_fild11,0,0	monster	Christmas Goblin	1245,5
+yuno_fild09,0,0	monster	Christmas Goblin	1245,5
+
+// Santa Poring Spawns
+//============================================================
+ein_fild03,0,0	monster	Santa Poring	1062,15
+ein_fild04,0,0	monster	Santa Poring	1062,15
+ein_fild06,0,0	monster	Santa Poring	1062,15
+ein_fild07,0,0	monster	Santa Poring	1062,15
+ein_fild08,0,0	monster	Santa Poring	1062,15
+ein_fild09,0,0	monster	Santa Poring	1062,15
+ein_fild10,0,0	monster	Santa Poring	1062,15
+gef_fild00,0,0	monster	Santa Poring	1062,15
+gef_fild01,0,0	monster	Santa Poring	1062,15
+gef_fild02,0,0	monster	Santa Poring	1062,15
+gef_fild03,0,0	monster	Santa Poring	1062,15
+gef_fild04,0,0	monster	Santa Poring	1062,15
+gef_fild05,0,0	monster	Santa Poring	1062,15
+gef_fild07,0,0	monster	Santa Poring	1062,15
+gef_fild08,0,0	monster	Santa Poring	1062,15
+gef_fild09,0,0	monster	Santa Poring	1062,15
+gef_fild10,0,0	monster	Santa Poring	1062,15
+gef_fild11,0,0	monster	Santa Poring	1062,15
+gef_fild12,0,0	monster	Santa Poring	1062,15
+gef_fild13,0,0	monster	Santa Poring	1062,15
+gef_fild14,0,0	monster	Santa Poring	1062,15
+glast_01,0,0	monster	Santa Poring	1062,15
+lhz_fild01,0,0	monster	Santa Poring	1062,15
+lhz_fild02,0,0	monster	Santa Poring	1062,15
+lhz_fild03,0,0	monster	Santa Poring	1062,15
+mjolnir_01,0,0	monster	Santa Poring	1062,15
+mjolnir_02,0,0	monster	Santa Poring	1062,15
+mjolnir_03,0,0	monster	Santa Poring	1062,15
+mjolnir_04,0,0	monster	Santa Poring	1062,15
+mjolnir_05,0,0	monster	Santa Poring	1062,15
+mjolnir_06,0,0	monster	Santa Poring	1062,15
+mjolnir_07,0,0	monster	Santa Poring	1062,15
+mjolnir_08,0,0	monster	Santa Poring	1062,15
+mjolnir_09,0,0	monster	Santa Poring	1062,15
+mjolnir_10,0,0	monster	Santa Poring	1062,15
+mjolnir_11,0,0	monster	Santa Poring	1062,15
+mjolnir_12,0,0	monster	Santa Poring	1062,15
+moc_fild01,0,0	monster	Santa Poring	1062,15
+moc_fild02,0,0	monster	Santa Poring	1062,15
+moc_fild03,0,0	monster	Santa Poring	1062,15
+moc_fild04,0,0	monster	Santa Poring	1062,15
+moc_fild05,0,0	monster	Santa Poring	1062,15
+moc_fild06,0,0	monster	Santa Poring	1062,15
+moc_fild07,0,0	monster	Santa Poring	1062,15
+moc_fild08,0,0	monster	Santa Poring	1062,15
+moc_fild09,0,0	monster	Santa Poring	1062,15
+moc_fild10,0,0	monster	Santa Poring	1062,15
+moc_fild11,0,0	monster	Santa Poring	1062,15
+moc_fild12,0,0	monster	Santa Poring	1062,15
+moc_fild13,0,0	monster	Santa Poring	1062,15
+moc_fild14,0,0	monster	Santa Poring	1062,15
+moc_fild15,0,0	monster	Santa Poring	1062,15
+moc_fild16,0,0	monster	Santa Poring	1062,15
+moc_fild17,0,0	monster	Santa Poring	1062,15
+moc_fild18,0,0	monster	Santa Poring	1062,15
+pay_fild01,0,0	monster	Santa Poring	1062,15
+pay_fild02,0,0	monster	Santa Poring	1062,15
+pay_fild03,0,0	monster	Santa Poring	1062,15
+pay_fild04,0,0	monster	Santa Poring	1062,15
+pay_fild05,0,0	monster	Santa Poring	1062,15
+pay_fild06,0,0	monster	Santa Poring	1062,15
+pay_fild07,0,0	monster	Santa Poring	1062,15
+pay_fild08,0,0	monster	Santa Poring	1062,15
+pay_fild09,0,0	monster	Santa Poring	1062,15
+pay_fild10,0,0	monster	Santa Poring	1062,15
+pay_fild11,0,0	monster	Santa Poring	1062,15
+prt_fild00,0,0	monster	Santa Poring	1062,15
+prt_fild01,0,0	monster	Santa Poring	1062,15
+prt_fild02,0,0	monster	Santa Poring	1062,15
+prt_fild03,0,0	monster	Santa Poring	1062,15
+prt_fild04,0,0	monster	Santa Poring	1062,15
+prt_fild05,0,0	monster	Santa Poring	1062,15
+prt_fild06,0,0	monster	Santa Poring	1062,15
+prt_fild07,0,0	monster	Santa Poring	1062,15
+prt_fild08,0,0	monster	Santa Poring	1062,15
+prt_fild09,0,0	monster	Santa Poring	1062,15
+prt_fild10,0,0	monster	Santa Poring	1062,15
+prt_fild11,0,0	monster	Santa Poring	1062,15
+xmas_fild01,0,0	monster	Santa Poring	1062,15
+cmd_fild01,0,0	monster	Santa Poring	1062,15
+cmd_fild02,0,0	monster	Santa Poring	1062,15
+cmd_fild03,0,0	monster	Santa Poring	1062,15
+cmd_fild04,0,0	monster	Santa Poring	1062,15
+cmd_fild05,0,0	monster	Santa Poring	1062,15
+cmd_fild06,0,0	monster	Santa Poring	1062,15
+cmd_fild07,0,0	monster	Santa Poring	1062,15
+cmd_fild08,0,0	monster	Santa Poring	1062,15
+cmd_fild09,0,0	monster	Santa Poring	1062,15
+yuno_fild01,0,0	monster	Santa Poring	1062,15
+yuno_fild02,0,0	monster	Santa Poring	1062,15
+yuno_fild03,0,0	monster	Santa Poring	1062,15
+yuno_fild04,0,0	monster	Santa Poring	1062,15
+yuno_fild05,0,0	monster	Santa Poring	1062,15
+yuno_fild06,0,0	monster	Santa Poring	1062,15
+yuno_fild07,0,0	monster	Santa Poring	1062,15
+yuno_fild08,0,0	monster	Santa Poring	1062,15
+yuno_fild09,0,0	monster	Santa Poring	1062,15
+yuno_fild11,0,0	monster	Santa Poring	1062,15
+yuno_fild12,0,0	monster	Santa Poring	1062,15
+ama_fild01,0,0	monster	Santa Poring	1062,15
+gon_fild01,0,0	monster	Santa Poring	1062,15
+um_fild01,0,0	monster	Santa Poring	1062,15
+um_fild02,0,0	monster	Santa Poring	1062,15
+um_fild03,0,0	monster	Santa Poring	1062,15
+um_fild04,0,0	monster	Santa Poring	1062,15
+nif_fild01,0,0	monster	Santa Poring	1062,15
+nif_fild02,0,0	monster	Santa Poring	1062,15
+lou_fild01,0,0	monster	Santa Poring	1062,15
+hu_fild01,0,0	monster	Santa Poring	1062,15
+hu_fild04,0,0	monster	Santa Poring	1062,15
+hu_fild05,0,0	monster	Santa Poring	1062,15
+hu_fild07,0,0	monster	Santa Poring	1062,15
+
+// Antonio Spawns
+//============================================================
+ein_fild03,0,0	monster	Antonio	1247,1
+ein_fild04,0,0	monster	Antonio	1247,1
+ein_fild06,0,0	monster	Antonio	1247,1
+ein_fild07,0,0	monster	Antonio	1247,1
+ein_fild08,0,0	monster	Antonio	1247,1
+ein_fild09,0,0	monster	Antonio	1247,1
+ein_fild10,0,0	monster	Antonio	1247,1
+gef_fild00,0,0	monster	Antonio	1247,1
+gef_fild01,0,0	monster	Antonio	1247,1
+gef_fild02,0,0	monster	Antonio	1247,1
+gef_fild03,0,0	monster	Antonio	1247,1
+gef_fild04,0,0	monster	Antonio	1247,1
+gef_fild05,0,0	monster	Antonio	1247,1
+gef_fild07,0,0	monster	Antonio	1247,1
+gef_fild08,0,0	monster	Antonio	1247,1
+gef_fild09,0,0	monster	Antonio	1247,1
+gef_fild10,0,0	monster	Antonio	1247,1
+gef_fild11,0,0	monster	Antonio	1247,1
+gef_fild12,0,0	monster	Antonio	1247,1
+gef_fild13,0,0	monster	Antonio	1247,1
+gef_fild14,0,0	monster	Antonio	1247,1
+glast_01,0,0	monster	Antonio	1247,1
+lhz_fild01,0,0	monster	Antonio	1247,1
+lhz_fild02,0,0	monster	Antonio	1247,1
+lhz_fild03,0,0	monster	Antonio	1247,1
+mjolnir_01,0,0	monster	Antonio	1247,1
+mjolnir_02,0,0	monster	Antonio	1247,1
+mjolnir_03,0,0	monster	Antonio	1247,1
+mjolnir_04,0,0	monster	Antonio	1247,1
+mjolnir_05,0,0	monster	Antonio	1247,1
+mjolnir_06,0,0	monster	Antonio	1247,1
+mjolnir_07,0,0	monster	Antonio	1247,1
+mjolnir_08,0,0	monster	Antonio	1247,1
+mjolnir_09,0,0	monster	Antonio	1247,1
+mjolnir_10,0,0	monster	Antonio	1247,1
+mjolnir_11,0,0	monster	Antonio	1247,1
+mjolnir_12,0,0	monster	Antonio	1247,1
+moc_fild01,0,0	monster	Antonio	1247,1
+moc_fild02,0,0	monster	Antonio	1247,1
+moc_fild03,0,0	monster	Antonio	1247,1
+moc_fild04,0,0	monster	Antonio	1247,1
+moc_fild05,0,0	monster	Antonio	1247,1
+moc_fild06,0,0	monster	Antonio	1247,1
+moc_fild07,0,0	monster	Antonio	1247,1
+moc_fild08,0,0	monster	Antonio	1247,1
+moc_fild09,0,0	monster	Antonio	1247,1
+moc_fild10,0,0	monster	Antonio	1247,1
+moc_fild11,0,0	monster	Antonio	1247,1
+moc_fild12,0,0	monster	Antonio	1247,1
+moc_fild13,0,0	monster	Antonio	1247,1
+moc_fild14,0,0	monster	Antonio	1247,1
+moc_fild15,0,0	monster	Antonio	1247,1
+moc_fild16,0,0	monster	Antonio	1247,1
+moc_fild17,0,0	monster	Antonio	1247,1
+moc_fild18,0,0	monster	Antonio	1247,1
+pay_fild01,0,0	monster	Antonio	1247,1
+pay_fild02,0,0	monster	Antonio	1247,1
+pay_fild03,0,0	monster	Antonio	1247,1
+pay_fild04,0,0	monster	Antonio	1247,1
+pay_fild05,0,0	monster	Antonio	1247,1
+pay_fild06,0,0	monster	Antonio	1247,1
+pay_fild07,0,0	monster	Antonio	1247,1
+pay_fild08,0,0	monster	Antonio	1247,1
+pay_fild09,0,0	monster	Antonio	1247,1
+pay_fild10,0,0	monster	Antonio	1247,1
+pay_fild11,0,0	monster	Antonio	1247,1
+prt_fild00,0,0	monster	Antonio	1247,1
+prt_fild01,0,0	monster	Antonio	1247,1
+prt_fild02,0,0	monster	Antonio	1247,1
+prt_fild03,0,0	monster	Antonio	1247,1
+prt_fild04,0,0	monster	Antonio	1247,1
+prt_fild05,0,0	monster	Antonio	1247,1
+prt_fild06,0,0	monster	Antonio	1247,1
+prt_fild07,0,0	monster	Antonio	1247,1
+prt_fild08,0,0	monster	Antonio	1247,1
+prt_fild09,0,0	monster	Antonio	1247,1
+prt_fild10,0,0	monster	Antonio	1247,1
+prt_fild11,0,0	monster	Antonio	1247,1
+xmas_fild01,0,0	monster	Antonio	1247,1
+cmd_fild01,0,0	monster	Antonio	1247,1
+cmd_fild02,0,0	monster	Antonio	1247,1
+cmd_fild03,0,0	monster	Antonio	1247,1
+cmd_fild04,0,0	monster	Antonio	1247,1
+cmd_fild05,0,0	monster	Antonio	1247,1
+cmd_fild06,0,0	monster	Antonio	1247,1
+cmd_fild07,0,0	monster	Antonio	1247,1
+cmd_fild08,0,0	monster	Antonio	1247,1
+cmd_fild09,0,0	monster	Antonio	1247,1
+yuno_fild01,0,0	monster	Antonio	1247,1
+yuno_fild02,0,0	monster	Antonio	1247,1
+yuno_fild03,0,0	monster	Antonio	1247,1
+yuno_fild04,0,0	monster	Antonio	1247,1
+yuno_fild05,0,0	monster	Antonio	1247,1
+yuno_fild06,0,0	monster	Antonio	1247,1
+yuno_fild07,0,0	monster	Antonio	1247,1
+yuno_fild08,0,0	monster	Antonio	1247,1
+yuno_fild09,0,0	monster	Antonio	1247,1
+yuno_fild11,0,0	monster	Antonio	1247,1
+yuno_fild12,0,0	monster	Antonio	1247,1
+ama_fild01,0,0	monster	Antonio	1247,1
+gon_fild01,0,0	monster	Antonio	1247,1
+um_fild01,0,0	monster	Antonio	1247,1
+um_fild02,0,0	monster	Antonio	1247,1
+um_fild03,0,0	monster	Antonio	1247,1
+um_fild04,0,0	monster	Antonio	1247,1
+nif_fild01,0,0	monster	Antonio	1247,1
+nif_fild02,0,0	monster	Antonio	1247,1
+lou_fild01,0,0	monster	Antonio	1247,1
+hu_fild01,0,0	monster	Antonio	1247,1
+hu_fild04,0,0	monster	Antonio	1247,1
+hu_fild05,0,0	monster	Antonio	1247,1
+hu_fild07,0,0	monster	Antonio	1247,1
+
+// Xmas Jakk Spawns
+//============================================================
+gef_dun01,0,0	monster	Xmas Jakk	1244,5
+//gefenia02,0,0	monster	Xmas Jakk	1244,5
+
+// Xmas Orc Spawns
+//============================================================
+gef_fild02,0,0	monster	Christmas Orc	1588,5
+gef_fild03,0,0	monster	Christmas Orc	1588,5
+gef_fild10,0,0	monster	Christmas Orc	1588,5
+gef_fild14,0,0	monster	Christmas Orc	1588,5
+alde_dun02,0,0	monster	Christmas Orc	1588,5

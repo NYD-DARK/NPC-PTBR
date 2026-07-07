@@ -1,0 +1,127 @@
+//===== rAthena Script =======================================
+//= White Day Event Script
+//===== By: ==================================================
+//= 1.0a Muad_Dib (Prometheus Project)
+//===== Current Version: =====================================
+//= 1.0a
+//===== Compatible With: =====================================
+//= rAthena Project; RO Episode 6+
+//===== Description: =========================================
+//= Sells candy, candy cane and well baked cookie.
+//===== Additional Comments: =================================
+//= 07/06/05 : Added 1st Version. [Muad_Dib]
+//= Converted to rAthena format by Dr.Evil
+//============================================================
+
+alberta,188,64,4	script	Sugar	91,{
+	set @maplenum,0;
+	set @mapleItemID,0;
+	set @maplePrice,0;
+	set @maplePriceT,0;
+	mes "[Sugar]";
+	mes "Bem-vindo(a)!";
+	mes "Doces não são deliciosos?";
+	mes "Meu mestre.........";
+	mes "O artesão de doces de Alberta";
+	mes "Existem doces que são feitos de forma complexa.";
+	next;
+	mes "[Sugar]";
+	mes "Foi dado pela pessoa amada.";
+	mes "Em troca do presente....";
+	mes "o carinho,";
+	mes "a doçura do presente, de alguma forma.";
+	next;
+	menu "Por favor, me dê!",-,"Não preciso disso.",M_END,"O mestre.",M_L1;
+
+	mes "[Sugar]";
+	mes "Sim!";
+	mes "Selecione a partir do menu aqui.";
+	mes "Como existe uma limitação de quantidade";
+	mes "Não mais que ^ff0000 5 unidades^000000.";
+	mes "são permitidas para levar?";
+	next;
+	menu "Doce",-,"Bengala Doce",L0_2,"Biscoito Bem Assado",L0_3;
+
+	set @maplePrice,3000;
+	set @mapleItemID,529;
+	mes "[Sugar]";
+	mes "É um doce, e o preço é";
+	mes "3000 Zenys cada.";
+	mes "Quantos você gostaria de comprar?";
+	next;
+	goto L_INPUT;
+L0_2:
+	set @maplePrice,4000;
+	set @mapleItemID,530;
+	mes "[Sugar]";
+	mes "É uma bengala doce, e o preço é";
+	mes "4000 Zenys cada.";
+	mes "Quantos você gostaria de comprar?";
+	next;
+	goto L_INPUT;
+L0_3:
+	set @maplePrice,2000;
+	set @mapleItemID,538; 
+	mes "[Sugar]";
+	mes "É um biscoito bem assado, e o preço é";
+	mes "2000 Zenys cada.";
+	mes "Quantos você gostaria de comprar?";
+	next;
+
+L_INPUT:
+	input @maplenum;
+	if (@maplenum > 5) goto L_ERROR;
+	if (@maplenum == 0) goto M_END;
+	set @maplePriceT,@maplePrice*@maplenum;
+	if (Zeny < @maplePriceT) goto L_ERROR2;
+	set Zeny,Zeny- @maplePriceT;
+	getitem @mapleItemID,@maplenum;
+	mes "[Sugar]";
+	mes "Obrigada!!!";
+	mes "Esses doces são realmente deliciosos.";
+	mes "Já que meu mestre de doces é o mestre nº 1 do mundo!";
+	mes "Embora você possa comer sozinho(a)";
+	mes "não coma tanto ou você vai engordar.";
+	mes "Por favor, cuide-se!!!";
+	close;
+
+M_L1:
+	mes "[Sugar]";
+	mes "Sim";
+	mes "Meu mestre";
+	mes "é o Sr. Kuberu, um artesão de doces.";
+	mes "Fazendo doces sob duas pessoas.";
+	mes "o que é permitido para o auto-treinamento.";
+	next;
+	mes "[Sugar]";
+	mes "Embora a venda pareça estar sendo realizada....";
+	mes "Onde ele está agora?";
+	mes "Eu não sei.";
+	close;
+
+L_ERROR:
+	mes "[Sugar]";
+	mes "???";
+	mes "Parece que você teve um problema para ouvir.";
+	mes "Vou lhe dizer mais uma vez?";
+	mes "Você só pode comprar";
+	mes "^ff0000 5 unidades^000000 de uma vez.";
+	next;
+	goto L_INPUT;
+
+L_ERROR2:
+	mes "[Sugar]";
+	mes "???";
+	mes "Hmmm, parece que você não tem dinheiro suficiente";
+	mes "para fazer essa compra.";
+	mes "Peço que verifique seu dinheiro primeiro.";
+	close;
+
+M_END:
+	mes "[Sugar]";
+	mes "Sério.... Você pode se arrepender..";
+	mes "Se mudar de ideia.";
+	mes "Estou bem aqui, ok.";
+	mes "Tenha um bom dia!";
+	close;
+}

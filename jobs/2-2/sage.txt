@@ -1,0 +1,2911 @@
+//===== rAthena Script ======================================= 
+//= Sage Job Quest
+//===== By: ==================================================
+//= jAthena (0.9) - I guess
+//= Unknown Translator (1.0)
+//= Darkchild (1.2)
+//===== Current Version: ===================================== 
+//= 2.8
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job quest for Sage classes
+//===== Additional Comments: ================================= 
+//= 2.1 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//=     No longer uses function "F_BlockHigh"
+//= 2.2 Small bug fix (== -> !=) thanks to Saithis. [L0ne_W0lf]
+//= 2.2b ANotehr smaLL bugfix, pointed out by Cara. [L0ne_W0lf]
+//= 2.3 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 2.4 Fixes bug with first room monsters not being reset. [L0ne_W0lf]
+//= 2.4a Deleted unused variables. [Samuray22]
+//= 2.5 Updated waiting room. (Removes global var) [L0ne_W0lf]
+//= 2.5a Corrected some "mes"s without the getitemname. (bugreport:1564) [Samuray22]
+//=     -Changed an incorrect "!=" to "==". (bugreport:1572) 
+//=     -And Small Typo Error
+//= 2.6 Fixed Kayron Grik cutin not being removed as reported by jc1991, bugreport:1825 [Brainstorm]
+//= 2.6a Fixed a Little Bug with Whispers Summoned in the Last Test. (bugreport:2253) [Samuray22]
+//= 2.7 Added Quest Log commands. [Kisuka]
+//= 2.8 Removed the need for use of 'goto.' [L0ne_W0lf]
+//============================================================ 
+
+yuno_in02,38,61,5	script	Dean of the Academy#sa	743,{
+	cutin "job_sage_kayron",2;
+	mes "[Kayron Grik]";
+	if (Upper == 1) {
+		mes "Haha, eu vi muitas pessoas,";
+		mes "mas parece que você possui poderes e habilidades especiais.";
+		next;
+		mes "[Kayron Grik]";
+		mes "É melhor você ir e aumentar sua reputação.";
+		mes "Nunca se esqueça de que, no passado, você também já foi um Aprendiz.";
+		close2;
+		cutin "job_sage_kayron",255;
+		end;
+	}
+	if (BaseJob != Job_Mage) {
+		if (BaseJob == Job_Sage) {
+			mes "O que o traz aqui? Há algo lhe incomodando ultimamente?";
+			mes "Embora você já seja um Sábio, isso não significa que possa parar de estudar.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Nosso conhecimento é a mola propulsora da atividade que ajuda o reino a se desenvolver mais rapidamente.";
+			mes "Por favor, mantenha isso em mente: você deve estudar e registrar tudo o que descobriu para que todos no reino possam se beneficiar.";
+		}
+		else if (BaseJob == Job_Novice) {
+			mes "Hahah, então meu pequeno Aprendiz, o que o traz por aqui? ...Acho que está em uma viagem de turismo?";
+			mes "Você deve ter passado por grandes dificuldades para chegar a este lugar. Devo dizer que você parece interessado na classe Sábio.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Se você aspira se tornar um Sábio, deve primeiro viver a vida como um Mago. Só então terá uma chance.";
+			mes "Estou ansioso para vê-lo novamente.";
+		}
+		else {
+			mes "*Risada* Embora estudemos este mundo há muito tempo, sei que o estudo, por si só, suprirá todas as necessidades das pessoas.";
+			mes "Outras classes são tão importantes quanto para o bem-estar de Rune-Midgard...";
+			next;
+			mes "[Kayron Grik]";
+			mes "No entanto, se você encontrar um Sábio pelo caminho, espero que possa lhe prestar assistência.";
+			mes "E se o fizer, ele o recompensará da mesma forma...";
+		}
+		close2;
+		cutin "job_sage_kayron",255;
+		end;
+	}
+	if (SAGE_Q == 0) {
+		cutin "job_sage_kayron",2;
+		mes "Bem-vindo, jovem. Posso ver que você está intrigado pelas maravilhas da magia.";
+		mes "Então, que tipo de assunto o traz até mim?";
+		next;
+		switch(select("Eu gostaria de ser um Sábio.:Fale-me sobre a mudança de classe para Sábio.:Nada.")) {
+		case 1:
+			mes "[Kayron Grik]";
+			mes "Hm? Você deseja se tornar um Sábio?";
+			mes "Bem, então gostaria de sugerir algumas coisas que são exigidas de um Sábio.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Sábios são aqueles que promovem o desenvolvimento deste continente através do estudo e registro contínuo de todo conhecimento relacionado a este mundo.";
+			mes "Tornar-se um Sábio é mais do que apenas uma mudança de figurino: é um trabalho importante onde você deve estar sempre ciente de seu dever e responsabilidade para com as pessoas.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Talvez você queira fazer uma inscrição na Academia de Magia de Schweicherbil.";
+			mes "Acredito que eles possam explicar em detalhes o que você precisa para se tornar um Sábio.";
+			break;
+		case 2:
+			mes "[Kayron Grik]";
+			mes "Mudança de classe para Sábio... hmm... um termo interessante, devo dizer.";
+			mes "Embora seja assim que dizemos, é muito inadequado pensar em se tornar um Sábio como meramente mudar de emprego.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Para ser um Sábio, você deve fazer uma inscrição na Academia de Magia de Schweicherbil.";
+			mes "Você então fará o exame de admissão.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Após o exame, você será designado para estudar um assunto específico...";
+			mes "e finalmente, você enviará sua dissertação para a universidade.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Eu sou aquele que avalia sua dissertação.";
+			mes "Quando você passar em todos os cursos, você se tornará um Sábio.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Por favor, visite a Academia de Magia de Schweicherbil.";
+			mes "Um jovem Sábio chamado Metheus Sylphe aceitará sua inscrição.";
+			break;
+		case 3:
+			mes "[Kayron Grik]";
+			mes "Entendo... Bem, já que você tem tempo livre, encorajo-o a ler tantos livros quanto puder.";
+			mes "Você pode encontrar e pesquisar cada assunto mundano dentro de suas páginas.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Ah sim, você não pode se tornar a pessoa mais inteligente apenas lendo todos os livros ao seu redor...";
+			mes "No entanto, para um Sábio como eu, o conhecimento encontrado nos livros é o mais importante.";
+		}
+		close2;
+		cutin "job_sage_kayron",255;
+		end;
+	}
+	else if (SAGE_Q == 15) {
+		if (countitem(1550) > 0) {
+			if (JobLevel < 40) {
+				set SAGE_Q,0;
+				mes "Você ainda não parece estar qualificado.";
+				mes "Lembre-se, você deve atingir pelo menos o nível de classe 40 para se tornar um Sábio.";
+				close2;
+				cutin "job_sage_kayron",255;
+				end;
+			}
+			if (SkillPoint) {
+				mes "Você possui pontos de habilidade restantes...";
+				mes "Antes de enviar sua dissertação, por favor, cuide disso primeiro.";
+				close2;
+				cutin "job_sage_kayron",255;
+				end;
+			}
+			mes "Ho~ Então? Você finalmente completou sua dissertação? Muito bem.";
+			mes "Deixe-me ver.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Hmm...";
+			next;
+			mes "[Kayron Grik]";
+			mes "Hã...";
+			next;
+			mes "[Kayron Grik]";
+			mes "Interessante...";
+			next;
+			mes "[Kayron Grik]";
+			mes "Embora esteja escrita de forma simples, está bem feita para um iniciante.";
+			mes "Ah sim... você parece ser proficiente nos estudos.";
+			next;
+			completequest 2052;
+			callfunc "Job_Change",Job_Sage;
+			callfunc "F_ClearJobVar";
+			mes "[Kayron Grik]";
+			mes "Parabéns! Você se tornou um Sábio agora.";
+			mes "Lembre-se sempre de manter uma mentalidade estudiosa e analítica.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Além disso, guarde esta dissertação e trate-a com cuidado, já que é o único livro que você escreveu.";
+			mes "Você pode precisar dele um dia destes. E ele lembrará para sempre deste momento grandioso.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Bem então... Que Deus preencha seu caminho com conhecimento.";
+			mes "Estude com diligência!!";
+		}
+		else {
+			mes "Hmm? O que aconteceu com você? Onde você deixou sua dissertação?";
+			mes "Por favor, traga-a até mim para que possa passar no teste.";
+			next;
+			mes "[Kayron Grik]";
+			mes "Espere... você não a perdeu, perdeu?";
+			mes "Bem... isso é problema seu. É lamentável que você não terá a chance de escrever um livro novamente.";
+		}
+	}
+	else {
+		mes "*Risada* Tornar-se um Sábio não é tão simples quanto você supunha.";
+		mes "Você não pode se tornar um Sábio porque suas habilidades mágicas são inadequadas...";
+		next;
+		mes "[Kayron Grik]";
+		mes "Estude diligentemente e retorne quando terminar sua dissertação.";
+		mes "Até lá, adeus!";
+	}
+	close2;
+	cutin "",255;
+	end;
+}
+
+yuno_in03,154,35,4	script	Staff of the Academy#a	742,{
+	mes "[Metheus Sylphe]";
+	if (Upper == 1) {
+		mes "Bem-vindo à";
+		mes "Academia de Magia";
+		mes "de Schweicherbil. E-espere um segundo...";
+		mes "Eu conheço você de algum lugar?";
+		next;
+		mes "[Metheus Sylphe]";
+		mes "Nós nos conhecemos antes, não";
+		mes "conhecemos? Oh céus, devo soar";
+		mes "bem louco. Sinto muito, acho que é porque não tenho";
+		mes "dormido muito bem? Ah, bem,";
+		mes "tenha um bom dia, aventureiro~";
+		close;
+	}
+	if (BaseJob != Job_Mage) {
+		if (BaseJob == Job_Sage) {
+			mes "Oh, prazer em vê-lo novamente, há quanto tempo.";
+			mes "Então, como vão os estudos?";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Tudo bem estudar livros e pergaminhos mágicos o dia todo,";
+			mes "mas você deve ir lá fora e lutar com monstros tanto quanto puder para ser um Sábio bem experiente.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Se você conhece algum candidato a Sábio, por favor, dê-lhes alguns conselhos...";
+			mes "Além disso, por favor, envie lembranças aos seus colegas também.";
+		}
+		else if (BaseJob == Job_Novice) {
+			mes "Bem-vindo à Academia de Magia de Schweicherbil.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Este lugar é especializado em treinamento da classe Sábio. Principalmente, o que fazemos é estudar sobre monstros e feitiços mágicos.";
+			mes "Sempre recebemos bem novos estudantes.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Pessoas que estão no nível de classe 40 como Mago estão qualificadas para solicitar a inscrição.";
+			mes "Ao passar em cursos selecionados, nós os aprovaremos como Sábios.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Se você estiver interessado na classe Sábio, por favor, venha novamente.";
+			mes "E tenha um bom dia.";
+		}
+		else {
+			mes "Bem-vindo à Academia de Magia de Schweicherbil.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Este lugar é especializado em treinamento da classe Sábio. O que fazemos é estudar sobre monstros e feitiços mágicos.";
+			mes "Pessoas que estão no nível de classe 40 como Mago estão qualificadas para solicitar a inscrição.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Se você tiver amigos Mago, por favor, informe-os sobre esta academia.";
+			mes "Tenha um bom dia.";
+		}
+		close;
+	}
+	if (SAGE_Q == 0) {
+		mes "Bem-vindo à Academia de Magia Schweicherbil.";
+		mes "Oh, você é um Mago. Como posso ajudá-lo?";
+		next;
+		switch(select("Conte-me sobre a mudança de classe para Sábio.:Quero me matricular na escola.:Nada.")) {
+		case 1:
+			mes "[Metheus Sylphe]";
+			mes "Entendo. Você deseja se tornar um Sábio?";
+			mes "Infelizmente, não somos responsáveis por mudar sua classe para a classe Sábio.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Após entrar nesta academia e passar em certos cursos...";
+			mes "você receberá a aprovação oficial para conduzir estudos como um Sábio.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Por essa razão, não falamos desse processo como uma mudança de classe, mas como uma graduação.";
+			mes "De qualquer forma, se você preencher sua inscrição para esta academia, eu o informarei sobre a taxa de inscrição e o deixarei fazer o teste.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Para sua informação, se você trouxer ^3355FFOld Magicbook^000000 e ^3355FFNecklace of Wisdom^000000,";
+			mes "você não precisará pagar a Taxa de Inscrição para se matricular na escola.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Após se inscrever, você poderá fazer o teste de admissão.";
+			mes "Se você passar no teste, escreverá uma tese sobre um assunto específico.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "O Reitor da academia decidirá se você é qualificado ou não.";
+			mes "Se você for admitido, poderá participar das atividades de estudo e pesquisa como um Sábio.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Você é sempre bem-vindo para se juntar a nós.";
+			mes "Tenha um bom dia.";
+			close;
+		case 2:
+			mes "[Metheus Sylphe]";
+			mes "Entendo, você quer se juntar à academia. Mais uma vez, bem-vindo à Academia de Magia Schweicherbil.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Pessoas que já cumpriram o requisito básico atingindo o nível de classe 40 de Mago são qualificadas para a inscrição.";
+			mes "Uma pequena taxa de inscrição também será necessária.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "A taxa de inscrição é de 70.000 zenys.";
+			mes "No entanto, se você trouxer ^3355FFOld Magicbook^000000 e ^3355FFNecklace of Wisdom^000000, você será isento desta taxa.";
+			next;
+			mes "[Metheus Sylphe]";
+			mes "Então, você deseja se inscrever imediatamente?";
+			next;
+			switch(select("Sim, desejo.:A taxa é muito cara.:Voltarei mais tarde.")) {
+			case 1:
+				if (JobLevel < 40) {
+					mes "[Metheus Sylphe]";
+					mes "Sinto muito, mas você ainda não atendeu aos requisitos básicos.";
+					mes "Por favor, estude mais e atinja o nível de classe 40 de Mago primeiro.";
+					close;
+				}
+				if (SkillPoint) {
+					mes "[Metheus Sylphe]";
+					mes "Você tem pontos de habilidade não utilizados sobrando. Por favor, aprenda todas as habilidades que você planejou aprender.";
+					mes "Não aceitamos candidatos ambíguos.";
+					close;
+				}
+				mes "[Metheus Sylphe]";
+				mes "Muito bem. Vamos preencher seu formulário de inscrição.";
+				mes "Por favor, assine aqui.";
+				next;
+				select(strcharinfo(0));
+				mes "[Metheus Sylphe]";
+				mes "Seu nome é..." + strcharinfo(0) + ". É um nome muito bonito.";
+				next;
+				if (JobLevel == 50) {
+					mes "[Metheus Sylphe]";
+					mes "Oh, você dominou a classe Mago! Você é ótimo!! *Aplausos*";
+					mes "Em recompensa pelo seu grande esforço, você será isento da taxa de inscrição!";
+					next;
+					mes "[Metheus Sylphe]";
+					mes "Sim, está tudo pronto.";
+					mes "Em seguida, você fará um teste de admissão.";
+					set SAGE_Q,4;
+					setquest 2041;
+					next;
+					mes "[Metheus Sylphe]";
+					mes "Por favor, visite o Professor Claytos.";
+					mes "Ele está na sala da esquerda.";
+					close;
+				}
+				mes "[Metheus Sylphe]";
+				mes "Você pagará a taxa de inscrição com 70.000 zenys?";
+				mes "Ou você me dará ^3355FFOld Magicbook^000000 e ^3355FFNecklace of Wisdom^000000?";
+				next;
+				if (select("Pagar 70.000 zenys.:Dar a ele Old Magicbook e Necklace of Wisdom.") == 1) {
+					if (Zeny > 69999) {
+						set Zeny, Zeny-70000;
+						mes "[Metheus Sylphe]";
+						mes "Obrigado, sua inscrição foi aceita.";
+						mes "Em seguida, você fará um teste de admissão.";
+						set SAGE_Q,4;
+						setquest 2041;
+						next;
+						mes "[Metheus Sylphe]";
+						mes "Por favor, visite o Professor Claytos.";
+						mes "Ele está na sala da esquerda.";
+						close;
+					}
+					mes "[Metheus Sylphe]";
+					mes "Que pena! Parece que você não trouxe dinheiro suficiente para a mensalidade.";
+					mes "Por favor, certifique-se de ter pelo menos 70.000 zenys para se matricular nas aulas.";
+					close;
+				}
+				if (countitem(1006) > 0 && countitem(1007) > 0) {
+					delitem 1006,1; //Old_Magic_Book
+					delitem 1007,1; //Penetration
+					mes "[Metheus Sylphe]";
+					mes "Obrigado, sua inscrição foi aceita.";
+					mes "Em seguida, você fará o teste de admissão.";
+					set SAGE_Q,4;
+					setquest 2041;
+					next;
+					mes "[Metheus Sylphe]";
+					mes "Por favor, visite o Professor Claytos.";
+					mes "Ele está na sala da esquerda.";
+					close;
+				}
+				mes "[Metheus Sylphe]";
+				mes "Hmm... Parece que você não trouxe nenhum deles?";
+				mes "Suponho que você os deixou em algum lugar. Por favor, vá pegá-los e depois volte.";
+				close;
+			case 2:
+				if (JobLevel < 40) {
+					mes "[Metheus Sylphe]";
+					mes "Antes de falarmos sobre a taxa de inscrição, parece que você ainda não atendeu ao requisito básico, nível de classe 40 de Mago.";
+					mes "Por favor, estude mais e volte para se matricular.";
+					close;
+				}
+				if (JobLevel == 50) {
+					mes "[Metheus Sylphe]";
+					mes "Bem, não posso ajudá-lo com essa questão. Se você não tem a taxa, não é permitido entrar na academia.";
+					mes "Mesmo que você ache que é absurdamente caro, é um preço justificável a pagar para se tornar um Sábio.";
+					next;
+					mes "[Metheus Sylphe]";
+					mes "De qualquer forma... oh! Você dominou a classe Mago! Você é verdadeiramente exemplar!! *Aplausos*.";
+					mes "Como recompensa pelo seu grande esforço, você será isento da taxa de inscrição!";
+					next;
+					mes "[Metheus Sylphe]";
+					mes "Ok, vamos preencher o formulário de inscrição.";
+					mes "Por favor, assine aqui.";
+					next;
+					select(strcharinfo(0));
+					mes "[Metheus Sylphe]";
+					mes "Seu nome é..." + strcharinfo(0) + ". É um nome muito bonito.";
+					next;
+					mes "[Metheus Sylphe]";
+					mes "Sim, está tudo pronto.";
+					mes "Em seguida, você fará o teste de admissão.";
+					set SAGE_Q,4;
+					setquest 2041;
+					next;
+					mes "[Metheus Sylphe]";
+					mes "Por favor, visite o Professor Claytos.";
+					mes "Ele está na sala da esquerda.";
+					close;
+				}
+				if (Zeny > 43210) {
+					mes "[Metheus Sylphe]";
+					mes "Bem, não posso ajudá-lo com essa questão. Se você não tem a taxa, não é permitido entrar na academia.";
+					mes "Mesmo que você possa achar que é absurdamente caro, é um preço justificável a pagar para se tornar um Sábio.";
+					next;
+					mes "[Metheus Sylphe]";
+					mes "Alternativamente, você poderia tentar encontrar ^3355FFOld Magicbook^000000 e ^3355FFNecklace of Wisdom^000000.";
+					mes "Se você não quiser fazer isso, precisará economizar algum dinheiro para a taxa de inscrição.";
+					next;
+					mes "[Metheus Sylphe]";
+					mes "Adeus e tenha um bom dia.";
+					close;
+				}
+				else {
+					mes "[Metheus Sylphe]";
+					mes "Oh, suponho que você não tenha dinheiro suficiente?";
+					mes "De acordo com as disposições existentes, você deve pagar 70.000 zenys pela inscrição...";
+					next;
+					if (select("Por favor... há alguma forma?:Ok, voltarei mais tarde.") == 1) {
+						mes "[Metheus Sylphe]";
+						mes "Hmmm... então, oferecerei uma opção especial!";
+						mes "Você pagará 30.000 zenys e trará alguns itens como compensação pelo desconto na mensalidade.";
+						next;
+						switch(rand(1,3)) {
+						case 1:
+							set SAGE_Q,1;
+							setquest 2043;
+							mes "[Metheus Sylphe]";
+							mes "Por favor, reúna os itens a seguir.";
+							mes "50 ^3355FFPena de Pássaro^000000";
+							mes "50 ^3355FFFelpa^000000";
+							mes "25 ^3355FFMinério de Ferro^000000";
+							next;
+							mes "[Metheus Sylphe]";
+							mes "Se você trouxer esses itens, sua mensalidade será de 30.000 zenys, em vez da taxa original de 70.000 zenys.";
+							break;
+						case 2:
+							set SAGE_Q,2;
+							setquest 2044;
+							mes "[Metheus Sylphe]";
+							mes "Por favor, reúna os itens a seguir.";
+							mes "50 ^3355FFTrevo^000000";
+							mes "50 ^3355FFPena^000000";
+							mes "25 ^3355FFTinta de Lula^000000";
+							next;
+							mes "[Metheus Sylphe]";
+							mes "Se você trouxer os itens mencionados, a taxa da mensalidade será de 30.000 zenys, em vez da taxa original de 70.000 zenys.";
+							break;
+						case 3:
+							set SAGE_Q,3;
+							setquest 2045;
+							mes "[Metheus Sylphe]";
+							mes "Por favor, reúna os itens a seguir.";
+							mes "50 ^3355FFPena de Pássaro^000000";
+							mes "50 ^3355FFFelpa^000000";
+							mes "50 ^3355FFTrevo^000000";
+							mes "50 ^3355FFPena^000000";
+							next;
+							mes "[Metheus Sylphe]";
+							mes "Se você trouxer esses itens, sua mensalidade será de apenas 30.000 zenys, em vez da taxa original de 70.000 zenys.";
+						}
+						mes "Tenho certeza de que é uma opção bem razoável para você.";
+						next;
+						mes "[Metheus Sylphe]";
+						mes "Ah sim, antes de reunir todos esses itens, se você por acaso tiver 70.000 zenys, ficarei mais do que feliz em receber o pagamento integral.";
+						mes "Essa é, afinal de contas, nossa política original.";
+						next;
+						mes "[Metheus Sylphe]";
+						mes "Alternativamente, você pode me trazer um ^3355FFLivro de Magia Antigo^000000 e um ^3355FFColar da Sabedoria^000000.";
+						mes "Adeus e tenha um bom dia.";
+						close;
+					}
+					mes "[Metheus Sylphe]";
+					mes "Ah sim, leve o tempo que precisar...";
+					mes "Adeus e tenha um bom dia.";
+					close;
+				}
+			case 3:
+				mes "[Metheus Sylphe]";
+				mes "Ah sim, leve o tempo que precisar...";
+				mes "Adeus e tenha um bom dia.";
+				close;
+			}
+		case 3:
+			mes "[Metheus Sylphe]";
+			mes "Entendo, leve o tempo que precisar. Você também pode dar uma olhada por aqui.";
+			mes "Adeus e tenha um bom dia.";
+			close;
+		}
+	}
+	else if (SAGE_Q >= 1 && SAGE_Q <= 3) {
+		mes "Bem-vindo novamente.";
+		next;
+		if (countitem(1006) > 0 && countitem(1007) > 0) {
+			delitem 1006,1; //Old_Magic_Book
+			delitem 1007,1; //Penetration
+			mes "[Metheus Sylphe]";
+			mes "Muito bem. Deixe-me prosseguir com sua solicitação de inscrição.";
+			set SAGE_Q,4;
+			next;
+		}
+		else if (Zeny > 69999) {
+			set Zeny, Zeny-70000;
+			mes "[Metheus Sylphe]";
+			mes "Muito bem. Deixe-me prosseguir com sua solicitação de inscrição.";
+			set SAGE_Q,4;
+			next;
+		}
+		else {
+			switch (SAGE_Q) {
+			case 1:
+				//Feather_Of_Bird, Fluff, Iron_Ore
+				setarray .@item[0], 916,914,1002; 
+				setarray .@count[0], 50,50,25; 
+				break;
+			case 2:
+				//Clover, Feather, Chinese_Ink
+				setarray .@item[0], 705,949,1024;
+				setarray .@count[0], 50,50,25;
+				break;
+			case 3:
+				//Feather_Of_Bird, Fluff, Clover, Feather
+				setarray .@item[0], 916,914,705,949;
+				setarray .@count[0], 50,50,50,50;
+				break;
+			}
+			set .@size, (getarraysize(.@item)-1); 
+			for( set .@i,0 ; .@i < .@size && countitem(.@item[.@i]) >= .@count[.@i] ; set .@i,.@i+1 );
+			if(.@i == .@size) {  
+				if (Zeny > 29999) {
+					for (set .@i, 0; .@i < .@size ; set .@i, .@i+1)
+						delitem .@item[.@i], .@count[.@i];  
+					set Zeny, Zeny-30000;
+					mes "[Metheus Sylphe]";
+					mes "Muito bem. Deixe-me prosseguir com sua solicitação de inscrição.";
+					set .@SAGE_Q_T,SAGE_Q;
+					set SAGE_Q,4;
+					next;
+				}
+				mes "[Metheus Sylphe]";
+				mes "Sinto dizer que você ainda não está pronto.";
+				mes "Embora tenha trazido todos os itens, o dinheiro que você tem agora é menos de 30.000 zenys.";
+				next;
+				mes "[Metheus Sylphe]";
+				mes "Como eu disse antes, você deve trazer todos esses itens e os 30.000 zenys juntos.";
+				mes "Por favor, certifique-se de que você tem os itens e o dinheiro necessários.";
+				close;
+			}
+			else {
+				mes "[Metheus Sylphe]";
+				mes "Sinto dizer que parece que você não trouxe todos os itens necessários.";
+				mes "Vou lembrá-lo do que precisa trazer, caso tenha esquecido.";
+				next;
+				mes "[Metheus Sylphe]";
+				mes "Por favor, traga os itens a seguir para mim.";
+				mes .@count[0]+"^3355FF"+getitemname(.@item[0])+"^000000";
+				mes .@count[1]+"^3355FF"+getitemname(.@item[1])+"^000000";
+				mes .@count[2]+"^3355FF"+getitemname(.@item[2])+"^000000";
+				if (SAGE_Q == 3) mes .@count[3]+"^3355FF"+getitemname(.@item[3])+"^000000";
+				next;
+				mes "[Metheus Sylphe]";
+				mes "Se você trouxer todos esses itens, sua taxa de mensalidade será reduzida de 70.000 zenys para 30.000 zenys.";
+				mes "Boa sorte.";
+				close;
+			}
+		}
+		mes "[Metheus Sylphe]";
+		mes "Vamos concluir o formulário de inscrição.";
+		mes "Por favor, coloque sua assinatura aqui.";
+		next;
+		select(strcharinfo(0));
+		mes "[Metheus Sylphe]";
+		switch (.@SAGE_Q_T) {
+		case 1: mes "Seu nome é..." + strcharinfo(0) + ". É um nome muito bonito."; break;
+		case 2: mes "Seu nome é..." + strcharinfo(0) + ". Soa muito sagaz."; break;
+		case 3: mes "Seu nome é..." + strcharinfo(0) + ". Nome interessante."; break;
+		}
+		next;
+		mes "[Metheus Sylphe]";
+		mes "Ah sim, tudo está pronto.";
+		mes "A seguir, você fará um teste de admissão.";
+		set SAGE_Q,4;
+		if(checkquest(2043) != -1) {
+			changequest 2043,2041;
+		}
+		else if(checkquest(2044) != -1) {
+			changequest 2044,2041;
+		}
+		else if(checkquest(2045) != -1) {
+			changequest 2045,2041;
+		}
+		else {
+			setquest 2041;
+		}
+		next;
+		mes "[Metheus Sylphe]";
+		mes "Por favor, visite o Professor Claytos.";
+		mes "Ele está na sala à esquerda.";
+		close;
+	}
+	else if (SAGE_Q == 4) {
+		mes "Hã? O que você está fazendo aqui? Era para você estar fazendo o teste de admissão agora.";
+		mes "Por favor, visite o Professor Claytos na sala à esquerda.";
+		close;
+	}
+	else if (SAGE_Q == 15) {
+		mes "Oh, você terminou a dissertação?";
+		mes "Claro, você pode enviá-la ao Reitor Kayron.";
+		next;
+		mes "[Metheus Sylphe]";
+		mes "Contanto que você se esforce, deve alcançar bons resultados.";
+		mes "Boa sorte.";
+		close;
+	}
+	else {
+		mes "Ah, desculpe, este é um momento bastante inoportuno para conversar.";
+		mes "Por favor, volte mais tarde. Peço desculpas por incomodá-lo.";
+		close;
+	}
+}
+
+yuno_in03,105,177,5	script	Written Test Professor#s	754,{
+	mes "[Claytos Verdo]";
+	if (BaseJob != Job_Mage) {
+		if (BaseJob == Job_Sage) {
+			mes "Eh? O quê? Por que você voltou aqui?";
+			mes "Você quer entrar na escola novamente?";
+			next;
+			mes "[Claytos Verdo]";
+			mes "Agora, entendo como você se sente. Desde que se formou, você se tornou um Sábio. Um Sábio... até o fim dos seus dias.";
+			mes "Então, seja forte e independente. Tente explorar alguns lugares onde ninguém mais se aventurou a ir.";
+			next;
+			mes "[Claytos Verdo]";
+			mes "Não se esqueça de registrar tudo o que vivenciou.";
+			mes "Você deve compartilhar seu conhecimento com outros fazendo excelentes anotações.";
+		}
+		else if (BaseJob == Job_Novice) {
+			mes "O que você está fazendo aqui, garoto?";
+			mes "Esta é uma Academia de Magia, não uma creche.";
+			next;
+			mes "[Claytos Verdo]";
+			mes "Vá lá fora e brinque com os Porings. Esse é seu trabalho.";
+			mes "Saia, rápido, rápido!!";
+		}
+		else if (Class == Job_Wizard) {
+			mes "Bem... olha só quem voltou rastejando. Viciado em magia.";
+			mes "É, é, então não é tão ruim assim ser devotado à magia.";
+			next;
+			mes "[Claytos Verdo]";
+			mes "Mas espero que você se lembre: ninguém pode viver sozinho.";
+			mes "Embora você seja forte o suficiente para jogar sozinho, deve cooperar e ajudar outras pessoas. É isso que um Bruxo deve representar.";
+		}
+		else {
+			mes "Hmm... entendo que você quer entrar em nossa prestigiosa academia, mas já que escolheu viver como uma classe diferente,";
+			mes "não acho que você possa se tornar um Sábio.";
+			next;
+			mes "[Claytos Verdo]";
+			mes "Então, não fique por aí se arrependendo de ter escolhido uma profissão diferente de Sábio. É melhor sair e caçar, subindo o nível da sua profissão atual.";
+		}
+		close;
+	}
+	if (SAGE_Q == 0) {
+		mes "O quê, você quer ser um Sábio?";
+		mes "Percebo pelos seus olhos, famintos por sabedoria.";
+		next;
+		mes "[Claytos Verdo]";
+		mes "Claro, se você quer ser um Sábio, deve primeiro entrar na academia.";
+		mes "Inscreva-se para a matrícula e depois volte.";
+		close;
+	}
+	else if (SAGE_Q == 1 || SAGE_Q == 2 || SAGE_Q == 3) {
+		mes "Hah! Você nem terminou o processo de inscrição!?";
+		mes "Entendo... Metheus te disse alguma coisa?";
+		next;
+		mes "[Claytos Verdo]";
+		mes "Faça o seu melhor. Será uma boa experiência para você.";
+		mes "Volte quando terminar a inscrição.";
+		close;
+	}
+	else if (SAGE_Q == 4) {
+		mes "Bem-vindo à Academia de Magia Schweicherbil.";
+		mes "Você já se inscreveu para este teste, não é mesmo?";
+		next;
+		mes "[Claytos Verdo]";
+		mes "Deixe-me ver, seu nome é" + strcharinfo(0) + "...";
+		mes "Ok, vamos começar!";
+		next;
+		mes "[Claytos Verdo]";
+		mes "O teste que vou te dar testará seu conhecimento em todas as matérias acadêmicas do mundo.";
+		mes "Darei 20 perguntas, com cada pergunta valendo 5 pontos. Ao obter uma nota de 80 pontos, você passará no teste.";
+		next;
+		mes "[Claytos Verdo]";
+		mes "Ok, não há necessidade de esperar. Vamos começar imediatamente";
+		mes "Ah, e se você não responder imediatamente, o teste será cancelado.";
+L_AskQuestions:
+		next;
+		switch(rand(1,3)) {
+		case 1:
+			mes "1. Escolha um item que o Mercador em Prontera não vende.";
+			next;
+			if (select("China:Red Frame:Bouquet:Glass Bead") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "2. Escolha uma cidade onde você não pode comprar uma Stiletto.";
+			next;
+			if (select("Prontera:Morocc:Geffen:Lutie") == 1)
+				set .@sage_t,.@sage_t+5;
+			mes "3. Escolha a cidade mais próxima da Turtle Island.";
+			next;
+			if (select("Al De Baran:Alberta:Comodo:Izlude") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "4. Escolha o monstro que é de um tipo diferente dos outros.";
+			next;
+			if (select("Raggler:Pest:Frilldora:Aster") == 4)
+				set .@sage_t,.@sage_t+5;
+			mes "5. Escolha o monstro que tem um atributo diferente dos outros.";
+			next;
+			if (select("Mantis:Metaller:Rocker:Horn") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "6. Escolha o monstro que é de um tamanho diferente dos outros.";
+			next;
+			if (select("Raydric:Raydric Arqueiro:Musa:Retrato de Injustiça") == 1)
+				set .@sage_t,.@sage_t+5;
+			mes "7. Escolha o monstro que não dropa 'Alcohol'.";
+			next;
+			if (select("Horong:Plankton:Esporo Venenoso:Toad") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "8. Escolha o NPC que é irrelevante para a quest de mudança de classe do Cavaleiro.";
+			next;
+			if (select("Sir Siracuse:Thomas Servantes:Sir Windsor:Lady Amy") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "9. Escolha o NPC que não é um cidadão de Prontera.";
+			next;
+			if (select("Tono:Pina:YuPi:Hollgrehenn") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "10. Escolha o nome correto para a Kafra que usa óculos.";
+			next;
+			if (select("Pavianne:Roxie:Leilah:Curly Sue") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "11. Quanto SP é gasto para usar Tempestade de Trovão nv 7?";
+			next;
+			if (select("49:59:69:74") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "12. Escolha a redução de dano e o consumo de SP corretos da habilidade Casaco de Energia quando o SP restante do conjurador é de 50%.";
+			next;
+			if (select("Dano -24% SP1.5%:Dano -24% SP2%:Dano -18% SP1.5%:Dano -18% SP2%") == 4)
+				set .@sage_t,.@sage_t+5;
+			mes "13. Escolha a propriedade que é irrelevante para as habilidades do tipo 'Bolt' para a classe Mago.";
+			next;
+			if (select("Água:Terra:Fogo:Vento") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "14. Escolha a chance e força de ataque corretas para Ataque Duplo nv 7, a habilidade do Gatuno.";
+			next;
+			if (select("35% / 120%:35% / 140%:40% / 120%:40% / 140%") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "15. Escolha a habilidade que é irrelevante para aprender Magnus Exorcismus, a habilidade do Sacerdote.";
+			next;
+			if (select("Proteção Divina:Cura:Revelação:Aqua Benedicta") == 1)
+				set .@sage_t,.@sage_t+5;
+			mes "16. Escolha a defesa e habilidade corretas do Bunny Band.";
+			next;
+			if (select("1 / SOR +2:1 / SOR +5:2 / SOR +2:2 / SOR +5") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "17. Escolha a classe que não pode equipar Padded Armor.";
+			next;
+			if (select("Espadachim:Mercador:Gatuno:Arqueiro") == 4)
+				set .@sage_t,.@sage_t+5;
+			mes "18. Escolha o item que cura todos os status anormais e restaura HP e SP completos ao mesmo tempo.";
+			next;
+			if (select("Royal Jelly:Yggdrasil Seed:Yggdrasilberry:Mastella Fruit") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "19. Quem governa o reino de Rune-Midgard atualmente?";
+			next;
+			if (select("Tristun III:Tristram III:Tristar III:Trast III") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "20. Escolha o deus dos Templários.";
+			next;
+			if (select("Odin:Loki:Thor:Venadin") == 1)
+				set .@sage_t,.@sage_t+5;
+			break;
+		case 2:
+			mes "1. Escolha a joia que o Mercador de joias de Morocc não vende.";
+			next;
+			if (select("Topázio:Granada:Diamante:Safira") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "2. Escolha a cidade onde os usuários não podem comprar Ração para Monstros de um NPC.";
+			next;
+			if (select("Prontera:Morocc:Al De Baran:Alberta") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "3. Escolha a cidade mais próxima do Labirinto.";
+			next;
+			if (select("Prontera:Morocc:Geffen:payon") == 1)
+				set .@sage_t,.@sage_t+5;
+			mes "4. Escolha o monstro que é de um tipo diferente dos outros.";
+			next;
+			if (select("Muka:Drops:Plankton:Penomena") == 4)
+				set .@sage_t,.@sage_t+5;
+			mes "5. Escolha o monstro com um atributo diferente.";
+			next;
+			if (select("Dokebi:Isis:Giearth:Deviruchi") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "6. Escolha o monstro que é diferente em tamanho.";
+			next;
+			if (select("Besouro-Ladrão (Agressivo):Horn:Metaller:Argos") == 4)
+				set .@sage_t,.@sage_t+5;
+			mes "7. Escolha o monstro que não derruba 'Folha de Yggdrasil'.";
+			next;
+			if (select("Marduk:Baphomet Jr.:Angeling:Musa") == 1)
+				set .@sage_t,.@sage_t+5;
+			mes "8. Escolha o NPC que é irrelevante para a missão de mudança de classe de Sacerdote.";
+			next;
+			if (select("Paul:Sir Windsor:Peter S. Alberto:Cecilia") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "9. Escolha o NPC que não é um cidadão de Morocc.";
+			next;
+			if (select("Syvia:Akira:Antonio:Dmitrii") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "10. Escolha a atendente Kafra que tem um lindo cabelo azul.";
+			next;
+			if (select("Pavianne:Roxie:Leilah:Curly Sue") == 1)
+				set .@sage_t,.@sage_t+5;
+			mes "11. Escolha a habilidade que é irrelevante para aprender Barreira de Fogo, a habilidade de Mago.";
+			next;
+			if (select("Lanças de Fogo nv. 4:Impacto Espiritual nv. 4:Bola de Fogo nv. 5:Visão nv. 1") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "12. Quanto de SP pode ser restaurado ao aprender Recuperação de SP nv. 6 (sem ser afetado pela INT)?";
+			next;
+			if (select("14:16:18:21") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "13. Quantos pontos de INT um Mago recebe como bônus no nível de classe 33?";
+			next;
+			if (select("7:6:5:4") == 4)
+				set .@sage_t,.@sage_t+5;
+			mes "14. Escolha o consumo de SP e a duração corretos para Aumentar Agilidade nv. 5 (habilidade de Arqueiro).";
+			next;
+			if (select("45 / 80 seg:50 / 80 seg:45 / 90 seg:50 / 90 seg") == 1)
+				set .@sage_t,.@sage_t+5;
+			mes "15. Escolha a habilidade que é irrelevante para aprender Maximizar Poder, a habilidade de Ferreiro.";
+			next;
+			if (select("Amplificar Poder:Temperar Pele:Martelo de Thor:Perfeição de Arma") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "16. Qual é a taxa de defesa e a habilidade correta da Tiara?";
+			next;
+			if (select("0 / SP +20:0 / SP +30:1 / SP +20:1 / SP +30") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "17. Escolha a classe que não pode equipar Túnica de Seda.";
+			next;
+			if (select("Espadachim:Mercador:Gatuno:Noviço") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "18. Escolha o status anormal que não pode ser curado por Poção Verde.";
+			next;
+			if (select("Silêncio:Caos:Cegueira:Maldição") == 4)
+				set .@sage_t,.@sage_t+5;
+			mes "19. Escolha o nome correto para o antigo reino que desapareceu em algum lugar em Geffen.";
+			next;
+			if (select("Geffayon:Geffenia:Gefenn:Jaffen") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "20. Escolha o nome correto para a árvore que se tornou a raiz deste mundo.";
+			next;
+			if (select("Yggdrasil:Yggdrasil:Mastela:Galho Seco") == 1)
+				set .@sage_t,.@sage_t+5;
+			break;
+		case 3:
+			mes "1. Escolha o item que a Ferramenta Mágica Mercador em Geffen não vende.";
+			next;
+			if (select("Manto:Varinha:Diadema:Túnica de Prata") == 1)
+				set .@sage_t,.@sage_t+5;
+			mes "2. Escolha a cidade onde os usuários não podem comprar Lâmina de um NPC.";
+			next;
+			if (select("Prontera:Izlude:Al De Baran:payon") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "3. Escolha a cidade mais próxima de Glast Heim.";
+			next;
+			if (select("Prontera:Geffen:Morocc:payon") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "4. Escolha o monstro que é de um tipo diferente dos outros.";
+			next;
+			if (select("Aster:Marc:Marse:Marin") == 4)
+				set .@sage_t,.@sage_t+5;
+			mes "5. Escolha o monstro que tem um atributo diferente.";
+			next;
+			if (select("Filhote de Lobo do Deserto:Smokie:Picky:Choco") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "6. Escolha o monstro que tem um tamanho diferente.";
+			next;
+			if (select("Drake:Aparição:Druida Maligno:Khalitzburg") == 1)
+				set .@sage_t,.@sage_t+5;
+			mes "7. Escolha o monstro que não dropa 'Phracon'.";
+			next;
+			if (select("Pupa:Ovo de Peco Peco:Savage Bebe:Filhote de Lobo do Deserto") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "8. Escolha o NPC que é irrelevante para a quest de mudança de classe do Ferreiro.";
+			next;
+			if (select("Altiregen:Geschupenschte:Barcadi:Baisulist") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "9. Escolha o NPC que não é um cidadão de Al De Baran.";
+			next;
+			if (select("RS125:GOD-POING:Stromme:Chemirre") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "10. Escolha a dama da Kafra que é a mais nova entre a equipe.";
+			next;
+			if (select("Pavianne:Roxie:Leilah:Curly Sue") == 4)
+				set .@sage_t,.@sage_t+5;
+			mes "11. Escolha o consumo correto de SP e o número de evasões ao usar Safety Wall nível 6.";
+			next;
+			if (select("SP 40, 6 vezes:SP 35, 6 vezes:SP 40, 7 vezes:SP 35, 7 vezes") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "12. Escolha a quantidade correta de ataque mágico para Napalm Beat nível 6.";
+			next;
+			if (select("ATQM * 1.2:ATQM * 1.3:ATQM * 1.4:ATQM * 1.5") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "13. Escolha a pedra catalisadora para a Solução do Mago nº 4, que é usada na quest de mudança de classe do Mago.";
+			next;
+			if (select("Blue Gemstone:Red Gemstone:Yellow Gemstone:1 carat Diamond") == 4)
+				set .@sage_t,.@sage_t+5;
+			mes "14. Escolha a força de ataque correta e o consumo de SP para Bash nível 6, a habilidade do Swordman.";
+			next;
+			if (select("250% / 8:280% / 8:280% / 15:310% / 15") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "15. Escolha a habilidade que é irrelevante para aprender Claymore Trap, a habilidade do Caçador.";
+			next;
+			if (select("Remove Trap:Land Mine:Ankle Snare:Flasher") == 1)
+				set .@sage_t,.@sage_t+5;
+			mes "16. Escolha a defesa correta e a habilidade do Wedding Veil.";
+			next;
+			if (select("0 / MDEF +3:0 / MDEF +5:1 / MDEF +3:1 / MDEF +5") == 2)
+				set .@sage_t,.@sage_t+5;
+			mes "17. Escolha a classe que não pode equipar Coat.";
+			next;
+			if (select("Espadachim:Mercador:Gatuno:Aprendiz") == 4)
+				set .@sage_t,.@sage_t+5;
+			mes "18. Escolha o item que não é um ingrediente para Blue Dyestuffs.";
+			next;
+			if (select("Alcohol:Detrimindexta:Karvodailnirol:Blue Herb") == 3)
+				set .@sage_t,.@sage_t+5;
+			mes "19. Quando o mundo foi criado pelo deus Odin, o que ele usou como material?";
+			next;
+			if (select("O coração de Ymir:A unha de Ymir:O dente de Ymir:A lembrança de Ymir") == 1)
+				set .@sage_t,.@sage_t+5;
+			mes "20. Escolha o metal que, segundo rumores, traz fortuna e fama para a pessoa com o destino certo.";
+			next;
+			if (select("Empelium Dourado:Emperium:Imperador:Phracon") == 2)
+				set .@sage_t,.@sage_t+5;
+		}
+		mes "[Claytos Verdo]";
+		if (SAGE_Q == 4) {
+			mes "Bem, você respondeu a todas as 20 perguntas.";
+			mes "Ok, deixe-me verificar suas respostas e somar sua pontuação.";
+		}
+		else {
+			mes "Bem, terminamos todas as 20 perguntas.";
+			mes "Agora, vamos verificar quantos pontos você conseguiu.";
+		}
+		next;
+		mes "[Claytos Verdo]";
+		mes "Vejamos...";
+		mes "Hum... hum...";
+		next;
+		mes "[Claytos Verdo]";
+		mes "Você conseguiu" + .@sage_t + "pontos.";
+		if (.@sage_t == 100) {
+			if (SAGE_Q == 4)
+				mes "Excelente! Você parece totalmente qualificado para se tornar um Sábio!";
+			else
+				mes "Excelente! Você deve ter estudado muito para este teste!";
+			set SAGE_Q,6;
+			changequest 2041,2046;
+			next;
+			mes "[Claytos Verdo]";
+			mes "Você passou no teste escrito.";
+			mes "Vá visitar o Professor Hermes para o exame prático.";
+		}
+		else if (.@sage_t >= 80) {
+			set SAGE_Q,6;
+			changequest 2041,2046;
+			mes "É, nada mal. Imagino que você pelo menos entenderá o que vai aprender na aula.";
+			next;
+			mes "[Claytos Verdo]";
+			mes "Você passou no teste escrito.";
+			mes "Vá visitar o Professor Hermes para o exame prático.";
+		}
+		else {
+			if (SAGE_Q == 4) {
+				set SAGE_Q,5;
+				mes "Ah, bem... que pena: você falhou.";
+				next;
+				mes "[Claytos Verdo]";
+				mes "Mas eu lhe darei outra chance de fazer o teste escrito,";
+				mes "Vá estudar mais e volte depois.";
+			}
+			else {
+				mes "Ah, que pena: você falhou.";
+				next;
+				mes "[Claytos Verdo]";
+				mes "Mas eu lhe darei outra chance,";
+				mes "Vá estudar ainda mais e volte.";
+			}
+		}
+		close;
+	}
+	else if (SAGE_Q == 5) {
+		mes "Bem-vindo de volta.";
+		mes "Então, você estudou mais desta vez?";
+		next;
+		mes "[Claytos Verdo]";
+		mes "Você fará o teste escrito sob as mesmas condições do teste anterior. Darei 20 perguntas a você.";
+		mes "Cada resposta correta lhe dará 5 pontos. Quando sua pontuação atingir 80 pontos, você passa no teste.";
+		next;
+		set sage_m2,rand(1,3);
+		mes "[Claytos Verdo]";
+		mes "Ok, não há necessidade de esperar.";
+		mes "Responda imediatamente, ou farei você falhar novamente.";
+		set SAGE_Q,5;
+		goto L_AskQuestions;
+		end;
+	}
+	else if (SAGE_Q == 6) {
+		mes "O que mais você quer?! Você quer fazer este teste novamente?";
+		mes "Você já passou!";
+		next;
+		mes "[Claytos Verdo]";
+		mes "Vá visitar o Professor Hermes para o exame prático.";
+		mes "Mova-se!";
+		close;
+	}
+	else if (SAGE_Q == 15) {
+		mes "Heh heh, parece que você terminou sua dissertação.";
+		mes "Mas eu não sou a pessoa responsável por essa parte do teste.";
+		next;
+		mes "[Claytos Verdo]";
+		mes "envie sua tese para o Reitor Kayron.";
+		mes "Ele decidirá se você está qualificado para se formar ou não.";
+		close;
+	}
+	else {
+		mes "Estou ocupado demais para cuidar de testes escritos.";
+		mes "Volte depois e reservarei um tempo para conversarmos.";
+		close;
+	}
+}
+
+//Practical Examination Professer
+yuno_in03,169,180,3	script	Practical Examination P	755,{
+	mes "[Hermes Tris]";
+	if (BaseJob != Job_Mage) {
+		if (BaseJob == Job_Sage) {
+			mes "Bem-vindo. Como você tem passado?";
+			mes "Imagino que você tenha passado por muitos momentos difíceis... Posso notar pela sua aparência.";
+			next;
+			mes "[Hermes Tris]";
+			mes "Eu sei como é difícil explorar todas essas áreas perigosas, mas isso ajudará você a adquirir mais conhecimento.";
+			mes "O conhecimento dos livros nunca supera a vivência nas ruas.";
+			next;
+			mes "[Hermes Tris]";
+			mes "No entanto, é uma ideia muito perigosa entrar sozinho em uma masmorra.";
+			mes "É melhor você procurar companheiros de confiança.";
+		}
+		else if (BaseJob == Job_Novice) {
+			mes "Heh heh, agora, não é um Aprendiz tão bonitinho?";
+			next;
+			mes "[Hermes Tris]";
+			mes "Neste continente de Rune-Midgarts, existem muitos lugares e objetos desconhecidos que ainda não foram totalmente descobertos.";
+			mes "Os monstros, objetos misteriosos e heróis dos mitos...";
+			next;
+			mes "[Hermes Tris]";
+			mes "Por que você não considera se tornar um Sábio no futuro?";
+			mes "Você vai adorar estudar o mundo.";
+			next;
+			mes "[Hermes Tris]";
+			mes "Se por acaso você decidir fazer isso, nos veremos novamente.";
+			mes "Se cuide, criança.";
+		}
+		else {
+			mes "Bem-vindo à Academia de Magia de Schweicherbil.";
+			next;
+			mes "[Hermes Tris]";
+			mes "Nós, Sages, somos mais parecidos com estudiosos do que com Magos.";
+			mes "Somos muito úteis e poderosos como membros de um grupo.";
+			next;
+			mes "[Hermes Tris]";
+			mes "Tente formar um grupo com um Sábio da próxima vez.";
+			mes "A sabedoria que um Sábio trará será mais do que útil para o seu grupo...";
+		}
+		close;
+	}
+	if (SAGE_Q >= 0 && SAGE_Q <= 3) {
+		mes "Eu sou o Professor Hermes, responsável pelos exames práticos.";
+		mes "Você é um candidato à classe Sábio?";
+		next;
+		mes "[Hermes Tris]";
+		mes "Registre sua inscrição e faça o teste escrito primeiro.";
+		close;
+	}
+	else if (SAGE_Q == 4 || SAGE_Q == 5) {
+		mes "Eu sou o Professor Hermes, responsável pelos exames práticos.";
+		mes "Você é um candidato à classe Sábio?";
+		next;
+		mes "[Hermes Tris]";
+		mes "Vá passar no teste escrito com o Professor Claytos primeiro.";
+		mes "Então eu cuidarei de você.";
+		close;
+	}
+	else if (SAGE_Q == 6) {
+		mes "Bem-vindo, você acabou de passar no teste escrito, não foi?";
+		mes "Agora é hora do exame prático.";
+		next;
+		mes "[Hermes Tris]";
+		mes "Não há nada difícil ou especial sobre este teste.";
+		mes "Tudo o que você precisa fazer é matar todos os monstros dentro do limite de tempo.";
+		next;
+		mes "[Hermes Tris]";
+		mes "É melhor experimentar isso você mesmo, em vez de ser avisado sobre este teste 100 vezes.";
+		mes "Que tal? Você está pronto para fazer este teste?";
+		next;
+		if (select("Sim, estou.:Desculpe, me dê um tempo.") == 1) {
+			set SAGE_Q,7;
+			mes "[Hermes Tris]";
+			mes "Bom, vamos começar imediatamente.";
+			mes "Dê o seu melhor e volte em segurança!";
+			close2;
+			warp "job_sage",50,154;
+			end;
+		}
+		set SAGE_Q,7;
+		mes "[Hermes Tris]";
+		mes "Sim, você não precisa se apressar... tome seu tempo e volte.";
+		close;
+	}
+	else if (SAGE_Q == 7) {
+		mes "Bem-vindo novamente! Então, você se preparou totalmente desta vez?";
+		mes "Ah, bem, não é tão difícil. Dê tudo de si, ok?";
+		next;
+		mes "[Hermes Tris]";
+		mes "Você está pronto?";
+		next;
+		if (select("Sim, estou.:Desculpe, me dê um tempo.") == 1) {
+			mes "[Hermes Tris]";
+			mes "Bom, vamos começar imediatamente.";
+			mes "Dê o seu melhor e volte em segurança!";
+			close2;
+			warp "job_sage",50,154;
+			end;
+		}
+		mes "[Hermes Tris]";
+		mes "Sim, você não precisa ter pressa... leve o seu tempo e volte.";
+		close;
+	}
+	else if (SAGE_Q == 8) {
+		mes "Bom trabalho~ Já que você passou no exame prático também...";
+		mes "Aceitarei sua admissão.";
+		next;
+		mes "[Hermes Tris]";
+		mes "Agora preciso decidir qual matéria você irá aprender e estudar...";
+		mes "Vamos ver... deixe-me verificar a nota do seu teste escrito e o tempo gasto no exame prático.";
+		next;
+		mes "[Hermes Tris]";
+		mes "Hmm, hmm... entendo.";
+		mes "Bem... acho que você está bem.";
+		next;
+		switch(rand(1,3)) {
+		case 1:
+			set SAGE_Q,9;
+			changequest 2046,2047;
+			mes "[Hermes Tris]";
+			mes "Agora, você estudará Yggdrasil.";
+			mes "Yggdrasil é a árvore que se dizia ser a fonte da vida para este mundo.";
+			next;
+			mes "[Hermes Tris]";
+			mes "Essa é uma boa matéria que nos ajuda a reconhecer as mudanças no mundo, assim como a direção de seu aprimoramento.";
+			mes "Peça ajuda ao Professor Saphien. Ele está na Sala de Aula.";
+			next;
+			mes "[Hermes Tris]";
+			mes "Desejo-lhe sorte.";
+			close;
+		case 2:
+			set SAGE_Q,11;
+			changequest 2046,2048;
+			mes "[Hermes Tris]";
+			mes "Agora, você estudará monstros.";
+			mes "O objetivo deste estudo é aprender e entender mais sobre as criaturas existentes em todo o continente.";
+			next;
+			mes "[Hermes Tris]";
+			mes "Esta é uma boa matéria que o ajudará a viver sua vida como um Sábio experiente.";
+			mes "Peça ajuda ao Professor Lucius. Ele está no Museu de Monstros.";
+			next;
+			mes "[Hermes Tris]";
+			mes "Desejo-lhe sorte.";
+			close;
+		case 3:
+			set SAGE_Q,13;
+			changequest 2046,2049;
+			mes "[Hermes Tris]";
+			mes "Agora, você estudará habilidades mágicas que possuem certas propriedades.";
+			mes "O objetivo deste estudo é entender melhor as habilidades mágicas básicas que usamos no dia a dia.";
+			next;
+			mes "[Hermes Tris]";
+			mes "Essa é uma boa matéria que o ajuda a entender profundamente a verdade da magia.";
+			mes "Peça ajuda ao Professor Aebecee... Ele está no Laboratório de Somatologia.";
+			next;
+			mes "[Hermes Tris]";
+			mes "Desejo-lhe sorte.";
+			close;
+		}
+	}
+	else if (SAGE_Q == 9) {
+		mes "Hã? Você não entendeu o que eu disse?";
+		mes "Eu disse para você estudar Yggdrasil.";
+		next;
+		mes "[Hermes Tris]";
+		mes "Peça ajuda ao Professor Saphien. Ele está na Sala de Aula.";
+		close;
+	}
+	else if (SAGE_Q == 11) {
+		mes "Hã? Você não entendeu o que eu disse?";
+		mes "Eu disse para você estudar monstros.";
+		next;
+		mes "[Hermes Tris]";
+		mes "Peça ajuda ao Professor Lucius. Ele está no Museu de Monstros.";
+		close;
+	}
+	else if (SAGE_Q == 13) {
+		mes "Hã? Você não entendeu o que eu disse?";
+		mes "Eu disse para você estudar feitiços mágicos que possuem certas propriedades.";
+		next;
+		mes "[Hermes Tris]";
+		mes "Peça ajuda ao Professor Aebecee. Ele está no Laboratório de Somatologia.";
+		close;
+	}
+	else if (SAGE_Q == 15) {
+		mes "O que você está fazendo aqui? Você não deveria estar com o Reitor Kayron?";
+		mes "Ah bem, não há problema em me mostrar sua dissertação embora...";
+		next;
+		mes "[Hermes Tris]";
+		mes "Mas pensando bem, talvez haja. Vá ver o Reitor Kayron.";
+		close;
+	}
+	else {
+		mes "Ah, desculpe, estou bastante ocupado no momento...";
+		mes "Se tiver alguma dúvida, visite o Professor que designei para você.";
+		close;
+	}
+}
+
+yuno_in03,62,176,2	script	History Professor#sa	109,{
+	mes "[Saphien Layless]";
+	if (BaseJob != Job_Mage) {
+		if (BaseJob == Job_Sage) {
+			mes "Eu te conheço? Você foi um dos meus alunos?";
+			mes "Ah, não importa de qualquer forma. Você não seria um Sábio sem se formar nesta academia...";
+			next;
+			mes "[Saphien Layless]";
+			mes "Em qualquer caso, você deve estudar o passado para entender melhor o presente e prever... o futuro.";
+			mes "Esta frase contém toda a verdade do mundo.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Acho que você está seguindo o caminho certo...";
+			mes "Um dia você olhará para trás e perceberá que isso mudou sua vida.";
+		}
+		else if (BaseJob == Job_Novice) {
+			mes "Um Aprendiz? Por que um Aprendiz está aqui?";
+			next;
+			mes "[Saphien Layless]";
+			mes "Alguém cuja vida tem muitas possibilidades...";
+			mes "Como você deseja viver sua vida?";
+			next;
+			mes "[Saphien Layless]";
+			mes "Não importa o que você decida ser, tudo depende da sua escolha.";
+			mes "Que Deus o abençoe para que você possa escolher o melhor caminho para você...";
+		}
+		else {
+			mes "Bem-vindo, eu sou o responsável pelos estudos históricos aqui na academia.";
+			next;
+			mes "[Saphien Layless]";
+			mes "O mundo como o conhecemos é resultado de eventos descritos nos registros das eras. São eventos históricos que moldaram o mundo como ele é hoje.";
+			mes "Portanto, conhecer o passado significa que você entenderá melhor o presente e... o futuro.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Reflita sobre o seu passado.";
+			mes "Você verá o seu caminho no futuro...";
+		}
+		close;
+	}
+	if (SAGE_Q == 9) {
+		if (SAGE_Q2 == 0) {
+			mes "Bem-vindo," + strcharinfo(0) + ". Fico feliz em conhecê-lo.";
+			mes "Meu nome é Saphien Layless, ficarei responsável por sua turma por enquanto.";
+			next;
+			mes "[Saphien Layless]";
+			mes "A matéria que você está estudando é Yggdrasil.";
+			mes "Então... você sabe o que é Yggdrasil?";
+			next;
+			switch(select("Sim, sei muito bem.:Não, não sei.")) {
+			case 1:
+				mes "[Saphien Layless]";
+				mes "Tudo bem então, o que é Yggdrasil?";
+				mes "Por favor, responda-me.";
+				next;
+				switch(select("É o nome de um item de cura.:É a fonte da vida no mundo.:Bobo, eu menti.")) {
+				case 1:
+					mes "[Saphien Layless]";
+					mes "Errado." + strcharinfo(0) + ", você perdeu - 10 pontos.";
+					mes "Esse é apenas um dos presentes de Yggdrasil.";
+					next;
+					mes "[Saphien Layless]";
+					mes "Yggdrasil é o nome da árvore que é a fonte da vida neste mundo.";
+					break;
+				case 2:
+					mes "[Saphien Layless]";
+					mes "Correto. Yggdrasil, a chamada 'Árvore do Mundo',";
+					mes "é o nome da árvore que tem sido a fonte da vida neste mundo.";
+					break;
+				case 3:
+					mes "[Saphien Layless]";
+					mes "Ótimo, Schott... Se não sabe, apenas diga.";
+					mes "A propósito," + strcharinfo(0) + ", você acabou de perder - 10 pontos por mentir e por estar errado.";
+					break;
+				}
+				next;
+				break;
+			case 2:
+				mes "[Saphien Layless]";
+				mes "Ah bem, eu esperava que você soubesse pelo menos um pouco sobre Yggdrasil...";
+				mes "Yggdrasil é o nome da árvore que é a fonte da vida neste mundo.";
+				next;
+				break;
+			}
+			mes "[Saphien Layless]";
+			mes "Antes de começarmos a aula, precisarei de alguns itens de reserva.";
+			mes "É para um melhor entendimento sobre Yggdrasil.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Qualquer coisa serve, desde que seja relacionada à árvore Yggdrasil.";
+			mes "Sementes ou frutos da árvore seriam bons. Sei que é difícil de encontrar, mas por favor, tente.";
+			next;
+			set SAGE_Q2,1;
+			changequest 2047,2050;
+			mes "[Saphien Layless]";
+			mes "Quando tivermos os itens de reserva, iniciaremos a aula.";
+			mes "Por favor, volte mais tarde.";
+			close;
+		}
+		else {
+			if (countitem(607) > 0) {
+				mes "[Saphien Layless]";
+				mes "Oh, você os trouxe? Excelente!";
+				mes "Você trouxe Fruta de Yggdrasil!";
+				next;
+				mes "[Saphien Layless]";
+				mes "Muito bem, agora vou começar a aula.";
+				mes "Ouça com atenção, não aceitarei ninguém cochilando no meio da aula.";
+				next;
+			}
+			else if (countitem(608) > 0) {
+				mes "[Saphien Layless]";
+				mes "Hmm, você se preparou para a aula? Vamos ver...";
+				mes "Oh! Então você me trouxe a Semente de Yggdrasil?";
+				next;
+				mes "[Saphien Layless]";
+				mes "Muito bem. Agora vou começar a aula..";
+				mes "Ouça com atenção, não aceitarei ninguém cochilando no meio da aula.";
+				next;
+			}
+			else if (countitem(610) > 0) {
+				mes "[Saphien Layless]";
+				mes "Hmm, você se preparou para a aula? Vamos ver...";
+				mes "Folha de Yggdrasil...";
+				next;
+				mes "[Saphien Layless]";
+				mes "Você pode comprar este item na cidade de Al De Baran! Você não demonstrou nenhum esforço.";
+				mes "Então, terei que lhe dar - 10 pontos," + strcharinfo(0) + ".";
+				next;
+				mes "[Saphien Layless]";
+				mes "Muito bem, agora vou começar a aula.";
+				mes "Ouça com atenção, não aceitarei que você cochile no meio da aula, ou qualquer outra desatenção.";
+				next;
+			}
+			else {
+				mes "[Saphien Layless]";
+				mes "Hã? Você ainda não está pronto para esta aula!";
+				mes "Eu disse para me trazer itens relacionados a Yggdrasil.";
+				next;
+				mes "[Saphien Layless]";
+				mes "Me avise quando estiver pronto.";
+				mes "Não se preocupe em se atrasar, nós, professores, somos pagos para ficar esperando.";
+				close;
+			}
+			mes "[Saphien Layless]";
+			mes "A raiz deste mundo, Yggdrasil, é uma árvore gigantesca.";
+			mes "Ela cria raízes por todo o continente de Rune-Midgard e suas folhas alcançam o céu.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Fora deste continente, existe um oceano onde uma cobra gigante chamada Jormungand está enrolada.";
+			mes "O mundo como conhecemos consiste em 3 lugares: Asgard, Midgard e Utgard.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Utgard é onde todos os titãs vivem.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Midgard é onde todos os seres humanos vivem.";
+			next;
+			mes "[Saphien Layless]";
+			mes "E Asgard é onde os deuses residem...";
+			mes "Um freixo criando raízes no meio do continente de Rune-Midgard, essa é Yggdrasil.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Este continente nasceu do coração de Ymir, e Yggdrasil mantém o continente unido segurando-o com suas 3 raízes.";
+			mes "Estas raízes se estendem para 3 lugares diferentes.";
+			next;
+			mes "[Saphien Layless]";
+			mes "A primeira raiz chega a Asgard, onde os deuses vivem e";
+			mes "onde nós, meros humanos, ainda não exploramos ou vivenciamos.";
+			next;
+			mes "[Saphien Layless]";
+			mes "A segunda raiz chega a Jotunheim, onde todos os gigantes vivem.";
+			mes "Já ouvimos este nome muitas vezes através de mitos e lendas.";
+			next;
+			mes "[Saphien Layless]";
+			mes "A terceira chega a Niflheim.";
+			mes "Dizem que aquele lugar é coberto por uma névoa espessa e negra.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Itens como Semente de Yggdrasil, Fruta de Yggdrasil e Folha de Yggdrasil são";
+			mes "considerados parte da árvore Yggdrasil.";
+			next;
+			mes "[Saphien Layless]";
+			mes "A Fruta de Yggdrasil tem um aroma fascinante que, segundo rumores,";
+			mes "restaura todo o HP e SP de uma vez.";
+			next;
+			mes "[Saphien Layless]";
+			mes "A semente de Yggdrasil, que tem a fragrância de uma flor desabrochando e o sabor de nozes, segundo rumores,";
+			mes "restaura metade do HP e SP de uma vez.";
+			next;
+			mes "[Saphien Layless]";
+			mes "A folha de Yggdrasil, que é preenchida com força vital, segundo rumores,";
+			mes "revive os mortos, trazendo-os de volta a este mundo.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Por último... se por acaso você descobrir um caminho para Asgard no futuro,";
+			mes "espero que encontre a árvore Yggdrasil.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Embora a história da árvore Yggdrasil exista apenas em mitos e lendas,";
+			mes "nós, Sábios, temos a obrigação de descobrir a verdade sobre a árvore Yggdrasil.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Esta é a conclusão da aula de hoje.";
+			mes "Por favor, registre os artigos que aprendeu hoje e tente se lembrar do máximo que puder.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Na próxima aula, você escreverá uma tese sobre Yggdrasil...";
+			mes "Por favor, traga os seguintes itens para se preparar para a aula.";
+			next;
+			mes "[Saphien Layless]";
+			mes "^3355FF1 Pena de Ave^000000 que será usada como caneta,";
+			mes "^3355FF1 Pele de Animal^000000 que será usada como papel,";
+			mes "^3355FF1 Tronco^000000 que será usado para encadernar um livro,";
+			mes "^3355FF1 Tinta de Polvo^000000 que será usada como tinta,";
+			mes "^3355FF1 Garrafa Vazia^000000 que será usada para guardar a tinta de polvo.";
+			next;
+			set SAGE_Q2,0;
+			set SAGE_Q,10;
+			changequest 2050,2051;
+			mes "[Saphien Layless]";
+			mes "Eu ajudarei você a escrever sua tese quando estiver pronto com todos esses itens.";
+			mes "Estou ansioso pela nossa próxima aula.";
+			close;
+		}
+	}
+	else if (SAGE_Q == 10) {
+		if (countitem(916) > 0 && countitem(919) > 0 && countitem(1019) > 0 && countitem(1024) > 0 && countitem(713) > 0) {
+			delitem 916,1; //Feather_Of_Birds
+			delitem 919,1; //Animal's_Skin
+			delitem 1019,1; //Wooden_Block
+			delitem 1024,1; //Chinese_Ink
+			delitem 713,1; //Empty_Bottle
+			mes "Agora, você está escrevendo sua tese.";
+			mes "Eu o ajudarei com sua escrita.";
+			next;
+			mes "..........";
+			next;
+			mes "....................";
+			next;
+			mes ".................................";
+			next;
+			mes ".....Existe um oceano ao redor do continente,";
+			mes "O oceano é enrolado por";
+			switch(select("Um freixo gigante.:Uma cobra gigante, Jormungand.:Uma tartaruga gigante e elefantes.:Um dragão gigante.")) {
+			case 1:
+				set .@w_point,.@w_point+1;
+				mes "Um freixo gigante.";
+				break;
+			case 2:
+				mes "Uma cobra gigante, Jormungand.";
+				break;
+			case 3:
+				set .@w_point,.@w_point+1;
+				mes "Uma tartaruga gigante e elefantes.";
+				break;
+			case 4:
+				set .@w_point,.@w_point+1;
+				mes "Um dragão gigante.";
+				break;
+			}
+			mes "O continente consiste em três lugares, tais como:";
+			switch(select("Mt. Mjolnir, onde vivem aranhas,:Urano, onde vivem titãs,:Utgard, onde vivem titãs,:Lutie, a terra do inverno,")) {
+			case 1:
+				set .@w_point,.@w_point+1;
+				mes "Mt. Mjolnir, onde vivem aranhas,";
+				break;
+			case 2:
+				set .@w_point,.@w_point+1;
+				mes "Uranos, onde vivem os titãs,";
+				break;
+			case 3:
+				mes "Utgard, onde vivem os titãs,";
+				break;
+			case 4:
+				set .@w_point,.@w_point+1;
+				mes "Lutie, a terra do inverno,";
+				break;
+			}
+			switch(select("Midgard, onde vivem os humanos,:Rune-Midgarts, onde vivem os humanos,:Tritonia, onde vivem as sereias,:Morocc, a cidade do deserto,")) {
+			case 1:
+				mes "Midgard, onde vivem os humanos,";
+				break;
+			case 2:
+				set .@w_point,.@w_point+1;
+				mes "Rune-Midgarts, onde vivem os humanos,";
+				break;
+			case 3:
+				set .@w_point,.@w_point+1;
+				mes "Tritonia, onde vivem as sereias,";
+				break;
+			case 4:
+				set .@w_point,.@w_point+1;
+				mes "Morocc, a cidade do deserto,";
+				break;
+			}
+			switch(select("Abguard, onde vivem os deuses.:Asgard, onde vivem os deuses.:Schwarzwald, onde vivem os cidadãos.:Prontera, a capital de Rune-Midgarts.")) {
+			case 1:
+				set .@w_point,.@w_point+1;
+				mes "Abguard, onde vivem os deuses.";
+				break;
+			case 2:
+				mes "Asgard, onde vivem os deuses.";
+				break;
+			case 3:
+				set .@w_point,.@w_point+1;
+				mes "Schwarzwald, onde vivem os cidadãos.";
+				break;
+			case 4:
+				set .@w_point,.@w_point+1;
+				mes "Prontera, a capital de Rune-Midgarts.";
+				break;
+			}
+			mes "O continente consiste nos três lugares citados acima.";
+			next;
+			if (.@w_point > 0) {
+				mes "[Saphien Layless]";
+				mes "..." + strcharinfo(0) + ", você perdeu o juízo?";
+				mes "Seu trabalho é pobre demais para ser considerado uma tese!";
+				next;
+				mes "[Saphien Layless]";
+				mes "Não acho que você possa enviar seu trabalho ao reitor.";
+				mes "Estude mais e tente novamente!";
+				close;
+			}
+			mes ".....como estudamos na última aula,";
+			mes "Yggdrasil é...";
+			switch(select("Um freixo gigante.:Uma fabulosa árvore de Mastela.:Um salgueiro gigante.:Um galho seco gigante.")) {
+			case 1:
+				mes "Um freixo gigante.";
+				break;
+			case 2:
+				set .@w_point,.@w_point+1;
+				mes "Uma fabulosa árvore de Mastela.";
+				break;
+			case 3:
+				set .@w_point,.@w_point+1;
+				mes "Um salgueiro gigante.";
+				break;
+			case 4:
+				set .@w_point,.@w_point+1;
+				mes "Um galho seco gigante.";
+				break;
+			}
+			mes "A raiz de Yggdrasil é dividida em 3 partes. Essas partes alcançam 3 lugares...";
+			switch(select("Schwarzwald, Jotunnheim, Niflheim.:Midgard, Jotunnheim, Naffleheim.:Asgard, Jotunnheim, Naffleheim.:Asgard, Jotunnheim, Niflheim.")) {
+			case 1:
+				set .@w_point,.@w_point+1;
+				mes "Schwarzwald, Jotunnheim, Niflheim.";
+				break;
+			case 2:
+				set .@w_point,.@w_point+1;
+				mes "Midgard, Jotunnheim, Naffleheim.";
+				break;
+			case 3:
+				set .@w_point,.@w_point+1;
+				mes "Asgard, Jotunnheim, Naffleheim.";
+				break;
+			case 4:
+				mes "Asgard, Jotunnheim, Niflheim.";
+				break;
+			}
+			mes "Aquele que possui uma Semente de Yggdrasil,";
+			switch(select("pode ser curado de todos os status anormais.:pode restaurar todo o HP e SP de uma vez.:pode restaurar metade do total de HP e SP.:pode ser curado de Silêncio, Maldição e Caos.")) {
+			case 1:
+				set .@w_point,.@w_point+1;
+				mes "pode ser curado de todos os status anormais.";
+				break;
+			case 2:
+				set .@w_point,.@w_point+1;
+				mes "pode restaurar todo o HP e SP de uma vez.";
+				break;
+			case 3:
+				mes "pode restaurar metade do total de HP e SP.";
+				break;
+			case 4:
+				set .@w_point,.@w_point+1;
+				mes "pode ser curado de Silêncio, Maldição e Caos.";
+				break;
+			}
+			next;
+			if (.@w_point > 0) {
+				mes "[Saphien Layless]";
+				mes "..." + strcharinfo(0) + ", você perdeu o juízo?";
+				mes "Seu trabalho é pobre demais para ser considerado uma tese!";
+				next;
+				mes "[Saphien Layless]";
+				mes "Não acho que você possa enviar seu trabalho ao reitor.";
+				mes "Estude mais e tente novamente!";
+				close;
+			}
+			mes "..........";
+			next;
+			mes "....................";
+			next;
+			mes ".................................";
+			next;
+			set SAGE_Q,15;
+			changequest 2051,2052;
+			mes "[Saphien Layless]";
+			mes "Oh, você já terminou? Muito bem.";
+			mes "Por favor, manuseie isso com cuidado, pois você não poderá fazer isso nunca mais.";
+			getitem 1550,1; //Book
+			next;
+			mes "[Saphien Layless]";
+			mes "Suponho que esteja pronto para enviar seu trabalho ao reitor.";
+			mes "Se você será aprovado no teste ou não, é decisão dele.";
+			close;
+		}
+		else {
+			mes "Não tenho certeza se você está pronto para escrever uma tese.";
+			mes "Receio dizer que já o informei sobre o que você precisa.";
+			next;
+			mes "[Saphien Layless]";
+			mes "^3355FF1 Pena de Pássaro^000000 que será usada como caneta,";
+			mes "^3355FF1 Pele de Animal^000000 que será usada como papel,";
+			mes "^3355FF1 Tronco^000000 que será usado para encadernar um livro,";
+			mes "^3355FF1 Tinta de Lula^000000 que será usada como tinta,";
+			mes "^3355FF1 Garrafa Vazia^000000 que será usada para guardar a tinta de lula.";
+			next;
+			mes "[Saphien Layless]";
+			mes "Eu o ajudarei a escrever sua tese.";
+			mes "Por favor, traga todos esses itens com você.";
+			close;
+		}
+	}
+	else if (SAGE_Q == 15) {
+		mes "Hã? Você não deveria ir até o reitor?";
+		mes "Se você terminou de escrever sua tese, por favor, leve-a ao reitor.";
+		next;
+		mes "[Saphien Layless]";
+		mes "Você só pode ter uma chance de escrever sua tese antes de se tornar um Sábio.";
+		mes "Então, por favor, siga em frente.";
+		close;
+	}
+	else {
+		mes "Não tenho certeza se você tem assuntos a tratar comigo, mas por favor, volte mais tarde.";
+		mes "Tenho alguns problemas para analisar...";
+		close;
+	}
+}
+
+yuno_in03,32,102,1	script	Biology Professor#sa	755,{
+	mes "[Lucius Celsus]";
+	if (BaseJob != Job_Mage) {
+		if (BaseJob == Job_Sage) {
+			mes "O que você quer comigo?";
+			mes "Você deve fazer uma reserva com uma semana de antecedência se tiver alguma dúvida.";
+			next;
+			mes "[Lucius Celsus]";
+			mes "Você não sabe o quão ocupado eu sou... ou sabe?";
+			mes "Se você é um Sábio, deveria saber sobre mim a esta altura.";
+			next;
+			mes "[Lucius Celsus]";
+			mes "Você tem tempo demais nas mãos. Vá explorar algumas dungeons.";
+			mes "Acho que será mais útil do que desperdiçar seu tempo comigo.";
+		}
+		else if (BaseJob == Job_Novice) {
+			mes "O que o traz até mim, garoto?";
+			next;
+			mes "[Lucius Celsus]";
+			mes "É melhor você sair e brincar com seus amigos.";
+			mes "Este não é um lugar para você ficar de bobeira.";
+		}
+		else {
+			mes "Hmm? O que o traz até mim? Você está interessado em observar monstros?";
+			next;
+			mes "[Lucius Celsus]";
+			mes "Você tem permissão para observar. No entanto, não os perturbe fazendo algazarra.";
+			mes "E mantenha suas mãos longe, alguns desses caras são perigosos demais para tocar.";
+			next;
+			mes "[Lucius Celsus]";
+			mes "Aliás, se você capturar monstros raros no futuro, me avise.";
+			mes "Estou disposto a comprá-los a qualquer custo.";
+		}
+		close;
+	}
+	if (SAGE_Q == 11) {
+		if (SAGE_Q2 == 0) {
+			mes "Bem-vindo à minha aula, você obteve bons resultados na prova prática?";
+			mes "Meu nome é Lucius Celsus, o especialista em Biologia.";
+			next;
+			mes "[Lucius Celsus]";
+			mes "Huh... que grosseria a sua! Você deveria se apresentar para mim assim que eu o cumprimento!";
+			mes "Qual é o seu nome, jovem?";
+			next;
+			select(strcharinfo(0));
+			mes "[Lucius Celsus]";
+			mes "Um bom nome. É um prazer conhecê-lo.";
+			mes "Então, você está ciente do assunto que está estudando?";
+			next;
+			mes "[Lucius Celsus]";
+			mes "Como você sabe, seu tópico de estudo são os monstros.";
+			mes "Quantas vezes você lutou contra monstros?";
+			next;
+			if (select("Bem, eu nem consigo contar.:Algumas vezes, eu acho...") == 1) {
+				mes "[Lucius Celsus]";
+				mes "Oh, cale a boca, pirralho. Não seja tão convencido.";
+				mes "Mesmo que você tenha muita experiência com monstros, terá dificuldade em compreender minha palestra.";
+			}
+			mes "[Lucius Celsus]";
+			mes "Sim, era o que eu imaginava sobre você. Você é apenas um sabe-tudo de livros.";
+			mes "No entanto, tenho certeza de que você encontrará a maioria dos monstros mencionados na minha palestra.";
+			next;
+			set sage_m4,rand(1,3);
+			mes "[Lucius Celsus]";
+			mes "Vamos começar.";
+			mes "Certifique-se de estar preparado para a avaliação prática durante minha palestra.";
+			next;
+			if (sage_m4 == 1) {
+				set SAGE_Q2,1;
+				changequest 2048,2053;
+				mes "[Lucius Celsus]";
+				mes "Vá buscar os itens a seguir para mim.";
+				mes "5 ^3355FFTentáculo^000000,";
+				mes "5 ^3355FFCélula Única^000000,";
+				mes "5 ^3355FFCauda de Peixe^000000.";
+			}
+			else if (sage_m4 == 2) {
+				set SAGE_Q2,2;
+				changequest 2048,2054;
+				mes "[Lucius Celsus]";
+				mes "Vá buscar os itens a seguir para mim.";
+				mes "5 ^3355FFTenaz^000000,";
+				mes "5 ^3355FFCarne de Marisco^000000,";
+				mes "5 ^3355FFCoração de Sereia^000000.";
+			}
+			else {
+				set SAGE_Q2,3;
+				changequest 2048,2054;
+				mes "[Lucius Celsus]";
+				mes "Vá buscar os itens a seguir para mim.";
+				mes "5 ^3355FFTendão^000000,";
+				mes "5 ^3355FFTenaz^000000,";
+				mes "5 ^3355FFEscama Afiada^000000.";
+			}
+			next;
+			mes "[Lucius Celsus]";
+			mes "Darei continuidade à aula quando você me trouxer isso.";
+			mes "Divirta-se.";
+			close;
+		}
+		else if (SAGE_Q2 >= 1 && SAGE_Q2 <=3) {
+			switch(SAGE_Q2) {
+			case 1: setarray .@items[0],962,1052,1023; break;
+			//Nipper, Clam Flesh, Heart of Mermaid
+			case 2: setarray .@items[0],960,966,950; break;
+			//Tendon, Nipper, Sharp Scale
+			case 3: setarray .@items[0],1050,960,963; break;
+			}
+			if (countitem(.@items[0]) > 4 && countitem(.@items[1]) > 4 && countitem(.@items[2]) > 4) {
+				mes "Você se esforçou muito para reunir tudo isso.";
+				mes "Bem, não tenho certeza se você coletou por conta própria ou comprou nas lojas...";
+				next;
+				mes "[Lucius Celsus]";
+				mes "De alguma forma, os monstros que derrubam esses itens têm algo em comum.";
+				mes "Você pode me dizer qual é essa semelhança?";
+				next;
+				switch(select("Eles possuem a propriedade Água.:Eles são peixes.:Eles são agressivos.:Hum... eles são monstros.")) {
+				case 1:
+					mes "[Lucius Celsus]";
+					mes "Sim, eles possuem a propriedade Água e, ao mesmo tempo, são peixes.";
+					mes "A maioria dos monstros da classe peixe vive debaixo d'água, por isso são atribuídos à propriedade Água.";
+					break;
+				case 2:
+					mes "[Lucius Celsus]";
+					mes "Sim, eles possuem a propriedade Água e, ao mesmo tempo, são peixes.";
+					mes "A maioria dos monstros da classe peixe vive debaixo d'água, por isso são atribuídos à propriedade Água.";
+					break;
+				case 3:
+					set sage_m4,4;
+					mes "[Lucius Celsus]";
+					mes "...Eu não sabia que os Phens eram agressivos hoje em dia?";
+					mes "Ou será que Marina e Plankton se unem para começar uma briga com você?";
+					next;
+					mes "[Lucius Celsus]";
+					mes "Todos os monstros dos quais você obteve esses itens não são agressivos... se controle.";
+					mes "Todos eles são peixes e possuem a propriedade Água.";
+					break;
+				case 4:
+					set sage_m4,4;
+					mes "[Lucius Celsus]";
+					mes "O que...! O que você veio fazer aqui!? Você está aqui para estudar sobre monstros específicos, seu idiota de cabeça pequena!";
+					mes "Suspiro... todos eles são peixes e possuem a propriedade Água.";
+					break;
+				}
+				next;
+				mes "[Lucius Celsus]";
+				mes "Nem todos os monstros da classe peixe possuem a propriedade Água, mas a maioria deles possui.";
+				mes "Então, que tipo de magia funcionaria melhor na maioria dos monstros da classe peixe?";
+				next;
+				switch(select("Relâmpago.:Lança de Fogo.:Tempestade de Raios.:Lanças de Gelo.")) {
+				case 1:
+					mes "[Lucius Celsus]";
+					mes "Isso mesmo, Relâmpago, que possui a propriedade Vento, funciona melhor contra monstros de propriedade Água.";
+					mes "Embora você deva tomar cuidado com monstros que reconhecem o lançamento de magia.";
+					break;
+				case 2:
+					set sage_m4,4;
+					mes "[Lucius Celsus]";
+					mes "O quê? Lança de Fogo! Fogo não pode vencer a água, seu imbecil!";
+					mes "A maioria dos peixes é atribuída à propriedade Água. Portanto, eles são fracos contra magias de propriedade Vento. Você não entende?";
+					break;
+				case 3:
+					mes "[Lucius Celsus]";
+					mes "Sim, a magia Tempestade de Raios é boa... é uma magia de propriedade Vento.";
+					mes "No entanto, você terá problemas se usar a magia em um local mal escolhido.";
+					break;
+				case 4:
+					set sage_m4,4;
+					mes "[Lucius Celsus]";
+					mes "Não consigo compreender tanta estupidez! Esta pergunta pede que você escolha uma propriedade que combata a água! Você não entende?";
+					mes "Logicamente, qualquer magia que possua a propriedade Água não pode vencer monstros do atributo Água!";
+					break;
+				}
+				next;
+				mes "[Lucius Celsus]";
+				mes "Aliás, embora alguns monstros como Penomena ou Aster sejam considerados monstros da classe peixe,";
+				mes "eles possuem uma propriedade diferente dos outros. É melhor você tomar cuidado com eles.";
+				next;
+				mes "[Lucius Celsus]";
+				mes "Ok, deixe-me ensinar sobre monstros insetos.";
+				mes "Vamos ver... hmm... hmm...";
+				next;
+				switch(rand(1,4)) {
+				case 1:
+					set SAGE_Q2,4;
+					if(checkquest(2053) != -1) {
+						changequest 2053,2056;
+					}
+					else if(checkquest(2054) != -1) {
+						changequest 2054,2056;
+					}
+					else {
+						changequest 2055,2056;
+					}
+					mes "5 ^3355FFTeia de Aranha^000000,";
+					mes "5 ^3355FFCasca^000000,";
+					mes "5 ^3355FFAntena de Inseto^000000.";
+					break;
+				case 2:
+					set SAGE_Q2,5;
+					if(checkquest(2053) != -1) {
+						changequest 2053,2057;
+					}
+					else if(checkquest(2054) != -1) {
+						changequest 2054,2057;
+					}
+					else {
+						changequest 2055,2057;
+					}
+					mes "5 ^3355FFChifre^000000,";
+					mes "5 ^3355FFCasca de Caracol^000000,";
+					mes "5 ^3355FFPó de Mariposa^000000.";
+					break;
+				case 3:
+					set SAGE_Q2,6;
+					if(checkquest(2053) != -1) {
+						changequest 2053,2058;
+					}
+					else if(checkquest(2054) != -1) {
+						changequest 2054,2058;
+					}
+					else {
+						changequest 2055,2058;
+					}
+					mes "5 ^3355FFFoice de Louva-a-deus^000000,";
+					mes "5 ^3355FFPele de Verme^000000,";
+					mes "5 ^3355FFCasca Arco-íris^000000.";
+					break;
+				case 4:
+					set SAGE_Q2,7;
+					if(checkquest(2053) != -1) {
+						changequest 2053,2059;
+					}
+					else if(checkquest(2054) != -1) {
+						changequest 2054,2059;
+					}
+					else {
+						changequest 2055,2059;
+					}
+					mes "5 ^3355FFTeia de Aranha^000000,";
+					mes "5 ^3355FFFoice de Louva-a-deus^000000,";
+					mes "5 ^3355FFCasca Sólida^000000.";
+				}
+				next;
+				mes "[Lucius Celsus]";
+				mes "Darei continuidade à aula quando você me trouxer isso.";
+				mes "Divirta-se.";
+				close;
+			}
+			mes "O quê, você já esqueceu o que eu te disse há apenas um minuto?";
+			mes "Que incômodo... ouça com atenção desta vez.";
+			next;
+			mes "[Lucius Celsus]";
+			mes "5 ^3355FF"+getitemname(.@items[0])+"^000000,";
+			mes "5 ^3355FF"+getitemname(.@items[1])+"^000000,";
+			mes "5 ^3355FF"+getitemname(.@items[2])+"^000000,";
+			close;
+		}
+		else if (SAGE_Q2 >= 4  && SAGE_Q2 <= 7) {
+			switch(SAGE_Q2) {
+			case 4: setarray .@items[0],1025,935,928; break;
+			//Horn, Snail's Shell, Moth Dust
+			case 5: setarray .@items[0],947,946,1057; break;
+			//Mantis Scythe, Worm Peeling, Rainbow Shell
+			case 6: setarray .@items[0],1031,955,1013; break;
+			//Cobweb, Mantis Scythe, Solid Shell
+			case 7: setarray .@items[0],1025,1031,943; break;
+			}
+			if (countitem(.@items[0]) > 4 && countitem(.@items[1]) > 4 && countitem(.@items[2]) > 4) {
+				mes "Muito bem. Então, você observou os insetos enquanto coletava esses itens?";
+				mes "Oh, bem, acredito que você fez um bom trabalho com a tarefa.";
+				next;
+				mes "[Lucius Celsus]";
+				mes "Monstros da classe Inseto não compartilham a mesma propriedade na maioria das vezes,";
+				mes "Você deve pensar duas vezes antes de conjurar uma magia em um inseto.";
+				next;
+				mes "[Lucius Celsus]";
+				mes "É notável que insetos consigam detectar objetos ocultos.";
+				mes "Portanto, qualquer habilidade de esconder, como a habilidade Esconderijo ou a habilidade Camuflagem, não funcionará em monstros insetos.";
+				next;
+				mes "[Lucius Celsus]";
+				mes "Alguns insetos formam um grupo e vivem juntos.";
+				mes "Eles são controlados pelo líder do grupo...";
+				next;
+				mes "[Lucius Celsus]";
+				mes "Por exemplo, Maya, a rainha das formigas...";
+				mes "Mistress, a rainha das vespas,";
+				mes "ou o Besouro-Ladrão Dourado, o rei dos besouros-ladrões...";
+				next;
+				mes "[Lucius Celsus]";
+				mes "Você não pode derrotar esses monstros chefes sozinho,";
+				mes "é melhor você formar um grupo se quiser lutar contra eles.";
+				next;
+				mes "[Lucius Celsus]";
+				mes "Essa é a conclusão da minha aula... é hora de você escrever uma tese.";
+				mes "Traga-me os itens a seguir para escrever a tese.";
+				next;
+				mes "[Lucius Celsus]";
+				mes "^3355FF1 Pena de Ave^000000 que será usada como caneta,";
+				mes "^3355FF1 Pele de Animal^000000 que será usada como papel,";
+				mes "^3355FF1 Tronco^000000 que será usado para encadernar um livro,";
+				mes "^3355FF1 Tinta de Polvo^000000 que será usada como tinta,";
+				mes "^3355FF1 Garrafa Vazia^000000 que será usada para guardar a tinta de polvo.";
+				next;
+				set SAGE_Q2,0;
+				set SAGE_Q,12;
+				if(checkquest(2056) != -1) {
+					changequest 2056,2051;
+				}
+				else if(checkquest(2057) != -1) {
+					changequest 2057,2051;
+				}
+				else if(checkquest(2058) != -1) {
+					changequest 2058,2051;
+				}
+				else {
+					changequest 2059,2051;
+				}
+				mes "[Lucius Celsus]";
+				mes "Eu vou te ajudar a escrever a tese quando você trouxer todos esses itens.";
+				mes "Você está quase lá. Aprender não é fácil?";
+				close;
+			}
+			mes "O quê, você já esqueceu o que eu te disse?";
+			mes "Que incômodo... escute com atenção desta vez.";
+			next;
+			mes "[Lucius Celsus]";
+			mes "5 ^3355FF"+getitemname(.@items[0])+"^000000,";
+			mes "5 ^3355FF"+getitemname(.@items[1])+"^000000,";
+			mes "5 ^3355FF"+getitemname(.@items[2])+"^000000,";
+			close;
+		}
+		mes "Zzz... Zzz...";
+		close;
+	}
+	else if (SAGE_Q == 12) {
+		if (countitem(916) > 0 && countitem(919) > 0 && countitem(1019) > 0 && countitem(1024) > 0 && countitem(713) > 0) {
+			delitem 916,1; //Feather_Of_Birds
+			delitem 919,1; //Animal's_Skin
+			delitem 1019,1; //Wooden_Block
+			delitem 1024,1; //Chinese_Ink
+			delitem 713,1; //Empty_Bottle
+			mes "Humpf. O pirralho sortudo trouxe todos os itens.";
+			mes "Bem, eu não espero que você escreva uma tese escandalosamente brilhante, no entanto...";
+			next;
+			mes "[Lucius Celsus]";
+			mes "Bem, se você realmente quer escrever sozinho, eu posso deixar você cuidar disso, mas...";
+			mes "Eu vou te dar um trabalho de um gênio genial. Apenas faça uma cópia dele com seu nome.";
+			next;
+			mes "[Lucius Celsus]";
+			mes "Você tem algum problema com isso? Azar, esse é o meu estilo.";
+			mes "Apenas faça o que eu digo.";
+			next;
+			mes "..........";
+			next;
+			mes "....................";
+			next;
+			mes ".................................";
+			next;
+			select(".....Os monstros variam conforme a aparência física,");
+			mes ".....Os monstros variam conforme a aparência física,";
+			select("...e possuem várias propriedades elementais.");
+			mes "...e possuem várias propriedades elementais.";
+			select("Você deve estar ciente das propriedades de cada monstro,");
+			mes "Você deve estar ciente das propriedades de cada monstro,";
+			select("...e estar ciente de que certas magias funcionam de forma diferente em monstros diferentes.");
+			mes "...e estar ciente de que certas magias funcionam de forma diferente em monstros diferentes.";
+			select("Você deve ser especialmente cuidadoso com monstros de propriedade Sagrado e Sombrio.");
+			mes "Você deve ser especialmente cuidadoso com monstros de propriedade Sagrado e Sombrio.";
+			select("Esses monstros são os mais perigosos, embora ocasionalmente sejam fofos.");
+			mes "Esses monstros são os mais perigosos.";
+			next;
+			mes "..........";
+			next;
+			mes "....................";
+			next;
+			mes ".................................";
+			next;
+			set SAGE_Q,15;
+			changequest 2051,2052;
+			mes "[Lucius Celsus]";
+			mes "Terminou? Ok, então acabou.";
+			mes "Você não poderá escrever outra tese, trate disso com cuidado.";
+			getitem 1550,1; //Book
+			next;
+			mes "[Lucius Celsus]";
+			mes "Mostre esta obra-prima ao reitor.";
+			mes "Então, ele permitirá que você se gradue na academia. Até mais.";
+			close;
+		}
+		else {
+			mes "O quê, tem certeza de que está pronto? Não, eu não acho.";
+			mes "Ah, bem... escute com atenção desta vez.";
+			next;
+			mes "[Lucius Celsus]";
+			mes "^3355FF1 Pena de Ave^000000 que será usada como caneta,";
+			mes "^3355FF1 Pele de Animal^000000 que será usada como papel,";
+			mes "^3355FF1 Tronco^000000 que será usado para encadernar um livro,";
+			mes "^3355FF1 Tinta de Polvo^000000 que será usada como tinta,";
+			mes "^3355FF1 Garrafa Vazia^000000 que será usada para guardar a tinta de polvo.";
+			next;
+			mes "[Lucius Celsus]";
+			mes "Você tem se saído bem, acho que pode fazer isso sem problemas.";
+			mes "Vá buscá-los. Depressa.";
+			close;
+		}
+	}
+	else if (SAGE_Q == 15) {
+		mes "O que você está fazendo aqui? Vá mostrar sua tese ao reitor!";
+		mes "Não desperdice mais tempo aqui.";
+		next;
+		mes "[Lucius Celsus]";
+		mes "Parece que você tem tempo demais sobrando. Ok, vou te dar algumas tarefas.";
+		mes "Hahaha, você disse não? Tudo bem então, certo. Caia fora.";
+		close;
+	}
+	else {
+		mes "Wah~! Meu cérebro vai explodir logo! Por que eu tenho que preparar todas essas coisas?!";
+		mes "Quem é você?! Não me perturbe, estou ocupado!!";
+		next;
+		mes "[Lucius Celsus]";
+		mes "Se você só quer observar monstros aqui, tudo bem para mim...";
+		mes "Apenas não me faça perguntas.";
+		close;
+	}
+}
+
+yuno_in03,244,31,3	script	Physics Professor#sa	120,{
+	mes "[Aebecee George]";
+	if (BaseJob != Job_Mage) {
+		if (BaseJob == Job_Sage) {
+			mes "Hi hi, olá! O que te traz aqui de novo, docinho?";
+			mes "Ah, entendi... você está empolgado porque finalmente se tornou um Sábio? Hi hi~";
+			next;
+			mes "[Aebecee George]";
+			mes "Ah, bem, embora você tenha se tornado um Sábio, você está apenas fazendo a mesma coisa, hi hi... somos magos até o âmago!";
+			mes "Somos muito melhores que qualquer outra classe porque somos bons com a nossa cabeça, sabe?";
+			next;
+			mes "[Aebecee George]";
+			mes "Certo, tem algo sobre o que você queira conversar?";
+			mes "Oh querido, não fique nervoso... onde está seu senso de aventura?";
+		}
+		else if (BaseJob == Job_Novice) {
+			mes "Bem, não é você o Aprendiz mais fofinho~";
+			next;
+			mes "[Aebecee George]";
+			mes "O que você está fazendo aqui, docinho? Você veio só para ver o que tem aqui?";
+			mes "Quer um doce? Doce, meu precioso? Hi hi.";
+			next;
+			mes "[Aebecee George]";
+			mes "Oh céus... Desculpe, achei que tivesse um pouco...";
+			mes "Mas eu tenho outras guloseimas, entendeu o que eu quero dizer?";
+		}
+		else {
+			mes "Ei, hi hi, como vai, marinheiro?";
+			next;
+			mes "[Aebecee George]";
+			mes "Você veio aqui para dar uma olhada? Hã...?";
+			mes "Bem, se você não está aqui a negócios, deve estar aqui...";
+			next;
+			mes "[Aebecee George]";
+			mes "...por PRAZER.";
+			mes "Ei, espere! Volte aqui~!";
+		}
+		close;
+	}
+	if (SAGE_Q == 13) {
+		if (SAGE_Q2 == 0) {
+			mes "Olá~? Prazer em conhecê-lo, hi hi.";
+			mes "Veio me ver? Ah, você é um estudante!";
+			next;
+			mes "[Aebecee George]";
+			mes "Hi hi, eu sou a Professor responsável por você, Abecee George.";
+			mes "Então... não está feliz por estar comigo, querido? Não está contente? Hi hi~";
+			next;
+			mes "[Aebecee George]";
+			mes "No entanto, antes de começarmos a aula, preciso que você me faça... um favor.";
+			mes "Não tenha medo, é só um favorzinho bem pequeno. Hi hi~";
+			next;
+			mes "[Aebecee George]";
+			mes "Por favor, traga-me ^3355FF30 Pedra^000000, só isso.";
+			mes "Não é tão difícil, é?";
+			next;
+			set SAGE_Q2,1;
+			changequest 2049,2060;
+			mes "[Aebecee George]";
+			mes "Por que você não pede ajuda a um amigo Gatuno?";
+			mes "Começaremos a aula quando você me trouxer essas pedras~ Hi hi~";
+			close;
+		}
+		else if (SAGE_Q2 == 1) {
+			if (countitem(7049) > 29) {
+				mes "Ah~ que doce! Você trouxe todas~ obrigada~";
+				mes "Ah, você pode esperar um pouquinho? Preciso fazer algo antes de começarmos. Hi hi~";
+				next;
+				mes "[Aebecee George]";
+				mes "Hocus-focus!!";
+				next;
+				mes "[Aebecee George]";
+				mes "Hocus~focus!!";
+				next;
+				mes "[Aebecee George]";
+				mes "Ho~cus~fo~cus!!";
+				next;
+				delitem 7049,30; //Stone
+				mes "[Aebecee George]";
+				mes "Hi hi, sua pedra travessa~";
+				mes "Apenas 3 delas funcionaram para mim. Hi hi~";
+				next;
+				mes "[Aebecee George]";
+				mes "Aqui está meu outro pedido. Ah, essas são lágrimas de... alegria?";
+				mes "Ah, eu estou tão empolgada também! Hi hi~";
+				next;
+				getitem 991,1; //Crystal_Blue
+				getitem 993,1; //Yellow_Live
+				getitem 992,1; //Wind_Of_Verdure
+				mes "[Aebecee George]";
+				mes "Vou te dar estes minérios elementais... mas... eles não são de graça.";
+				mes "Calma lá, caubói! Não saia tão cedo~ Ouça, hi hi~";
+				set SAGE_Q2,2;
+				changequest 2060,2061;
+				next;
+				mes "[Aebecee George]";
+				mes "Por favor, faça flechas usando estes itens e traga-as para mim, por favorzinho~";
+				mes "50 ^3355FFFlecha de Cristal^000000,";
+				mes "50 ^3355FFFlecha de Pedra^000000,";
+				mes "50 ^3355FFFlecha de Vento^000000.";
+				next;
+				mes "[Aebecee George]";
+				mes "Pergunte a qualquer um dos seus amigos Arqueiro, se você conhecer algum.";
+				mes "Estou ansiosa para vê-lo novamente, hi hi~";
+				close;
+			}
+			else {
+				mes "Você não tem todos os itens? E eu aqui, ficando toda animada e agitada.";
+				mes "Vá lá, querido, e volte logo~";
+				next;
+				mes "[Aebecee George]";
+				mes "Eu pedi para você trazer ^3355FF30 Pedra^000000.";
+				mes "Existem muitas por aí, então não será tão difícil consegui-las~ hi hi.";
+				close;
+			}
+		}
+		else if (SAGE_Q2 == 2) {
+			if (countitem(1754) > 49 && countitem(1756) > 49 && countitem(1755) > 49) {
+				mes "Ah~ que doce! Você trouxe todas~ Ah, obrigada~";
+				mes "Bem, agora vamos ao trabalho. Hi hi~";
+				next;
+				mes "[Aebecee George]";
+				mes "Eu vou dizer algo, e você apenas escreva tudo.";
+				mes "Não se esqueça de sublinhar as frases importantes~";
+				next;
+				mes "[Aebecee George]";
+				mes "A magia da propriedade Água é tão forte contra a propriedade Fogo.";
+				mes "Lembre-se daqueles bombeiros corpulentos e sexy, digamos, apagando o fogo com água. Ooh, molhado!";
+				next;
+				mes "[Aebecee George]";
+				mes "A magia da propriedade Vento domina totalmente a propriedade Água! Ah, sim~";
+				mes "Pense em um clarão, quero dizer, um relâmpago, atingindo um lago. Ah, eu sou má!";
+				next;
+				mes "[Aebecee George]";
+				mes "Em termos de força, a magia da propriedade Terra supera a magia da propriedade Vento! Ho~~";
+				mes "Pense em como o vento bate apaixonadamente contra o penhasco perto do Mirante ou da Alameda dos Amantes. Hi hi~";
+				next;
+				mes "[Aebecee George]";
+				mes "A magia da propriedade Fogo é forte contra a propriedade Terra! Hi hi~";
+				mes "Pense na madeira queimando, vinda da terra, em uma lareira aconchegante. Na pele de urso, no escuro~";
+				next;
+				mes "[Aebecee George]";
+				mes "...Ah, céus! O tempo voa tão rápido!";
+				mes "Vamos encerrar por hoje, querido, hi hi~";
+				next;
+				delitem 1754,50; //Crystal_Arrow
+				delitem 1756,50; //Stone_Arrow
+				delitem 1755,50; //Arrow_Of_Wind
+				mes "[Aebecee George]";
+				mes "Quando você vier para a próxima aula, traga ^3355FF1 Água Benta^000000~";
+				mes "Espero que você tenha pelo menos um amigo Sacerdote. Ah, não tem? Bem, não faria mal fazer amizade com um.";
+				set SAGE_Q2,3;
+				changequest 2061,2062;
+				close;
+			}
+			else {
+				mes "O que você está fazendo aqui, precioso... está tentando me enganar? Hi hi~";
+				mes "Espero que você não tenha vendido os minérios elementais que eu te dei? Que feio~ Você não sabe que diamantes são os melhores amigos de uma garota? Hi hi~";
+				next;
+				mes "[Aebecee George]";
+				mes "50 ^3355FFFlecha de Cristal^000000,";
+				mes "50 ^3355FFFlecha de Pedra^000000,";
+				mes "50 ^3355FFFlecha de Vento^000000.";
+				mes "Pergunte ao seu amigo Arqueiro se você tiver um~ hi hi.";
+				close;
+			}
+		}
+		else if (SAGE_Q2 == 3) {
+			if (countitem(523) > 0) {
+				mes "Ah~ que doce! Você trouxe um pouco de Água Benta~ obrigada, querido~";
+				mes "Ah, certo, vamos começar a aula. Hi hi~";
+				next;
+				mes "[Aebecee George]";
+				mes "Assim como da última vez, eu falarei e você apenas escreva tudo o que eu disser.";
+				mes "Mesmo que você não entenda, apenas finja e siga o fluxo, tudo bem? Hi hi~";
+				next;
+				mes "[Aebecee George]";
+				mes "A magia de Água é fraca contra a propriedade Vento! Sim, isso mesmo~";
+				mes "Lembre-se de por que você não mantém o ventilador por perto quando está tomando um banho de espuma quente. Ooh! Tão elétrico!";
+				next;
+				mes "[Aebecee George]";
+				mes "A magia da propriedade Vento é fraca contra a propriedade Terra!";
+				mes "Pense em como o vento não consegue, digamos, penetrar em uma máscara facial de lama~";
+				next;
+				mes "[Aebecee George]";
+				mes "A magia da propriedade Terra é fraca contra a propriedade Fogo! Hi hi~";
+				mes "Pense na madeira queimando, vinda da terra, em uma lareira aconchegante. Na pe--ah? Eu já disse isso? Que bobagem.";
+				next;
+				mes "[Aebecee George]";
+				mes "A magia da propriedade Fogo é fraca contra a propriedade Água! Sim~";
+				mes "Quando as coisas ficam muito quentes, o melhor é jogar água fria. Você não concorda~?";
+				next;
+				mes "[Aebecee George]";
+				mes "Ah, é o fim da aula~ hi hi.";
+				mes "E então? Você acha que aprendeu muito? Pode me agradecer, querido!";
+				next;
+				delitem 523,1; //Holy_Water
+				mes "[Aebecee George]";
+				mes "Bem, é isso. Você pode escrever sua tese com o que eu te ensinei!";
+				mes "Hi hi~ sim! Sim! Eu sou a melhor professora do mundo! Ah, estou pegando fogo! Hi hi~";
+				set SAGE_Q2,0;
+				set SAGE_Q,14;
+				changequest 2062,2051;
+				next;
+				mes "[Aebecee George]";
+				mes "Ok, por favor, reúna estes itens para que você possa escrever a tese, querido~ Hi hi~";
+				mes "^3355FF1 Pena de Pássaro^000000 que será usada como caneta,";
+				mes "^3355FF1 Pele de Animal^000000 que será usada como papel,";
+				mes "^3355FF1 Tronco^000000 que será usado para encadernar um livro,";
+				mes "^3355FF1 Tinta de Lula^000000 que será usada como tinta,";
+				mes "^3355FF1 Garrafa Vazia^000000 para evitar que a Tinta de Lula derrame.";
+				next;
+				mes "[Aebecee George]";
+				mes "Então vá lá, caubói, e volte logo~ Hi hi~";
+				close;
+			}
+			else {
+				mes "O que você está fazendo aqui, precioso... está brincando? Hi hi.";
+				mes "Ah, pobre querido. Você já esqueceu o que eu te disse? Quer que eu te lembre? Hi hi~";
+				next;
+				mes "[Aebecee George]";
+				mes "^3355FF1 Água Benta^000000,";
+				mes "Não faria mal fazer amizade com um Noviço ou Sacerdote... hi hi.";
+				close;
+			}
+		}
+		else {
+			mes "Então... você tem um minuto? Estou brincando, amiga!";
+			close;
+		}
+	}
+	else if (SAGE_Q == 14) {
+		if (countitem(916) > 0 && countitem(919) > 0 && countitem(1019) > 0 && countitem(1024) > 0 && countitem(713) > 0) {
+			delitem 916,1; //Feather_Of_Birds
+			delitem 919,1; //Animal's_Skin
+			delitem 1019,1; //Wooden_Block
+			delitem 1024,1; //Chinese_Ink
+			delitem 713,1; //Empty_Bottle
+			mes "Certo~ então é agora ou nunca~ hihi~";
+			mes "Eu te ensinei tudo o que sei. Não fique nervosa, você vai se sair bem~";
+			next;
+			mes "..........";
+			next;
+			mes "....................";
+			next;
+			mes ".................................";
+			next;
+			mes ".....Feitiços mágicos são divididos em 4 elementos, como:";
+			switch(select("Água, Terra, Fogo e Vento.:Terra, Água, Fogo e Vento.:Água, Vento, Terra e Fogo.")) {
+			case 1:
+				mes "Água, Terra, Fogo e Vento.";
+				break;
+			case 2:
+				mes "Terra, Água, Fogo e Vento.";
+				break;
+			case 3:
+				mes "Água, Vento, Terra e Fogo.";
+				break;
+			}
+			mes "Cada propriedade possui uma propriedade oposta,";
+			switch(select("Magia com a propriedade Vento é forte contra Água:Magia com a propriedade Água é forte contra Fogo:Magia com a propriedade Fogo é forte contra Terra")) {
+			case 1:
+				mes "Magia com a propriedade Vento é forte contra Água";
+				break;
+			case 2:
+				mes "Magia com a propriedade Água é forte contra Fogo";
+				break;
+			case 3:
+				mes "Magia com a propriedade Fogo é forte contra Terra";
+				break;
+			}
+			mes "Magia com a propriedade Terra é forte contra Vento.";
+			switch(select("No entanto, isso não funciona no caso inverso:Esta teoria funciona da mesma forma para armas com propriedade de Terra:As propriedades elementais variam de acordo com os tipos de monstro")) {
+			case 1:
+				mes "No entanto, isso não funciona no caso inverso";
+				break;
+			case 2:
+				mes "Esta teoria funciona da mesma forma para armas com propriedade de Terra";
+				break;
+			case 3:
+				mes "As propriedades elementais variam de acordo com os tipos de monstro";
+				break;
+			}
+			switch(select("Você deve estar ciente do limite da sua habilidade.:Você deve aplicar diferentes tipos de propriedades de acordo com a situação ou local.:Dizem que a Poção Vermelha tem gosto de morango.")) {
+			case 1:
+				mes "Você deve estar ciente do limite da sua habilidade.";
+				break;
+			case 2:
+				mes "Você deve aplicar diferentes tipos de propriedades de acordo com a situação ou local.";
+				break;
+			case 3:
+				mes "Dizem que a Poção Vermelha tem gosto de morango.";
+				break;
+			}
+			next;
+			switch(select("O NPC mais adorável é a YuPi em Prontera:Dizem que a Poção Vermelha é feita de Porings:Você nunca conhece os limites da magia")) {
+			case 1:
+				mes "O NPC mais adorável é a YuPi em Prontera";
+				break;
+			case 2:
+				mes "Dizem que a Poção Vermelha é feita de Porings";
+				break;
+			case 3:
+				mes "Você nunca conhece os limites da magia";
+				break;
+			}
+			switch(select("A moça Mercador em Morocc também é tão fofa quanto a YuPi.:Ninguém sabe por que a Poção Vermelha tem gosto de morango.:Não é recomendado ficar viciado demais em feitiços mágicos.")) {
+			case 1:
+				mes "A moça Mercador em Morocc também é tão fofa quanto a YuPi.";
+				break;
+			case 2:
+				mes "Ninguém sabe por que a Poção Vermelha tem gosto de morango.";
+				break;
+			case 3:
+				mes "Não é recomendado ficar viciado demais em feitiços mágicos.";
+				break;
+			}
+			switch(select("Se eu tivesse uma Tiara de Coelho,:E quanto ao gosto da Poção Branca?:Apenas o uso pertinente da magia, assim como o descanso,")) {
+			case 1:
+				mes "Se eu tivesse uma Tiara de Coelho,";
+				break;
+			case 2:
+				mes "E quanto ao gosto da Poção Branca?";
+				break;
+			case 3:
+				mes "Apenas o uso pertinente da magia, assim como o descanso,";
+				break;
+			}
+			switch(select("Eu gostaria de dar a ela de presente.:Eu nem consigo imaginar o gosto.:garantirá a você uma batalha segura.")) {
+			case 1:
+				mes "Eu gostaria de dar a ela de presente.";
+				break;
+			case 2:
+				mes "Eu nem consigo imaginar o gosto.";
+				break;
+			case 3:
+				mes "garantirá a você uma batalha segura.";
+				break;
+			}
+			switch(select("Embora a Tiara de Coelho combine melhor com a classe Noviço:Eu adoro essa sensação emocionante:Formar um grupo com pessoas de diferentes classes")) {
+			case 1:
+				mes "Embora a Tiara de Coelho combine melhor com a classe Noviço";
+				break;
+			case 2:
+				mes "Eu adoro essa sensação emocionante";
+				break;
+			case 3:
+				mes "Formar um grupo com pessoas de diferentes classes";
+				break;
+			}
+			switch(select("Eu ainda me pergunto se a Tiara de Coelho seria perfeita para o DEUS-PORING.:Eu não conseguiria beber, mesmo se meu HP fosse menor que 1.:é considerada a melhor maneira de se preparar para a batalha.")) {
+			case 1:
+				mes "Ainda me pergunto se a Faixa de Coelho seria perfeita para o GOD-POING.";
+				break;
+			case 2:
+				mes "Eu não conseguiria beber isso mesmo se meu HP estivesse abaixo de 1.";
+				break;
+			case 3:
+				mes "é considerado a melhor forma de se preparar para a batalha.";
+				break;
+			}
+			next;
+			mes "..........";
+			next;
+			mes "....................";
+			next;
+			mes ".................................";
+			next;
+			set SAGE_Q,15;
+			changequest 2051,2052;
+			mes "[Aebecee George]";
+			mes "Hehe, então... terminou sua tese? O que acha do seu trabalho? Acho que você se saiu bem~";
+			mes "Não esqueça, esta é a primeira e a última vez que você escreverá uma tese, certo? Hehe~";
+			getitem 1550,1; //Book
+			next;
+			mes "[Aebecee George]";
+			mes "Certo, agora você pode mostrar sua tese ao reitor~";
+			mes "Você está quase lá~ hehe.";
+			close;
+		}
+		else {
+			mes "O que você ainda está fazendo aqui, docinho? Hehe~";
+			mes "Oh, pobrezinho. Você já esqueceu o que eu te disse? Quer que eu te lembre? Não é problema, hehe.";
+			next;
+			mes "[Aebecee George]";
+			mes "^3355FF1 Pena de Aves^000000 que será usada como caneta,";
+			mes "^3355FF1 Pele de Animal^000000 que será usada como papel,";
+			mes "^3355FF1 Tronco^000000 que será usado para encadernar um livro,";
+			mes "^3355FF1 Tinta de Lula^000000 que será usada como tinta,";
+			mes "^3355FF1 Garrafa Vazia^000000 que será usada para guardar a tinta de lula.";
+			next;
+			mes "[Aebecee George]";
+			mes "Você deveria preparar todos esses itens, não é?";
+			mes "Volte logo~! Hehe~";
+			close;
+		}
+	}
+	else if (SAGE_Q == 15) {
+		mes "O que você está fazendo aqui, querido? Não quer encontrar o reitor e mostrar seu trabalho?";
+		mes "Vai por mim, garotos como ele não vão te esperar para sempre, hehe~";
+		next;
+		mes "[Aebecee George]";
+		mes "Eu sei, eu sei... você quer brincar comigo. Mas primeiro você deveria se tornar um Sábio.";
+		mes "Por favor, apresse-se, hehe.";
+		close;
+	}
+	else {
+		mes "Bem, bem... o que temos aqui?";
+		next;
+		mes "[Aebecee George]";
+		mes "Você não é um Sábio. Que pena, alguém tão doce como você...";
+		mes "Mas, já que não está aqui a negócios, deve estar aqui por...";
+		next;
+		mes "[Aebecee George]";
+		mes "...PRAZER. Espere, para onde você está indo, querido?";
+		close;
+	}
+}
+
+job_sage,50,165,4	script	Test Helper#talk	700,{
+	mes "[Test Helper]";
+	mes "Bem-vindo ao salão do exame prático de Sábio.";
+	mes "Se deseja fazer o teste agora, por favor, entre na sala de espera.";
+	next;
+	mes "[Test Helper]";
+	mes "Se alguém estiver fazendo o teste no momento, por favor, espere até que a pessoa termine.";
+	mes "O progresso do teste é anunciado em todo o mapa. Um anúncio será feito quando a próxima pessoa puder sair da sala de espera.";
+	next;
+	mes "[Test Helper]";
+	mes "O teste leva de 5 a 10 minutos por pessoa.";
+	mes "Se você deseja sair da arena, por favor, deslogue do jogo.";
+	close;
+}
+
+job_sage,50,165,4	script	Waiting Room#sg	700,{
+	end;
+
+OnInit:
+	//disablenpc  "Waiting Room#sg";
+	hideonnpc "Waiting Room#sg";
+	waitingroom "Waiting Room",20,"Waiting Room#sg::OnStartArena",1;
+	enablewaitingroomevent;
+	end;
+
+OnStartArena:
+	warpwaitingpc "job_sage",116,97;
+	donpcevent "Arena#1::OnEnable";
+	disablewaitingroomevent;
+	end;
+
+OnEnable:
+	enablewaitingroomevent;
+	end;
+}
+
+-	script	Arena#1	66,{
+OnInit:
+	disablenpc "Arena#1";
+	end;
+
+OnEnable:
+	enablenpc "Arena#1";
+	set .MyMobs,16;
+	monster "job_sage",111,102,"Grade F",1183,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",120,102,"Grade F",1183,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",111,93,"Grade F",1183,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",120,93,"Grade F",1183,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",107,98,"Grade F",1183,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",124,98,"Grade F",1183,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",115,106,"Grade F",1183,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",115,90,"Grade F",1183,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",103,110,"Grade D",1184,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",128,110,"Grade D",1184,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",103,85,"Grade D",1184,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",128,85,"Grade D",1184,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",107,106,"Grade D",1184,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",124,106,"Grade D",1184,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",107,89,"Grade D",1184,1,"Arena#1::OnMyMobDead";
+	monster "job_sage",124,89,"Grade D",1184,1,"Arena#1::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnReset:
+	killmonsterall "job_sage";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mapannounce "job_sage"," " + strcharinfo(0) + ", successfully defeat all the monsters.",bc_map;
+		donpcevent "Arena#2::OnEnable";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer1000:
+	mapannounce "job_sage","O exame prático começou.",bc_map;
+	end;
+
+OnTimer2000:
+	mapannounce "job_sage","1º teste - limite de tempo de 3 minutos.",bc_map;
+	end;
+
+OnTimer3000:
+	mapannounce "job_sage","Por favor, derrote todos os monstros dentro do limite de tempo.",bc_map;
+	end;
+
+OnTimer33000:
+	mapannounce "job_sage","2 minutos e 30 segundos restantes.",bc_map;
+	end;
+
+OnTimer63000:
+	mapannounce "job_sage","2 minutos restantes.",bc_map;
+	end;
+
+OnTimer93000:
+	mapannounce "job_sage","1 minuto e 30 segundos restantes.",bc_map;
+	end;
+
+OnTimer123000:
+	mapannounce "job_sage","1 minuto restante.",bc_map;
+	end;
+
+OnTimer153000:
+	mapannounce "job_sage","30 segundos restantes.",bc_map;
+	end;
+
+OnTimer173000:
+	mapannounce "job_sage","10 segundos restantes.",bc_map;
+	end;
+
+OnTimer183000:
+	mapannounce "job_sage","Tempo esgotado.",bc_map;
+	donpcevent "Arena#1::OnReset";
+	end;
+
+OnTimer184000:
+	areawarp "job_sage",100,82,131,113,"yuno",324,258;
+	end;
+
+OnTimer185000:
+	mapannounce "job_sage","Próximo candidato, entre.",bc_map;
+	end;
+
+OnTimer186000:
+	disablenpc "Arena#1";
+	donpcevent "Waiting Room#sg::OnEnable";
+	stopnpctimer;
+	end;
+}
+
+-	script	Arena#2	-1,{
+OnInit:
+	disablenpc "Arena#2";
+	end;
+
+OnEnable:
+	enablenpc "Arena#2";
+	donpcevent "Arena#1::OnReset";
+	disablenpc "Arena#1";
+	set .MyMobs,24;
+	monster "job_sage",111,102,"Numerical Value",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",111,102,"Physics",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",111,102,"History",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",120,102,"Geography",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",120,102,"Astronomy",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",120,102,"Meteorology",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",111,93,"Architecture",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",111,93,"Control",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",111,93,"Instrumentology",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",120,102,"Statistics;",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",120,102,"Graphic Method",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",120,102,"Language",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",111,93,"Sitology",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",111,93,"Dietetics",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",111,93,"Landscape Architecture",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",120,93,"Anthropology",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",120,93,"Biology",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",120,93,"Ethics",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",107,98,"Economy",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",107,98,"Politics",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",107,98,"Photography",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",124,98,"Dendrology",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",124,98,"Hygiene",1063,1,"Arena#2::OnMyMobDead";
+	monster "job_sage",124,98,"Sociology",1063,1,"Arena#2::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnReset:
+	killmonsterall "job_sage";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mapannounce "job_sage"," " + strcharinfo(0) + ", successfully defeat all the monsters.",bc_map;
+		donpcevent "Arena#Doorkeeper::OnEnable";
+		donpcevent "Arena#3::OnEnable";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer1000:
+	mapannounce "job_sage","Segundo teste - limite de tempo de 3 minutos.",bc_map;
+	end;
+
+OnTimer2000:
+	mapannounce "job_sage","Por favor, derrote todos os monstros dentro do limite de tempo.",bc_map;
+	end;
+
+OnTimer33000:
+	mapannounce "job_sage","2 minutos e 30 segundos restantes.",bc_map;
+	end;
+
+OnTimer63000:
+	mapannounce "job_sage","2 minutos restantes.",bc_map;
+	end;
+
+OnTimer93000:
+	mapannounce "job_sage","1 minuto e 30 segundos restantes.",bc_map;
+	end;
+
+OnTimer123000:
+	mapannounce "job_sage","1 minuto restante.",bc_map;
+	end;
+
+OnTimer153000:
+	mapannounce "job_sage","30 segundos restantes.",bc_map;
+	end;
+
+OnTimer173000:
+	mapannounce "job_sage","10 segundos restantes.",bc_map;
+	end;
+
+OnTimer183000:
+	mapannounce "job_sage","Tempo esgotado.",bc_map;
+	donpcevent "Arena#2::OnReset";
+	end;
+
+OnTimer184000:
+	areawarp "job_sage",100,82,131,113,"yuno",324,258;
+	end;
+
+OnTimer185000:
+	mapannounce "job_sage","Próximo candidato, por favor, entre.",bc_map;
+	end;
+
+OnTimer186000:
+	disablenpc "Arena#2";
+	donpcevent "Waiting Room#sg::OnEnable";
+	stopnpctimer;
+	end;
+}
+
+-	script	Arena#Doorkeeper	-1,{
+OnInit:
+	disablenpc "Arena#Doorkeeper";
+	end;
+
+OnEnable:
+	enablenpc "Arena#Doorkeeper";
+	donpcevent "Arena#2::OnReset";
+	disablenpc "Arena#2";
+	set .MyMobs,1;
+	monster "job_sage",116,97,"Academic Probation",1179,1,"Arena#Doorkeeper::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnReset:
+	killmonsterall "job_sage";
+	end;
+
+OnDisable:
+	disablenpc "Arena#3";
+	disablenpc "Arena#Doorkeeper";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mapannounce "job_sage","Parabéns," + strcharinfo(0) + ". You passed the test.",bc_map;
+		set SAGE_Q,8;
+		donpcevent "Test Helper#sg::OnEnable";
+		disablenpc "Arena#Doorkeeper";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer1000:
+	mapannounce "job_sage","3º teste - Limite de tempo de 1 minuto.",bc_map;
+	end;
+
+OnTimer30000:
+	mapannounce "job_sage","30 segundos restantes.",bc_map;
+	end;
+
+OnTimer50000:
+	mapannounce "job_sage","10 segundos restantes.",bc_map;
+	end;
+
+OnTimer60000:
+	mapannounce "job_sage","Tempo esgotado.",bc_map;
+	donpcevent "Arena#Doorkeeper::OnReset";
+	end;
+
+OnTimer61000:
+	areawarp "job_sage",100,82,131,113,"yuno",324,258;
+	end;
+
+OnTimer62000:
+	mapannounce "job_sage","Próximo candidato, por favor, entre.",bc_map;
+	end;
+
+OnTimer63000:
+	disablenpc "Arena#Doorkeeper";
+	donpcevent "Waiting Room#sg::OnEnable";
+	stopnpctimer;
+	end;
+}
+
+-	script	Arena#3	-1,{
+OnInit:
+	disablenpc "Arena#3";
+	end;
+
+OnEnable:
+	monster "job_sage",107,106,"Absent 3 times",1185,1;
+	monster "job_sage",124,106,"Being Late 5 times",1185,1;
+	monster "job_sage",107,89,"Cheating 2 times",1185,1;
+	monster "job_sage",124,89,"Cheating 4 times",1185,1;
+	end;
+
+OnDisable:
+	killmonsterall "job_sage";
+	end;
+}
+
+-	script	Test Helper#sg	-1,{
+OnInit:
+	disablenpc "Test Helper#sg";
+	end;
+
+OnEnable:
+	initnpctimer;
+	end;
+
+OnTimer2000:
+	mapannounce "job_sage","Por favor, volte para onde você veio e termine o restante da sua missão de mudança de classe.",bc_map;
+	end;
+
+OnTimer4000:
+	mapannounce "job_sage","Este é o fim do exame prático. Próximo candidato, por favor, prepare-se.",bc_map;
+	end;
+
+OnTimer5000:
+	areawarp "job_sage",100,82,131,113,"yuno_in03",163,180;
+	end;
+
+OnTimer7000:
+	mapannounce "job_sage","Próximo candidato, por favor, entre.",bc_map;
+	end;
+
+OnTimer9000:
+	disablenpc "Test Helper#sg";
+	donpcevent "Waiting Room#sg::OnEnable";
+	stopnpctimer;
+	end;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= Script mostly based on translated jA script
+//= Written test questions/answers weren't translated 100% corectly
+//= So a lot of those are based upon mRO site and my own info
+//= IF you by excident have (or can get) screenshots of these questions
+//= Then PLEASE send them to Darkchild
+//= 1.3 Baby class Support added [Lupus] 1.5 Fixed possible EXP abuse [Lupus]
+//= 1.6 Added a func which prevent advanced classes passing
+//= 2nd Job Quests again. It also guides adv classes where to go. [Lupus]
+//= 1.7 Fixed tuition fee. Fixed some answers, names & typos, added missing labels [Lupus]
+//= 1.7a Moved JFunc back in the main file, fixed typos [Lupus]
+//= 2.0 Changed numbers to constants. [Vicious]
+//= 2.0a Fixed double warp [KarLaeda] 2.0b Mantis Scythe Item name fix
