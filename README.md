@@ -1,7 +1,9 @@
 A tradução foi feita usando IA, então podem haver alguns textos estranhos, e os nomes de Skills, monstros e itens podem estar traduzidos incorretamente.
 Eu poderia ter "travado" os nomes em inglês, mas minha ferramenta não teria como saber exatamente quando fazer e isso resultaria em textos estranhos.
 Porém, a ferramenta que usei para gerenciar a tradução me permite corrigir esses erros facilmente!
-Então, caso alguém encontre textos estranhos ou traduções mal feitas, por favor me avisem e informem o nome do NPC, o mapa e o texto problemático para que eu possa corrigir.
+Então, caso alguém encontre textos estranhos ou traduções mal feitas, por favor me avisem e informem o nome do NPC, o mapa e o texto problemático para que eu possa corrigir. 
+
+######### Não esqueçam de converter os arquivos para ANSI W-1252, o git sempre converte para UTF-8 quando eu atualizo algo por ele. #########
 
 
                           ESSA É UMA TRADUÇÃO É GRATUITA!!!!
