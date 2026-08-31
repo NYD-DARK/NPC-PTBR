@@ -308,15 +308,15 @@ function	Job_Options	{
 	// Requisitos conforme evolucao.txt: Summoner->Druid usa 99/50, Druid->Karnos usa 200/70, Karnos->Alitea usa 200/70
 	if (.RenewalClass && BaseJob == Job_Summoner && (.@eac&EAJL_2) && !(.@eac&EAJL_THIRD)) {
 		Require_Level(.Req_Third[0], .Req_Third[1]);
-		Job_Options(.@job_opt, Job_Druid);
+		Job_Options(.@job_opt, .Job_Druid);
 	}
-	if (.RenewalClass && BaseJob == Job_Druid && (.@eac&EAJL_2) && !(.@eac&EAJL_THIRD)) {
+	if (.RenewalClass && BaseJob == .Job_Druid && (.@eac&EAJL_2) && !(.@eac&EAJL_THIRD)) {
 		Require_Level(.Req_Fourth[0], .Req_Fourth[1]);
-		Job_Options(.@job_opt, Job_Karnos);
+		Job_Options(.@job_opt, .Job_Karnos);
 	}
-	if (.TraitClass && BaseJob == Job_Karnos && (.@eac&EAJL_2) && !(.@eac&EAJL_FOURTH)) {
+	if (.TraitClass && BaseJob == .Job_Karnos && (.@eac&EAJL_2) && !(.@eac&EAJL_FOURTH)) {
 		Require_Level(.Req_Fourth[0], .Req_Fourth[1]);
-		Job_Options(.@job_opt, Job_Alitea);
+		Job_Options(.@job_opt, .Job_Alitea);
 	}
 
 	// Player is Job_Novice, Job_Novice_High or Job_Baby
@@ -610,10 +610,12 @@ OnInit:
 	setarray .Req_SHandler[0],200,70;	// Nível básico mínimo, nível de trabalho para se tornarSpirit Handler
 	.SNovice = 45;					// Minimum base level to turn into Super Novice
 
-	// Classes Personalizadas do evolucao.txt
-	if (!Job_Druid) Job_Druid = 4351;
-	if (!Job_Karnos) Job_Karnos = 4353;
-	if (!Job_Alitea) Job_Alitea = 4355;
+	// Classes Novas
+	.Job_Druid = 4351;
+	.Job_Druid_B = 4352;
+	.Job_Karnos = 4353;
+	.Job_Karnos_B = 4354;
+	.Job_Alitea = 4355;
 
 	// Setting adjustments by PACKETVER
 	if( PACKETVER < 20161207 ) {
